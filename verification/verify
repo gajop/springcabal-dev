@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+
+usage() {
+    cat >&2 <<'EOS'
+usage: verify <game> [mode] [seconds]
+       verify list
+       verify all
+
+  area17     static | headless | visual | all
+  flove      headless | visual | outline
+  gravitas   e2e | shots | headless
+  hunted     headless | visual
+  ports      headless | visual  [mycube|partsneeded|all]
+  ttld       headless | visual
+
+Environment:
+  SPRING_BAR_DIR        engine checkout (default /home/gajop/projects/spring-projects/spring-bar)
+  SPRING_ENGINE_BIN     override the rendering engine binary
+  SPRING_HEADLESS_BIN   override the headless engine binary
+  KEEP_TEST_ARTIFACTS=1 keep temporary workspaces
+
+Output, logs and screenshots land in verification/out/<suite>/.
+EOS
+    exit 2
+}
+
+list_games() {
+    local suite
+    for suite in "$VERIFICATION_ROOT"/games/*.sh; do
+        printf '%s\n' "$(basename "$suite" .sh)"
+    done
+}
+
+[[ $# -ge 1 ]] || usage
+
+case "$1" in
+    list) list_games; exit 0 ;;
+    all)
+        shift
+        failed=()
+        for suite in $(list_games); do
+            printf '\n########## %s\n' "$suite"
+            "$VERIFICATION_ROOT/games/$suite.sh" || failed+=("$suite")
+        done
+        if [[ ${#failed[@]} -gt 0 ]]; then
+            printf '\nfailed: %s\n' "${failed[*]}" >&2
+            exit 1
+        fi
+        printf '\nall suites passed\n'
+        exit 0
+        ;;
+    -h|--help) usage ;;
+esac
+
+suite="$VERIFICATION_ROOT/games/$1.sh"
+[[ -x $suite ]] || { printf 'unknown game: %s\n\n' "$1" >&2; usage; }
+shift
+exec "$suite" "$@"

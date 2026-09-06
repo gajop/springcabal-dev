@@ -1,0 +1,107 @@
+   Compiling area17-rules-wasm v0.1.0 (/home/gajop/projects/spring-projects/springcabal-games/spring-linux/games/Area17-wasm.sdd/wasm-src/rules-synced)
+    Finished `release` profile [optimized] target(s) in 0.35s
+   Compiling area17-rules-wasm v0.1.0 (/home/gajop/projects/spring-projects/springcabal-games/spring-linux/games/Area17-wasm.sdd/wasm-src/rules-synced)
+    Finished `release` profile [optimized] target(s) in 0.62s
+Area 17 headless integration failed (Spring exit 124). Log: /home/gajop/projects/spring-projects/springcabal-games/area17-test/last.headless-integration.infolog.txt
+[t=00:00:16.006112][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.006119][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.006123][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.006133][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.006137][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.006141][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddc1
+[t=00:00:16.006147][f=-000001] [Path] TK CPathManager::Finalize PathFinder 0x0x7561a0273570 has BLOCKSIZE 1
+[t=00:00:16.057179][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=16
+[t=00:00:16.057202][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.057207][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.057212][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.057216][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.057220][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.057224][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddb1
+[t=00:00:16.094052][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=32
+[t=00:00:16.094076][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.094081][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.094085][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.094090][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.094094][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.094098][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddc1
+[t=00:00:16.094104][f=-000001] [Path] TK CPathManager::Finalize PathFinder 0x0x7561a0433740 has BLOCKSIZE 1
+[t=00:00:16.145562][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=16
+[t=00:00:16.145581][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.145587][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.145592][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.145596][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.145601][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.145605][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddb1
+[t=00:00:16.182543][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=32
+[t=00:00:16.182567][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.182572][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.182578][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.182582][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.182596][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.182601][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddc1
+[t=00:00:16.182608][f=-000001] [Path] TK CPathManager::Finalize PathFinder 0x0x7561a05f3910 has BLOCKSIZE 1
+[t=00:00:16.235101][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=16
+[t=00:00:16.235121][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.235125][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.235130][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.235134][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.235137][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.235142][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddb1
+[t=00:00:16.271347][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=32
+[t=00:00:16.271371][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.271386][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.271390][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.271394][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.271398][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.271403][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddc1
+[t=00:00:16.271409][f=-000001] [Path] TK CPathManager::Finalize PathFinder 0x0x7561a07b3ae0 has BLOCKSIZE 1
+[t=00:00:16.322652][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=16
+[t=00:00:16.322675][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.322680][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.322684][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.322688][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.322693][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.322697][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddb1
+[t=00:00:16.356284][f=-000001] [Path] [PathEstimator::CalcHash][Init] BLOCK_SIZE=32
+[t=00:00:16.356305][f=-000001] [Path] [PathEstimator::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.356311][f=-000001] [Path] [PathEstimator::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.356316][f=-000001] [Path] [PathEstimator::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.356321][f=-000001] [Path] [PathEstimator::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.356327][f=-000001] [Path] [PathEstimator::CalcHash][Init] blockMapChecksum=29a
+[t=00:00:16.356332][f=-000001] [Path] [PathEstimator::CalcHash][Init] estimatorHashCode=5639ddc1
+[t=00:00:16.356340][f=-000001] [Path] TK CPathManager::Finalize PathFinder 0x0x7561a0973cb0 has BLOCKSIZE 1
+[t=00:00:16.374766][f=-000001] [Path] [PathingState::CalcHash][Init] BLOCK_SIZE=16
+[t=00:00:16.374785][f=-000001] [Path] [PathingState::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.374790][f=-000001] [Path] [PathingState::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.374795][f=-000001] [Path] [PathingState::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.374800][f=-000001] [Path] [PathingState::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.374804][f=-000001] [Path] [PathingState::CalcHash][Init] estimatorHashCode=5639db17
+[t=00:00:16.374985][f=-000001] [Path] [PathEstimator::ReadFile] hash=5639db17 file="cache/paths/Area 17 - v01.pe-5639db17.zip" (exists=1)
+[t=00:00:16.375096][f=-000001] [LoadScreen::SetLoadMessage] text="Reading Estimate PathCosts [16]"
+[t=00:00:16.376688][f=-000001] [~CBufferedArchive][name=/home/gajop/projects/spring-projects/springcabal-games/area17-test/write/cache/paths/Area 17 - v01.pe-5639db17.zip] 0 bytes cached in 0 files, 0 bytes cached in 1 files
+[t=00:00:16.378650][f=-000001] Path cache (128, 128) initialized.
+[t=00:00:16.378681][f=-000001] Path cache (128, 128) initialized.
+[t=00:00:16.397582][f=-000001] [Path] [PathingState::CalcHash][Init] BLOCK_SIZE=32
+[t=00:00:16.397600][f=-000001] [Path] [PathingState::CalcHash][Init] PATHESTIMATOR_VERSION=109
+[t=00:00:16.397605][f=-000001] [Path] [PathingState::CalcHash][Init] heightMapChecksum=2ee0027f
+[t=00:00:16.397609][f=-000001] [Path] [PathingState::CalcHash][Init] typeMapChecksum=16bdfce3
+[t=00:00:16.397613][f=-000001] [Path] [PathingState::CalcHash][Init] moveDefChecksum=109bdb38
+[t=00:00:16.397617][f=-000001] [Path] [PathingState::CalcHash][Init] estimatorHashCode=5639db27
+[t=00:00:16.437266][f=-000001] [Path] [PathEstimator::ReadFile] hash=5639db27 file="cache/paths/Area 17 - v01.pe2-5639db27.zip" (exists=1)
+[t=00:00:16.437392][f=-000001] [LoadScreen::SetLoadMessage] text="Reading Estimate PathCosts [32]"
+[t=00:00:16.438013][f=-000001] [~CBufferedArchive][name=/home/gajop/projects/spring-projects/springcabal-games/area17-test/write/cache/paths/Area 17 - v01.pe2-5639db27.zip] 0 bytes cached in 0 files, 0 bytes cached in 1 files
+[t=00:00:16.438524][f=-000001] Path cache (64, 64) initialized.
+[t=00:00:16.438576][f=-000001] Path cache (64, 64) initialized.
+[t=00:00:16.438618][f=-000001] [LoadScreen::SetLoadMessage] text="[LoadFinalize] finalized PFS (834ms, checksum 09ad5881)"
+[t=00:00:16.438687][f=-000001] [Game::Load][6] globalQuit=0 forcedQuit=0
+[t=00:00:16.438693][f=-000001] [Game::LoadLua] Lua developer mode disabled
+[t=00:00:16.438700][f=-000001] [LoadScreen::SetLoadMessage] text="Loading LuaRules"
+[t=00:00:16.448389][f=-000001] [~ScopedOnceTimer][creg::AutoRegisterCFunctions(LuaRules)] 8ms
+[t=00:00:16.459945][f=-000001] Loaded SYNCED gadget:  Lua unit script framework  <unit_script.lua>
+[t=00:00:16.460596][f=-000001] Loaded SYNCED gadget:  Area 17 WASM unit-script bridge  <wasm_unit_script_bridge.lua>
+[t=00:00:16.472412][f=-000001] [LoadScreen::SetLoadMessage] text="Loading LuaGaia"
+[t=00:00:16.492343][f=-000001] [~ScopedOnceTimer][creg::AutoRegisterCFunctions(LuaGaia)] 9ms
+[t=00:00:16.510635][f=-000001] Error: Failed to load: gui_dualfog_gadget.lua  ([string "LuaGaia/Gadgets/gui_dualfog_gadget.lua"]:132: attempt to index field 'version' (a nil value))
+[t=00:00:16.512246][f=-000001] [LoadScreen::SetLoadMessage] text="Loading LuaUI"
+   Compiling area17-rules-wasm v0.1.0 (/home/gajop/projects/spring-projects/springcabal-games/spring-linux/games/Area17-wasm.sdd/wasm-src/rules-synced)
+    Finished `release` profile [optimized] target(s) in 0.46s

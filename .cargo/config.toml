@@ -1,0 +1,4 @@
+# Local development override: point git dependencies to local engine repo
+[patch."https://github.com/gajop/spring-rust"]
+spring = { path = "../spring-bar/rust/crates/spring" }
+spring-addons = { path = "../spring-bar/rust/crates/spring-addons" }

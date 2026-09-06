@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["menu"]
+
+[workspace.lints.rust]
+warnings = "deny"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }
+too_many_arguments = "allow"
+
+[workspace.dependencies]
+spring = { git = "https://github.com/gajop/spring-rust", branch = "rust-wip", features = ["alloc"] }

@@ -1,0 +1,43 @@
+# ==========================================
+# SpringCabal Games Dev Framework .gitignore
+# ==========================================
+
+# Engine runtime & downloads
+spring-linux/
+spring-linux.7z
+springsettings.cfg
+
+# Compiled binaries and bytecode
+*.cwasm
+*.wasm
+*.sd7
+target/
+**/target/
+
+# Test runtime outputs, write dirs, and logs
+verification/out/
+verification/cache/
+wasm-test-screens/
+area17-test/write/
+area17-test/visual-runs/
+area17-test/last.*.txt
+area17-test/*.sd7
+wasm-test/write/
+wasm-test/isolation-*/
+wasm-test/screens-*/
+wasm-menu-test/write/
+*.log
+
+# Backups & scratch folders
+wasm-backups/
+claude-work/
+codex-work/
+gemini-work/
+.claude/
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*~
