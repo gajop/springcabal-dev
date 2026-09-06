@@ -41,3 +41,7 @@ gemini-work/
 .DS_Store
 *.swp
 *~
+
+# Local overrides
+.cargo/config.toml
+

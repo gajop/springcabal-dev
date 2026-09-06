@@ -48,15 +48,27 @@ just copy-all
 ```
 
 ### 3. Local Engine Co-Development (Overrides)
-To develop games against a local checkout of the Spring engine (e.g. `spring-bar`), `.cargo/config.toml` at the repository root overrides the git dependencies:
+By default, all games build from the remote git repository (`https://github.com/gajop/spring-rust`, branch `rust-wip`), requiring no engine checkout.
 
+If you are developing on the engine at the same time, you can configure a local override:
+```bash
+just setup-dev-engine
+# Prompts for path (defaults to ../spring-bar), or pass it directly:
+# just setup-dev-engine /path/to/spring-engine
+```
+
+This creates `.cargo/config.toml` (which is gitignored) with Cargo `[patch]` entries pointing to your local engine's crates:
 ```toml
 [patch."https://github.com/gajop/spring-rust"]
 spring = { path = "../spring-bar/rust/crates/spring" }
 spring-addons = { path = "../spring-bar/rust/crates/spring-addons" }
 ```
 
-Cargo automatically applies this override for all games within this workspace. When building outside this workspace or on CI without this file, games compile directly from the remote repository.
+To revert back to using the remote repository:
+```bash
+just remove-dev-engine
+```
+
 
 ## Verification Suite
 
