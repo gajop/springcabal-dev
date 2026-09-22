@@ -510,6 +510,12 @@ fn make_start_script(game: &GameEntry) -> String {
     } else {
         ""
     };
+    // Flove assigns the grove to team 1 and mushrooms to team 0.
+    let (player_team, ai_team) = if game.game_type.starts_with("Flove") {
+        (1, 0)
+    } else {
+        (0, 1)
+    };
     format!(
         r#"[GAME]
 {{
@@ -553,7 +559,7 @@ fn make_start_script(game: &GameEntry) -> String {
     {{
         Name=0;
         Spectator=0;
-        Team=0;
+        Team={player_team};
     }}
     [TEAM1]
     {{
@@ -569,7 +575,7 @@ fn make_start_script(game: &GameEntry) -> String {
     {{
         Name=1: NullAI;
         ShortName=NullAI;
-        Team=1;
+        Team={ai_team};
         IsFromDemo=0;
         Host=1;
         [Options] {{}}
