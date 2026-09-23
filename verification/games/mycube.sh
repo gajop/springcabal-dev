@@ -30,6 +30,8 @@ minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; 
 gametype=$game; mapname=$map;
 }
 EOS
+    # The rules draw from the engine's synced RNG; pin it so runs repeat.
+    vf_start_set FixedRNGSeed 1
 }
 
 mycube_stage() {

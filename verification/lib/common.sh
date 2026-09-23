@@ -126,7 +126,7 @@ vf_write_settings() {
 # the caller's tolerance check via vf_within's default.
 vf_rmse() {
     compare -metric RMSE "${1:?a}" "${2:?b}" "${3:-null:}" 2>&1 |
-        grep -oE '\(([0-9.]+)\)' | tr -d '()' || true
+        grep -oE '\(([0-9.]+(e[-+]?[0-9]+)?)\)' | tr -d '()' || true
 }
 
 vf_within() {

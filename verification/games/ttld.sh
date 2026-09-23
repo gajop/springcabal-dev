@@ -44,6 +44,8 @@ minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=3; 
 gametype=$game_name; mapname=$MAP_NAME;
 }
 EOS
+    # The rules draw from the engine's synced RNG; pin it so runs repeat.
+    vf_start_set FixedRNGSeed 1
 }
 
 ttld_lua_visual() {

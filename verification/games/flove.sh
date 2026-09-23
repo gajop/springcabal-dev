@@ -29,6 +29,8 @@ flove_stage() {
 flove_start() {
     vf_start_file "$START_FILE" "${1:?min speed}" "${2:?max speed}"
     vf_modoption test_mode 1
+    # The rules draw from the engine's synced RNG; pin it so runs repeat.
+    vf_start_set FixedRNGSeed 1
 }
 
 flove_headless() {
