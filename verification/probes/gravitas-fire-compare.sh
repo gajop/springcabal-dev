@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Fire renderer parity, step 2: compare the lua and wasm runs of
+# gravitas-fire.sh.  See gravitas-fire.md.
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 out="$VERIFICATION_ROOT/out/gravitas-fire-comparison"
 mkdir -p "$out"

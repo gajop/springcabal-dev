@@ -5,8 +5,7 @@ GAME_DIR="$GAMES_DIR/Gravitas-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/Gravitas-map.sdd"
 FIXTURES="$FIXTURES_DIR/gravitas"
-BUILD_DIR="${TMPDIR:-/tmp}/gravitas-verify-target"
-SHOT_NAMES=(arena)
+START_FILE="$LAUNCH_DIR/gravitas.txt"
 HUD_REGION=1280x60+0+660
 # The health bar inside HUD_REGION tracks live health, so its fill width, its
 # colour and its readout all depend on whether the player has been hit by the
@@ -17,22 +16,16 @@ HUD_LIVE_REGION='460,4 668,56'
 HUD_TOLERANCE=1
 FIRE_SHARE=60
 
-gravitas_build_e2e() {
-    mkdir -p "$BUILD_DIR"
-    (
-        cd "$SOURCE_ROOT"
-        cargo build --workspace --features e2e \
-            --target wasm32-unknown-unknown --release --target-dir "$BUILD_DIR"
-    ) || vf_die 'gravitas e2e build failed'
-}
-
+# Stages the port with e2e modules (in-game cases and the GRAVITAS_SHOT capture).
 gravitas_stage() {
     local staged
+    vf_build "$SOURCE_ROOT" e2e
     staged=$(vf_stage_game "$GAME_DIR")
-    cp "$BUILD_DIR/wasm32-unknown-unknown/release/gravitas_rules_wasm.wasm" \
-        "$staged/LuaRules/wasm/gravitas-rules.wasm"
-    cp "$BUILD_DIR/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm" \
-        "$staged/LuaUI/wasm/gravitas-ui.wasm"
+    vf_install_modules "$staged" \
+        gravitas_rules_wasm:LuaRules/wasm/gravitas-rules.wasm \
+        gravitas_ui_wasm:LuaUI/wasm/gravitas-ui.wasm
+    vf_link_map "$MAP_DIR"
+    vf_start_file "$START_FILE"
 }
 
 gravitas_headless() {
@@ -42,7 +35,7 @@ gravitas_headless() {
     vf_workspace gravitas-headless
     vf_link_game "$GAME_DIR"
     vf_link_map "$MAP_DIR"
-    vf_start_file "$FIXTURES/start.txt"
+    vf_start_file "$START_FILE"
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -52,12 +45,9 @@ gravitas_headless() {
 gravitas_e2e() {
     local seconds=${1:-40} failures=0 cases_failed
 
-    gravitas_build_e2e
     vf_workspace gravitas-e2e
     trap 'vf_keep_workspace_unless' EXIT INT TERM
     gravitas_stage
-    vf_link_map "$MAP_DIR"
-    vf_start_file "$FIXTURES/start.txt"
     vf_write_settings <<'CFG'
 UseFontConfigLib = 0
 CFG
@@ -124,23 +114,18 @@ gravitas_clippy_clean() {
     (
         cd "$SOURCE_ROOT"
         cargo clippy --workspace "$@" --target wasm32-unknown-unknown --release \
-            --target-dir "$BUILD_DIR" 2>&1 | grep -qE '^(error|warning)'
+            --target-dir "$BUILD_CACHE/Gravitas-wasm.sdd" 2>&1 | grep -qE '^(error|warning)'
     ) && return 1
     return 0
 }
 
 gravitas_shots() {
-    local seconds=${1:-40} tolerance=${SHOT_TOLERANCE:-10}
-    local shot_dir golden_dir index name current golden difference percent
-    local -a captured taken
+    local seconds=${1:-40} shot previous='' checksum
+    local -a taken
 
     command -v xvfb-run >/dev/null 2>&1 || vf_die 'xvfb-run not found'
-    gravitas_build_e2e
-
     vf_workspace gravitas-shots stable
     gravitas_stage
-    vf_link_map "$MAP_DIR"
-    vf_start_file "$FIXTURES/start.txt"
     vf_write_settings <<CFG
 Fullscreen = 0
 UseFontConfigLib = 0
@@ -157,46 +142,21 @@ CFG
     vf_run_visual "$seconds"
     vf_save_logs
 
-    mapfile -t captured < <(vf_screenshots)
-    taken=()
-    local previous='' checksum shot
-    for shot in "${captured[@]}"; do
+    # The capture repeats while the engine settles; keep distinct frames only.
+    while read -r shot; do
         checksum=$(md5sum "$shot" | cut -d' ' -f1)
         [[ $checksum == "$previous" ]] && continue
         previous=$checksum
         taken+=("$shot")
-    done
-    [[ ${#taken[@]} -eq ${#SHOT_NAMES[@]} ]] ||
-        vf_die "expected ${#SHOT_NAMES[@]} screenshot(s), got ${#taken[@]}"
+    done < <(vf_screenshots)
+    [[ ${#taken[@]} -eq 1 ]] || vf_die "expected 1 distinct screenshot, got ${#taken[@]}"
 
-    shot_dir="$VF_OUT_DIR/shots"
-    golden_dir="$FIXTURES/goldens"
-    mkdir -p "$shot_dir" "$golden_dir"
-
-    for index in "${!SHOT_NAMES[@]}"; do
-        name=${SHOT_NAMES[$index]}
-        current="$shot_dir/$name.png"
-        golden="$golden_dir/$name.png"
-        cp "${taken[$index]}" "$current"
-        if [[ ! -f $golden ]]; then
-            echo "  NEW   $name  (no golden yet: $current)"
-            GRAVITAS_FAILURES=$((GRAVITAS_FAILURES + 1))
-            continue
-        fi
-        difference=$(vf_rmse "$golden" "$current" "$shot_dir/$name.diff.png")
-        percent=$(vf_percent "$difference")
-        if vf_within "$difference" "$tolerance"; then
-            echo "  PASS  $name  (${percent}% off golden)"
-        else
-            echo "  FAIL  $name  (${percent}% off golden, limit ${tolerance}%; diff: $shot_dir/$name.diff.png)"
-            GRAVITAS_FAILURES=$((GRAVITAS_FAILURES + 1))
-        fi
-    done
-
-    gravitas_hud_and_fire "$golden_dir/arena.png" "$shot_dir/arena.png"
+    vf_golden gravitas arena "${taken[0]}" "${SHOT_TOLERANCE:-10}"
+    gravitas_hud_and_fire "$FIXTURES/goldens/arena.png" "$VF_OUT_DIR/goldens/arena.png"
 
     echo
     [[ $GRAVITAS_FAILURES -eq 0 ]] || { echo "gravitas shots: $GRAVITAS_FAILURES check(s) need a look"; return 1; }
+    vf_goldens_done
     echo '>>> Gravitas shots match golden <<<'
 }
 

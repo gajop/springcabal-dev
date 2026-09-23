@@ -1,70 +1,121 @@
 # Verification
 
-One place for every game's automated checks. Before this existed the same
-eight-line preamble (find the engine, build an isolation view, symlink base and
-fonts, randomise the host port, run under `timeout`, grep the log) was
-copy-pasted into 18 scripts across `area17-test/`, `wasm-test/`,
-`claude-work/gravitas-test/`, `gemini-work/flove-test/` and the repo root.
-
-## Running
+Automated checks for every game, driven from the repository root with `just`:
 
 ```bash
-./verification/verify list
-./verification/verify flove                 # default mode
-./verification/verify flove visual
-./verification/verify flove outline 60      # mode + seconds
-./verification/verify ports headless partsneeded
-./verification/verify all                   # every suite, default mode
+just verify-list                 # suites, modes, probes
+just verify flove                # one suite, default mode
+just verify flove visual         # one suite, one mode
+just verify-all                  # every headless/static suite
+just verify-visual               # every screenshot suite against its goldens
+just update-goldens [suite]      # re-record goldens after an intended change
+just probe gravitas-fire lua     # a debugging probe
 ```
 
-| game | modes |
-| --- | --- |
-| `area17` | `static` \| `headless` \| `visual` \| `all` |
-| `flove` | `headless` \| `visual` \| `outline` \| `wisps` \| `original` |
-| `gravitas` | `e2e` \| `shots` \| `headless` |
-| `hunted` | `headless` |
-| `ports` | `headless` \| `visual` — plus `mycube` \| `partsneeded` \| `all` |
-| `ttld` | `headless` \| `visual` \| `lua-visual` |
+(`./verification/verify …` takes the same arguments.)
 
-`static` is build hygiene only (fmt, clippy, installed artifacts match source).
-`headless` runs the in-game assertions under `spring-headless`. `visual` renders
-under xvfb with software GL and checks screenshots. `outline` and `shots` are
-image comparisons against a reference. `flove wisps [0|1|2|3|all]` pins every
-tree's wisps to a stage and reports the stage histogram plus a screenshot, so the
-effect can be inspected without waiting the 165 frames per stage the game needs.
-`flove original` renders the pre-port `Flove.sdd` from a staged copy for A/B
-against the port.
+| suite | modes (first = default) |
+| --- | --- |
+| `area17` | `headless` \| `visual` \| `static` \| `all` |
+| `flove` | `headless` \| `visual` \| `outline` \| `wisps [stage]` \| `original` |
+| `gravitas` | `e2e` \| `shots` \| `headless` |
+| `hunted` | `headless` \| `visual` |
+| `mycube` | `headless` \| `visual` \| `lua-headless` |
+| `partsneeded` | `headless` \| `visual` |
+| `ttld` | `headless` \| `visual` \| `lua-visual` \| `pose-parity` |
+| `unit-scripts` | `partsneeded` \| `source` |
+
+- `headless` runs the in-game assertions (modules built with the
+  `headless-integration` feature) under `spring-headless`.
+- `visual` renders under xvfb with software GL, runs the `e2e` feature's
+  scripted scenario and compares its screenshots with goldens.
+- `static` is build hygiene only (fmt, clippy, installed artifacts match source).
+- `lua-*` modes check the original Lua game on this engine.
+- `pose-parity` and `unit-scripts` compare Lua and Rust unit-script animation
+  traces numerically.
+- `flove outline`, `wisps` and `original` render images for manual A/B
+  inspection and do not fail on pixels.
+
+`verify all` runs every in-game assertion suite. `verify visual` runs every
+golden comparison. Both run their mode list from the table in `verify`.
+
+## Suites never touch the game checkouts
+
+Everything under `spring-linux/` is what `release/package.sh` ships, so suites
+treat it as read-only:
+
+- `vf_build` compiles into `verification/cache/target/<game>/`, never the
+  checkout's own `target/` (whose output `just copy` installs).
+- `vf_stage_game` copies the game into the run's isolation view, and
+  `vf_install_modules` puts the test-feature modules into that copy. Probe
+  gadgets, edited manifests and similar changes also go into the copy.
+
+`release/package.sh` rejects any module that contains test markers, in case a
+test build ends up in a checkout anyway.
+
+## Goldens
+
+`fixtures/<game>/goldens/<name>.png` holds the reference screenshots.
+`vf_golden` compares a capture with its golden by RMSE and writes the capture
+and a diff image to `out/<suite>/goldens/`.
+
+Renders are **not** bit-identical between runs, and how much they drift
+depends on the game. Each suite sets `GOLDEN_TOLERANCE` to about twice the
+run-to-run RMSE measured on 2026-09-23:
+
+| suite | run-to-run drift | limit |
+| --- | --- | --- |
+| ttld | 0.1% | 1% |
+| area17 | 2.8% | 5% |
+| flove | 2.6% | 5% |
+| mycube | 4.2% | 9% |
+| hunted | 5.2% | 10% |
+| gravitas | 7.9% | 10% (`SHOT_TOLERANCE`) |
+| partsneeded | not recorded yet | 8% |
+
+For MyCube and Hunted the drift is as large as the difference between two of
+their own shots, because units move differently each run. Their goldens catch
+gross breakage (missing terrain, a black screen, a missing HUD) but not subtle
+changes. For those, compare within one run (the `area17` crater, the `ttld`
+leader render), assert on values the simulation reports, or use a tight
+tolerance on a masked crop (the `gravitas` HUD check).
+
+Golden names:
+
+- **flove** names them after its scenario's announcements
+  ("Taking screenshot 2 (spire zap in flight)" → `02_spire_zap_in_flight`).
+- **area17** names them after the capture frame (`frame_080`).
+- **The other suites** use `shot_N`, in capture order.
+
+After an intended visual change, run `just update-goldens <suite>`, look at the
+new images, and commit them.
+
+## Probes
+
+`probes/` holds debugging tools that aren't regression tests. They need
+environment variables, a real GPU, or manual steps; each script's header says
+which. `verify list` shows them, and `verify all` never runs them.
 
 ## Layout
 
 ```
-verify              dispatcher
+verify              dispatcher (suite/mode table, all, visual, goldens, probes)
 lib/common.sh       everything shared; suites only describe their game
-games/<game>.sh     per-game config, install steps and assertions
-fixtures/<game>/    start scripts, configs, goldens
-cache/fontcache     shared font cache, built once (see below)
-out/<suite>/        logs, screenshots and workspace for the last run
+games/<suite>.sh    per-game build features, staging and assertions
+probes/             debugging probes (not part of all/visual)
+fixtures/visual.conf  engine config for every visual suite
+fixtures/<game>/    probe gadgets, configs, goldens
+unit-scripts/       Lua/Rust animation trace comparators
+cache/              font cache and build targets, shared across runs
+out/<suite>/        logs, screenshots and workspace of the last run
 ```
 
-Suites read `wasm-test/spring.conf` and `area17-test/spring.conf` in place
-rather than keeping a copy, because the launcher (`run-wasm.sh`) owns
-those files.
-
-## The font cache
-
-`lib/common.sh` symlinks every run's `write/fontcache` at `cache/fontcache`, so
-the cache is built once and shared by every suite forever after. Do not point a
-suite at a fresh per-run fontcache: building it from scratch takes over 25
-seconds under an ASAN engine build, which silently ate the whole timeout budget
-of the first migrated visual run.
-
-The archive cache (`write/cache`) stays per-suite. It records each archive's
-info-file path, so a workspace that moves between runs makes every entry stale;
-visual suites therefore use a stable workspace under `out/<suite>/run`.
+Start scripts come from `launch/` (the same files `run-wasm.sh` plays), and
+suites add what they need with `vf_modoption test_mode 1` and
+`vf_start_set gametype ...`. Suites whose scenario needs a special team layout
+write theirs inline.
 
 ## Writing a suite
-
-Source the library, describe the game, call the helpers:
 
 ```bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
@@ -72,11 +123,14 @@ source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 GAME_DIR="$GAMES_DIR/Example-wasm.sdd"
 
 example_headless() {
+    local staged
     vf_build "$GAME_DIR/wasm-src" headless-integration
     vf_workspace example-headless
-    vf_link_game "$GAME_DIR"
+    staged=$(vf_stage_game "$GAME_DIR")
+    vf_install_modules "$staged" example_rules_wasm:LuaRules/wasm/example-rules.wasm
     vf_link_map "$MAPS_DIR/Example-map.sdd" 'Display Name.sdd'
-    vf_start_file "$FIXTURES_DIR/example/start.txt" 100.0 100.0
+    vf_start_file "$LAUNCH_DIR/example.txt" 100.0 100.0
+    vf_modoption test_mode 1
     vf_config
     vf_run_headless 45
     vf_save_logs
@@ -85,47 +139,34 @@ example_headless() {
 }
 ```
 
-Useful helpers beyond those: `vf_stage_game` (copy instead of symlink, for
-suites that must not touch the shipped archive), `vf_write_settings`,
-`vf_run_visual`, `vf_require_screenshots`, `vf_collect_screenshots`, `vf_rmse`,
-`vf_within`, `vf_percent`, `vf_count`, `vf_summary`, `vf_restore_modules`.
+Then add the suite and its modes to the tables in `verify`. For a screenshot
+mode, end with `vf_goldens_by_index example shot_1 shot_2` (or `vf_golden`
+per image) and `vf_goldens_done`.
 
-`unit-scripts` is the cross-runtime unit-script harness. Its `source` mode
-compares the Lua and Rust animation command tables without starting Spring:
+Other helpers: `vf_write_settings`, `vf_run_visual`, `vf_require_screenshots`,
+`vf_collect_screenshots`, `vf_rmse`, `vf_within`, `vf_percent`, `vf_count`,
+`vf_summary`.
 
-```bash
-./verification/verify unit-scripts source
-```
+A map alias is often needed, because a start script names the map by its
+display name, which rarely matches the archive name.
 
-Its `partsneeded` mode injects the same
-probe gadget into isolated Lua and WASM archive copies, samples model-relative
-piece model matrices at the same simulation frames, then compares the numeric
-traces. This tests the complete engine result—including animated rotation—not
-merely whether the Rust source contains similar-looking keyframes. Run the
-first port with:
+## The font cache
 
-```bash
-./verification/verify unit-scripts partsneeded
-```
+Every run's `write/fontcache` is a symlink to `cache/fontcache`, so the cache
+is built once. Building it from scratch takes over 25 seconds under an ASAN
+engine build, which silently ate the whole timeout of the first migrated
+visual run.
 
-To add another game, keep the probe fixture and comparator, then add a small
-suite/configuration that names the two archives, map, target unit, sample
-frames, and pieces. The resulting traces remain under
-`verification/out/unit-scripts-<game>-{lua,wasm}/trace.log` for inspection.
-
-A map alias is often needed because a start script names the map by its display
-name, which rarely matches the archive directory name.
+The archive cache (`write/cache`) stays per suite. It records each archive's
+path, so visual suites use a stable workspace under `out/<suite>/run`.
 
 ## Gotchas found the hard way
 
 - `test_scenario.lua` in Flove force-sets game speed to 1.0 and `quitforce`s at
   frame 250. A wisp needs 165 frames per stage, so nothing in a default run ever
   leaves wisp stage 1. Any test that depends on later game state has to move
-  that frame or drive the state directly rather than waiting for it.
+  that frame or drive the state directly.
 - Visual suites need `xvfb-run` and ImageMagick (`convert`, `compare`).
-- **Renders are not deterministic between runs.** Two runs of the identical
-  config differ by roughly 11000 pixels at 1280x720. Never build an assertion on
-  a pixel diff between two separate runs; it will measure noise. Compare within a
-  run, compare against a committed golden with a generous RMSE tolerance (as
-  `gravitas shots` does), or assert on values the simulation reports rather than
-  on pixels.
+- The Lua Gravitas archive can wait at the pre-game boundary under the
+  headless engine, and several games start paused or stop logging once
+  running. Don't infer progress from the last logged frame number.

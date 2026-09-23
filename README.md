@@ -23,7 +23,9 @@ are archived in [game-info/](game-info/README.md).
 ├── release/                 # Release packaging and smoke test (see RELEASING.md)
 ├── verification/            # Automated test suite (headless, visual, static)
 ├── game-info/               # Archived jam entries (descriptions, credits, ratings)
-├── wasm-test/, area17-test/ # Launch configs and start scripts used by run-wasm.sh
+├── launch/                  # Start scripts and engine configs for direct launches
+├── patches/                 # Patches applied to third-party archives (Area 17 map)
+├── scripts/                 # Helper scripts (patched map builder)
 ├── justfile                 # Root commands for building, checking, testing, releasing
 └── spring-linux/            # (Gitignored) game and map checkouts
 ```
@@ -67,15 +69,9 @@ with `$SPRING_BAR_DIR`), then `engine/current` from setup.
 ### 3. Building & Checking Games
 Games depend on `spring` and `spring-addons` via the remote git repository (`https://github.com/gajop/spring-rust`, branch `rust-wip`).
 
-Check compilation across all games:
 ```bash
-just check-all
-```
-
-Build release WASM binaries across all games:
-```bash
-just build-all
-just copy-all
+just check-all     # cargo check every WASM game and the menu
+just build-all     # fmt + clippy + release build, installed into each game
 ```
 
 ### 4. Local Engine Co-Development (Overrides)
@@ -101,49 +97,42 @@ just remove-dev-engine
 ```
 
 
-## Verification Suite
+## The WASM menu
 
-The WASM menu uses `wasm-menu/WasmMenu/menu.rml`, `menu.rcss`, and `gallery.rcss`
-for layout, gallery styling, and hover. Each game has one row with separate
-one-click WASM and Lua buttons. The spotlight shows artwork, original jam date,
-and full credits. Mouse hover/scroll previews games independently of keyboard
-selection: Up/Down selects a game, Left/Right selects its version, and Enter
-launches that keyboard selection. Tab/Shift+Tab traverses the launch buttons.
-Official logo sources and attribution are in `wasm-menu/WasmMenu/images/LOGOS.md`.
-Rust in `wasm-menu/wasm-src/menu/src/ui.rs` handles RmlUi
-events and queues launches until callbacks return; game metadata and launch
-settings remain in `lib.rs`. This requires the experimental engine's RmlUi
-menu integration. Rebuild Rust changes with:
+`wasm-menu/WasmMenu/menu.rml`, `menu.rcss` and `gallery.rcss` define layout,
+gallery styling and hover. Each game has one row with WASM and Lua buttons; the
+spotlight shows artwork, the original jam date and full credits. Mouse
+hover/scroll previews games independently of keyboard selection: Up/Down selects
+a game, Left/Right its version, Enter launches, Tab/Shift+Tab walks the buttons.
+Logo sources and attribution are in `wasm-menu/WasmMenu/images/LOGOS.md`.
 
-```bash
-just --justfile wasm-menu/wasm-src/justfile copy
-```
+`wasm-menu/wasm-src/menu/src/ui.rs` handles RmlUi events and queues launches
+until callbacks return; game metadata and launch settings (start scripts,
+graphics overrides) live in `lib.rs`. Rebuild after Rust changes with
+`just --justfile wasm-menu/wasm-src/justfile copy`, and restart the engine after
+editing RML/RCSS (styles may be cached across reloads).
 
-Restart the engine after editing RML/RCSS (styles may be cached across reloads).
-The Hunted Core-WASM launch/return path and repeated Hunted Lua launch/return
-cycles have been checked in the same process. Use an engine build containing
-the Lua-plugin teardown fix documented in the engine repository's `review.md`.
+Games return to the menu in-process (`reloadforce`). `run-wasm.sh` relaunches
+the menu only when a game logs a return marker and then quits the process.
 
-To test the menu on a separate X display without using your desktop or its
-runtime files:
+To try the menu on a separate X display without touching your runtime files:
 ```bash
 xvfb-run -a -s '-screen 0 1280x900x24' env SPRING_RUN_DIR=/tmp/springcabal-menu-check ./run-wasm.sh
 ```
+`SPRING_RUN_DIR` (default `wasm-test/`, gitignored) holds the launcher's write
+dir, logs and isolation views. Start scripts and engine configs for direct
+launches are in `launch/`.
 
-`SPRING_RUN_DIR` defaults to `wasm-test` in this repository. It contains the
-launcher's writable data and isolation views.
-
-Run automated headless assertions and visual tests:
+## Verification
 
 ```bash
-# List available test suites
-just verify-list
-
-# Run tests for a specific game
-just verify area17 all
-just verify flove
-just verify gravitas
-
-# Run all verification suites
-just verify-all
+just verify-list             # suites, modes, probes
+just verify flove            # one suite, default mode
+just verify-all              # every headless/static suite
+just verify-visual           # screenshot suites against committed goldens
+just update-goldens flove    # re-record goldens after an intended change
 ```
+
+Suites build test modules into `verification/cache/` and stage copies of the
+games, so they never modify `spring-linux/`. See
+[verification/README.md](verification/README.md).

@@ -5,15 +5,23 @@ set -euo pipefail
 VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 PROJECT_ROOT=$(CDPATH= cd -- "$VERIFICATION_ROOT/.." && pwd)
 ENGINE_ROOT=${SPRING_BAR_DIR:-$(dirname "$PROJECT_ROOT")/spring-bar}
-ENGINE_INSTALL="$ENGINE_ROOT/build-amd64-linux/install"
+# Same lookup order as run-wasm.sh: SPRING_ENGINE_DIR, the spring-bar build,
+# then the release fetched by setup.sh.
+ENGINE_INSTALL=${SPRING_ENGINE_DIR:-$ENGINE_ROOT/build-amd64-linux/install}
+if [[ -z ${SPRING_ENGINE_DIR:-} && ! -x $ENGINE_INSTALL/spring && -x $PROJECT_ROOT/engine/current/spring ]]; then
+    ENGINE_INSTALL="$PROJECT_ROOT/engine/current"
+fi
 
 GAMES_DIR="$PROJECT_ROOT/spring-linux/games"
 MAPS_DIR="$PROJECT_ROOT/spring-linux/maps"
 FIXTURES_DIR="$VERIFICATION_ROOT/fixtures"
 SHARED_FONTCACHE="$VERIFICATION_ROOT/cache/fontcache"
 
-DEFAULT_CONFIG="$PROJECT_ROOT/wasm-test/spring.conf"
-VISUAL_CONFIG="$PROJECT_ROOT/area17-test/spring.conf"
+LAUNCH_DIR="$PROJECT_ROOT/launch"
+DEFAULT_CONFIG="$LAUNCH_DIR/spring.conf"
+VISUAL_CONFIG="$FIXTURES_DIR/visual.conf"
+BUILD_CACHE="$VERIFICATION_ROOT/cache/target"
+GOLDEN_FAILURES=0
 
 VF_TEST_ROOT=""
 VF_ISOLATION=""
@@ -22,6 +30,7 @@ VF_START_FILE=""
 VF_CONFIG_FILE=""
 VF_OUT_DIR=""
 VF_ENGINE_STATUS=0
+VF_BUILD_OUT=""
 
 vf_die() {
     printf '%s\n' "$*" >&2
@@ -42,7 +51,6 @@ vf_engine_bin() {
 
     if [[ -z $candidate ]]; then
         candidate="$ENGINE_INSTALL/$name"
-        [[ -x $candidate ]] || candidate="$PROJECT_ROOT/spring-linux/$name"
     fi
     [[ -x $candidate ]] || vf_die "engine not found: $candidate
 Build it with: cd '$ENGINE_ROOT' && ./docker-build-v2/build.sh linux"
@@ -77,13 +85,31 @@ vf_share_fontcache() {
     ln -sfn "$SHARED_FONTCACHE" "$VF_WRITE_DIR/fontcache"
 }
 
+# Suites never modify a checkout under spring-linux/: anything that needs test
+# modules, probe gadgets or edited files gets a private copy in the isolation
+# view.  The checkout is what release/package.sh ships.
 vf_stage_game() {
     local dir=${1:?game dir} staged
     staged="$VF_ISOLATION/games/$(basename "$dir")"
     rm -rf -- "$staged"
     mkdir -p "$staged"
-    (cd "$dir" && tar --exclude=./wasm-src --exclude=./target -cf - .) | (cd "$staged" && tar -xf -)
+    (cd "$dir" && tar --exclude=./wasm-src --exclude=./target --exclude=./.git -cf - .) | (cd "$staged" && tar -xf -)
     printf '%s\n' "$staged"
+}
+
+# vf_install_modules STAGED CRATE:ARCHIVE_PATH...
+# Copies modules from the last vf_build into a staged game copy.
+vf_install_modules() {
+    local staged=${1:?staged game} pair crate dest
+    shift
+    [[ -n $VF_BUILD_OUT ]] || vf_die 'vf_install_modules: call vf_build first'
+    [[ $staged == "$VF_ISOLATION"/* ]] || vf_die "refusing to install modules outside the isolation view: $staged"
+    for pair in "$@"; do
+        crate=${pair%%:*}
+        dest=${pair#*:}
+        [[ -s "$VF_BUILD_OUT/$crate.wasm" ]] || vf_die "missing build artifact: $crate.wasm"
+        cp "$VF_BUILD_OUT/$crate.wasm" "$staged/$dest"
+    done
 }
 
 vf_write_settings() {
@@ -115,10 +141,8 @@ vf_keep_workspace_unless() {
 }
 
 vf_link_engine_data() {
-    local base="$ENGINE_INSTALL/base" fonts="$ENGINE_INSTALL/fonts"
-    [[ -d $base ]] || { base="$PROJECT_ROOT/spring-linux/base"; fonts="$PROJECT_ROOT/spring-linux/fonts"; }
-    ln -sfn "$base" "$VF_ISOLATION/base"
-    ln -sfn "$fonts" "$VF_ISOLATION/fonts"
+    ln -sfn "$ENGINE_INSTALL/base" "$VF_ISOLATION/base"
+    ln -sfn "$ENGINE_INSTALL/fonts" "$VF_ISOLATION/fonts"
 
     if [[ -d "$ENGINE_INSTALL/AI" ]]; then
         ln -sfn "$ENGINE_INSTALL/AI" "$VF_ISOLATION/AI"
@@ -133,6 +157,7 @@ vf_link_engine_data() {
 vf_link_game() {
     local dir=${1:?game dir}
     [[ -e $dir ]] || vf_die "game archive not found: $dir"
+    [[ $dir == "$VF_ISOLATION"/* ]] && return 0
     ln -sfn "$dir" "$VF_ISOLATION/games/$(basename "$dir")"
 }
 
@@ -162,6 +187,38 @@ vf_start_inline() {
     VF_START_FILE="$VF_TEST_ROOT/start.txt"
     cat >"$VF_START_FILE"
     sed -E -i "s/[Hh]ostport=[0-9]+;/hostport=$(shuf -i 20000-60000 -n 1);/" "$VF_START_FILE"
+}
+
+# vf_start_set KEY VALUE: replace a top-level entry such as GameType or MapName
+# in the current start script (key match is case-insensitive).
+vf_start_set() {
+    local key=${1:?key} value=${2?value}
+    [[ -f $VF_START_FILE ]] || vf_die 'vf_start_set: no start script yet'
+    grep -qiE "^[[:space:]]*${key}[[:space:]]*=" "$VF_START_FILE" || vf_die "start script has no $key"
+    KEY=$key VALUE=$value perl -i -pe \
+        's/^(\s*)\Q$ENV{KEY}\E\s*=[^;]*;/$1$ENV{KEY}=$ENV{VALUE};/i' "$VF_START_FILE"
+}
+
+# vf_modoption KEY VALUE: set a [modoptions] entry in the current start script,
+# creating the section if the script has none.
+vf_modoption() {
+    local key=${1:?key} value=${2?value}
+    [[ -f $VF_START_FILE ]] || vf_die 'vf_modoption: no start script yet'
+    python3 - "$VF_START_FILE" "$key" "$value" <<'PY'
+import re, sys
+path, key, value = sys.argv[1:]
+text = open(path).read()
+entry = re.compile(r'(?im)^(\s*)' + re.escape(key) + r'\s*=[^;]*;')
+section = re.search(r'(?i)\[modoptions\]\s*\{', text)
+if section and entry.search(text, section.end()):
+    text = entry.sub(lambda m: f"{m.group(1)}{key}={value};", text, count=1)
+elif section:
+    text = text[:section.end()] + f"\n{key}={value};" + text[section.end():]
+else:
+    end = text.rstrip().rfind('}')
+    text = text[:end] + f"[modoptions]\n{{\n{key}={value};\n}}\n" + text[end:]
+open(path, 'w').write(text)
+PY
 }
 
 vf_config() {
@@ -217,27 +274,25 @@ vf_run_visual() {
     return 0
 }
 
+# vf_build SOURCE_ROOT [FEATURES]
+# fmt + clippy + build into verification/cache/target/<game>, never into the
+# checkout's own target/ (whose output `just copy` installs).  Sets VF_BUILD_OUT.
 vf_build() {
-    local source_root=${1:?wasm-src} features=${2:-}
+    local source_root=${1:?wasm-src} features=${2:-} game target
     [[ -d $source_root ]] || vf_die "wasm source not found: $source_root"
+    game=$(basename "$(dirname "$source_root")")
+    target="$BUILD_CACHE/$game"
+    local -a feature_args=()
+    [[ -n $features ]] && feature_args=(--features "$features")
     (
         cd "$source_root"
         cargo fmt --all -- --check
-        if [[ -n $features ]]; then
-            cargo clippy --workspace --features "$features" \
-                --target wasm32-unknown-unknown --release -- -D warnings
-            cargo build --workspace --features "$features" \
-                --target wasm32-unknown-unknown --release
-        else
-            cargo clippy --workspace --target wasm32-unknown-unknown --release -- -D warnings
-            cargo build --workspace --target wasm32-unknown-unknown --release
-        fi
-    )
-}
-
-vf_restore_modules() {
-    local source_root=${1:?wasm-src}
-    (cd "$source_root" && just copy) >/dev/null 2>&1 || true
+        cargo clippy --workspace "${feature_args[@]}" --target wasm32-unknown-unknown \
+            --release --target-dir "$target" -- -D warnings
+        cargo build --workspace "${feature_args[@]}" --target wasm32-unknown-unknown \
+            --release --target-dir "$target"
+    ) || vf_die "build failed: $source_root ${features:+(features: $features)}"
+    VF_BUILD_OUT="$target/wasm32-unknown-unknown/release"
 }
 
 vf_log() {
@@ -299,4 +354,89 @@ vf_collect_screenshots() {
         cp "$shot" "$dest/"
     done < <(vf_screenshots)
     printf '%s\n' "$dest"
+}
+
+# vf_golden GAME NAME IMAGE [TOLERANCE_PERCENT] [CROP]
+# Compares IMAGE with verification/fixtures/GAME/goldens/NAME.png by RMSE.
+# Renders are not bit-identical between runs, so the default tolerance only
+# catches real regressions (missing terrain, black screen, broken UI).  With
+# VF_UPDATE_GOLDENS=1 the image replaces the golden instead.
+vf_golden() {
+    local game=${1:?game} name=${2:?name} image=${3:?image}
+    local tolerance=${4:-${GOLDEN_TOLERANCE:-8}} crop=${5:-}
+    local golden="$FIXTURES_DIR/$game/goldens/$name.png"
+    local work="$VF_OUT_DIR/goldens" current difference
+    [[ -f $image ]] || vf_die "no image for golden $name: $image"
+    mkdir -p "$work"
+    current="$work/$name.png"
+    if [[ -n $crop ]]; then
+        convert "$image" -crop "$crop" +repage "$current"
+    else
+        cp "$image" "$current"
+    fi
+
+    if [[ ${VF_UPDATE_GOLDENS:-0} == 1 ]]; then
+        mkdir -p "$(dirname "$golden")"
+        cp "$current" "$golden"
+        printf '  UPDATED  %s\n' "${golden#"$PROJECT_ROOT"/}"
+        return 0
+    fi
+    if [[ ! -f $golden ]]; then
+        printf '  MISSING  %s (run with VF_UPDATE_GOLDENS=1 to record it)\n' "$name"
+        GOLDEN_FAILURES=$((GOLDEN_FAILURES + 1))
+        return 0
+    fi
+    difference=$(vf_rmse "$golden" "$current" "$work/$name.diff.png")
+    if vf_within "$difference" "$tolerance"; then
+        printf '  PASS     %s (%s%% off golden)\n' "$name" "$(vf_percent "$difference")"
+    else
+        printf '  FAIL     %s (%s%% off golden, limit %s%%; diff: %s)\n' \
+            "$name" "$(vf_percent "$difference")" "$tolerance" "$work/$name.diff.png"
+        GOLDEN_FAILURES=$((GOLDEN_FAILURES + 1))
+    fi
+}
+
+# vf_goldens_by_index GAME NAME... : the Nth screenshot of the run is golden NAME.
+vf_goldens_by_index() {
+    local game=${1:?game} index=0 name
+    shift
+    local -a shots
+    mapfile -t shots < <(vf_screenshots)
+    for name in "$@"; do
+        [[ $index -lt ${#shots[@]} ]] || vf_die "golden $name: only ${#shots[@]} screenshot(s) captured"
+        vf_golden "$game" "$name" "${shots[$index]}"
+        index=$((index + 1))
+    done
+}
+
+# vf_goldens_announced GAME PATTERN
+# For games whose scenario logs a line before each capture: PATTERN is an ERE
+# whose text after the match start names the shot (e.g. 'Taking screenshot').
+# Each announcement is paired with the next file the engine saves, so extra
+# screenshots taken elsewhere do not shift the mapping.  Names are slugged:
+# "Taking screenshot 2 (spire zap in flight)" -> 02_spire_zap_in_flight.
+vf_goldens_announced() {
+    local game=${1:?game} pattern=${2:?pattern} name file count=0
+    while IFS=$'\t' read -r name file; do
+        vf_golden "$game" "$name" "$VF_WRITE_DIR/$file"
+        count=$((count + 1))
+    done < <(awk -v pattern="$pattern" '
+        match($0, pattern) {
+            text = substr($0, RSTART + RLENGTH)
+            number = text; sub(/^[^0-9]*/, "", number); sub(/[^0-9].*$/, "", number)
+            sub(/^[^(]*\(/, "", text); sub(/\).*$/, "", text)
+            gsub(/[^A-Za-z0-9]+/, "_", text); sub(/^_/, "", text); sub(/_$/, "", text)
+            pending = sprintf("%02d_%s", number, tolower(text))
+            next
+        }
+        pending != "" && match($0, /saving "screenshots\/[^"]+"/) {
+            file = substr($0, RSTART + 8, RLENGTH - 9)
+            print pending "\t" file
+            pending = ""
+        }' "$VF_WRITE_DIR/stdout.txt")
+    [[ $count -gt 0 ]] || vf_die "no announced screenshots matched: $pattern"
+}
+
+vf_goldens_done() {
+    [[ $GOLDEN_FAILURES -eq 0 ]] || vf_die "$GOLDEN_FAILURES golden comparison(s) failed"
 }

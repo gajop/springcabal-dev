@@ -37,20 +37,17 @@ gametype=$game; mapname=$MAP_NAME;
 EOS
 }
 
-unit_scripts_install_wasm() {
-	(
-		cd "$SOURCE_ROOT"
-		cp target/wasm32-unknown-unknown/release/partsneeded_rules_wasm.wasm "$WASM_GAME_DIR/LuaRules/wasm/partsneeded-rules.wasm"
-		cp target/wasm32-unknown-unknown/release/partsneeded_ui_wasm.wasm "$WASM_GAME_DIR/LuaUI/wasm/partsneeded-ui.wasm"
-	)
-}
-
 unit_scripts_run_one() {
 	local label=${1:?label} archive=${2:?archive} game=${3:?game} seconds=${4:-25}
 	VF_OUT_DIR="$VERIFICATION_ROOT/out/unit-scripts-partsneeded-$label"
 	vf_workspace "unit-scripts-partsneeded-$label"
 	local staged
 	staged=$(vf_stage_game "$archive")
+	if [[ $label == wasm ]]; then
+		vf_install_modules "$staged" \
+			partsneeded_rules_wasm:LuaRules/wasm/partsneeded-rules.wasm \
+			partsneeded_ui_wasm:LuaUI/wasm/partsneeded-ui.wasm
+	fi
 	mkdir -p "$staged/LuaRules/Gadgets"
 	cp "$PROBE" "$staged/LuaRules/Gadgets/unit_script_probe.lua"
 	if [[ $label == lua ]]; then
@@ -91,7 +88,7 @@ partsneeded_source() {
 
 partsneeded_unit_scripts() {
 	local seconds=${1:-25}
-	trap 'vf_restore_modules "$SOURCE_ROOT"; vf_keep_workspace_unless' EXIT INT TERM
+	trap 'vf_keep_workspace_unless' EXIT INT TERM
 	[[ -f $PROBE ]] || vf_die "unit-script probe is missing: $PROBE"
 	[[ -d $MAP_DIR ]] || vf_die "map archive is missing: $MAP_DIR"
 	partsneeded_source
@@ -100,7 +97,6 @@ partsneeded_unit_scripts() {
 	# probe itself is the only test gadget in these runs, so Lua and WASM receive
 	# the same observation schedule and no synthetic gameplay is injected.
 	vf_build "$SOURCE_ROOT" unit-script-probe
-	unit_scripts_install_wasm
 	unit_scripts_run_one lua "$LUA_GAME_DIR" "$LUA_GAME_NAME" "$seconds"
 	unit_scripts_run_one wasm "$WASM_GAME_DIR" "$WASM_GAME_NAME" "$seconds"
 

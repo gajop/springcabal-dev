@@ -7,50 +7,59 @@ set shell := ["bash", "-cu"]
 default:
     @just --list
 
-# Run verification suite (e.g. `just verify area17 all`, `just verify flove`)
-[group('test')]
-verify GAME="list" MODE="":
-    ./verification/verify {{GAME}} {{MODE}}
+# WASM game checkouts, from content.tsv (e.g. spring-linux/games/Flove-wasm.sdd)
+wasm_games := `awk -F'\t' '$1 == "game" && $2 ~ /-wasm\.sdd$/ { printf "spring-linux/games/%s ", $2 }' content.tsv`
 
-# Run all verification suites
+# Run one suite, default mode if MODE is empty (e.g. `just verify flove visual`)
+[group('test')]
+verify SUITE MODE="" *ARGS:
+    ./verification/verify {{SUITE}} {{MODE}} {{ARGS}}
+
+# Every headless and static suite (in-game assertions, no screenshots)
 [group('test')]
 verify-all:
     ./verification/verify all
 
-# List all verification suites and modes
+# Every screenshot suite, compared against the committed goldens
+[group('test')]
+verify-visual:
+    ./verification/verify visual
+
+# List suites, their modes, and the probes
 [group('test')]
 verify-list:
     ./verification/verify list
 
-# Check compilation of all wasm game modules
+# Re-record goldens from fresh renders (all suites, or one: `just update-goldens flove`)
+[group('test')]
+update-goldens SUITE="":
+    ./verification/verify update-goldens {{SUITE}}
+
+# Run a debugging probe from verification/probes (e.g. `just probe gravitas-fire lua`)
+[group('probe')]
+probe NAME *ARGS:
+    ./verification/verify probe {{NAME}} {{ARGS}}
+
+# cargo check every WASM game and the menu
 [group('build')]
 check-all:
-    @for g in Area17 Flove Gravitas Hunted MyCube PartsNeeded ToTheLastDrop; do \
+    @for g in {{wasm_games}} wasm-menu; do \
         echo "=== Checking $g ==="; \
-        (cd "spring-linux/games/${g}-wasm.sdd/wasm-src" && cargo check --workspace --target wasm32-unknown-unknown) || exit 1; \
-    done; \
-    echo "=== Checking wasm-menu ==="; \
-    (cd "wasm-menu/wasm-src" && cargo check --workspace --target wasm32-unknown-unknown) || exit 1; \
-    echo "=== All games check passed ==="
+        (cd "$g/wasm-src" && cargo check --workspace --target wasm32-unknown-unknown) || exit 1; \
+    done
 
-# Build all wasm game modules in release mode
+# Build (fmt, clippy, release) and install the modules of every WASM game and the menu
 [group('build')]
 build-all:
-    @for g in Area17 Flove Gravitas Hunted MyCube PartsNeeded ToTheLastDrop; do \
+    @for g in {{wasm_games}} wasm-menu; do \
         echo "=== Building $g ==="; \
-        (cd "spring-linux/games/${g}-wasm.sdd/wasm-src" && cargo build --workspace --target wasm32-unknown-unknown --release) || exit 1; \
-    done; \
-    echo "=== Building wasm-menu ==="; \
-    (cd "wasm-menu/wasm-src" && cargo build --workspace --target wasm32-unknown-unknown --release) || exit 1; \
-    echo "=== All games built ==="
-
-# Copy built wasm artifacts into game directories
-[group('build')]
-copy-all:
-    @for g in Area17 Flove Gravitas Hunted MyCube PartsNeeded ToTheLastDrop; do \
-        echo "=== Copying $g wasm ==="; \
-        (cd "spring-linux/games/${g}-wasm.sdd/wasm-src" && just copy) || exit 1; \
+        (cd "$g/wasm-src" && just copy) || exit 1; \
     done
+
+# Build the patched Area 17 map into build/maps/
+[group('build')]
+area17-map:
+    ./scripts/area17-map.sh
 
 # Clone game/map repos from content.tsv (optionally fetch an engine release: `just setup 2026.09.23`)
 [group('run')]

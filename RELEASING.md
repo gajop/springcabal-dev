@@ -27,7 +27,8 @@ The games have to build against the same engine revision, so check that the
    checkout's branch and commit in `BUILDINFO.txt` and warns about uncommitted
    changes. It ships them anyway, but then the bundle can't be reproduced.
 2. Rebuild the WASM modules: pass `--build` to the packager, or run
-   `just copy-all` and `just --justfile wasm-menu/wasm-src/justfile copy`.
+   `just build-all`. The packager refuses modules that contain test markers
+   (a leftover `e2e`/`headless-integration` build).
 3. If you add a game or map, add it to `content.tsv` (and to the menu).
 
 ## 3. Package
@@ -59,7 +60,7 @@ What the packager does:
   patterns plus dev-only content (`wasm-src/`, `port-reference/`,
   `verification/`, `.git`, `target/`).
 - Map `.sdd` folders become `.sd7`. `Area17.sd7` gets the patched dual-fog gadget
-  from `area17-test/map-patch/`.
+  from `patches/area17-map/` (`scripts/area17-map.sh`).
 - `wasm-menu/` becomes `WasmMenu.sdz`.
 - It adds `springsettings.cfg` (portable mode, defaults from
   `springsettings-custom.cfg`), the launcher, `README.txt`

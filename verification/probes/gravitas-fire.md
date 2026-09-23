@@ -3,9 +3,9 @@
 Run from the workspace root:
 
 ```sh
-bash verification/games/gravitas-fire.sh lua
-bash verification/games/gravitas-fire.sh wasm
-bash verification/games/gravitas-fire-compare.sh
+just probe gravitas-fire lua
+just probe gravitas-fire wasm
+just probe gravitas-fire-compare
 ```
 
 The Lua fixture stages `Gravitas.sdd` and invokes its original `EmitFlame`

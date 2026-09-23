@@ -1,15 +1,21 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
+# Golden RMSE limit (no goldens recorded yet; revisit once measured).
+GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-8}
+
 GAME_DIR="$GAMES_DIR/PartsNeeded-wasm.sdd"
 LUA_GAME_DIR="$GAMES_DIR/PartsNeeded.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/LD35-map.sdd"
 MAP_NAME='LD35 map 0.1'
 GAME_NAME='Parts Needed WASM 0.1.0-wasm'
-LUA_GAME_NAME='Parts Needed $VERSION'
 TEST_MARKER='ALL PARTS NEEDED INTEGRATION TESTS PASSED'
 ENDING_TEST_MARKER='PARTS NEEDED ENDING INTEGRATION TEST PASSED'
+MODULES=(
+    partsneeded_rules_wasm:LuaRules/wasm/partsneeded-rules.wasm
+    partsneeded_ui_wasm:LuaUI/wasm/partsneeded-ui.wasm
+)
 
 partsneeded_assets() {
     local asset
@@ -24,8 +30,13 @@ partsneeded_assets() {
     done
 }
 
-partsneeded_start() {
-    local game=${1:?game name}
+partsneeded_stage() {
+    local features=$1 staged
+    partsneeded_assets
+    vf_build "$SOURCE_ROOT" "$features"
+    staged=$(vf_stage_game "$GAME_DIR")
+    vf_install_modules "$staged" "${MODULES[@]}"
+    vf_link_map "$MAP_DIR"
     vf_start_inline <<EOS
 [GAME]
 {
@@ -34,31 +45,17 @@ partsneeded_start() {
 [player0] { team=0; spectator=0; name=wasm-test; }
 [modoptions] { gamemode=play; }
 minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; numusers=1; numplayers=1; myplayernum=0; myplayername=wasm-test; hostport=8452; startpostype=0; gamestartdelay=0;
-gametype=$game; mapname=$MAP_NAME;
+gametype=$GAME_NAME; mapname=$MAP_NAME;
 }
 EOS
 }
 
-partsneeded_install() {
-    (
-        cd "$SOURCE_ROOT"
-        cp target/wasm32-unknown-unknown/release/partsneeded_rules_wasm.wasm "$GAME_DIR/LuaRules/wasm/partsneeded-rules.wasm"
-        cp target/wasm32-unknown-unknown/release/partsneeded_ui_wasm.wasm "$GAME_DIR/LuaUI/wasm/partsneeded-ui.wasm"
-    )
-}
-
 partsneeded_headless() {
     local seconds=${1:-120}
-    trap 'vf_restore_modules "$SOURCE_ROOT"; vf_keep_workspace_unless' EXIT INT TERM
-
-    partsneeded_assets
-    vf_build "$SOURCE_ROOT" headless-integration
-    partsneeded_install
+    trap 'vf_keep_workspace_unless' EXIT INT TERM
 
     vf_workspace partsneeded-headless
-    vf_link_game "$GAME_DIR"
-    vf_link_map "$MAP_DIR"
-    partsneeded_start "$GAME_NAME"
+    partsneeded_stage headless-integration
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -75,7 +72,30 @@ partsneeded_headless() {
     echo '>>> Parts Needed headless verification passed <<<'
 }
 
+partsneeded_visual() {
+    local seconds=${1:-75} shots
+
+    vf_workspace partsneeded-visual stable
+    partsneeded_stage e2e,headless-integration
+    vf_config "$VISUAL_CONFIG"
+    vf_run_visual "$seconds"
+    vf_save_logs
+    [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
+        vf_die "Parts Needed visual E2E engine exited with $VF_ENGINE_STATUS"
+    shots=$(vf_require_screenshots 3)
+    vf_require "$TEST_MARKER" 'Parts Needed did not reach its test marker'
+    vf_require "$ENDING_TEST_MARKER" 'Parts Needed did not reach its ending test marker'
+    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
+        'the Parts Needed visual run contains a runtime failure'
+
+    vf_note 'Parts Needed goldens'
+    vf_goldens_by_index partsneeded shot_1 shot_2 shot_3
+    vf_goldens_done
+    printf 'Parts Needed visual E2E passed: %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
+}
+
 case "${1:-headless}" in
     headless) partsneeded_headless "${2:-}" ;;
-    *) vf_die 'usage: partsneeded.sh [headless] [seconds]' ;;
+    visual) partsneeded_visual "${2:-}" ;;
+    *) vf_die 'usage: partsneeded.sh [headless|visual] [seconds]' ;;
 esac

@@ -1,157 +1,50 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code in this repository. README.md covers setup, layout and
+the menu; this file lists what an agent needs on top of that.
 
-## Project Overview
+## What this repo is
 
-SpringCabal Games is a collection of Spring RTS games developed by SpringCabal, primarily created for Ludum Dare game jams and experimental projects. The games run on the Recoil engine (a fork of the Spring RTS engine) and are written primarily in Lua.
+Dev tooling, the WASM game menu and release packaging for SpringCabal's Ludum
+Dare games on the Recoil `rust-wip` engine (built from `../spring-bar`). Each
+game has a Rust/WASM port (`*-wasm.sdd`) and its original Lua version (`*.sdd`).
 
-## Setup and Running
+The games and maps themselves live under `spring-linux/` in their own git
+repositories (listed in `content.tsv`). They are gitignored here and must never
+be pushed from here; only this repository is pushed
+(`gajop/springcabal-dev`, private).
 
-### Initial Setup
-```bash
-# Clone every game/map repo listed in content.tsv into spring-linux/, and
-# optionally download a Linux engine release into engine/<tag>
-./setup.sh --engine-tag 2026.09.23
-```
-`content.tsv` is the single list of games, maps and projects: source repo,
-branch, and whether the release ships it. Entries marked `local`/`download`
-(and the unpublished `*-wasm-port` branches) exist only on this machine.
-
-`springsettings-custom.cfg` holds the settings the games are tuned for
-(GroundDetail, MaxMapDetail, LODScale, ...); release bundles append it to
-their portable `springsettings.cfg`.
-
-### Running Games
-
-The WASM games are the active work, and they run on the locally built
-experimental engine, **not** on `spring-linux/spring`:
-```bash
-# Launch the WASM menu and pick a game
-./run-wasm.sh
-
-# Launch one WASM game directly
-./run-wasm.sh --game flove      # also: hunted, area17, ttld
-```
-`run-wasm.sh` runs `$SPRING_ENGINE_DIR/spring`, else
-`$SPRING_BAR_DIR/build-amd64-linux/install/spring` (default `../spring-bar`),
-else `engine/current/spring` from setup. It builds an isolated
-launch view under `wasm-test/`, and prints an error/warning summary from the
-session log when it exits. Rebuild that engine with
-`./docker-build-v2/build.sh linux` in the spring-bar checkout. Rebuild a game's
-guest modules with `just copy` in its `wasm-src/`.
-
-The original Lua versions are launched from the same WASM menu (each row has
-WASM and Lua buttons).
-
-### Releases
-
-`release/package.sh` builds Linux/Windows bundles locally from the checkouts;
-`release/smoke-test.sh` checks one. See `RELEASING.md`.
-
-## Project Structure
-
-- `spring-linux/` - engine installation plus all game and map archives. The
-  `spring` binary here is **not** the 2025.01.6 release; it is a local
-  `rust-wip` build (check `Spring Engine Version` in any infolog). There is no
-  pre-fork engine checked in to compare rendering against.
-- `spring-linux/games/*.sdd/` - Individual game directories
-- `spring-linux/maps/*.sdd/` - Map directories
-- `projects/` - Additional project files and scenario editors
-
-### Game Directories Structure
-Each game follows this pattern:
-- `modinfo.lua` - Game metadata and version info
-- `engineoptions.lua` - Engine configuration
-- `modoptions.lua` - Game-specific options
-- `GameData/` - Core game rules and definitions
-- `LuaRules/` - Server-side Lua scripts
-- `LuaUI/` - Client-side UI scripts  
-- `Units/` - Unit definitions
-- `Objects3d/` - 3D models (DAE format)
-- `Scripts/` - Unit behavior scripts
-- `sounds/` - Audio files
-- `effects/` - Visual effects definitions
-
-## Game Status
-
-`TODO.md` has the current rating of every WASM and Lua version and the rating
-scale.
-
-## Development Guidelines
-
-### Lua Conventions
-- Use existing Lua libraries from games like Flove (SpringABC, analytics, lcs, i18n)
-- Follow Spring engine Lua API patterns
-- Game logic goes in `LuaRules/`, UI in `LuaUI/`
-- Unit definitions use Spring's unit definition format
-
-### Git Workflow  
-- Use `git clone --recursive` for repositories with submodules
-- Many games depend on shared resources and libraries
-- Check existing games for reference implementations
-
-### Common File Patterns
-- `*.lua` - Lua scripts and configuration
-- `*.dae` - 3D models with optional `.lua` material files
-- `*.sdd` - Spring game/map directories
-- `*.sdz` - Spring archive files (zipped .sdd)
-
-### Debugging
-
-#### Log Analysis Workflow
-1. Run game via `./run-wasm.sh`
-2. Check for visual defects during gameplay
-3. Analyze error logs: `wasm-test/write/infolog.txt` plus the per-session copy
-   under `wasm-test/write/logs/`
-
-#### Verification Suites
-
-Every game's automated checks live in `verification/`:
+## Everyday commands
 
 ```bash
-./verification/verify list
-./verification/verify flove              # default mode (headless)
-./verification/verify flove visual
-./verification/verify all                # every suite
+just --list                   # everything, grouped
+./run-wasm.sh                 # the WASM menu (WASM and Lua buttons per game)
+./run-wasm.sh --game flove    # one game directly: hunted, area17, flove, ttld, gravitas
+just build-all                # fmt + clippy + build + install every game's modules
+just verify <suite> [mode]    # see verification/README.md
+just verify-all               # headless/static suites
+just verify-visual            # screenshot suites against goldens
 ```
 
-Modes are per game: `static` (build hygiene), `headless` (in-game assertions
-under spring-headless), `visual` (xvfb + software GL, screenshot checks), plus
-image comparisons (`flove outline`, `gravitas shots`). Logs and screenshots land
-in `verification/out/<suite>/`. Shared plumbing is `verification/lib/common.sh`;
-see `verification/README.md` before adding a suite.
+Rebuild the engine with `./docker-build-v2/build.sh linux` in `../spring-bar`.
+Rebuild one game's modules with `just copy` in its `wasm-src/`.
 
-#### Automated Error Detection
-Claude can automatically analyze infolog.txt for errors and suggest solutions:
+## Rules
 
-```bash
-# To analyze current log for errors:
-# Ask Claude: "Analyze spring-linux/infolog.txt for errors and suggest fixes"
+- Tests must not modify `spring-linux/`. Suites stage copies and build into
+  `verification/cache/`. `release/package.sh` ships the checkouts as they are
+  and rejects test builds.
+- `launch/` holds the start scripts and configs used for play. Test-only
+  options (`test_mode=1`, ...) are added by the suites, never committed there.
+- After an intended visual change, run `just update-goldens <suite>`, look at
+  the images, then commit them.
+- `TODO.md` holds the current rating of every WASM and Lua version.
 
-# For continuous monitoring during testing:
-# Ask Claude: "Monitor spring-linux/infolog.txt for new errors while I test games"
-```
+## Logs
 
-**Common Error Patterns to Look For:**
-- Lua script errors and stack traces
-- Missing file/resource errors
-- OpenGL/shader compilation failures
-- Unit definition errors
-- Sound system issues
-- Network/multiplayer errors
-
-#### Manual Debugging Steps
-- Games may need specific engine options or shadow settings disabled
-- Use Spring's built-in Lua debugging capabilities
-- Check mod-specific logs in game directories
-
-## Technical Notes
-
-- Engine: Recoil `rust-wip` (Spring RTS fork), built from the spring-bar checkout
-- Primary language: Lua for game logic, configuration, and UI
-- 3D graphics: OpenGL with GLSL shaders
-- Audio: WAV and OGG support
-- Supports mod/scenario editor for Gravitas game
-
-When working on broken games, prioritize understanding the specific error patterns mentioned in TODO.md and test with minimal configurations first.
+- `run-wasm.sh` writes `wasm-test/write/infolog.txt` and a per-session copy in
+  `wasm-test/write/logs/`, and prints an error/warning summary on exit.
+- Verification runs write to `verification/out/<suite>/` (`last.combined.txt`,
+  screenshots, goldens diffs).
+- `spring-headless` only flushes `infolog.txt` on a clean exit; when a run is
+  killed by a timeout, read its stdout instead.

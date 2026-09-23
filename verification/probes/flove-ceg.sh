@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# CEG probe on the original Lua Flove: logs CEG/draw callbacks and captures
+# 4 screenshots.  PROBE_GPU=1 renders on the real GPU instead of xvfb;
+# PROBE_FORCE_LEGACY=1 forces the legacy CEG path.
 set -euo pipefail
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 vf_workspace "flove-ceg-${1:-current}"
@@ -6,11 +9,10 @@ staged=$(vf_stage_game "$GAMES_DIR/Flove.sdd")
 cp "$FIXTURES_DIR/flove/ceg_probe.lua" "$staged/LuaUI/Widgets/ceg_probe.lua"
 cp "$FIXTURES_DIR/flove/draw_callback_probe.lua" "$staged/LuaRules/Gadgets/draw_callback_probe.lua"
 vf_link_map "$MAPS_DIR/LD34-map.sdd" 'The Grove 0.3.sdd'
-vf_start_file "$FIXTURES_DIR/flove/start.txt" 1 1
-sed -i 's/gametype=Flove WASM 0.1.0-wasm;/gametype=Flove $VERSION;/' "$VF_START_FILE"
-if [[ ${PROBE_FORCE_LEGACY:-0} == 1 ]]; then
-    sed -i '/test_mode=1;/a ceg_force_legacy=1;' "$VF_START_FILE"
-fi
+vf_start_file "$LAUNCH_DIR/flove.txt" 1 1
+vf_start_set gametype 'Flove $VERSION'
+vf_modoption test_mode 1
+[[ ${PROBE_FORCE_LEGACY:-0} == 1 ]] && vf_modoption ceg_force_legacy 1
 vf_config "$FIXTURES_DIR/flove/spring.conf"
 printf '\nXResolutionWindowed = 1280\nYResolutionWindowed = 720\nWindowBorderless = 0\nAllowDeferredMapRendering = 1\nAllowDeferredModelRendering = 1\n' >> "$VF_CONFIG_FILE"
 if [[ ${PROBE_GPU:-0} == 1 ]]; then

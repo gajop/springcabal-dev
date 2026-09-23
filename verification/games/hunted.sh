@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
+# Golden RMSE limit, about twice the run-to-run noise measured on 2026-09-23 (5.2%).
+GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-10}
+
 GAME_DIR="$GAMES_DIR/Hunted-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/HuntedMap.sdd"
-START_FILE="$PROJECT_ROOT/wasm-test/start.txt"
+START_FILE="$LAUNCH_DIR/hunted.txt"
+MODULES=(
+    hunted_rules_wasm:LuaRules/wasm/hunted-rules.wasm
+    hunted_ui_wasm:LuaUI/wasm/hunted-ui.wasm
+)
 
 hunted_headless() {
     local seconds=${1:-50} asset waves
@@ -47,25 +54,13 @@ hunted_headless() {
     echo '>>> Hunted headless verification passed <<<'
 }
 
-hunted_install() {
-    (
-        cd "$SOURCE_ROOT"
-        cp target/wasm32-unknown-unknown/release/hunted_rules_wasm.wasm \
-            "$GAME_DIR/LuaRules/wasm/hunted-rules.wasm"
-        cp target/wasm32-unknown-unknown/release/hunted_ui_wasm.wasm \
-            "$GAME_DIR/LuaUI/wasm/hunted-ui.wasm"
-    )
-}
-
 hunted_visual() {
-    local seconds=${1:-75} shots
-    trap 'vf_restore_modules "$SOURCE_ROOT"; vf_keep_workspace_unless' EXIT INT TERM
+    local seconds=${1:-75} shots staged
 
     vf_build "$SOURCE_ROOT" e2e
-    hunted_install
-
     vf_workspace hunted-visual stable
-    vf_link_game "$GAME_DIR"
+    staged=$(vf_stage_game "$GAME_DIR")
+    vf_install_modules "$staged" "${MODULES[@]}"
     vf_link_map "$MAP_DIR" 'Hunted - v04.sdd'
     vf_start_file "$START_FILE"
     vf_config "$VISUAL_CONFIG"
@@ -82,6 +77,10 @@ hunted_visual() {
     vf_require 'rabbit wave started:' 'no rabbit wave started in the visual run'
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
         'the Hunted visual run contains a runtime failure'
+
+    vf_note 'Hunted goldens'
+    vf_goldens_by_index hunted shot_1 shot_2 shot_3
+    vf_goldens_done
 
     vf_summary
     printf 'Hunted visual E2E passed: %s screenshot(s) in %s\n' \

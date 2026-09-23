@@ -18,13 +18,8 @@ target/
 verification/out/
 verification/cache/
 wasm-test-screens/
-area17-test/write/
-area17-test/visual-runs/
-area17-test/last.*.txt
-area17-test/*.sd7
-wasm-test/write/
-wasm-test/isolation-*/
-wasm-test/screens-*/
+area17-test/
+wasm-test/
 wasm-menu-test/write/
 *.log
 
@@ -52,3 +47,10 @@ release/cache/
 
 # Engine releases fetched by setup.sh
 engine/
+
+# Generated files (patched maps)
+build/
+
+# Python bytecode
+__pycache__/
+*.pyc

@@ -27,7 +27,7 @@ Usage: release/package.sh --engine-tag TAG [options]
                            e.g. linux=../spring-bar/build-amd64-linux/install
   --platform linux|windows|all   (default: all)
   --version VER            bundle version (default: today, $version)
-  --build                  rebuild all WASM modules first (just copy-all + menu)
+  --build                  rebuild all WASM modules first (just build-all)
   --no-archive             stop after assembling release/out/<bundle>/
 EOF
     exit 1
@@ -55,7 +55,7 @@ done
 log() { echo "==> $*"; }
 die() { echo "error: $*" >&2; exit 1; }
 
-for tool in 7z zip rsync tar; do
+for tool in 7z zip rsync tar strings; do
     command -v "$tool" >/dev/null || die "missing tool: $tool"
 done
 
@@ -85,15 +85,24 @@ manifest() {
 # ---------------------------------------------------------------------------
 if (( build_wasm )); then
     log "Building WASM modules"
-    (cd "$project_root" && just copy-all)
-    (cd "$project_root/wasm-menu/wasm-src" && just copy)
+    (cd "$project_root" && just build-all)
 fi
 
+# Strings that only exist in modules built with a test feature (e2e,
+# headless-integration, *-probe).  A test build left in a game folder must
+# never ship.
+test_markers='ASSERTION (PASSED|FAILED)|INTEGRATION TESTS? PASSED|VISUAL E2E|E2E case|E2E summary|GRAVITAS_SHOT|UnitScriptProbe|TTLD E2E|Visual-Test|fire-probe'
+
 check_wasm_modules() {
-    local dir="$1"
+    local dir="$1" module hits
     local found
     found="$(find "$dir/LuaRules/wasm" "$dir/LuaUI/wasm" -maxdepth 1 -name '*.wasm' 2>/dev/null | head -1)"
     [[ -n "$found" ]] || die "$(basename "$dir") has no built .wasm modules (run with --build)"
+    for module in "$dir"/LuaRules/wasm/*.wasm "$dir"/LuaUI/wasm/*.wasm; do
+        [[ -f $module ]] || continue
+        hits="$(strings "$module" | grep -oE "$test_markers" | sort -u | tr '\n' ' ' || true)"
+        [[ -z $hits ]] || die "${module#"$content_root"/} is a test build (contains: $hits); rebuild with 'just copy' in its wasm-src"
+    done
     # Warn when sources are newer than the shipped modules.
     local newest_src newest_mod
     newest_src="$(find "$dir/wasm-src" -name '*.rs' -printf '%T@\n' 2>/dev/null | sort -n | tail -1)"
@@ -192,8 +201,7 @@ while IFS=$'\t' read -r kind path source branch ship; do
             echo "    $path"
             if [[ "$path" == Area17.sd7 ]]; then
                 # The shipped Area 17 map carries a patched dual-fog gadget.
-                cp -- "$src" "$content_dir/maps/$path"
-                (cd "$project_root/area17-test/map-patch" && 7z u -bso0 -bsp0 "$content_dir/maps/$path" .)
+                cp -- "$("$project_root/scripts/area17-map.sh")" "$content_dir/maps/$path"
             elif [[ -d "$src" ]]; then
                 pack_sd7 "$src" "$content_dir/maps/${path%.sdd}.sd7"
             else

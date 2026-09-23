@@ -1,49 +1,106 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
-GAME_DIR="$GAMES_DIR/MyCube.sdd"
-MAP_DIR="$MAPS_DIR/MyCube_v1.sd7"
-GAME_NAME='Ludum Dare 42 Git'
-MAP_NAME='MyCube'
+# Golden RMSE limit, about twice the run-to-run noise measured on 2026-09-23 (4.2%).
+GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-9}
 
-mycube_assets() {
-    local asset
-    for asset in \
-        "$GAME_DIR/ModInfo.lua" \
-        "$GAME_DIR/LuaRules/Gadgets/api_custom_unit_shaders.lua" \
-        "$GAME_DIR/LuaUI/Widgets/ui_endgame.lua" \
-        "$MAP_DIR"; do
-        [[ -e $asset ]] || vf_die "required asset is missing: $asset"
-    done
-    grep -qF 'name = "Ludum Dare 42"' "$GAME_DIR/ModInfo.lua" ||
-        vf_die "unexpected My Cube Lua title base"
-    grep -qF 'version = "Git"' "$GAME_DIR/ModInfo.lua" ||
-        vf_die "unexpected My Cube Lua version"
-}
+GAME_DIR="$GAMES_DIR/MyCube-wasm.sdd"
+SOURCE_ROOT="$GAME_DIR/wasm-src"
+MAP_DIR="$MAPS_DIR/MyCube_v1-wasm.sdd"
+MAP_NAME='MyCube v1 WASM'
+GAME_NAME='MyCube WASM 0.1.0-wasm'
+LUA_GAME_DIR="$GAMES_DIR/MyCube.sdd"
+LUA_MAP_DIR="$MAPS_DIR/MyCube_v1.sd7"
+LUA_GAME_NAME='Ludum Dare 42 Git'
+LUA_MAP_NAME='MyCube'
+MODULES=(
+    mycube_rules_wasm:LuaRules/wasm/mycube-rules.wasm
+    mycube_ui_wasm:LuaUI/wasm/mycube-ui.wasm
+)
 
 mycube_start() {
+    local game=${1:?game} map=${2:?map}
     vf_start_inline <<EOS
 [GAME]
 {
 [team0] { startposx=4096; startposz=4096; allyteam=0; teamleader=0; }
 [allyteam0] { numallies=0; }
-[player0] { team=0; spectator=0; name=lua-test; }
-minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; numusers=1; numplayers=1; myplayernum=0; myplayername=lua-test; hostport=8452; startpostype=0; gamestartdelay=0;
-gametype=$GAME_NAME; mapname=$MAP_NAME;
+[player0] { team=0; spectator=0; name=test; }
+minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; numusers=1; numplayers=1; myplayernum=0; myplayername=test; hostport=8452; startpostype=0; gamestartdelay=0;
+gametype=$game; mapname=$map;
 }
 EOS
 }
 
-mycube_headless() {
-    local seconds=${1:-20}
+mycube_stage() {
+    local features=$1 staged
+    vf_build "$SOURCE_ROOT" "$features"
+    staged=$(vf_stage_game "$GAME_DIR")
+    vf_install_modules "$staged" "${MODULES[@]}"
+    vf_link_map "$MAP_DIR"
+    mycube_start "$GAME_NAME" "$MAP_NAME"
+}
 
+mycube_headless() {
+    # The integration suite finishes at frame 1020 (~40s headless).
+    local seconds=${1:-60}
     trap 'vf_keep_workspace_unless' EXIT INT TERM
 
-    mycube_assets
     vf_workspace mycube-headless
-    vf_link_game "$GAME_DIR"
-    vf_link_map "$MAP_DIR"
-    mycube_start
+    mycube_stage headless-integration
+    vf_config
+    vf_run_headless "$seconds"
+    vf_save_logs
+    vf_require 'ALL MYCUBE INTEGRATION TESTS PASSED' 'MyCube did not reach its test marker'
+    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
+        'the MyCube headless run contains a runtime failure'
+    echo '>>> MyCube headless verification passed <<<'
+}
+
+mycube_visual() {
+    local seconds=${1:-75} shots
+
+    # The integration feature fast-forwards the story to exercise every branch;
+    # keep its synthetic victory out of the screenshots.
+    vf_workspace mycube-visual stable
+    mycube_stage e2e
+    vf_config "$VISUAL_CONFIG"
+    vf_run_visual "$seconds"
+    vf_save_logs
+    [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
+        vf_die "MyCube visual E2E engine exited with $VF_ENGINE_STATUS"
+    shots=$(vf_require_screenshots 3)
+    vf_require 'MYCUBE VISUAL E2E PASSED' 'MyCube did not reach its visual test marker'
+    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
+        'the MyCube visual run contains a runtime failure'
+
+    vf_note 'MyCube goldens'
+    vf_goldens_by_index mycube shot_1 shot_2 shot_3
+    vf_goldens_done
+    printf 'MyCube visual E2E passed: %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
+}
+
+# The original Lua game must boot on this engine without any Lua errors.
+mycube_lua_headless() {
+    local seconds=${1:-20} asset unexpected_errors
+    trap 'vf_keep_workspace_unless' EXIT INT TERM
+
+    for asset in \
+        "$LUA_GAME_DIR/ModInfo.lua" \
+        "$LUA_GAME_DIR/LuaRules/Gadgets/api_custom_unit_shaders.lua" \
+        "$LUA_GAME_DIR/LuaUI/Widgets/ui_endgame.lua" \
+        "$LUA_MAP_DIR"; do
+        [[ -e $asset ]] || vf_die "required asset is missing: $asset"
+    done
+    grep -qF 'name = "Ludum Dare 42"' "$LUA_GAME_DIR/ModInfo.lua" ||
+        vf_die "unexpected My Cube Lua title base"
+    grep -qF 'version = "Git"' "$LUA_GAME_DIR/ModInfo.lua" ||
+        vf_die "unexpected My Cube Lua version"
+
+    vf_workspace mycube-lua-headless
+    vf_link_game "$LUA_GAME_DIR"
+    vf_link_map "$LUA_MAP_DIR"
+    mycube_start "$LUA_GAME_NAME" "$LUA_MAP_NAME"
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -52,21 +109,20 @@ mycube_headless() {
     # The headless renderer has no usable GL texture limit, so the engine
     # reports the groundFX atlas allocation once during startup. Ignore only
     # that renderer limitation; every other engine error is a game failure.
-    local unexpected_errors
     unexpected_errors=$(grep -E 'Error:' "$VF_OUT_DIR/last.combined.txt" |
         grep -vF 'Could not finalize groundFX texture atlas' || true)
     if [[ -n $unexpected_errors ]]; then
         printf '%s\n' "$unexpected_errors" >&2
         vf_die 'the My Cube Lua archive still has an unexpected engine error'
     fi
-
     vf_forbid 'Fatal:|Bad return table|Unknown tag "(new|clone|append)"|really low power|table for CEG .* invalid|Failed to load:|attempt to (call|compare|concatenate)|RunCallInTraceback|Removed widget' \
         'the My Cube Lua archive still has a startup or runtime failure'
-
     echo '>>> My Cube Lua headless verification passed <<<'
 }
 
 case "${1:-headless}" in
     headless) mycube_headless "${2:-}" ;;
-    *) vf_die 'usage: mycube.sh [headless] [seconds]' ;;
+    visual) mycube_visual "${2:-}" ;;
+    lua-headless) mycube_lua_headless "${2:-}" ;;
+    *) vf_die 'usage: mycube.sh [headless|visual|lua-headless] [seconds]' ;;
 esac

@@ -19,7 +19,7 @@ write_dir="$run_dir/write"
 log_dir="$write_dir/logs"
 
 usage() {
-    echo "Usage: $0 [--game hunted|area17]"
+    echo "Usage: $0 [--game hunted|area17|flove|ttld|gravitas]"
     echo ""
     echo "  No arguments:       launch the WASM menu (pick a game interactively)"
     echo "  --game hunted       launch Hunted WASM directly"
@@ -94,11 +94,24 @@ launch_engine() {
     "$@"
     local status=$?
     set -e
-    if grep -q -E "$return_marker" "$write_dir/infolog.txt" 2>/dev/null; then
+    # Games normally return to the menu in-process (reloadforce).  Only a game
+    # that logs a return marker and then quits the process (MyCube's Ctrl+Q)
+    # needs the menu relaunched, so require the marker to come after the last
+    # time the menu was (re)loaded.
+    if returned_by_quitting "$write_dir/infolog.txt"; then
         echo "Game requested a return to the WASM menu."
         exec "$project_root/run-wasm.sh"
     fi
     return "$status"
+}
+
+returned_by_quitting() {
+    local log=$1 marker_line menu_line
+    [[ -f $log ]] || return 1
+    marker_line=$(grep -n -E "$return_marker" "$log" | tail -1 | cut -d: -f1)
+    [[ -n $marker_line ]] || return 1
+    menu_line=$(grep -n 'LuaMenuController::Reset' "$log" | tail -1 | cut -d: -f1)
+    (( marker_line > ${menu_line:-0} ))
 }
 
 ln -sfn "$engine_install/base" "$isolation_dir/base"
@@ -119,11 +132,11 @@ if [[ -z "$game" ]]; then
         ln -sf "$g" "$isolation_dir/games/$(basename "$g")"
     done
     for m in "$project_root/spring-linux/maps/"*; do
+        # Area 17 always runs on the patched copy of its map.
+        [[ $(basename "$m") == Area17.sd7 ]] && continue
         ln -sf "$m" "$isolation_dir/maps/$(basename "$m")"
     done
-    if [[ -f "$project_root/area17-test/Area17-wasm.sd7" ]]; then
-        ln -sf "$project_root/area17-test/Area17-wasm.sd7" "$isolation_dir/maps/Area 17 - v01.sd7"
-    fi
+    ln -sf "$("$project_root/scripts/area17-map.sh")" "$isolation_dir/maps/Area17.sd7"
     if [[ ! -f "$wasm_menu_dir/WasmMenu/wasm-menu.wasm" ]]; then
         echo "Wasm menu module not found. Build it first:" >&2
         echo "  cd '$wasm_menu_dir/wasm-src' && just copy" >&2
@@ -145,38 +158,38 @@ else
         hunted)
             game_dir="$project_root/spring-linux/games/Hunted-wasm.sdd"
             map_dir="$project_root/spring-linux/maps/HuntedMap.sdd"
-            start_txt="$project_root/wasm-test/start.txt"
+            start_txt="$project_root/launch/hunted.txt"
             config="$isolation_dir/spring.conf"
-            cp "$project_root/wasm-test/spring.conf" "$config"
+            cp "$project_root/launch/spring.conf" "$config"
             echo "Shadows = 0" >> "$config"
             ln -sf "$map_dir" "$isolation_dir/maps/Hunted - v04.sdd"
             ;;
         area17)
             game_dir="$project_root/spring-linux/games/Area17-wasm.sdd"
-            map_dir="$project_root/area17-test/Area17-wasm.sd7"
-            start_txt="$project_root/area17-test/start.txt"
-            config="$project_root/area17-test/spring.conf"
-            ln -sf "$map_dir" "$isolation_dir/maps/Area 17 - v01.sd7"
+            map_dir="$("$project_root/scripts/area17-map.sh")"
+            start_txt="$project_root/launch/area17.txt"
+            config="$project_root/launch/area17.conf"
+            ln -sf "$map_dir" "$isolation_dir/maps/Area17.sd7"
             ;;
         flove)
             game_dir="$project_root/spring-linux/games/Flove-wasm.sdd"
             map_dir="$project_root/spring-linux/maps/LD34-map.sdd"
-            start_txt="$project_root/wasm-test/flove-start.txt"
-            config="$project_root/wasm-test/spring.conf"
+            start_txt="$project_root/launch/flove.txt"
+            config="$project_root/launch/spring.conf"
             ln -sf "$map_dir" "$isolation_dir/maps/The Grove 0.3.sdd"
             ;;
         ttld)
             game_dir="$project_root/spring-linux/games/ToTheLastDrop-wasm.sdd"
             map_dir="$project_root/spring-linux/maps/LD43-map.sdd"
-            start_txt="$project_root/wasm-test/ttld-start.txt"
-            config="$project_root/wasm-test/spring.conf"
+            start_txt="$project_root/launch/ttld.txt"
+            config="$project_root/launch/spring.conf"
             ln -sf "$map_dir" "$isolation_dir/maps/LD43-map.sdd"
             ;;
         gravitas)
             game_dir="$project_root/spring-linux/games/Gravitas-wasm.sdd"
             map_dir="$project_root/spring-linux/maps/Gravitas-map.sdd"
-            start_txt="$project_root/wasm-test/gravitas-start.txt"
-            config="$project_root/wasm-test/spring.conf"
+            start_txt="$project_root/launch/gravitas.txt"
+            config="$project_root/launch/spring.conf"
             ln -sf "$map_dir" "$isolation_dir/maps/Gravitas-map.sdd"
             ;;
         *)

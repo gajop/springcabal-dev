@@ -1,14 +1,24 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
+# Golden RMSE limit, about twice the run-to-run noise measured on 2026-09-23 (2.8%).
+GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-5}
+
 GAME_DIR="$GAMES_DIR/Area17-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
-MAP_FILE="$PROJECT_ROOT/area17-test/Area17-wasm.sd7"
-START_FILE="$PROJECT_ROOT/area17-test/start.txt"
+START_FILE="$LAUNCH_DIR/area17.txt"
+MODULES=(
+    area17_rules_wasm:LuaRules/wasm/area17-rules.wasm
+    area17_ui_wasm:LuaUI/wasm/area17-ui.wasm
+)
 
-area17_link() {
-    vf_link_game "$GAME_DIR"
-    vf_link_map "$MAP_FILE" 'Area17.sd7' 'Area 17 - v01.sd7'
+# Stages the game with modules built for FEATURES, plus the patched map.
+area17_stage() {
+    local features=$1 staged
+    vf_build "$SOURCE_ROOT" "$features"
+    staged=$(vf_stage_game "$GAME_DIR")
+    vf_install_modules "$staged" "${MODULES[@]}"
+    vf_link_map "$("$PROJECT_ROOT/scripts/area17-map.sh")"
 }
 
 area17_static() {
@@ -28,8 +38,8 @@ area17_static() {
     cmp "$target_root/area17_rules_wasm.wasm" "$GAME_DIR/LuaRules/wasm/area17-rules.wasm"
     cmp "$target_root/area17_ui_wasm.wasm" "$GAME_DIR/LuaUI/wasm/area17-ui.wasm"
 
-    if rg -n '\bunsafe\b|align4|to_le_bytes|from_le_bytes|#!\[allow\(clippy::all\)\]' \
-        "$SOURCE_ROOT/rules-synced/src" "$SOURCE_ROOT/ui/src" --glob '*.rs'; then
+    if grep -rnE --include='*.rs' '\bunsafe\b|align4|to_le_bytes|from_le_bytes|#!\[allow\(clippy::all\)\]' \
+        "$SOURCE_ROOT/rules-synced/src" "$SOURCE_ROOT/ui/src"; then
         vf_die 'Area 17 source contains unsafe/ABI-packing/lint-suppression code'
     fi
 
@@ -43,17 +53,12 @@ area17_static() {
 
 area17_headless() {
     local seconds=${1:-90}
-    trap 'vf_restore_modules "$SOURCE_ROOT"; vf_keep_workspace_unless' EXIT INT TERM
-
-    vf_build "$SOURCE_ROOT" headless-integration
-    (
-        cd "$SOURCE_ROOT"
-        cp target/wasm32-unknown-unknown/release/area17_rules_wasm.wasm "$GAME_DIR/LuaRules/wasm/area17-rules.wasm"
-    )
+    trap 'vf_keep_workspace_unless' EXIT INT TERM
 
     vf_workspace area17-headless
-    area17_link
+    area17_stage headless-integration
     vf_start_file "$START_FILE" 100.0 100.0
+    vf_modoption test_mode 1
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -70,19 +75,11 @@ area17_headless() {
 
 area17_visual() {
     local seconds=${1:-60} shots before after changed
-    trap 'vf_restore_modules "$SOURCE_ROOT"' EXIT INT TERM
-
-    vf_build "$SOURCE_ROOT" e2e
-    (
-        cd "$SOURCE_ROOT"
-        cp target/wasm32-unknown-unknown/release/area17_rules_wasm.wasm "$GAME_DIR/LuaRules/wasm/area17-rules.wasm"
-        cp target/wasm32-unknown-unknown/release/area17_ui_wasm.wasm "$GAME_DIR/LuaUI/wasm/area17-ui.wasm"
-    )
 
     vf_workspace area17-visual stable
-    area17_link
+    area17_stage e2e
     vf_start_file "$START_FILE"
-    sed -i 's/test_mode=1;/test_mode=0;\nvisual_test=1;/' "$VF_START_FILE"
+    vf_modoption visual_test 1
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
@@ -113,12 +110,16 @@ area17_visual() {
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
         'the visual run contains a runtime failure'
 
+    vf_note 'Area 17 goldens'
+    vf_goldens_by_index area17 frame_020 frame_080 frame_450
+    vf_goldens_done
+
     printf 'crater changed pixels: %s\n' "$changed"
     printf 'captured %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
     echo '>>> Area 17 visual verification passed <<<'
 }
 
-case "${1:-static}" in
+case "${1:-headless}" in
     static) area17_static ;;
     headless) area17_headless "${2:-}" ;;
     visual) area17_visual "${2:-}" ;;

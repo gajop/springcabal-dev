@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
+# Fire renderer parity, step 1: render 5 fixed fire frames with the Lua or
+# the Rust renderer (arg: lua|wasm).  See gravitas-fire.md.
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 variant=${1:-wasm}
 [[ $variant == lua || $variant == wasm ]] || vf_die 'expected lua or wasm'
 source_game="$GAMES_DIR/Gravitas.sdd"
 wasm_game="$GAMES_DIR/Gravitas-wasm.sdd"
 if [[ $variant == wasm ]]; then
-    (cd "$wasm_game/wasm-src" && cargo build -p gravitas-ui-wasm --features fire-probe --release --target-dir /tmp/gravitas-fire-target)
+    (cd "$wasm_game/wasm-src" && cargo build -p gravitas-ui-wasm --features fire-probe --release \
+        --target wasm32-unknown-unknown --target-dir "$BUILD_CACHE/gravitas-fire-probe")
 fi
 vf_workspace "gravitas-fire-$variant" stable
 staged=$(vf_stage_game "$source_game")
@@ -16,11 +19,11 @@ if [[ $variant == lua ]]; then
 else
     mv "$staged/LuaUI" "$staged/LuaUI-reference"
     cp -a "$wasm_game/LuaUI" "$staged/LuaUI"
-    cp /tmp/gravitas-fire-target/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm "$staged/LuaUI/wasm/gravitas-ui.wasm"
+    cp "$BUILD_CACHE/gravitas-fire-probe/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm" "$staged/LuaUI/wasm/gravitas-ui.wasm"
 fi
 vf_link_map "$MAPS_DIR/Gravitas-map.sdd"
-vf_start_file "$FIXTURES_DIR/gravitas/start.txt"
-sed -i 's/GameType=Gravitas WASM 0.1.0-wasm;/GameType=Gravitas;/' "$VF_START_FILE"
+vf_start_file "$LAUNCH_DIR/gravitas.txt"
+vf_start_set GameType Gravitas
 vf_write_settings <<'CFG'
 Fullscreen = 0
 UseFontConfigLib = 0

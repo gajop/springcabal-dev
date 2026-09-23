@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# Spire world-position probe on the Flove port, on the real GPU.
+# SPIRE_PROBE_MODULE_DIR=dir swaps in modules built elsewhere;
+# SPIRE_PROBE_PRESENTATION=1 adds the presentation probe; SPIRE_PROBE_MANUAL=1
+# leaves the camera to you; SPIRE_PROBE_SECONDS sets the run length.
 set -euo pipefail
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 vf_workspace "flove-spire-${1:-probe}"
@@ -13,15 +17,12 @@ if [[ ${SPIRE_PROBE_PRESENTATION:-0} == 1 ]]; then
     cp "$FIXTURES_DIR/flove/presentation_probe.lua" "$staged/LuaRules/Gadgets/presentation_probe.lua"
 fi
 vf_link_map "$MAPS_DIR/LD34-map.sdd" 'The Grove 0.3.sdd'
-vf_start_file "$FIXTURES_DIR/flove/start.txt" 1 1
-sed -i 's/test_mode=1;/test_mode=0;/' "$VF_START_FILE"
-if [[ ${SPIRE_PROBE_MANUAL:-0} == 1 ]]; then
-    sed -i '/test_mode=0;/a spire_probe_manual=1;' "$VF_START_FILE"
-fi
+vf_start_file "$LAUNCH_DIR/flove.txt" 1 1
+[[ ${SPIRE_PROBE_MANUAL:-0} == 1 ]] && vf_modoption spire_probe_manual 1
 vf_config "$FIXTURES_DIR/flove/spring.conf"
 printf '\nXResolutionWindowed = 1280\nYResolutionWindowed = 720\nWindowBorderless = 0\nWindowState = 0\n' >> "$VF_CONFIG_FILE"
 printf 'Probe workspace: %s\n' "$VF_TEST_ROOT"
 timeout "${SPIRE_PROBE_SECONDS:-30}" "$(vf_engine_bin visual)" --window --write-dir "$VF_WRITE_DIR" --isolation --isolation-dir "$VF_ISOLATION" --config "$VF_CONFIG_FILE" "$VF_START_FILE" > "$VF_WRITE_DIR/stdout.txt" 2>&1 || VF_ENGINE_STATUS=$?
 vf_save_logs
 vf_collect_screenshots
-rg '\[Spire-Probe\]' "$VF_WRITE_DIR/infolog.txt"
+grep -F '[Spire-Probe]' "$VF_WRITE_DIR/infolog.txt" || vf_die 'the spire probe logged nothing'

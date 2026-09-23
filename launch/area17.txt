@@ -43,7 +43,6 @@ startmetal=1000;
 hostport=8453;
 [modoptions]
 {
-test_mode=1;
 disablemapdamage=0;
 }
 }

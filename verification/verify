@@ -3,61 +3,109 @@ set -euo pipefail
 
 VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
+# suite: modes (the first is the default).  Keep in sync with games/*.sh.
+declare -A MODES=(
+    [area17]='headless visual static all'
+    [flove]='headless visual outline wisps original'
+    [gravitas]='e2e shots headless'
+    [hunted]='headless visual'
+    [mycube]='headless visual lua-headless'
+    [partsneeded]='headless visual'
+    [ttld]='headless visual lua-visual pose-parity'
+    [unit-scripts]='partsneeded source'
+)
+# What `verify all` runs: every in-game assertion suite, no screenshots.
+ALL_RUNS=(
+    'area17 static' 'area17 headless' 'flove headless' 'gravitas e2e'
+    'hunted headless' 'mycube headless' 'mycube lua-headless'
+    'partsneeded headless' 'ttld headless' 'unit-scripts source'
+)
+# What `verify visual` and `verify update-goldens` run: the golden comparisons.
+VISUAL_RUNS=(
+    'area17 visual' 'flove visual' 'gravitas shots' 'hunted visual'
+    'mycube visual' 'partsneeded visual' 'ttld visual'
+)
+
 usage() {
     cat >&2 <<'EOS'
-usage: verify <game> [mode] [seconds]
-       verify list
-       verify all
-
-  area17     static | headless | visual | all
-  flove      headless | visual | outline
-  gravitas   e2e | shots | headless
-  hunted     headless | visual
-  mycube     headless
-  ports      headless | visual  [mycube|partsneeded|all]
-  ttld       headless | visual | lua-visual
-  unit-scripts source | partsneeded
+usage: verify <suite> [mode] [seconds]    run one suite (default mode: first listed)
+       verify list                       suites and their modes
+       verify all                        every headless/static suite
+       verify visual                     every screenshot suite, compared to goldens
+       verify update-goldens [suite]     re-record goldens from fresh renders
+       verify probe <name> [args]        run a debugging probe (verification/probes)
 
 Environment:
+  SPRING_ENGINE_DIR     engine install to test (default: ../spring-bar build,
+                        then engine/current from setup.sh)
   SPRING_BAR_DIR        engine checkout (default ../spring-bar next to this repo)
   SPRING_ENGINE_BIN     override the rendering engine binary
   SPRING_HEADLESS_BIN   override the headless engine binary
+  GOLDEN_TOLERANCE      override the RMSE % limit against goldens (set per suite)
   KEEP_TEST_ARTIFACTS=1 keep temporary workspaces
 
-Output, logs and screenshots land in verification/out/<suite>/.
+Output, logs and screenshots land in verification/out/<suite>-<mode>/.
 EOS
     exit 2
 }
 
-list_games() {
+list_suites() {
     local suite
-    for suite in "$VERIFICATION_ROOT"/games/*.sh; do
-        printf '%s\n' "$(basename "$suite" .sh)"
+    for suite in $(printf '%s\n' "${!MODES[@]}" | sort); do
+        printf '%-14s %s\n' "$suite" "${MODES[$suite]}"
     done
+    printf '\nprobes:\n'
+    for suite in "$VERIFICATION_ROOT"/probes/*.sh; do
+        printf '  %s\n' "$(basename "$suite" .sh)"
+    done
+}
+
+run_all() {
+    local run failed=()
+    for run in "$@"; do
+        printf '\n########## %s\n' "$run"
+        # shellcheck disable=SC2086
+        "$VERIFICATION_ROOT/games/${run%% *}.sh" ${run#* } || failed+=("$run")
+    done
+    if [[ ${#failed[@]} -gt 0 ]]; then
+        printf '\nfailed:\n' >&2
+        printf '  %s\n' "${failed[@]}" >&2
+        exit 1
+    fi
+    printf '\nall %d runs passed\n' "$#"
 }
 
 [[ $# -ge 1 ]] || usage
 
 case "$1" in
-    list) list_games; exit 0 ;;
-    all)
-        shift
-        failed=()
-        for suite in $(list_games); do
-            printf '\n########## %s\n' "$suite"
-            "$VERIFICATION_ROOT/games/$suite.sh" || failed+=("$suite")
-        done
-        if [[ ${#failed[@]} -gt 0 ]]; then
-            printf '\nfailed: %s\n' "${failed[*]}" >&2
-            exit 1
+    list) list_suites; exit 0 ;;
+    all) run_all "${ALL_RUNS[@]}"; exit ;;
+    visual) run_all "${VISUAL_RUNS[@]}"; exit ;;
+    update-goldens)
+        export VF_UPDATE_GOLDENS=1
+        if [[ -n ${2:-} ]]; then
+            runs=()
+            for run in "${VISUAL_RUNS[@]}"; do
+                [[ ${run%% *} == "$2" ]] && runs+=("$run")
+            done
+            [[ ${#runs[@]} -gt 0 ]] || { printf 'no golden suite: %s\n' "$2" >&2; exit 2; }
+            run_all "${runs[@]}"
+        else
+            run_all "${VISUAL_RUNS[@]}"
         fi
-        printf '\nall suites passed\n'
-        exit 0
+        exit
+        ;;
+    probe)
+        [[ -n ${2:-} ]] || { list_suites; exit 2; }
+        probe="$VERIFICATION_ROOT/probes/$2.sh"
+        [[ -f $probe ]] || { printf 'unknown probe: %s\n' "$2" >&2; exit 2; }
+        shift 2
+        exec bash "$probe" "$@"
         ;;
     -h|--help) usage ;;
 esac
 
-suite="$VERIFICATION_ROOT/games/$1.sh"
-[[ -x $suite ]] || { printf 'unknown game: %s\n\n' "$1" >&2; usage; }
+[[ -n ${MODES[$1]:-} ]] || { printf 'unknown suite: %s\n\n' "$1" >&2; usage; }
+suite=$1
 shift
-exec "$suite" "$@"
+exec "$VERIFICATION_ROOT/games/$suite.sh" "$@"

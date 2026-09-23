@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
+# Golden RMSE limit, about twice the run-to-run noise measured on 2026-09-23 (0.1%).
+GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-1}
+
 GAME_DIR="$GAMES_DIR/ToTheLastDrop-wasm.sdd"
 LUA_GAME_DIR="$GAMES_DIR/ToTheLastDrop.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
@@ -78,13 +81,18 @@ ttld_lua_visual() {
     echo '>>> To the Last Drop Lua visual verification passed <<<'
 }
 
-ttld_install() {
-    (
-        cd "$SOURCE_ROOT"
-        cp target/wasm32-unknown-unknown/release/ttld_rules_wasm.wasm "$GAME_DIR/LuaRules/wasm/ttld-rules.wasm"
-        cp target/wasm32-unknown-unknown/release/ttld_rules_unsynced_wasm.wasm "$GAME_DIR/LuaRules/wasm/ttld-rules-unsynced.wasm"
-        cp target/wasm32-unknown-unknown/release/ttld_ui_wasm.wasm "$GAME_DIR/LuaUI/wasm/ttld-ui.wasm"
-    )
+# Stages the port with modules built for FEATURES.
+ttld_stage() {
+    local features=$1 staged
+    ttld_assets
+    vf_build "$SOURCE_ROOT" "$features"
+    staged=$(vf_stage_game "$GAME_DIR")
+    vf_install_modules "$staged" \
+        ttld_rules_wasm:LuaRules/wasm/ttld-rules.wasm \
+        ttld_rules_unsynced_wasm:LuaRules/wasm/ttld-rules-unsynced.wasm \
+        ttld_ui_wasm:LuaUI/wasm/ttld-ui.wasm
+    vf_link_map "$MAP_DIR"
+    ttld_start
 }
 
 ttld_assert_leader_render() {
@@ -168,16 +176,10 @@ ttld_assert_leader_render() {
 
 ttld_headless() {
     local seconds=${1:-45}
-    trap 'vf_restore_modules "$SOURCE_ROOT"; vf_keep_workspace_unless' EXIT INT TERM
-
-    ttld_assets
-    vf_build "$SOURCE_ROOT" headless-integration
-    ttld_install
+    trap 'vf_keep_workspace_unless' EXIT INT TERM
 
     vf_workspace ttld-headless
-    vf_link_game "$GAME_DIR"
-    vf_link_map "$MAP_DIR"
-    ttld_start
+    ttld_stage headless-integration
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -196,17 +198,11 @@ ttld_headless() {
 ttld_pose_parity() {
     local seconds=${1:-14}
     local rust_log lua_log
-    trap 'vf_restore_modules "$SOURCE_ROOT"; vf_keep_workspace_unless' EXIT INT TERM
-
-    ttld_assets
-    vf_build "$SOURCE_ROOT" pose-probe
-    ttld_install
+    trap 'vf_keep_workspace_unless' EXIT INT TERM
 
     vf_workspace ttld-pose-rust stable
     rust_log="$VF_OUT_DIR/last.combined.txt"
-    vf_link_game "$GAME_DIR"
-    vf_link_map "$MAP_DIR"
-    ttld_start
+    ttld_stage pose-probe
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -247,16 +243,9 @@ ttld_pose_parity() {
 
 ttld_visual() {
     local seconds=${1:-60} screen=${2:-1280x720x24} shots
-    trap 'vf_restore_modules "$SOURCE_ROOT"' EXIT INT TERM
-
-    ttld_assets
-    vf_build "$SOURCE_ROOT" e2e
-    ttld_install
 
     vf_workspace ttld-visual stable
-    vf_link_game "$GAME_DIR"
-    vf_link_map "$MAP_DIR"
-    ttld_start
+    ttld_stage e2e
     vf_config "$VISUAL_CONFIG"
     printf 'AllowDeferredMapRendering = 1\nAllowDeferredModelRendering = 1\nAllowDeferredModelBufferClear = 1\n' >>"$VF_CONFIG_FILE"
     vf_run_visual "$seconds" "$screen"
@@ -272,6 +261,9 @@ ttld_visual() {
     vf_require 'TTLD E2E selection cleared=0' 'the player remained selected in the engine UI'
     vf_forbid 'GLSL-PO::Validate\] program-object name: SMFShader' \
         'the map SMF shader still fails to validate; terrain will not render'
+    vf_note 'To the Last Drop goldens'
+    vf_goldens_by_index ttld shot_1 shot_2 shot_3
+    vf_goldens_done
     printf 'captured %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
     echo '>>> To the Last Drop visual verification passed <<<'
 }
