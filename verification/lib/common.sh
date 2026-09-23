@@ -12,7 +12,8 @@ if [[ -z ${SPRING_ENGINE_DIR:-} && ! -x $ENGINE_INSTALL/spring && -x $PROJECT_RO
     ENGINE_INSTALL="$PROJECT_ROOT/engine/current"
 fi
 
-GAMES_DIR="$PROJECT_ROOT/spring-linux/games"
+# VF_GAMES_DIR points suites at other game checkouts (worktrees on a branch).
+GAMES_DIR=${VF_GAMES_DIR:-$PROJECT_ROOT/spring-linux/games}
 MAPS_DIR="$PROJECT_ROOT/spring-linux/maps"
 FIXTURES_DIR="$VERIFICATION_ROOT/fixtures"
 SHARED_FONTCACHE="$VERIFICATION_ROOT/cache/fontcache"
