@@ -218,8 +218,12 @@ while IFS=$'\t' read -r kind path source branch ship; do
 done < <(manifest)
 
 log "Packing WasmMenu"
-[[ -f "$project_root/wasm-menu/WasmMenu/wasm-menu.wasm" ]] \
-    || die "wasm-menu.wasm missing (run with --build)"
+menu_wasm="$project_root/wasm-menu/WasmMenu/wasm-menu.wasm"
+[[ -f "$menu_wasm" ]] || die "wasm-menu.wasm missing (run with --build)"
+# The menu compiles in launch/games/ (start scripts, per-game graphics).
+if [[ -n "$(find "$project_root/launch/games" -newer "$menu_wasm" -print -quit)" ]]; then
+    die "launch/games/ changed after wasm-menu.wasm was built (run with --build)"
+fi
 menu_tmp="$(mktemp -d)"
 rsync -a --exclude=/wasm-src --exclude=/generate-rating-stars.sh \
     "$project_root/wasm-menu/" "$menu_tmp/root/"
@@ -257,7 +261,7 @@ write_settings() {
     {
         echo ""
         echo "# SpringCabal defaults"
-        grep -v -E '^\s*(#|$)' "$project_root/springsettings-custom.cfg"
+        grep -v -E '^\s*(#|$)' "$project_root/launch/springsettings.cfg"
     } >> "$cfg"
 }
 

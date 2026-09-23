@@ -23,7 +23,7 @@ are archived in [game-info/](game-info/README.md).
 ├── release/                 # Release packaging and smoke test (see RELEASING.md)
 ├── verification/            # Automated test suite (headless, visual, static)
 ├── game-info/               # Archived jam entries (descriptions, credits, ratings)
-├── launch/                  # Start scripts and engine configs for direct launches
+├── launch/                  # The one source of launch settings (see "Launch settings")
 ├── patches/                 # Patches applied to third-party archives (Area 17 map)
 ├── scripts/                 # Helper scripts (patched map builder)
 ├── justfile                 # Root commands for building, checking, testing, releasing
@@ -62,9 +62,28 @@ with `$SPRING_BAR_DIR`), then `engine/current` from setup.
 ### 2. Running
 
 ```bash
-./run-wasm.sh                 # the WASM menu; every game has WASM and Lua buttons
-./run-wasm.sh --game flove    # one game directly: hunted, area17, flove, ttld, gravitas
+./run-wasm.sh                        # the WASM menu; every game has WASM and Lua buttons
+./run-wasm.sh --game flove           # one game directly (every game in launch/games/)
+./run-wasm.sh --game flove --lua     # the original Lua version
+./run-wasm.sh --game gravitas --editor
 ```
+
+### Launch settings
+
+`launch/` is the only place launch settings live. The menu, `run-wasm.sh`,
+verification, the smoke test and the release all read from it:
+
+| file | what |
+| --- | --- |
+| `launch/springsettings.cfg` | graphics/UI profile; shipped as the release's `springsettings.cfg` |
+| `launch/games/<game>/wasm.txt`, `lua.txt` (`gravitas/editor.txt`) | the start script for each menu button |
+| `launch/games/<game>/graphics.cfg` | per-game overrides applied on top when that game starts |
+| `launch/local.cfg` (gitignored) | your window size/position, for `run-wasm.sh` only |
+
+The menu compiles `launch/games/` in (`include_str!`). After editing it, rebuild
+the menu with `just --justfile wasm-menu/wasm-src/justfile copy`.
+`run-wasm.sh` warns about a stale menu build, and `release/package.sh` refuses
+to ship one.
 
 ### 3. Building & Checking Games
 Games depend on `spring` and `spring-addons` via the remote git repository (`https://github.com/gajop/spring-rust`, branch `rust-wip`).
@@ -120,8 +139,7 @@ To try the menu on a separate X display without touching your runtime files:
 xvfb-run -a -s '-screen 0 1280x900x24' env SPRING_RUN_DIR=/tmp/springcabal-menu-check ./run-wasm.sh
 ```
 `SPRING_RUN_DIR` (default `wasm-test/`, gitignored) holds the launcher's write
-dir, logs and isolation views. Start scripts and engine configs for direct
-launches are in `launch/`.
+dir, logs and isolation views.
 
 ## Verification
 

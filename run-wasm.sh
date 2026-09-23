@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
+# Launch the WASM menu, or one game directly, with exactly what the menu and
+# the release use: launch/springsettings.cfg, launch/games/<game>/graphics.cfg
+# and launch/games/<game>/<variant>.txt.
 set -euo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+launch_dir="$project_root/launch"
 engine_root="${SPRING_BAR_DIR:-$(dirname "$project_root")/spring-bar}"
 # Engine install to run: SPRING_ENGINE_DIR, else a local spring-bar build,
 # else the release fetched by `./setup.sh --engine-tag TAG` (engine/current).
@@ -17,24 +21,26 @@ wasm_menu_dir="$project_root/wasm-menu"
 run_dir="${SPRING_RUN_DIR:-$project_root/wasm-test}"
 write_dir="$run_dir/write"
 log_dir="$write_dir/logs"
+games="$(ls "$launch_dir/games" | tr '\n' ' ')"
 
 usage() {
-    echo "Usage: $0 [--game hunted|area17|flove|ttld|gravitas]"
+    echo "Usage: $0 [--game GAME [--lua | --editor]]"
     echo ""
-    echo "  No arguments:       launch the WASM menu (pick a game interactively)"
-    echo "  --game hunted       launch Hunted WASM directly"
-    echo "  --game area17       launch Area 17 WASM directly"
-    echo "  --game flove        launch Flove WASM directly (bypasses the menu)"
-    echo "  --game ttld         launch To the Last Drop WASM directly"
-    echo "  --game gravitas     launch Gravitas WASM directly"
+    echo "  No arguments:   the WASM menu"
+    echo "  --game GAME     one game directly: $games"
+    echo "  --lua           the original Lua version instead of the WASM port"
+    echo "  --editor        the Gravitas scenario editor (with --game gravitas)"
     exit 1
 }
 
 game=""
+variant="wasm"
 start_file=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --game) game="${2:-}"; shift 2 ;;
+        --lua) variant="lua"; shift ;;
+        --editor) variant="editor"; shift ;;
         -h|--help) usage ;;
         *) echo "Unknown option: $1" >&2; usage ;;
     esac
@@ -46,6 +52,17 @@ if [[ ! -x "$engine_bin" ]]; then
     echo "or download a release with: ./setup.sh --engine-tag TAG" >&2
     exit 1
 fi
+if [[ -n "$game" && ! -f "$launch_dir/games/$game/$variant.txt" ]]; then
+    echo "No launch/games/$game/$variant.txt (games: $games)" >&2
+    exit 1
+fi
+
+# The menu compiles launch/games/ in; warn when it predates an edit there.
+menu_wasm="$wasm_menu_dir/WasmMenu/wasm-menu.wasm"
+if [[ -f "$menu_wasm" ]] && [[ -n "$(find "$launch_dir/games" -newer "$menu_wasm" -print -quit)" ]]; then
+    echo "warning: launch/games/ changed after the menu was built; rebuild it with" >&2
+    echo "  just --justfile wasm-menu/wasm-src/justfile copy" >&2
+fi
 
 # The isolation view has to keep the same path between runs.  The engine's
 # archive cache in the write dir records each archive's info-file path, and a
@@ -53,10 +70,10 @@ fi
 # deleted /tmp path, so startup logged one
 # "[FSA::GetFileModificationTime] error 'No such file or directory'" per
 # archive and then rescanned all of them.  One stable directory per launch
-# mode, since the modes link different archives under different names.
+# mode.
 isolation_dir="$run_dir/isolation-${game:-menu}"
 rm -rf -- "$isolation_dir/games" "$isolation_dir/maps"
-mkdir -p "$isolation_dir" "$write_dir" "$log_dir"
+mkdir -p "$isolation_dir/games" "$isolation_dir/maps" "$write_dir" "$log_dir"
 
 session_log="$log_dir/wasm-$(date +%Y%m%d-%H%M%S)-$$.infolog.txt"
 return_marker="(AREA17|HUNTED|FLOVE|GRAVITAS|MYCUBE|TTLD)_RETURN_TO_WASM_MENU|RETURN_TO_WASM_MENU"
@@ -114,6 +131,7 @@ returned_by_quitting() {
     (( marker_line > ${menu_line:-0} ))
 }
 
+# Engine data and every archive, as in the release bundle.
 ln -sfn "$engine_install/base" "$isolation_dir/base"
 ln -sfn "$engine_install/fonts" "$isolation_dir/fonts"
 if [[ -d "$engine_install/AI" ]]; then
@@ -124,102 +142,50 @@ fi
 if [[ -d "$project_root/spring-linux/projects" ]]; then
     ln -sfn "$project_root/spring-linux/projects" "$isolation_dir/projects"
 fi
-mkdir -p "$isolation_dir/games" "$isolation_dir/maps"
+for g in "$project_root/spring-linux/games/"*.sdd; do
+    ln -sf "$g" "$isolation_dir/games/$(basename "$g")"
+done
+for m in "$project_root/spring-linux/maps/"*; do
+    # Area 17 always runs on the patched copy of its map.
+    [[ $(basename "$m") == Area17.sd7 ]] && continue
+    ln -sf "$m" "$isolation_dir/maps/$(basename "$m")"
+done
+ln -sfn "$("$project_root/scripts/area17-map.sh" --dir)" "$isolation_dir/maps/Area17.sdd"
+if [[ ! -f "$menu_wasm" ]]; then
+    echo "Wasm menu module not found. Build it first:" >&2
+    echo "  cd '$wasm_menu_dir/wasm-src' && just copy" >&2
+    exit 1
+fi
+ln -sfn "$wasm_menu_dir" "$isolation_dir/games/WasmMenu.sdd"
+
+# Settings: the release profile, then personal window settings (launch/local.cfg),
+# then, for a direct launch, the game's overrides (the menu applies those itself).
+config="$run_dir/springsettings.cfg"
+{
+    cat "$launch_dir/springsettings.cfg"
+    [[ -f "$launch_dir/local.cfg" ]] && printf '\n' && cat "$launch_dir/local.cfg"
+    if [[ -n "$game" && -f "$launch_dir/games/$game/graphics.cfg" ]]; then
+        printf '\n'
+        cat "$launch_dir/games/$game/graphics.cfg"
+    fi
+} >"$config"
 
 if [[ -z "$game" ]]; then
-    # --- Menu mode ---
-    for g in "$project_root/spring-linux/games/"*.sdd; do
-        ln -sf "$g" "$isolation_dir/games/$(basename "$g")"
-    done
-    for m in "$project_root/spring-linux/maps/"*; do
-        # Area 17 always runs on the patched copy of its map.
-        [[ $(basename "$m") == Area17.sd7 ]] && continue
-        ln -sf "$m" "$isolation_dir/maps/$(basename "$m")"
-    done
-    ln -sf "$("$project_root/scripts/area17-map.sh")" "$isolation_dir/maps/Area17.sd7"
-    if [[ ! -f "$wasm_menu_dir/WasmMenu/wasm-menu.wasm" ]]; then
-        echo "Wasm menu module not found. Build it first:" >&2
-        echo "  cd '$wasm_menu_dir/wasm-src' && just copy" >&2
-        exit 1
-    fi
-    ln -s "$wasm_menu_dir" "$isolation_dir/games/WasmMenu.sdd"
-
     echo "Launching WASM Menu with experimental engine: $engine_bin"
     echo "Live log: $write_dir/infolog.txt"
-    launch_engine "$engine_bin" \
-        --window \
-        --write-dir "$write_dir" \
-        --isolation \
-        --isolation-dir "$isolation_dir" \
+    launch_engine "$engine_bin" --window --write-dir "$write_dir" \
+        --isolation --isolation-dir "$isolation_dir" --config "$config" \
         -menu "WasmMenu 1.0"
 else
-    # --- Direct game launch ---
-    case "$game" in
-        hunted)
-            game_dir="$project_root/spring-linux/games/Hunted-wasm.sdd"
-            map_dir="$project_root/spring-linux/maps/HuntedMap.sdd"
-            start_txt="$project_root/launch/hunted.txt"
-            config="$isolation_dir/spring.conf"
-            cp "$project_root/launch/spring.conf" "$config"
-            echo "Shadows = 0" >> "$config"
-            ln -sf "$map_dir" "$isolation_dir/maps/Hunted - v04.sdd"
-            ;;
-        area17)
-            game_dir="$project_root/spring-linux/games/Area17-wasm.sdd"
-            map_dir="$("$project_root/scripts/area17-map.sh")"
-            start_txt="$project_root/launch/area17.txt"
-            config="$project_root/launch/area17.conf"
-            ln -sf "$map_dir" "$isolation_dir/maps/Area17.sd7"
-            ;;
-        flove)
-            game_dir="$project_root/spring-linux/games/Flove-wasm.sdd"
-            map_dir="$project_root/spring-linux/maps/LD34-map.sdd"
-            start_txt="$project_root/launch/flove.txt"
-            config="$project_root/launch/spring.conf"
-            ln -sf "$map_dir" "$isolation_dir/maps/The Grove 0.3.sdd"
-            ;;
-        ttld)
-            game_dir="$project_root/spring-linux/games/ToTheLastDrop-wasm.sdd"
-            map_dir="$project_root/spring-linux/maps/LD43-map.sdd"
-            start_txt="$project_root/launch/ttld.txt"
-            config="$project_root/launch/spring.conf"
-            ln -sf "$map_dir" "$isolation_dir/maps/LD43-map.sdd"
-            ;;
-        gravitas)
-            game_dir="$project_root/spring-linux/games/Gravitas-wasm.sdd"
-            map_dir="$project_root/spring-linux/maps/Gravitas-map.sdd"
-            start_txt="$project_root/launch/gravitas.txt"
-            config="$project_root/launch/spring.conf"
-            ln -sf "$map_dir" "$isolation_dir/maps/Gravitas-map.sdd"
-            ;;
-        *)
-            echo "Unknown game: $game" >&2
-            echo "Supported: hunted, area17, flove, ttld, gravitas" >&2
-            exit 1
-            ;;
-    esac
-
-    if [[ ! -d "$game_dir" || ! -e "$map_dir" ]]; then
-        echo "Game or map not found: $game_dir / $map_dir" >&2
-        exit 1
-    fi
-
-    ln -sf "$game_dir" "$isolation_dir/games/$(basename "$game_dir")"
-
-    # Each direct game session gets its own loopback port.  This lets a menu
-    # session or another local Spring instance remain running concurrently.
+    # Each direct session gets its own loopback port, so a menu session or
+    # another local Spring instance can keep running.
     host_port="$(shuf -i 20000-60000 -n 1)"
     start_file="$(mktemp "${TMPDIR:-/tmp}/spring-wasm-start.XXXXXX")"
-    cp "$start_txt" "$start_file"
-    sed -E -i "s/hostport=[0-9]+;/hostport=${host_port};/" "$start_file"
+    sed -E "s/([Hh]ost[Pp]ort)=[0-9]+;/\1=${host_port};/" "$launch_dir/games/$game/$variant.txt" >"$start_file"
 
-    echo "Launching $game WASM with experimental engine: $engine_bin (port $host_port)"
+    echo "Launching $game ($variant) with experimental engine: $engine_bin (port $host_port)"
     echo "Live log: $write_dir/infolog.txt"
-    launch_engine "$engine_bin" \
-        --window \
-        --write-dir "$write_dir" \
-        --isolation \
-        --isolation-dir "$isolation_dir" \
-        --config "$config" \
+    launch_engine "$engine_bin" --window --write-dir "$write_dir" \
+        --isolation --isolation-dir "$isolation_dir" --config "$config" \
         "$start_file"
 fi

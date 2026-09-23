@@ -1,0 +1,203 @@
+{
+ "atlas_columns": 6,
+ "captures": {
+  "NONE/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "NONE/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "NONE/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "NONE/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "explosion/far/f02": {
+   "coverage": 0.002,
+   "diff_noise": 0.384,
+   "diff_noise_pooled": 0.179,
+   "visible": 0.0
+  },
+  "explosion/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.114,
+   "diff_noise_pooled": 0.052,
+   "visible": 0.0
+  },
+  "explosion/near/f02": {
+   "coverage": 0.0161,
+   "diff_noise": 1.418,
+   "diff_noise_pooled": 0.961,
+   "visible": 1.0
+  },
+  "explosion/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.353,
+   "diff_noise_pooled": 0.266,
+   "visible": 0.688
+  },
+  "flashnuke/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "flashnuke/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "flashnuke/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "flashnuke/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "missiletrailred/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "missiletrailred/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "missiletrailred/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "missiletrailred/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "none/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "none/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "none/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "none/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "nothing/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "nothing/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "nothing/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "nothing/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "smoke_puff/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "smoke_puff/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "smoke_puff/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "smoke_puff/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  }
+ },
+ "order": [
+  "NONE/far/f02",
+  "NONE/far/f12",
+  "NONE/near/f02",
+  "NONE/near/f12",
+  "explosion/far/f02",
+  "explosion/far/f12",
+  "explosion/near/f02",
+  "explosion/near/f12",
+  "flashnuke/far/f02",
+  "flashnuke/far/f12",
+  "flashnuke/near/f02",
+  "flashnuke/near/f12",
+  "missiletrailred/far/f02",
+  "missiletrailred/far/f12",
+  "missiletrailred/near/f02",
+  "missiletrailred/near/f12",
+  "none/far/f02",
+  "none/far/f12",
+  "none/near/f02",
+  "none/near/f12",
+  "nothing/far/f02",
+  "nothing/far/f12",
+  "nothing/near/f02",
+  "nothing/near/f12",
+  "smoke_puff/far/f02",
+  "smoke_puff/far/f12",
+  "smoke_puff/near/f02",
+  "smoke_puff/near/f12"
+ ]
+}

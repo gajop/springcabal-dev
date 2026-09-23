@@ -17,7 +17,7 @@ if [[ ${SPIRE_PROBE_PRESENTATION:-0} == 1 ]]; then
     cp "$FIXTURES_DIR/flove/presentation_probe.lua" "$staged/LuaRules/Gadgets/presentation_probe.lua"
 fi
 vf_link_map "$MAPS_DIR/LD34-map.sdd" 'The Grove 0.3.sdd'
-vf_start_file "$LAUNCH_DIR/flove.txt" 1 1
+vf_start_file "$(vf_launch_script flove)" 1 1
 [[ ${SPIRE_PROBE_MANUAL:-0} == 1 ]] && vf_modoption spire_probe_manual 1
 vf_config "$FIXTURES_DIR/flove/spring.conf"
 printf '\nXResolutionWindowed = 1280\nYResolutionWindowed = 720\nWindowBorderless = 0\nWindowState = 0\n' >> "$VF_CONFIG_FILE"

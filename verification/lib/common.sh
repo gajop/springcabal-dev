@@ -18,8 +18,10 @@ FIXTURES_DIR="$VERIFICATION_ROOT/fixtures"
 SHARED_FONTCACHE="$VERIFICATION_ROOT/cache/fontcache"
 
 LAUNCH_DIR="$PROJECT_ROOT/launch"
-DEFAULT_CONFIG="$LAUNCH_DIR/spring.conf"
-VISUAL_CONFIG="$FIXTURES_DIR/visual.conf"
+# Every run uses the settings players get: the release profile that
+# release/package.sh ships, plus the menu's per-game overrides (vf_graphics).
+DEFAULT_CONFIG="$LAUNCH_DIR/springsettings.cfg"
+VISUAL_CONFIG="$DEFAULT_CONFIG"
 BUILD_CACHE="$VERIFICATION_ROOT/cache/target"
 GOLDEN_FAILURES=0
 
@@ -189,14 +191,18 @@ vf_start_inline() {
     sed -E -i "s/[Hh]ostport=[0-9]+;/hostport=$(shuf -i 20000-60000 -n 1);/" "$VF_START_FILE"
 }
 
-# vf_start_set KEY VALUE: replace a top-level entry such as GameType or MapName
-# in the current start script (key match is case-insensitive).
+# vf_start_set KEY VALUE: set a top-level [GAME] entry such as GameType,
+# MapName or FixedRNGSeed (key match is case-insensitive; added if missing).
 vf_start_set() {
     local key=${1:?key} value=${2?value}
     [[ -f $VF_START_FILE ]] || vf_die 'vf_start_set: no start script yet'
-    grep -qiE "^[[:space:]]*${key}[[:space:]]*=" "$VF_START_FILE" || vf_die "start script has no $key"
-    KEY=$key VALUE=$value perl -i -pe \
-        's/^(\s*)\Q$ENV{KEY}\E\s*=[^;]*;/$1$ENV{KEY}=$ENV{VALUE};/i' "$VF_START_FILE"
+    if grep -qiE "(^|[[:space:];])${key}[[:space:]]*=" "$VF_START_FILE"; then
+        KEY=$key VALUE=$value perl -i -pe \
+            's/(^|[\s;])\Q$ENV{KEY}\E\s*=[^;]*;/$1$ENV{KEY}=$ENV{VALUE};/i' "$VF_START_FILE"
+    else
+        KEY=$key VALUE=$value perl -0 -i -pe \
+            's/(\[GAME\]\s*\{)/$1\n$ENV{KEY}=$ENV{VALUE};/i' "$VF_START_FILE"
+    fi
 }
 
 # vf_modoption KEY VALUE: set a [modoptions] entry in the current start script,
@@ -226,7 +232,9 @@ vf_config() {
     [[ -f $fixture ]] || vf_die "config not found: $fixture"
     VF_CONFIG_FILE="$VF_TEST_ROOT/spring.conf"
     cp "$fixture" "$VF_CONFIG_FILE"
-    printf '\nInfoConsoleGeometry = 0 0 0 0\nMaxTextureAtlasSizeX = 16384\nMaxTextureAtlasSizeY = 16384\n' \
+    # Test-only additions; none changes how the world renders.  The FPS/speed
+    # counters would put changing numbers into screenshots.
+    printf '\nInfoConsoleGeometry = 0 0 0 0\nMaxTextureAtlasSizeX = 16384\nMaxTextureAtlasSizeY = 16384\nShowFPS = 0\nShowSpeed = 0\nShowClock = 0\n' \
         >>"$VF_CONFIG_FILE"
     # Verification runs are silent unless VF_SOUND=1.
     [[ ${VF_SOUND:-0} == 1 ]] || printf 'snd_volmaster = 0\n' >>"$VF_CONFIG_FILE"
@@ -249,28 +257,92 @@ vf_run_headless() {
     return 0
 }
 
+# vf_graphics GAME: launch/games/GAME/graphics.cfg, the per-game overrides the
+# menu (and run-wasm.sh, and the release) apply on top of springsettings.cfg.
+vf_graphics() {
+    local file="$LAUNCH_DIR/games/${1:?game}/graphics.cfg" key value
+    [[ -f $file ]] || return 0
+    while IFS='=' read -r key value; do
+        key=${key//[[:space:]]/}
+        [[ -z $key || $key == \#* ]] && continue
+        vf_config_set "$key" "$(echo "$value" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+    done <"$file"
+}
+
+# vf_launch_script GAME [wasm|lua|editor]: the start script the menu uses.
+vf_launch_script() {
+    local file="$LAUNCH_DIR/games/${1:?game}/${2:-wasm}.txt"
+    [[ -f $file ]] || vf_die "no launch script: $file"
+    printf '%s\n' "$file"
+}
+
+# vf_config_set KEY VALUE: set one engine config entry (replacing any earlier).
+vf_config_set() {
+    local key=${1:?key} value=${2?value}
+    [[ -f $VF_CONFIG_FILE ]] || vf_die 'vf_config_set: call vf_config first'
+    sed -i -E "/^[[:space:]]*${key}[[:space:]]*=/d" "$VF_CONFIG_FILE"
+    printf '%s = %s\n' "$key" "$value" >>"$VF_CONFIG_FILE"
+}
+
+# Rendering backend for visual runs (VF_RENDERER, or the suite's default):
+#   software  Xvfb + Mesa llvmpipe: invisible, any size, not the real driver
+#   gpu       the real GPU through SDL's offscreen video driver (EGL, no
+#             window): invisible, but SDL's offscreen display is 1024x768 and
+#             the engine clamps its window to it, so at most 1024x736
+#   screen    a real window on $DISPLAY: any size, takes over the screen
+# Goldens record the renderer they were made with (see lib/gallery.py).
+vf_renderer() {
+    printf '%s\n' "${VF_RENDERER:-${VF_DEFAULT_RENDERER:-software}}"
+}
+
 vf_run_visual() {
-    local seconds=${1:?seconds} screen=${2:-1280x720x24} engine
+    local seconds=${1:?seconds} screen=${2:-1280x720x24} engine renderer width height
     engine=$(vf_engine_bin visual)
+    renderer=$(vf_renderer)
+    width=${screen%%x*}
+    height=${screen#*x}; height=${height%%x*}
     rm -f -- "$VF_WRITE_DIR/infolog.txt"
     rm -rf -- "${VF_WRITE_DIR:?}/screenshots"/*
 
+    local -a args=(--window --write-dir "$VF_WRITE_DIR" --isolation --isolation-dir "$VF_ISOLATION"
+        --config "$VF_CONFIG_FILE" "$VF_START_FILE")
     set +e
-    ASAN_OPTIONS=detect_leaks=0:allocator_may_return_null=1 \
-    LIBGL_ALWAYS_SOFTWARE=1 \
-    SDL_VIDEODRIVER=x11 \
-    WAYLAND_DISPLAY= \
-        timeout --signal=TERM "${seconds}s" \
-        xvfb-run -a -s "-screen 0 $screen +extension GLX" \
-        "$engine" \
-        --window \
-        --write-dir "$VF_WRITE_DIR" \
-        --isolation \
-        --isolation-dir "$VF_ISOLATION" \
-        --config "$VF_CONFIG_FILE" \
-        "$VF_START_FILE" >"$VF_WRITE_DIR/stdout.txt" 2>&1
+    case "$renderer" in
+        software)
+            ASAN_OPTIONS=detect_leaks=0:allocator_may_return_null=1 \
+            LIBGL_ALWAYS_SOFTWARE=1 SDL_VIDEODRIVER=x11 WAYLAND_DISPLAY= \
+                timeout --signal=TERM "${seconds}s" \
+                xvfb-run -a -s "-screen 0 $screen +extension GLX" \
+                "$engine" "${args[@]}" >"$VF_WRITE_DIR/stdout.txt" 2>&1
+            ;;
+        gpu)
+            if (( width > 1024 || height > 736 )); then
+                vf_die "the gpu renderer is limited to 1024x736 (SDL offscreen display); this run needs ${width}x${height}. Use VF_RENDERER=screen or software."
+            fi
+            vf_config_set Fullscreen 0
+            vf_config_set WindowBorderless 1
+            vf_config_set XResolutionWindowed "$width"
+            vf_config_set YResolutionWindowed "$height"
+            ASAN_OPTIONS=detect_leaks=0:allocator_may_return_null=1 SDL_VIDEODRIVER=offscreen \
+                timeout --signal=TERM "${seconds}s" \
+                "$engine" "${args[@]}" >"$VF_WRITE_DIR/stdout.txt" 2>&1
+            ;;
+        screen)
+            [[ -n ${DISPLAY:-} ]] || vf_die 'VF_RENDERER=screen needs $DISPLAY'
+            vf_config_set Fullscreen 0
+            vf_config_set XResolutionWindowed "$width"
+            vf_config_set YResolutionWindowed "$height"
+            ASAN_OPTIONS=detect_leaks=0:allocator_may_return_null=1 \
+                timeout --signal=TERM "${seconds}s" \
+                "$engine" "${args[@]}" >"$VF_WRITE_DIR/stdout.txt" 2>&1
+            ;;
+        *) set -e; vf_die "unknown VF_RENDERER: $renderer (software, gpu or screen)" ;;
+    esac
     VF_ENGINE_STATUS=$?
     set -e
+    local actual
+    actual=$(grep -m1 -oE 'GL renderer : .*' "$VF_WRITE_DIR/stdout.txt" | sed 's/GL renderer : //')
+    printf 'renderer: %s (%s)\n' "$renderer" "${actual:-unknown}"
     return 0
 }
 

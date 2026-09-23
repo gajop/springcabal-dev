@@ -24,6 +24,7 @@ just probe gravitas-fire lua     # a debugging probe
 | `partsneeded` | `headless` \| `visual` |
 | `ttld` | `headless` \| `visual` \| `lua-visual` \| `pose-parity` |
 | `unit-scripts` | `partsneeded` \| `source` |
+| `gallery` | `ceg [game]` \| `anim [game]` \| `parity [game]` (game defaults to `all`) |
 
 - `headless` runs the in-game assertions (modules built with the
   `headless-integration` feature) under `spring-headless`.
@@ -38,6 +39,31 @@ just probe gravitas-fire lua     # a debugging probe
 
 `verify all` runs every in-game assertion suite. `verify visual` runs every
 golden comparison. Both run their mode list from the table in `verify`.
+
+## Renderer and graphics settings
+
+Visual runs render with the graphics settings players get: the release profile
+(`launch/springsettings.cfg`, which turns on deferred map and model rendering),
+plus the per-game overrides the menu applies (`vf_graphics` reads
+`launch/games/<game>/graphics.cfg`: Area 17 gets 200,000 particles, shadows
+and water level 4; Hunted gets shadows off).  The
+only test-only changes are the window size, a muted mixer, a hidden console and
+hidden FPS/speed counters.  The gallery logs the effective settings and GPU at
+the start of every run (`[Gallery] graphics ...`).
+
+`VF_RENDERER` picks the backend:
+
+| renderer | what | visible | limits |
+| --- | --- | --- | --- |
+| `gpu` | the real GPU and driver via SDL's `offscreen` video driver (EGL, no window) | no | window at most 1024x736: SDL's offscreen display is 1024x768 and the engine clamps to it |
+| `software` | Xvfb + Mesa llvmpipe | no | not the driver players use |
+| `screen` | a normal window on `$DISPLAY` | **yes**, takes over the screen | none |
+
+Galleries default to `gpu` (720x720).  The scenario suites capture at
+1280x720, which doesn't fit the offscreen display, so they default to
+`software`; run them with `VF_RENDERER=screen` when fidelity matters.  Goldens
+store the renderer they were recorded with.  Runs on a different renderer
+still check poses and presence, but skip pixel comparisons with a warning.
 
 ## Suites never touch the game checkouts
 
@@ -66,7 +92,7 @@ run-to-run RMSE measured on 2026-09-23:
 | suite | run-to-run drift | limit |
 | --- | --- | --- |
 | ttld | 0.1% | 1% |
-| area17 | 2.8% | 5% |
+| area17 | up to 5.5% | 8% |
 | flove | 2.6% | 5% |
 | mycube | 4.2% | 9% |
 | hunted | 5.2% | 10% |
@@ -90,6 +116,105 @@ Golden names:
 After an intended visual change, run `just update-goldens <suite>`, look at the
 new images, and commit them.
 
+## Galleries: every CEG and every unit animation
+
+The scenario screenshots above depend on the whole game (AI, timing, camera,
+UI), so they are noisy.  `gallery` isolates the two things most worth pinning
+down.  For each game it runs **one engine process** that works through every
+item in turn:
+
+```bash
+just verify gallery ceg flove        # every CEG of one game (or `all`)
+just verify gallery anim ttld        # every unit type's animations
+just verify gallery parity ttld      # WASM vs Lua unit poses (report only)
+just verify gallery ceg hunted --only flashnuke,smoke_puff
+just update-goldens gallery          # re-record both for every game
+```
+
+Timings for a check (GTX 1660 Ti, 2026-09-23):
+- Area 17: 11.9 s (CEGs) + 12.9 s (animations)
+- Flove: 9.7 + 6.8 s
+- every other game: 4–6 s each
+- all galleries of all games: 79 s
+
+Recording goldens takes four CEG runs and two animation runs.
+
+What makes it fast:
+- **Raw captures.** PNG encoding cost 60–80 ms per capture on the render
+  thread.  The gallery now box-filters each capture on the GPU (mipmaps) and
+  writes 64x64 and 128x128 raw RGB via `gl.SaveImage(..., "x.raw")` (DevIL's
+  raw format).  Hunted's 336 captures went from 29.9 s of engine time to 1.3 s.
+  The Python comparison reads those bytes directly.
+- **Goldens in one atlas per game.** One PNG holds all tiles, so a check reads
+  a single file.  Contact sheets are made only when recording, or for failing
+  captures.
+- **An extracted copy of the Area 17 map** (`scripts/area17-map.sh --dir`).
+  Decompressing the 103 MB solid 7z took about 4 s on every start.
+
+`GALLERY_FULL=1` also keeps a full-size JPEG of every capture for inspection.
+
+`fixtures/gallery/gallery.lua` does the work in-engine.
+`Spring.SetVideoCapturingMode(true)` advances exactly one simulation frame per
+drawn frame and pins interpolation at 0, so a capture taken at game frame N
+shows frame N exactly.  Captures happen in `DrawScreenEffects`, after the world
+and before any HUD, with the interface hidden and global LOS granted
+(particles outside line of sight are not drawn).  `lib/gallery.py` compares
+the results.
+
+**CEGs.**  Only game data is loaded: LuaUI, rules gadgets and WASM modules are
+stripped from the staged copy.  Each CEG is spawned at fixed land spots, near
+(camera distance 180) and far (520), four times each.  Every spawn gets a
+background frame and captures 2 and 12 frames after it.  CEG particles use the
+engine's unsynced RNG, which nothing can seed, so no two spawns look the same.
+Instead, the four spawns' (capture − background) images are averaged at 64x64,
+and also compared pooled to 16x16.  Recording runs the gallery four times and
+measures how far each run's average strays from the golden built from the
+other three.  A capture fails when it strays more than twice that, with a
+floor, or when an effect that was visible stops appearing.  The golden is
+`fixtures/<game>/goldens/ceg/` (`metrics.json`, the `diffs.png` atlas, and
+contact sheets `sheet-*.jpg` to look at).
+
+Deliberately broken CEGs were used to check what this catches (Hunted,
+2026-09-23):
+
+| change | result |
+| --- | --- |
+| recolour flashnuke's smoke | caught, 3–6x limit |
+| flashnuke smoke particles 30 → 12 | caught, 1.3–2.1x limit |
+| delete a CEG | caught |
+| swap one flare texture inside a bunny explosion | **missed** (0.6x) |
+| (animations) give a unit another unit's model | caught |
+
+Effects whose randomness is large-scale, like the bunny explosions, get wide
+limits.  The report lists every capture's distance and limit, so weakly
+guarded effects are visible.
+
+**Animations.**  The game runs as shipped (rules, WASM modules, unit scripts),
+minus its UI, with `FixedRNGSeed=1`.  Every unit type is spawned at its own
+spot and put through idle, a move order and an attack-ground order.  At each
+capture the gallery logs every piece's matrix and takes a zoomed image.
+
+Both halves of the gadget compute the same schedule, and the synced half
+spawns, orders and removes on fixed absolute frames.  An earlier version
+spawned on a Lua message, and the frame it landed on varied.  Game logic that
+acts on the gallery's units (Flove's mushroom AI, Area 17's UFO targeting) then
+caught them at different moments, and poses differed by up to 17 elmos between
+runs.  With the fixed schedule, poses repeat exactly and are compared at 0.01
+elmos.  Recording takes two runs.  A shot whose poses still drift is reported,
+and held to that drift.
+
+Images still vary where unsynced effects are in view: particles, weather, other
+units wandering past.  Each image's limit is 2.5x the difference between the
+two recordings, never below 1.5% RMSE.  The Flove poison mushroom, for example,
+sits in its own random gas cloud and gets a wide limit, while most shots stay
+near 1.5%.  The golden is `fixtures/<game>/goldens/anim/` (`poses.txt`, the
+`images.png` atlas, `noise.json`, and `sheet.jpg` to look at).
+
+**Parity** runs the animation gallery on both the WASM port and the original
+Lua game, and lists per unit how far their poses differ.  It is a report, not
+a pass/fail check: some differences are expected (a Lua unit attacking ground
+where the port does not, script timing).
+
 ## Probes
 
 `probes/` holds debugging tools that aren't regression tests. They need
@@ -103,16 +228,15 @@ verify              dispatcher (suite/mode table, all, visual, goldens, probes)
 lib/common.sh       everything shared; suites only describe their game
 games/<suite>.sh    per-game build features, staging and assertions
 probes/             debugging probes (not part of all/visual)
-fixtures/visual.conf  engine config for every visual suite
 fixtures/<game>/    probe gadgets, configs, goldens
 unit-scripts/       Lua/Rust animation trace comparators
 cache/              font cache and build targets, shared across runs
 out/<suite>/        logs, screenshots and workspace of the last run
 ```
 
-Start scripts come from `launch/` (the same files `run-wasm.sh` plays), and
-suites add what they need with `vf_modoption test_mode 1` and
-`vf_start_set gametype ...`. Suites whose scenario needs a special team layout
+Start scripts come from `launch/games/` (`vf_launch_script GAME [wasm|lua]`),
+the same files the menu compiles in and `run-wasm.sh` plays.  Suites add what
+they need with `vf_modoption test_mode 1` and `vf_start_set ...`. Suites whose scenario needs a special team layout
 write theirs inline.
 
 ## Writing a suite
@@ -129,7 +253,7 @@ example_headless() {
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" example_rules_wasm:LuaRules/wasm/example-rules.wasm
     vf_link_map "$MAPS_DIR/Example-map.sdd" 'Display Name.sdd'
-    vf_start_file "$LAUNCH_DIR/example.txt" 100.0 100.0
+    vf_start_file "$(vf_launch_script example)" 100.0 100.0
     vf_modoption test_mode 1
     vf_config
     vf_run_headless 45

@@ -1,0 +1,38 @@
+{
+ "atlas_columns": 4,
+ "images": {
+  "burrow/idle-f30": 0,
+  "carrot/idle-f30": 0,
+  "carrot_carried/idle-f30": 0,
+  "carrot_carried/move-f15": 0,
+  "carrot_carried/move-f30": 0,
+  "carrot_dropped/idle-f30": 0,
+  "lighthouse/idle-f30": 0,
+  "mine/idle-f30": 0,
+  "rabbit/idle-f30": 0,
+  "rabbit/move-f15": 0,
+  "rabbit/move-f30": 0,
+  "shotgun/idle-f30": 0,
+  "shotgun/move-f15": 0,
+  "shotgun/move-f30": 0,
+  "trap/idle-f30": 0
+ },
+ "order": [
+  "burrow/idle-f30",
+  "carrot/idle-f30",
+  "carrot_carried/idle-f30",
+  "carrot_carried/move-f15",
+  "carrot_carried/move-f30",
+  "carrot_dropped/idle-f30",
+  "lighthouse/idle-f30",
+  "mine/idle-f30",
+  "rabbit/idle-f30",
+  "rabbit/move-f15",
+  "rabbit/move-f30",
+  "shotgun/idle-f30",
+  "shotgun/move-f15",
+  "shotgun/move-f30",
+  "trap/idle-f30"
+ ],
+ "poses": {}
+}

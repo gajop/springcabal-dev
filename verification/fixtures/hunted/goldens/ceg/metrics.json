@@ -1,0 +1,399 @@
+{
+ "atlas_columns": 8,
+ "captures": {
+  "dirtfling/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.215,
+   "diff_noise_pooled": 0.09,
+   "visible": 0.0
+  },
+  "dirtfling/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.966,
+   "diff_noise_pooled": 0.546,
+   "visible": 0.562
+  },
+  "dirtfling/near/f02": {
+   "coverage": 0.0039,
+   "diff_noise": 1.939,
+   "diff_noise_pooled": 1.515,
+   "visible": 0.5
+  },
+  "dirtfling/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 2.426,
+   "diff_noise_pooled": 2.154,
+   "visible": 0.75
+  },
+  "explosion/far/f02": {
+   "coverage": 0.002,
+   "diff_noise": 0.427,
+   "diff_noise_pooled": 0.11,
+   "visible": 0.0
+  },
+  "explosion/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.171,
+   "diff_noise_pooled": 0.101,
+   "visible": 0.0
+  },
+  "explosion/near/f02": {
+   "coverage": 0.0127,
+   "diff_noise": 1.981,
+   "diff_noise_pooled": 1.446,
+   "visible": 1.0
+  },
+  "explosion/near/f12": {
+   "coverage": 0.001,
+   "diff_noise": 0.687,
+   "diff_noise_pooled": 0.373,
+   "visible": 0.812
+  },
+  "flashnuke/far/f02": {
+   "coverage": 0.3145,
+   "diff_noise": 2.96,
+   "diff_noise_pooled": 2.062,
+   "visible": 1.0
+  },
+  "flashnuke/far/f12": {
+   "coverage": 0.1956,
+   "diff_noise": 4.181,
+   "diff_noise_pooled": 3.183,
+   "visible": 1.0
+  },
+  "flashnuke/near/f02": {
+   "coverage": 0.9988,
+   "diff_noise": 9.285,
+   "diff_noise_pooled": 8.019,
+   "visible": 1.0
+  },
+  "flashnuke/near/f12": {
+   "coverage": 0.9336,
+   "diff_noise": 11.087,
+   "diff_noise_pooled": 10.167,
+   "visible": 1.0
+  },
+  "fuse/far/f02": {
+   "coverage": 0.0005,
+   "diff_noise": 0.296,
+   "diff_noise_pooled": 0.088,
+   "visible": 0.0
+  },
+  "fuse/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "fuse/near/f02": {
+   "coverage": 0.0024,
+   "diff_noise": 1.106,
+   "diff_noise_pooled": 0.655,
+   "visible": 0.562
+  },
+  "fuse/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "genericbunnyexplosion-huge-red/far/f02": {
+   "coverage": 1.0,
+   "diff_noise": 10.907,
+   "diff_noise_pooled": 9.233,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-huge-red/far/f12": {
+   "coverage": 1.0,
+   "diff_noise": 8.481,
+   "diff_noise_pooled": 7.701,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-huge-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 29.035,
+   "diff_noise_pooled": 27.423,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-huge-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 24.272,
+   "diff_noise_pooled": 23.478,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/far/f02": {
+   "coverage": 1.0,
+   "diff_noise": 11.129,
+   "diff_noise_pooled": 9.484,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/far/f12": {
+   "coverage": 1.0,
+   "diff_noise": 10.697,
+   "diff_noise_pooled": 9.712,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 48.488,
+   "diff_noise_pooled": 47.468,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 34.662,
+   "diff_noise_pooled": 34.172,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/far/f02": {
+   "coverage": 0.9373,
+   "diff_noise": 13.526,
+   "diff_noise_pooled": 11.453,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/far/f12": {
+   "coverage": 1.0,
+   "diff_noise": 11.444,
+   "diff_noise_pooled": 10.574,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 30.249,
+   "diff_noise_pooled": 28.548,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 25.275,
+   "diff_noise_pooled": 24.365,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/far/f02": {
+   "coverage": 0.4424,
+   "diff_noise": 15.085,
+   "diff_noise_pooled": 12.896,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/far/f12": {
+   "coverage": 0.7795,
+   "diff_noise": 10.184,
+   "diff_noise_pooled": 9.225,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 42.61,
+   "diff_noise_pooled": 39.948,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 28.526,
+   "diff_noise_pooled": 27.532,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large/far/f02": {
+   "coverage": 0.4641,
+   "diff_noise": 0.327,
+   "diff_noise_pooled": 0.16,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large/far/f12": {
+   "coverage": 0.8064,
+   "diff_noise": 0.134,
+   "diff_noise_pooled": 0.072,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 1.459,
+   "diff_noise_pooled": 1.006,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 0.021,
+   "diff_noise_pooled": 0.005,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium/far/f02": {
+   "coverage": 0.2012,
+   "diff_noise": 0.339,
+   "diff_noise_pooled": 0.158,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium/far/f12": {
+   "coverage": 0.2109,
+   "diff_noise": 0.193,
+   "diff_noise_pooled": 0.095,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium/near/f02": {
+   "coverage": 0.989,
+   "diff_noise": 1.524,
+   "diff_noise_pooled": 0.765,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 0.032,
+   "diff_noise_pooled": 0.008,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small/far/f02": {
+   "coverage": 0.0496,
+   "diff_noise": 0.255,
+   "diff_noise_pooled": 0.103,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small/far/f12": {
+   "coverage": 0.0522,
+   "diff_noise": 0.127,
+   "diff_noise_pooled": 0.07,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small/near/f02": {
+   "coverage": 0.4321,
+   "diff_noise": 0.754,
+   "diff_noise_pooled": 0.322,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small/near/f12": {
+   "coverage": 0.4573,
+   "diff_noise": 0.478,
+   "diff_noise_pooled": 0.275,
+   "visible": 1.0
+  },
+  "genericshellexplosion/far/f02": {
+   "coverage": 0.0496,
+   "diff_noise": 0.213,
+   "diff_noise_pooled": 0.113,
+   "visible": 1.0
+  },
+  "genericshellexplosion/far/f12": {
+   "coverage": 0.0522,
+   "diff_noise": 0.194,
+   "diff_noise_pooled": 0.103,
+   "visible": 1.0
+  },
+  "genericshellexplosion/near/f02": {
+   "coverage": 0.4294,
+   "diff_noise": 1.181,
+   "diff_noise_pooled": 0.554,
+   "visible": 1.0
+  },
+  "genericshellexplosion/near/f12": {
+   "coverage": 0.4575,
+   "diff_noise": 0.833,
+   "diff_noise_pooled": 0.458,
+   "visible": 1.0
+  },
+  "nothing/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "nothing/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "nothing/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "nothing/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "smoke_puff/far/f02": {
+   "coverage": 0.0176,
+   "diff_noise": 2.097,
+   "diff_noise_pooled": 1.696,
+   "visible": 1.0
+  },
+  "smoke_puff/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 2.523,
+   "diff_noise_pooled": 2.057,
+   "visible": 1.0
+  },
+  "smoke_puff/near/f02": {
+   "coverage": 0.1853,
+   "diff_noise": 5.977,
+   "diff_noise_pooled": 4.978,
+   "visible": 1.0
+  },
+  "smoke_puff/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 4.472,
+   "diff_noise_pooled": 3.958,
+   "visible": 0.938
+  }
+ },
+ "order": [
+  "dirtfling/far/f02",
+  "dirtfling/far/f12",
+  "dirtfling/near/f02",
+  "dirtfling/near/f12",
+  "explosion/far/f02",
+  "explosion/far/f12",
+  "explosion/near/f02",
+  "explosion/near/f12",
+  "flashnuke/far/f02",
+  "flashnuke/far/f12",
+  "flashnuke/near/f02",
+  "flashnuke/near/f12",
+  "fuse/far/f02",
+  "fuse/far/f12",
+  "fuse/near/f02",
+  "fuse/near/f12",
+  "genericbunnyexplosion-huge-red/far/f02",
+  "genericbunnyexplosion-huge-red/far/f12",
+  "genericbunnyexplosion-huge-red/near/f02",
+  "genericbunnyexplosion-huge-red/near/f12",
+  "genericbunnyexplosion-large-red/far/f02",
+  "genericbunnyexplosion-large-red/far/f12",
+  "genericbunnyexplosion-large-red/near/f02",
+  "genericbunnyexplosion-large-red/near/f12",
+  "genericbunnyexplosion-medium-red/far/f02",
+  "genericbunnyexplosion-medium-red/far/f12",
+  "genericbunnyexplosion-medium-red/near/f02",
+  "genericbunnyexplosion-medium-red/near/f12",
+  "genericbunnyexplosion-small-red/far/f02",
+  "genericbunnyexplosion-small-red/far/f12",
+  "genericbunnyexplosion-small-red/near/f02",
+  "genericbunnyexplosion-small-red/near/f12",
+  "genericshellexplosion-large/far/f02",
+  "genericshellexplosion-large/far/f12",
+  "genericshellexplosion-large/near/f02",
+  "genericshellexplosion-large/near/f12",
+  "genericshellexplosion-medium/far/f02",
+  "genericshellexplosion-medium/far/f12",
+  "genericshellexplosion-medium/near/f02",
+  "genericshellexplosion-medium/near/f12",
+  "genericshellexplosion-small/far/f02",
+  "genericshellexplosion-small/far/f12",
+  "genericshellexplosion-small/near/f02",
+  "genericshellexplosion-small/near/f12",
+  "genericshellexplosion/far/f02",
+  "genericshellexplosion/far/f12",
+  "genericshellexplosion/near/f02",
+  "genericshellexplosion/near/f12",
+  "nothing/far/f02",
+  "nothing/far/f12",
+  "nothing/near/f02",
+  "nothing/near/f12",
+  "smoke_puff/far/f02",
+  "smoke_puff/far/f12",
+  "smoke_puff/near/f02",
+  "smoke_puff/near/f12"
+ ]
+}

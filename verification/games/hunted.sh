@@ -7,7 +7,7 @@ GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-10}
 GAME_DIR="$GAMES_DIR/Hunted-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/HuntedMap.sdd"
-START_FILE="$LAUNCH_DIR/hunted.txt"
+START_FILE="$(vf_launch_script hunted)"
 MODULES=(
     hunted_rules_wasm:LuaRules/wasm/hunted-rules.wasm
     hunted_ui_wasm:LuaUI/wasm/hunted-ui.wasm
@@ -64,6 +64,7 @@ hunted_visual() {
     vf_link_map "$MAP_DIR" 'Hunted - v04.sdd'
     vf_start_file "$START_FILE"
     vf_config "$VISUAL_CONFIG"
+    vf_graphics hunted
     vf_run_visual "$seconds"
     vf_save_logs
 

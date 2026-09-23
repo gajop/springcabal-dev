@@ -1,18 +1,31 @@
 extern crate alloc;
 
-use alloc::format;
 use alloc::string::String;
 use spring::config;
 
 mod entry;
 mod ui;
 
+// Start scripts and graphics overrides live in launch/games/ at the repository
+// root, the one source that run-wasm.sh, verification and the release smoke
+// test also read.  They are compiled in, so rebuild the menu after editing them.
 struct GameEntry {
     name: &'static str,
-    game_type: &'static str,
-    map_name: &'static str,
     authors: &'static str,
+    start_script: &'static str,
+    graphics: &'static str,
 }
+
+macro_rules! launch_file {
+    ($game:literal, $file:literal) => {
+        include_str!(concat!("../../../../launch/games/", $game, "/", $file))
+    };
+}
+
+const NO_GRAPHICS: &str = "";
+const AREA17_GRAPHICS: &str = launch_file!("area17", "graphics.cfg");
+const HUNTED_GRAPHICS: &str = launch_file!("hunted", "graphics.cfg");
+const GRAVITAS_EDITOR: &str = launch_file!("gravitas", "editor.txt");
 
 struct GameDetails {
     built: &'static str,
@@ -55,208 +68,111 @@ static GAME_DETAILS: &[GameDetails] = &[
 static WASM_GAMES: &[GameEntry] = &[
     GameEntry {
         name: "Gravitas (WASM)",
-        game_type: "Gravitas WASM 0.1.0-wasm",
-        map_name: "Gravitas Enterprise",
         authors: "Anarchid, ashdnazg, gajop, Picasso, Silentwings",
+        start_script: launch_file!("gravitas", "wasm.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "Zeus vs Bunnies (WASM)",
-        game_type: "Hunted WASM 0.1.0-wasm",
-        map_name: "Hunted - v04",
         authors: "ashdnazg, FLOZi, ForbodingAngel, gajop, GoogleFrog, Picasso",
+        start_script: launch_file!("hunted", "wasm.txt"),
+        graphics: HUNTED_GRAPHICS,
     },
     GameEntry {
         name: "Area 17 (WASM)",
-        game_type: "Area 17 WASM 0.1.0-wasm",
-        map_name: "Area 17 - v01",
         authors: "Anarchid, ashdnazg, ForbodingAngel, gajop, GoogleFrog",
+        start_script: launch_file!("area17", "wasm.txt"),
+        graphics: AREA17_GRAPHICS,
     },
     GameEntry {
         name: "Flove (WASM)",
-        game_type: "Flove WASM 0.1.0-wasm",
-        map_name: "The Grove 0.3",
         authors: "Anarchid, ForbodingAngel, gajop, Jared Bauer, Krystal, Silentwings, smoth",
+        start_script: launch_file!("flove", "wasm.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "Parts Needed (WASM)",
-        game_type: "Parts Needed WASM 0.1.0-wasm",
-        map_name: "LD35 map 0.1",
         authors: "Anarchid, gajop, greze, smoth",
+        start_script: launch_file!("partsneeded", "wasm.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "MyCube (WASM)",
-        game_type: "MyCube WASM 0.1.0-wasm",
-        map_name: "MyCube v1 WASM",
         authors: "Anarchid, gajop, PicassoCT",
+        start_script: launch_file!("mycube", "wasm.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "To the Last Drop (WASM)",
-        game_type: "To the Last Drop WASM 0.1.0-wasm",
-        map_name: "Eyam",
         authors: "ashdnazg, gajop, GoogleFrog, J3Jumby, silentwings",
+        start_script: launch_file!("ttld", "wasm.txt"),
+        graphics: NO_GRAPHICS,
     },
 ];
 
 static LUA_GAMES: &[GameEntry] = &[
     GameEntry {
         name: "Gravitas",
-        game_type: "Scenario Editor Gravitas git",
-        map_name: "Gravitas Enterprise",
         authors: "Anarchid, ashdnazg, gajop, Picasso, Silentwings",
+        start_script: launch_file!("gravitas", "lua.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "Zeus vs Bunnies",
-        game_type: "Hunted $VERSION",
-        map_name: "Hunted - v04",
         authors: "ashdnazg, FLOZi, ForbodingAngel, gajop, GoogleFrog, Picasso",
+        start_script: launch_file!("hunted", "lua.txt"),
+        graphics: HUNTED_GRAPHICS,
     },
     GameEntry {
         name: "Area 17",
-        game_type: "Area 17 $VERSION",
-        map_name: "Area 17 - v01",
         authors: "Anarchid, ashdnazg, ForbodingAngel, gajop, GoogleFrog",
+        start_script: launch_file!("area17", "lua.txt"),
+        graphics: AREA17_GRAPHICS,
     },
     GameEntry {
         name: "Flove",
-        game_type: "Flove $VERSION",
-        map_name: "The Grove 0.3",
         authors: "Anarchid, ForbodingAngel, gajop, Jared Bauer, Krystal, Silentwings, smoth",
+        start_script: launch_file!("flove", "lua.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "Parts Needed",
-        game_type: "Parts Needed $VERSION",
-        map_name: "LD35 map 0.1",
         authors: "Anarchid, gajop, greze, smoth",
+        start_script: launch_file!("partsneeded", "lua.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "My Cube",
-        // Lua archive title: ModInfo.lua name + version.
-        game_type: "Ludum Dare 42 Git",
-        map_name: "MyCube",
         authors: "Anarchid, gajop, PicassoCT",
+        start_script: launch_file!("mycube", "lua.txt"),
+        graphics: NO_GRAPHICS,
     },
     GameEntry {
         name: "To the Last Drop",
-        game_type: "To the last Drop $VERSION",
-        map_name: "Eyam",
         authors: "ashdnazg, gajop, GoogleFrog, J3Jumby, silentwings",
+        start_script: launch_file!("ttld", "lua.txt"),
+        graphics: NO_GRAPHICS,
     },
 ];
 
+// Applies launch/games/<game>/graphics.cfg ("Key = value" lines) for this
+// session only, on top of the player's springsettings.cfg.
 fn apply_game_graphics(game: &GameEntry) {
-    if game.game_type.starts_with("Area 17") {
-        let _ = config::set_config_int("MaxParticles", 200_000, true);
-        let _ = config::set_config_int("Shadows", 1, true);
-        let _ = config::set_config_int("Water", 4, true);
-    } else if game.game_type.starts_with("Hunted") {
-        let _ = config::set_config_int("Shadows", 0, true);
+    for line in game.graphics.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        if let Some((key, value)) = line.split_once('=') {
+            let _ = config::set_config_string(key.trim(), value.trim(), true);
+        }
     }
 }
 
-fn format_start_script(game: &GameEntry, mod_options: &str) -> String {
-    // Flove assigns the grove to team 1 and mushrooms to team 0.
-    let (player_team, ai_team) = if game.game_type.starts_with("Flove") {
-        (1, 0)
-    } else {
-        (0, 1)
-    };
-    format!(
-        r#"[GAME]
-{{
-    MapName={map};
-    GameMode=0;
-    GameType={game_type};
-
-    NumTeams=2;
-    NumUsers=2;
-
-    HostIP=127.0.0.1;
-    HostPort=8452;
-    IsHost=1;
-    NumPlayers=1;
-    GameStartDelay=0;
-
-    StartMetal=1000;
-    StartEnergy=1000;
-
-    StartposType=3;
-    LimitDGun=0;
-    DiminishingMMs=0;
-    GhostedBuildings=1;
-    MyPlayerNum=1;
-    MyPlayerName=0;
-    NumRestrictions=0;
-    MaxSpeed=20;
-    MinSpeed=0.1;
-
-    [TEAM0]
-    {{
-        AllyTeam=0;
-        Side=;
-        RGBColor=0.35294118523598 0.35294118523598 1;
-        TeamLeader=1;
-        Handicap=0;
-        StartPosX=0;
-        StartPosZ=0;
-    }}
-    [PLAYER1]
-    {{
-        Name=0;
-        Spectator=0;
-        Team={player_team};
-    }}
-    [TEAM1]
-    {{
-        AllyTeam=1;
-        Side=;
-        RGBColor=0.7843137383461 0 0;
-        TeamLeader=1;
-        Handicap=0;
-        StartPosX=0;
-        StartPosZ=0;
-    }}
-    [AI1]
-    {{
-        Name=1: NullAI;
-        ShortName=NullAI;
-        Team={ai_team};
-        IsFromDemo=0;
-        Host=1;
-        [Options] {{}}
-    }}
-    [ALLYTEAM0]
-    {{
-        NumAllies=0;
-    }}
-    [ALLYTEAM1]
-    {{
-        NumAllies=0;
-    }}
-{mod_options}
-}}
-"#,
-        map = game.map_name,
-        game_type = game.game_type,
-        mod_options = mod_options,
-    )
-}
-
 fn make_start_script(game: &GameEntry) -> String {
-    let mod_options = if game.game_type.starts_with("Area 17") {
-        "    [MODOPTIONS]\n    {\n        DisableMapDamage=0;\n    }\n"
-    } else if game.game_type.starts_with("Parts Needed") {
-        // The original defaults to its editor when this is absent.  Play mode
-        // locks the camera/input and removes the developer play/stop widget.
-        "    [MODOPTIONS]\n    {\n        gamemode=play;\n    }\n"
-    } else if game.game_type.starts_with("Scenario Editor Gravitas") {
-        "    [MODOPTIONS]\n    {\n        play_mode=1;\n        deathmode=neverend;\n        has_scenario_file=0;\n        project_dir=projects/Gravity-Enterprise;\n    }\n"
-    } else {
-        ""
-    };
-    format_start_script(game, mod_options)
+    String::from(game.start_script)
 }
 
-fn make_editor_start_script(game: &GameEntry) -> String {
-    let mod_options = "    [MODOPTIONS]\n    {\n        play_mode=0;\n        deathmode=neverend;\n        has_scenario_file=0;\n        project_dir=projects/Gravity-Enterprise;\n    }\n";
-    format_start_script(game, mod_options)
+fn make_editor_start_script(_game: &GameEntry) -> String {
+    String::from(GRAVITAS_EDITOR)
 }

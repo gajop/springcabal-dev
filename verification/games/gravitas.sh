@@ -5,7 +5,7 @@ GAME_DIR="$GAMES_DIR/Gravitas-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/Gravitas-map.sdd"
 FIXTURES="$FIXTURES_DIR/gravitas"
-START_FILE="$LAUNCH_DIR/gravitas.txt"
+START_FILE="$(vf_launch_script gravitas)"
 HUD_REGION=1280x60+0+660
 # The health bar inside HUD_REGION tracks live health, so its fill width, its
 # colour and its readout all depend on whether the player has been hit by the

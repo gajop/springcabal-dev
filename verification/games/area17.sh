@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
-# Golden RMSE limit, about twice the run-to-run noise measured on 2026-09-23 (2.8%).
-GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-5}
+# Golden RMSE limit.  Run-to-run drift measured 0.4-5.5% (2026-09-23); the
+# scenario runs in real time, not frame-locked like the galleries.
+GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-8}
 
 GAME_DIR="$GAMES_DIR/Area17-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
-START_FILE="$LAUNCH_DIR/area17.txt"
+START_FILE="$(vf_launch_script area17)"
 MODULES=(
     area17_rules_wasm:LuaRules/wasm/area17-rules.wasm
     area17_ui_wasm:LuaUI/wasm/area17-ui.wasm
@@ -18,7 +19,7 @@ area17_stage() {
     vf_build "$SOURCE_ROOT" "$features"
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" "${MODULES[@]}"
-    vf_link_map "$("$PROJECT_ROOT/scripts/area17-map.sh")"
+    vf_link_map "$("$PROJECT_ROOT/scripts/area17-map.sh" --dir)"
 }
 
 area17_static() {
@@ -81,6 +82,7 @@ area17_visual() {
     vf_start_file "$START_FILE"
     vf_modoption visual_test 1
     vf_config "$VISUAL_CONFIG"
+    vf_graphics area17
     vf_run_visual "$seconds"
     vf_save_logs
 

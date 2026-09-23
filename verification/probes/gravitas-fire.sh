@@ -22,7 +22,7 @@ else
     cp "$BUILD_CACHE/gravitas-fire-probe/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm" "$staged/LuaUI/wasm/gravitas-ui.wasm"
 fi
 vf_link_map "$MAPS_DIR/Gravitas-map.sdd"
-vf_start_file "$LAUNCH_DIR/gravitas.txt"
+vf_start_file "$(vf_launch_script gravitas)"
 vf_start_set GameType Gravitas
 vf_write_settings <<'CFG'
 Fullscreen = 0

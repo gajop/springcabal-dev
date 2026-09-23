@@ -1,0 +1,1211 @@
+{
+ "atlas_columns": 14,
+ "captures": {
+  "bloodytrail/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.009,
+   "diff_noise_pooled": 0.002,
+   "visible": 0.0
+  },
+  "bloodytrail/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "bloodytrail/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.541,
+   "diff_noise_pooled": 0.18,
+   "visible": 0.0
+  },
+  "bloodytrail/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 1.029,
+   "diff_noise_pooled": 0.625,
+   "visible": 0.062
+  },
+  "bloodytrailgreen/far/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.132,
+   "diff_noise_pooled": 0.036,
+   "visible": 0.0
+  },
+  "bloodytrailgreen/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.329,
+   "diff_noise_pooled": 0.105,
+   "visible": 0.0
+  },
+  "bloodytrailgreen/near/f02": {
+   "coverage": 0.0,
+   "diff_noise": 0.088,
+   "diff_noise_pooled": 0.033,
+   "visible": 0.0
+  },
+  "bloodytrailgreen/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "dirtfling/far/f02": {
+   "coverage": 0.0029,
+   "diff_noise": 0.874,
+   "diff_noise_pooled": 0.373,
+   "visible": 0.938
+  },
+  "dirtfling/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 1.306,
+   "diff_noise_pooled": 0.702,
+   "visible": 0.812
+  },
+  "dirtfling/near/f02": {
+   "coverage": 0.0159,
+   "diff_noise": 2.682,
+   "diff_noise_pooled": 1.985,
+   "visible": 1.0
+  },
+  "dirtfling/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 3.369,
+   "diff_noise_pooled": 2.997,
+   "visible": 1.0
+  },
+  "explosion/far/f02": {
+   "coverage": 0.05,
+   "diff_noise": 6.965,
+   "diff_noise_pooled": 5.264,
+   "visible": 1.0
+  },
+  "explosion/far/f12": {
+   "coverage": 0.168,
+   "diff_noise": 7.13,
+   "diff_noise_pooled": 5.313,
+   "visible": 1.0
+  },
+  "explosion/near/f02": {
+   "coverage": 0.5283,
+   "diff_noise": 17.954,
+   "diff_noise_pooled": 16.671,
+   "visible": 1.0
+  },
+  "explosion/near/f12": {
+   "coverage": 0.7427,
+   "diff_noise": 18.456,
+   "diff_noise_pooled": 17.882,
+   "visible": 1.0
+  },
+  "fire/far/f02": {
+   "coverage": 0.0195,
+   "diff_noise": 2.049,
+   "diff_noise_pooled": 1.497,
+   "visible": 1.0
+  },
+  "fire/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "fire/near/f02": {
+   "coverage": 0.1995,
+   "diff_noise": 5.421,
+   "diff_noise_pooled": 4.931,
+   "visible": 1.0
+  },
+  "fire/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "fireflash/far/f02": {
+   "coverage": 0.019,
+   "diff_noise": 2.184,
+   "diff_noise_pooled": 2.018,
+   "visible": 1.0
+  },
+  "fireflash/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "fireflash/near/f02": {
+   "coverage": 0.1807,
+   "diff_noise": 4.796,
+   "diff_noise_pooled": 4.678,
+   "visible": 1.0
+  },
+  "fireflash/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "flashnuke/far/f02": {
+   "coverage": 0.3108,
+   "diff_noise": 3.352,
+   "diff_noise_pooled": 2.454,
+   "visible": 1.0
+  },
+  "flashnuke/far/f12": {
+   "coverage": 0.1936,
+   "diff_noise": 4.618,
+   "diff_noise_pooled": 3.255,
+   "visible": 1.0
+  },
+  "flashnuke/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 11.094,
+   "diff_noise_pooled": 9.835,
+   "visible": 1.0
+  },
+  "flashnuke/near/f12": {
+   "coverage": 0.9478,
+   "diff_noise": 14.867,
+   "diff_noise_pooled": 13.735,
+   "visible": 1.0
+  },
+  "fuse/far/f02": {
+   "coverage": 0.0002,
+   "diff_noise": 0.701,
+   "diff_noise_pooled": 0.198,
+   "visible": 0.0
+  },
+  "fuse/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.996,
+   "diff_noise_pooled": 0.308,
+   "visible": 0.0
+  },
+  "fuse/near/f02": {
+   "coverage": 0.0063,
+   "diff_noise": 2.622,
+   "diff_noise_pooled": 1.778,
+   "visible": 0.75
+  },
+  "fuse/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "genericbunnyexplosion-huge-red/far/f02": {
+   "coverage": 1.0,
+   "diff_noise": 9.935,
+   "diff_noise_pooled": 8.38,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-huge-red/far/f12": {
+   "coverage": 1.0,
+   "diff_noise": 9.645,
+   "diff_noise_pooled": 8.92,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-huge-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 23.481,
+   "diff_noise_pooled": 21.813,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-huge-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 19.221,
+   "diff_noise_pooled": 18.255,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/far/f02": {
+   "coverage": 1.0,
+   "diff_noise": 10.321,
+   "diff_noise_pooled": 8.65,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/far/f12": {
+   "coverage": 1.0,
+   "diff_noise": 11.536,
+   "diff_noise_pooled": 10.994,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 27.028,
+   "diff_noise_pooled": 24.827,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-large-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 17.861,
+   "diff_noise_pooled": 16.72,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/far/f02": {
+   "coverage": 0.9565,
+   "diff_noise": 12.526,
+   "diff_noise_pooled": 10.766,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/far/f12": {
+   "coverage": 1.0,
+   "diff_noise": 11.105,
+   "diff_noise_pooled": 10.314,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 28.721,
+   "diff_noise_pooled": 27.042,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-medium-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 25.156,
+   "diff_noise_pooled": 24.266,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/far/f02": {
+   "coverage": 0.4478,
+   "diff_noise": 17.569,
+   "diff_noise_pooled": 15.563,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/far/f12": {
+   "coverage": 0.78,
+   "diff_noise": 10.035,
+   "diff_noise_pooled": 9.288,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 43.955,
+   "diff_noise_pooled": 42.528,
+   "visible": 1.0
+  },
+  "genericbunnyexplosion-small-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 24.293,
+   "diff_noise_pooled": 23.444,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-blue/far/f02": {
+   "coverage": 0.4583,
+   "diff_noise": 1.54,
+   "diff_noise_pooled": 0.674,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-blue/far/f12": {
+   "coverage": 0.7896,
+   "diff_noise": 1.412,
+   "diff_noise_pooled": 0.693,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-blue/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 6.708,
+   "diff_noise_pooled": 4.254,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-blue/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 1.94,
+   "diff_noise_pooled": 1.447,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-green/far/f02": {
+   "coverage": 0.4734,
+   "diff_noise": 1.878,
+   "diff_noise_pooled": 0.686,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-green/far/f12": {
+   "coverage": 0.8159,
+   "diff_noise": 1.125,
+   "diff_noise_pooled": 0.573,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-green/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 4.985,
+   "diff_noise_pooled": 3.198,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-green/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 1.78,
+   "diff_noise_pooled": 1.274,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-purple/far/f02": {
+   "coverage": 0.28,
+   "diff_noise": 1.957,
+   "diff_noise_pooled": 0.64,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-purple/far/f12": {
+   "coverage": 0.2058,
+   "diff_noise": 1.413,
+   "diff_noise_pooled": 0.77,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-purple/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 5.739,
+   "diff_noise_pooled": 3.755,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-purple/near/f12": {
+   "coverage": 0.4348,
+   "diff_noise": 1.375,
+   "diff_noise_pooled": 0.935,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-red/far/f02": {
+   "coverage": 0.4021,
+   "diff_noise": 1.959,
+   "diff_noise_pooled": 0.77,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-red/far/f12": {
+   "coverage": 0.7324,
+   "diff_noise": 1.198,
+   "diff_noise_pooled": 0.644,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-red/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 5.527,
+   "diff_noise_pooled": 3.703,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 1.165,
+   "diff_noise_pooled": 0.707,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-sparks-burn/far/f02": {
+   "coverage": 0.0183,
+   "diff_noise": 1.0,
+   "diff_noise_pooled": 0.389,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-sparks-burn/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.2,
+   "diff_noise_pooled": 0.064,
+   "visible": 0.0
+  },
+  "genericshellexplosion-large-sparks-burn/near/f02": {
+   "coverage": 0.1616,
+   "diff_noise": 3.891,
+   "diff_noise_pooled": 1.863,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-sparks-burn/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.602,
+   "diff_noise_pooled": 0.364,
+   "visible": 0.0
+  },
+  "genericshellexplosion-large-white/far/f02": {
+   "coverage": 0.1804,
+   "diff_noise": 1.959,
+   "diff_noise_pooled": 0.763,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-white/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 1.324,
+   "diff_noise_pooled": 0.633,
+   "visible": 0.312
+  },
+  "genericshellexplosion-large-white/near/f02": {
+   "coverage": 0.584,
+   "diff_noise": 7.51,
+   "diff_noise_pooled": 5.084,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large-white/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 1.994,
+   "diff_noise_pooled": 1.571,
+   "visible": 0.938
+  },
+  "genericshellexplosion-large/far/f02": {
+   "coverage": 0.4595,
+   "diff_noise": 1.613,
+   "diff_noise_pooled": 0.555,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large/far/f12": {
+   "coverage": 0.7922,
+   "diff_noise": 1.127,
+   "diff_noise_pooled": 0.468,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large/near/f02": {
+   "coverage": 1.0,
+   "diff_noise": 4.387,
+   "diff_noise_pooled": 2.883,
+   "visible": 1.0
+  },
+  "genericshellexplosion-large/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 1.398,
+   "diff_noise_pooled": 0.921,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-blue/far/f02": {
+   "coverage": 0.1692,
+   "diff_noise": 1.671,
+   "diff_noise_pooled": 0.595,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-blue/far/f12": {
+   "coverage": 0.2046,
+   "diff_noise": 1.046,
+   "diff_noise_pooled": 0.583,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-blue/near/f02": {
+   "coverage": 0.9827,
+   "diff_noise": 6.277,
+   "diff_noise_pooled": 4.089,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-blue/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 2.784,
+   "diff_noise_pooled": 2.178,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-green/far/f02": {
+   "coverage": 0.2029,
+   "diff_noise": 1.774,
+   "diff_noise_pooled": 0.697,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-green/far/f12": {
+   "coverage": 0.2122,
+   "diff_noise": 1.101,
+   "diff_noise_pooled": 0.574,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-green/near/f02": {
+   "coverage": 0.9707,
+   "diff_noise": 4.83,
+   "diff_noise_pooled": 2.955,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-green/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 2.562,
+   "diff_noise_pooled": 1.924,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-purple/far/f02": {
+   "coverage": 0.0977,
+   "diff_noise": 1.649,
+   "diff_noise_pooled": 0.617,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-purple/far/f12": {
+   "coverage": 0.0681,
+   "diff_noise": 1.026,
+   "diff_noise_pooled": 0.62,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-purple/near/f02": {
+   "coverage": 0.8713,
+   "diff_noise": 6.209,
+   "diff_noise_pooled": 3.665,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-purple/near/f12": {
+   "coverage": 0.4685,
+   "diff_noise": 2.563,
+   "diff_noise_pooled": 2.022,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-red/far/f02": {
+   "coverage": 0.2087,
+   "diff_noise": 1.863,
+   "diff_noise_pooled": 0.625,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-red/far/f12": {
+   "coverage": 0.2146,
+   "diff_noise": 0.919,
+   "diff_noise_pooled": 0.484,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-red/near/f02": {
+   "coverage": 0.9937,
+   "diff_noise": 6.882,
+   "diff_noise_pooled": 4.895,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-red/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 2.116,
+   "diff_noise_pooled": 1.536,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-sparks-burn/far/f02": {
+   "coverage": 0.0122,
+   "diff_noise": 0.668,
+   "diff_noise_pooled": 0.22,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-sparks-burn/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.137,
+   "diff_noise_pooled": 0.035,
+   "visible": 0.0
+  },
+  "genericshellexplosion-medium-sparks-burn/near/f02": {
+   "coverage": 0.1067,
+   "diff_noise": 3.323,
+   "diff_noise_pooled": 1.579,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-sparks-burn/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.537,
+   "diff_noise_pooled": 0.258,
+   "visible": 0.0
+  },
+  "genericshellexplosion-medium-white/far/f02": {
+   "coverage": 0.0562,
+   "diff_noise": 1.786,
+   "diff_noise_pooled": 0.789,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-white/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.904,
+   "diff_noise_pooled": 0.555,
+   "visible": 0.188
+  },
+  "genericshellexplosion-medium-white/near/f02": {
+   "coverage": 0.4512,
+   "diff_noise": 6.744,
+   "diff_noise_pooled": 3.941,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium-white/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 2.402,
+   "diff_noise_pooled": 1.766,
+   "visible": 0.938
+  },
+  "genericshellexplosion-medium/far/f02": {
+   "coverage": 0.2063,
+   "diff_noise": 1.161,
+   "diff_noise_pooled": 0.405,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium/far/f12": {
+   "coverage": 0.2148,
+   "diff_noise": 0.809,
+   "diff_noise_pooled": 0.364,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium/near/f02": {
+   "coverage": 0.9697,
+   "diff_noise": 4.56,
+   "diff_noise_pooled": 2.659,
+   "visible": 1.0
+  },
+  "genericshellexplosion-medium/near/f12": {
+   "coverage": 1.0,
+   "diff_noise": 2.414,
+   "diff_noise_pooled": 1.618,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-blue/far/f02": {
+   "coverage": 0.0571,
+   "diff_noise": 0.975,
+   "diff_noise_pooled": 0.358,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-blue/far/f12": {
+   "coverage": 0.0554,
+   "diff_noise": 0.786,
+   "diff_noise_pooled": 0.492,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-blue/near/f02": {
+   "coverage": 0.4646,
+   "diff_noise": 2.901,
+   "diff_noise_pooled": 1.584,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-blue/near/f12": {
+   "coverage": 0.4556,
+   "diff_noise": 2.38,
+   "diff_noise_pooled": 1.622,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey-modified/far/f02": {
+   "coverage": 0.0549,
+   "diff_noise": 1.784,
+   "diff_noise_pooled": 0.584,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey-modified/far/f12": {
+   "coverage": 0.073,
+   "diff_noise": 5.445,
+   "diff_noise_pooled": 3.777,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey-modified/near/f02": {
+   "coverage": 0.4761,
+   "diff_noise": 5.155,
+   "diff_noise_pooled": 3.102,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey-modified/near/f12": {
+   "coverage": 0.6409,
+   "diff_noise": 13.378,
+   "diff_noise_pooled": 11.889,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey/far/f02": {
+   "coverage": 0.0535,
+   "diff_noise": 1.128,
+   "diff_noise_pooled": 0.504,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey/far/f12": {
+   "coverage": 0.0662,
+   "diff_noise": 4.675,
+   "diff_noise_pooled": 3.594,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey/near/f02": {
+   "coverage": 0.4609,
+   "diff_noise": 4.032,
+   "diff_noise_pooled": 2.744,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-firey/near/f12": {
+   "coverage": 0.5417,
+   "diff_noise": 12.763,
+   "diff_noise_pooled": 11.782,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green-drone/far/f02": {
+   "coverage": 0.0498,
+   "diff_noise": 1.373,
+   "diff_noise_pooled": 0.527,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green-drone/far/f12": {
+   "coverage": 0.0422,
+   "diff_noise": 1.174,
+   "diff_noise_pooled": 0.351,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green-drone/near/f02": {
+   "coverage": 0.4248,
+   "diff_noise": 4.538,
+   "diff_noise_pooled": 2.646,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green-drone/near/f12": {
+   "coverage": 0.3596,
+   "diff_noise": 2.159,
+   "diff_noise_pooled": 0.852,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green/far/f02": {
+   "coverage": 0.0532,
+   "diff_noise": 1.13,
+   "diff_noise_pooled": 0.525,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green/far/f12": {
+   "coverage": 0.0527,
+   "diff_noise": 0.791,
+   "diff_noise_pooled": 0.371,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green/near/f02": {
+   "coverage": 0.4722,
+   "diff_noise": 3.686,
+   "diff_noise_pooled": 1.814,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-green/near/f12": {
+   "coverage": 0.457,
+   "diff_noise": 2.445,
+   "diff_noise_pooled": 1.846,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-purple/far/f02": {
+   "coverage": 0.0359,
+   "diff_noise": 1.086,
+   "diff_noise_pooled": 0.463,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-purple/far/f12": {
+   "coverage": 0.0181,
+   "diff_noise": 1.017,
+   "diff_noise_pooled": 0.52,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-purple/near/f02": {
+   "coverage": 0.292,
+   "diff_noise": 2.581,
+   "diff_noise_pooled": 1.164,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-purple/near/f12": {
+   "coverage": 0.0813,
+   "diff_noise": 2.587,
+   "diff_noise_pooled": 1.828,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-red/far/f02": {
+   "coverage": 0.0535,
+   "diff_noise": 1.36,
+   "diff_noise_pooled": 0.656,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-red/far/f12": {
+   "coverage": 0.053,
+   "diff_noise": 0.884,
+   "diff_noise_pooled": 0.47,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-red/near/f02": {
+   "coverage": 0.4524,
+   "diff_noise": 4.196,
+   "diff_noise_pooled": 2.621,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-red/near/f12": {
+   "coverage": 0.458,
+   "diff_noise": 2.003,
+   "diff_noise_pooled": 1.415,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-sparks-burn/far/f02": {
+   "coverage": 0.0073,
+   "diff_noise": 0.802,
+   "diff_noise_pooled": 0.221,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-sparks-burn/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.822,
+   "diff_noise_pooled": 0.236,
+   "visible": 0.0
+  },
+  "genericshellexplosion-small-sparks-burn/near/f02": {
+   "coverage": 0.052,
+   "diff_noise": 3.833,
+   "diff_noise_pooled": 1.998,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-sparks-burn/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.546,
+   "diff_noise_pooled": 0.285,
+   "visible": 0.0
+  },
+  "genericshellexplosion-small-white/far/f02": {
+   "coverage": 0.03,
+   "diff_noise": 1.203,
+   "diff_noise_pooled": 0.378,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-white/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.841,
+   "diff_noise_pooled": 0.475,
+   "visible": 0.125
+  },
+  "genericshellexplosion-small-white/near/f02": {
+   "coverage": 0.2246,
+   "diff_noise": 4.698,
+   "diff_noise_pooled": 3.28,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small-white/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 2.209,
+   "diff_noise_pooled": 1.695,
+   "visible": 0.875
+  },
+  "genericshellexplosion-small/far/f02": {
+   "coverage": 0.0532,
+   "diff_noise": 0.938,
+   "diff_noise_pooled": 0.297,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small/far/f12": {
+   "coverage": 0.0527,
+   "diff_noise": 0.719,
+   "diff_noise_pooled": 0.327,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small/near/f02": {
+   "coverage": 0.4749,
+   "diff_noise": 3.718,
+   "diff_noise_pooled": 2.217,
+   "visible": 1.0
+  },
+  "genericshellexplosion-small/near/f12": {
+   "coverage": 0.4612,
+   "diff_noise": 1.949,
+   "diff_noise_pooled": 1.342,
+   "visible": 1.0
+  },
+  "genericshellexplosion/far/f02": {
+   "coverage": 0.0518,
+   "diff_noise": 0.919,
+   "diff_noise_pooled": 0.345,
+   "visible": 1.0
+  },
+  "genericshellexplosion/far/f12": {
+   "coverage": 0.0515,
+   "diff_noise": 0.724,
+   "diff_noise_pooled": 0.362,
+   "visible": 1.0
+  },
+  "genericshellexplosion/near/f02": {
+   "coverage": 0.4707,
+   "diff_noise": 4.044,
+   "diff_noise_pooled": 2.436,
+   "visible": 1.0
+  },
+  "genericshellexplosion/near/f12": {
+   "coverage": 0.4595,
+   "diff_noise": 1.967,
+   "diff_noise_pooled": 1.258,
+   "visible": 1.0
+  },
+  "independenceflash/far/f02": {
+   "coverage": 0.0237,
+   "diff_noise": 2.991,
+   "diff_noise_pooled": 2.018,
+   "visible": 1.0
+  },
+  "independenceflash/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.475,
+   "diff_noise_pooled": 0.129,
+   "visible": 0.0
+  },
+  "independenceflash/near/f02": {
+   "coverage": 0.2122,
+   "diff_noise": 9.529,
+   "diff_noise_pooled": 9.019,
+   "visible": 1.0
+  },
+  "independenceflash/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "missiletrailsmall/far/f02": {
+   "coverage": 0.0107,
+   "diff_noise": 2.27,
+   "diff_noise_pooled": 1.812,
+   "visible": 1.0
+  },
+  "missiletrailsmall/far/f12": {
+   "coverage": 0.0015,
+   "diff_noise": 0.925,
+   "diff_noise_pooled": 0.48,
+   "visible": 0.125
+  },
+  "missiletrailsmall/near/f02": {
+   "coverage": 0.0708,
+   "diff_noise": 3.337,
+   "diff_noise_pooled": 2.46,
+   "visible": 1.0
+  },
+  "missiletrailsmall/near/f12": {
+   "coverage": 0.0103,
+   "diff_noise": 1.754,
+   "diff_noise_pooled": 1.22,
+   "visible": 1.0
+  },
+  "pulseflash/far/f02": {
+   "coverage": 0.0215,
+   "diff_noise": 3.104,
+   "diff_noise_pooled": 2.158,
+   "visible": 1.0
+  },
+  "pulseflash/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.177,
+   "diff_noise_pooled": 0.068,
+   "visible": 0.0
+  },
+  "pulseflash/near/f02": {
+   "coverage": 0.2117,
+   "diff_noise": 7.631,
+   "diff_noise_pooled": 7.015,
+   "visible": 1.0
+  },
+  "pulseflash/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 0.0,
+   "diff_noise_pooled": 0.0,
+   "visible": 0.0
+  },
+  "sickfires/far/f02": {
+   "coverage": 0.0217,
+   "diff_noise": 3.226,
+   "diff_noise_pooled": 2.838,
+   "visible": 0.875
+  },
+  "sickfires/far/f12": {
+   "coverage": 0.0154,
+   "diff_noise": 4.157,
+   "diff_noise_pooled": 3.526,
+   "visible": 0.625
+  },
+  "sickfires/near/f02": {
+   "coverage": 0.1946,
+   "diff_noise": 12.535,
+   "diff_noise_pooled": 12.021,
+   "visible": 0.812
+  },
+  "sickfires/near/f12": {
+   "coverage": 0.1655,
+   "diff_noise": 12.371,
+   "diff_noise_pooled": 12.156,
+   "visible": 0.688
+  },
+  "smoke_puff/far/f02": {
+   "coverage": 0.0117,
+   "diff_noise": 1.394,
+   "diff_noise_pooled": 0.659,
+   "visible": 1.0
+  },
+  "smoke_puff/far/f12": {
+   "coverage": 0.0,
+   "diff_noise": 2.947,
+   "diff_noise_pooled": 2.044,
+   "visible": 1.0
+  },
+  "smoke_puff/near/f02": {
+   "coverage": 0.1396,
+   "diff_noise": 5.117,
+   "diff_noise_pooled": 4.005,
+   "visible": 1.0
+  },
+  "smoke_puff/near/f12": {
+   "coverage": 0.0,
+   "diff_noise": 3.657,
+   "diff_noise_pooled": 3.22,
+   "visible": 0.875
+  },
+  "ufoblast/far/f02": {
+   "coverage": 0.208,
+   "diff_noise": 8.104,
+   "diff_noise_pooled": 5.494,
+   "visible": 1.0
+  },
+  "ufoblast/far/f12": {
+   "coverage": 0.5977,
+   "diff_noise": 5.358,
+   "diff_noise_pooled": 4.112,
+   "visible": 1.0
+  },
+  "ufoblast/near/f02": {
+   "coverage": 0.8115,
+   "diff_noise": 27.392,
+   "diff_noise_pooled": 26.388,
+   "visible": 1.0
+  },
+  "ufoblast/near/f12": {
+   "coverage": 0.8542,
+   "diff_noise": 15.475,
+   "diff_noise_pooled": 14.414,
+   "visible": 1.0
+  }
+ },
+ "order": [
+  "bloodytrail/far/f02",
+  "bloodytrail/far/f12",
+  "bloodytrail/near/f02",
+  "bloodytrail/near/f12",
+  "bloodytrailgreen/far/f02",
+  "bloodytrailgreen/far/f12",
+  "bloodytrailgreen/near/f02",
+  "bloodytrailgreen/near/f12",
+  "dirtfling/far/f02",
+  "dirtfling/far/f12",
+  "dirtfling/near/f02",
+  "dirtfling/near/f12",
+  "explosion/far/f02",
+  "explosion/far/f12",
+  "explosion/near/f02",
+  "explosion/near/f12",
+  "fire/far/f02",
+  "fire/far/f12",
+  "fire/near/f02",
+  "fire/near/f12",
+  "fireflash/far/f02",
+  "fireflash/far/f12",
+  "fireflash/near/f02",
+  "fireflash/near/f12",
+  "flashnuke/far/f02",
+  "flashnuke/far/f12",
+  "flashnuke/near/f02",
+  "flashnuke/near/f12",
+  "fuse/far/f02",
+  "fuse/far/f12",
+  "fuse/near/f02",
+  "fuse/near/f12",
+  "genericbunnyexplosion-huge-red/far/f02",
+  "genericbunnyexplosion-huge-red/far/f12",
+  "genericbunnyexplosion-huge-red/near/f02",
+  "genericbunnyexplosion-huge-red/near/f12",
+  "genericbunnyexplosion-large-red/far/f02",
+  "genericbunnyexplosion-large-red/far/f12",
+  "genericbunnyexplosion-large-red/near/f02",
+  "genericbunnyexplosion-large-red/near/f12",
+  "genericbunnyexplosion-medium-red/far/f02",
+  "genericbunnyexplosion-medium-red/far/f12",
+  "genericbunnyexplosion-medium-red/near/f02",
+  "genericbunnyexplosion-medium-red/near/f12",
+  "genericbunnyexplosion-small-red/far/f02",
+  "genericbunnyexplosion-small-red/far/f12",
+  "genericbunnyexplosion-small-red/near/f02",
+  "genericbunnyexplosion-small-red/near/f12",
+  "genericshellexplosion-large-blue/far/f02",
+  "genericshellexplosion-large-blue/far/f12",
+  "genericshellexplosion-large-blue/near/f02",
+  "genericshellexplosion-large-blue/near/f12",
+  "genericshellexplosion-large-green/far/f02",
+  "genericshellexplosion-large-green/far/f12",
+  "genericshellexplosion-large-green/near/f02",
+  "genericshellexplosion-large-green/near/f12",
+  "genericshellexplosion-large-purple/far/f02",
+  "genericshellexplosion-large-purple/far/f12",
+  "genericshellexplosion-large-purple/near/f02",
+  "genericshellexplosion-large-purple/near/f12",
+  "genericshellexplosion-large-red/far/f02",
+  "genericshellexplosion-large-red/far/f12",
+  "genericshellexplosion-large-red/near/f02",
+  "genericshellexplosion-large-red/near/f12",
+  "genericshellexplosion-large-sparks-burn/far/f02",
+  "genericshellexplosion-large-sparks-burn/far/f12",
+  "genericshellexplosion-large-sparks-burn/near/f02",
+  "genericshellexplosion-large-sparks-burn/near/f12",
+  "genericshellexplosion-large-white/far/f02",
+  "genericshellexplosion-large-white/far/f12",
+  "genericshellexplosion-large-white/near/f02",
+  "genericshellexplosion-large-white/near/f12",
+  "genericshellexplosion-large/far/f02",
+  "genericshellexplosion-large/far/f12",
+  "genericshellexplosion-large/near/f02",
+  "genericshellexplosion-large/near/f12",
+  "genericshellexplosion-medium-blue/far/f02",
+  "genericshellexplosion-medium-blue/far/f12",
+  "genericshellexplosion-medium-blue/near/f02",
+  "genericshellexplosion-medium-blue/near/f12",
+  "genericshellexplosion-medium-green/far/f02",
+  "genericshellexplosion-medium-green/far/f12",
+  "genericshellexplosion-medium-green/near/f02",
+  "genericshellexplosion-medium-green/near/f12",
+  "genericshellexplosion-medium-purple/far/f02",
+  "genericshellexplosion-medium-purple/far/f12",
+  "genericshellexplosion-medium-purple/near/f02",
+  "genericshellexplosion-medium-purple/near/f12",
+  "genericshellexplosion-medium-red/far/f02",
+  "genericshellexplosion-medium-red/far/f12",
+  "genericshellexplosion-medium-red/near/f02",
+  "genericshellexplosion-medium-red/near/f12",
+  "genericshellexplosion-medium-sparks-burn/far/f02",
+  "genericshellexplosion-medium-sparks-burn/far/f12",
+  "genericshellexplosion-medium-sparks-burn/near/f02",
+  "genericshellexplosion-medium-sparks-burn/near/f12",
+  "genericshellexplosion-medium-white/far/f02",
+  "genericshellexplosion-medium-white/far/f12",
+  "genericshellexplosion-medium-white/near/f02",
+  "genericshellexplosion-medium-white/near/f12",
+  "genericshellexplosion-medium/far/f02",
+  "genericshellexplosion-medium/far/f12",
+  "genericshellexplosion-medium/near/f02",
+  "genericshellexplosion-medium/near/f12",
+  "genericshellexplosion-small-blue/far/f02",
+  "genericshellexplosion-small-blue/far/f12",
+  "genericshellexplosion-small-blue/near/f02",
+  "genericshellexplosion-small-blue/near/f12",
+  "genericshellexplosion-small-firey-modified/far/f02",
+  "genericshellexplosion-small-firey-modified/far/f12",
+  "genericshellexplosion-small-firey-modified/near/f02",
+  "genericshellexplosion-small-firey-modified/near/f12",
+  "genericshellexplosion-small-firey/far/f02",
+  "genericshellexplosion-small-firey/far/f12",
+  "genericshellexplosion-small-firey/near/f02",
+  "genericshellexplosion-small-firey/near/f12",
+  "genericshellexplosion-small-green-drone/far/f02",
+  "genericshellexplosion-small-green-drone/far/f12",
+  "genericshellexplosion-small-green-drone/near/f02",
+  "genericshellexplosion-small-green-drone/near/f12",
+  "genericshellexplosion-small-green/far/f02",
+  "genericshellexplosion-small-green/far/f12",
+  "genericshellexplosion-small-green/near/f02",
+  "genericshellexplosion-small-green/near/f12",
+  "genericshellexplosion-small-purple/far/f02",
+  "genericshellexplosion-small-purple/far/f12",
+  "genericshellexplosion-small-purple/near/f02",
+  "genericshellexplosion-small-purple/near/f12",
+  "genericshellexplosion-small-red/far/f02",
+  "genericshellexplosion-small-red/far/f12",
+  "genericshellexplosion-small-red/near/f02",
+  "genericshellexplosion-small-red/near/f12",
+  "genericshellexplosion-small-sparks-burn/far/f02",
+  "genericshellexplosion-small-sparks-burn/far/f12",
+  "genericshellexplosion-small-sparks-burn/near/f02",
+  "genericshellexplosion-small-sparks-burn/near/f12",
+  "genericshellexplosion-small-white/far/f02",
+  "genericshellexplosion-small-white/far/f12",
+  "genericshellexplosion-small-white/near/f02",
+  "genericshellexplosion-small-white/near/f12",
+  "genericshellexplosion-small/far/f02",
+  "genericshellexplosion-small/far/f12",
+  "genericshellexplosion-small/near/f02",
+  "genericshellexplosion-small/near/f12",
+  "genericshellexplosion/far/f02",
+  "genericshellexplosion/far/f12",
+  "genericshellexplosion/near/f02",
+  "genericshellexplosion/near/f12",
+  "independenceflash/far/f02",
+  "independenceflash/far/f12",
+  "independenceflash/near/f02",
+  "independenceflash/near/f12",
+  "missiletrailsmall/far/f02",
+  "missiletrailsmall/far/f12",
+  "missiletrailsmall/near/f02",
+  "missiletrailsmall/near/f12",
+  "pulseflash/far/f02",
+  "pulseflash/far/f12",
+  "pulseflash/near/f02",
+  "pulseflash/near/f12",
+  "sickfires/far/f02",
+  "sickfires/far/f12",
+  "sickfires/near/f02",
+  "sickfires/near/f12",
+  "smoke_puff/far/f02",
+  "smoke_puff/far/f12",
+  "smoke_puff/near/f02",
+  "smoke_puff/near/f12",
+  "ufoblast/far/f02",
+  "ufoblast/far/f12",
+  "ufoblast/near/f02",
+  "ufoblast/near/f12"
+ ]
+}

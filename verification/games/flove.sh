@@ -9,7 +9,7 @@ SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/LD34-map.sdd"
 MAP_ALIAS='The Grove 0.3.sdd'
 FIXTURES="$FIXTURES_DIR/flove"
-START_FILE="$LAUNCH_DIR/flove.txt"
+START_FILE="$(vf_launch_script flove)"
 MODULES=(
     flove_rules_wasm:LuaRules/wasm/flove-rules.wasm
     flove_rules_unsynced_wasm:LuaRules/wasm/flove-rules-unsynced.wasm

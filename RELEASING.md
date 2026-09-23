@@ -29,7 +29,10 @@ The games have to build against the same engine revision, so check that the
 2. Rebuild the WASM modules: pass `--build` to the packager, or run
    `just build-all`. The packager refuses modules that contain test markers
    (a leftover `e2e`/`headless-integration` build).
-3. If you add a game or map, add it to `content.tsv` (and to the menu).
+3. If you add a game or map, add it to `content.tsv`, give it
+   `launch/games/<game>/{wasm,lua}.txt`, and add it to the menu.
+4. The packager refuses a menu built before the latest change to
+   `launch/games/`, because the menu compiles those files in.
 
 ## 3. Package
 
@@ -62,8 +65,8 @@ What the packager does:
 - Map `.sdd` folders become `.sd7`. `Area17.sd7` gets the patched dual-fog gadget
   from `patches/area17-map/` (`scripts/area17-map.sh`).
 - `wasm-menu/` becomes `WasmMenu.sdz`.
-- It adds `springsettings.cfg` (portable mode, defaults from
-  `springsettings-custom.cfg`), the launcher, `README.txt`
+- It adds `springsettings.cfg` (portable mode, `launch/springsettings.cfg`),
+  the launcher, `README.txt`
   (from `release/README.txt.in`) and `BUILDINFO.txt`.
 
 ## 4. Test

@@ -19,7 +19,7 @@ be pushed from here; only this repository is pushed
 ```bash
 just --list                   # everything, grouped
 ./run-wasm.sh                 # the WASM menu (WASM and Lua buttons per game)
-./run-wasm.sh --game flove    # one game directly: hunted, area17, flove, ttld, gravitas
+./run-wasm.sh --game flove    # one game directly (--lua for the original)
 just build-all                # fmt + clippy + build + install every game's modules
 just verify <suite> [mode]    # see verification/README.md
 just verify-all               # headless/static suites
@@ -34,8 +34,12 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
 - Tests must not modify `spring-linux/`. Suites stage copies and build into
   `verification/cache/`. `release/package.sh` ships the checkouts as they are
   and rejects test builds.
-- `launch/` holds the start scripts and configs used for play. Test-only
-  options (`test_mode=1`, ...) are added by the suites, never committed there.
+- `launch/` is the only source of launch settings. `springsettings.cfg` is the
+  graphics profile, and `games/<game>/{wasm,lua}.txt` plus `graphics.cfg` are
+  what each menu button starts. The menu compiles them in, and `run-wasm.sh`,
+  verification, the smoke test and the release read them. Don't duplicate them
+  elsewhere. Rebuild the menu after editing them. Suites add test-only options
+  (`test_mode=1`, ...) on top; those are never committed to `launch/`.
 - After an intended visual change, run `just update-goldens <suite>`, look at
   the images, then commit them.
 - `TODO.md` holds the current rating of every WASM and Lua version.

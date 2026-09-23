@@ -1,0 +1,5 @@
+# Personal additions for ./run-wasm.sh only (gitignored): window size and
+# position, never graphics -- those come from launch/springsettings.cfg and
+# launch/games/<game>/graphics.cfg so every way of launching matches.
+#XResolutionWindowed = 1920
+#YResolutionWindowed = 1080

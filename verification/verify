@@ -13,6 +13,7 @@ declare -A MODES=(
     [partsneeded]='headless visual'
     [ttld]='headless visual lua-visual pose-parity'
     [unit-scripts]='partsneeded source'
+    [gallery]='ceg anim parity'
 )
 # What `verify all` runs: every in-game assertion suite, no screenshots.
 ALL_RUNS=(
@@ -24,11 +25,13 @@ ALL_RUNS=(
 VISUAL_RUNS=(
     'area17 visual' 'flove visual' 'gravitas shots' 'hunted visual'
     'mycube visual' 'partsneeded visual' 'ttld visual'
+    'gallery ceg all' 'gallery anim all'
 )
 
 usage() {
     cat >&2 <<'EOS'
 usage: verify <suite> [mode] [seconds]    run one suite (default mode: first listed)
+       verify gallery ceg|anim|parity [game|all] [--only name,...]
        verify list                       suites and their modes
        verify all                        every headless/static suite
        verify visual                     every screenshot suite, compared to goldens

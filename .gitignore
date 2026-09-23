@@ -54,3 +54,6 @@ build/
 # Python bytecode
 __pycache__/
 *.pyc
+
+# Personal launcher settings (see launch/local.cfg.example)
+launch/local.cfg
