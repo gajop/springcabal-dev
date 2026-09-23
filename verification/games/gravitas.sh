@@ -36,6 +36,7 @@ gravitas_headless() {
     vf_link_game "$GAME_DIR"
     vf_link_map "$MAP_DIR"
     vf_start_file "$START_FILE"
+    vf_quit_when --frame 900
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -51,6 +52,7 @@ gravitas_e2e() {
     vf_write_settings <<'CFG'
 UseFontConfigLib = 0
 CFG
+    vf_quit_when 'E2E summary passed='
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs

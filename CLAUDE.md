@@ -58,5 +58,6 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
   `wasm-test/write/logs/`, and prints an error/warning summary on exit.
 - Verification runs write to `verification/out/<suite>/` (`last.combined.txt`,
   screenshots, goldens diffs).
-- `spring-headless` only flushes `infolog.txt` on a clean exit; when a run is
-  killed by a timeout, read its stdout instead.
+- `spring-headless` only flushes `infolog.txt` on a clean exit. Headless
+  suites quit themselves once their markers appear (`vf_quit_when`); when a
+  run is still killed by its timeout, read its stdout instead.

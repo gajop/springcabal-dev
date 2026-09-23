@@ -230,6 +230,62 @@ open(path, 'w').write(text)
 PY
 }
 
+# vf_quit_when [--frame N] [MARKER...]
+# End the run with quitforce once every MARKER (plain text) has been logged, on
+# "ASSERTION FAILED", or at game frame N, instead of at the timeout. Only a
+# clean exit flushes the headless infolog and lets an ASAN engine report
+# leaks. The timeout stays as the backstop. Call after the start script is
+# written; a linked game is staged as a copy first.
+vf_quit_when() {
+    local frame='' staged draw markers='' marker
+    if [[ ${1:-} == --frame ]]; then
+        frame=${2:?frame}
+        shift 2
+    fi
+    # The staged copy (vf_stage_game runs in a subshell, so look for it), else
+    # a copy of the linked game.
+    local -a copies=()
+    for staged in "$VF_ISOLATION"/games/*; do
+        [[ -d $staged && ! -L $staged ]] && copies+=("$staged")
+    done
+    if (( ${#copies[@]} == 1 )); then
+        staged=${copies[0]}
+    elif (( ${#copies[@]} == 0 )) && [[ -n ${VF_GAME_DIR:-} && -L $VF_ISOLATION/games/$(basename "$VF_GAME_DIR") ]]; then
+        rm -f -- "$VF_ISOLATION/games/$(basename "$VF_GAME_DIR")"
+        staged=$(vf_stage_game "$VF_GAME_DIR")
+    else
+        vf_die "vf_quit_when: expected one staged or linked game, found ${#copies[@]} staged copies"
+    fi
+    mkdir -p "$staged/LuaRules/Gadgets"
+    cp "$FIXTURES_DIR/quit.lua" "$staged/LuaRules/Gadgets/zz_verify_quit.lua"
+
+    # Most WASM ports run no unsynced gadgets (draw.lua is empty or
+    # `return true`); give those an entry point that runs only this one.
+    draw="$staged/LuaRules/draw.lua"
+    if ! grep -q 'gadgets\.lua' "$draw" 2>/dev/null; then
+        if [[ -s $draw ]] && grep -vE '^[[:space:]]*(--.*)?$' "$draw" | grep -qvE '^[[:space:]]*return true[[:space:]]*$'; then
+            vf_die "vf_quit_when: $draw runs its own unsynced code; add the quit gadget there"
+        fi
+        cat >"$draw" <<'LUA'
+-- Verification entry point: this game has no unsynced gadgets, so run only
+-- the verification quit gadget.
+gadget = {}
+gadgetHandler = { IsSyncedCode = function() return false end }
+VFS.Include("LuaRules/Gadgets/zz_verify_quit.lua", nil, VFS.ZIP_FIRST)
+function GameFrame(n) gadget:GameFrame(n) end
+gadget:Initialize()
+LUA
+    fi
+
+    for marker in "$@"; do
+        [[ $marker != *[\;\}\|]* ]] || vf_die "vf_quit_when: marker cannot contain ; } or |: $marker"
+        markers+=${markers:+||}$marker
+    done
+    [[ -n $markers || -n $frame ]] || vf_die 'vf_quit_when: give markers or --frame'
+    [[ -z $markers ]] || vf_modoption vf_quit_markers "$markers"
+    [[ -z $frame ]] || vf_modoption vf_quit_frame "$frame"
+}
+
 vf_config() {
     local fixture=${1:-$DEFAULT_CONFIG}
     [[ -f $fixture ]] || vf_die "config not found: $fixture"

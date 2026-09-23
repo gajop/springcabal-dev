@@ -60,6 +60,7 @@ area17_headless() {
     area17_stage headless-integration
     vf_start_file "$START_FILE" 100.0 100.0
     vf_modoption test_mode 1
+    vf_quit_when 'ALL AREA17 RUST INTEGRATION TESTS PASSED' 'ALL AREA17 LUA INTEGRATION TESTS PASSED'
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs

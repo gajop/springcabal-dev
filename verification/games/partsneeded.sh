@@ -56,6 +56,7 @@ partsneeded_headless() {
 
     vf_workspace partsneeded-headless
     partsneeded_stage headless-integration
+    vf_quit_when "$TEST_MARKER" "$ENDING_TEST_MARKER"
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs

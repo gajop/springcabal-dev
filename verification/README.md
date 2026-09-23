@@ -274,6 +274,7 @@ example_headless() {
     vf_link_map "$MAPS_DIR/Example-map.sdd" 'Display Name.sdd'
     vf_start_file "$(vf_launch_script example)" 100.0 100.0
     vf_modoption test_mode 1
+    vf_quit_when 'ALL EXAMPLE TESTS PASSED'
     vf_config
     vf_run_headless 45
     vf_save_logs
@@ -292,6 +293,30 @@ Other helpers: `vf_write_settings`, `vf_run_visual`, `vf_require_screenshots`,
 
 A map alias is often needed, because a start script names the map by its
 display name, which rarely matches the archive name.
+
+`vf_quit_when MARKER...` (or `vf_quit_when --frame N` for a suite with no
+completion marker) ends the run with `quitforce` once every marker has been
+logged, instead of letting the timeout kill it. It stages
+`fixtures/quit.lua` into the game. Every headless run uses it. Only a clean
+exit makes `spring-headless` flush its infolog and lets an ASAN engine check
+for leaks; the timeout stays as the backstop.
+
+## ASAN engines and leaks
+
+Point `SPRING_HEADLESS_BIN` / `SPRING_ENGINE_BIN` at an ASAN build (the
+engine's `docker-build-v2/build-variants.sh asan` writes
+`build-amd64-linux-asan/install`) and run any suite:
+
+```bash
+A=../spring-bar/build-amd64-linux-asan/install
+SPRING_HEADLESS_BIN=$A/spring-headless SPRING_ENGINE_BIN=$A/spring just verify-all
+```
+
+Leak checking is on. `lsan.supp` suppresses only third-party
+process-lifetime allocations (the NVIDIA driver); a run whose output contains
+a LeakSanitizer report fails. Add an entry only for a stack that never reaches
+engine or game code. Leaks are only reported by runs that exit cleanly, which
+is why the suites quit themselves.
 
 ## The font cache
 

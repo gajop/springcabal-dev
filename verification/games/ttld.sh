@@ -180,6 +180,7 @@ ttld_headless() {
 
     vf_workspace ttld-headless
     ttld_stage headless-integration
+    vf_quit_when "$TEST_MARKER"
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -203,6 +204,7 @@ ttld_pose_parity() {
     vf_workspace ttld-pose-rust stable
     rust_log="$VF_OUT_DIR/last.combined.txt"
     ttld_stage pose-probe
+    vf_quit_when '[UnitScriptProbe] DONE unit='
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -221,6 +223,7 @@ ttld_pose_parity() {
     vf_link_game "$staged"
     vf_link_map "$MAP_DIR"
     ttld_start "$LUA_GAME_NAME"
+    vf_quit_when '[UnitScriptProbe] DONE unit='
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs

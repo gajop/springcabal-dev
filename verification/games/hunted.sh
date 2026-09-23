@@ -30,6 +30,9 @@ hunted_headless() {
     vf_link_game "$GAME_DIR"
     vf_link_map "$MAP_DIR" 'Hunted - v04.sdd'
     vf_start_file "$START_FILE"
+    vf_quit_when 'static carrots, burrows, and lighthouses spawned' \
+        'rabbit wave started:' 'rabbit wave started:' \
+        'rabbit finished eating and is carrying a carrot' 'status sent frame='
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs

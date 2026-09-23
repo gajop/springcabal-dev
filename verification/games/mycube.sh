@@ -48,6 +48,7 @@ mycube_headless() {
 
     vf_workspace mycube-headless
     mycube_stage headless-integration
+    vf_quit_when 'ALL MYCUBE INTEGRATION TESTS PASSED'
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -101,6 +102,7 @@ mycube_lua_headless() {
     vf_link_game "$LUA_GAME_DIR"
     vf_link_map "$LUA_MAP_DIR"
     mycube_start "$LUA_GAME_NAME" "$LUA_MAP_NAME"
+    vf_quit_when --frame 450
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs

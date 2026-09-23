@@ -39,6 +39,7 @@ flove_headless() {
     vf_workspace flove-headless
     flove_stage >/dev/null
     flove_start 100.0 100.0
+    vf_quit_when 'ALL FLOVE RUST INTEGRATION TESTS PASSED' 'ALL FLOVE EXTENDED TEST ASSERTIONS PASSED'
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
