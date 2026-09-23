@@ -1,0 +1,27 @@
+<rml>
+<head>
+    <title>Spring Cabal Games</title>
+    <link type="text/rcss" href="menu.rcss"/>
+    <link type="text/rcss" href="gallery.rcss"/>
+</head>
+<body>
+    <header><h1>SPRING CABAL GAMES<span class="title-dot">.</span></h1></header>
+    <main>
+        <aside id="spotlight">
+            <div class="hero-art"><img id="hero-image" src="images/flove.png"/></div>
+            <div class="hero-copy">
+                <h2 id="hero-name">Flove</h2>
+                <p id="hero-built"/>
+                <div id="hero-introduction"/>
+                <div id="hero-ratings"/>
+                <div class="rule"/>
+                <div class="credit-label">Credits</div>
+                <p id="hero-authors"/>
+            </div>
+        </aside>
+        <div class="library"><div class="games" id="games"/></div>
+    </main>
+    <footer><p>↑ ↓ Game · ← → Version · Enter Play</p><button id="quit">Quit <span>Esc</span></button></footer>
+    <div id="error"/>
+</body>
+</rml>

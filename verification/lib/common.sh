@@ -4,7 +4,7 @@ set -euo pipefail
 
 VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 PROJECT_ROOT=$(CDPATH= cd -- "$VERIFICATION_ROOT/.." && pwd)
-ENGINE_ROOT=${SPRING_BAR_DIR:-/home/gajop/projects/spring-projects/spring-bar}
+ENGINE_ROOT=${SPRING_BAR_DIR:-$(dirname "$PROJECT_ROOT")/spring-bar}
 ENGINE_INSTALL="$ENGINE_ROOT/build-amd64-linux/install"
 
 GAMES_DIR="$PROJECT_ROOT/spring-linux/games"

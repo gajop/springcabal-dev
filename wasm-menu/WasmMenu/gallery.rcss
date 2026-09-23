@@ -1,0 +1,48 @@
+body { color: #edf0f5; background-color: #0c1017; font-size: 18px; }
+aside { display: block; }
+header { text-align: left; padding: 24px 4%; }
+h1 { font-size: 38px; margin: 0; }
+.title-dot { color: #b7f477; }
+#spotlight { box-sizing: border-box; width: 36%; margin-right: 3%; background-color: #141b25; border: 1px #263140; display: flex; flex-direction: column; overflow-y: auto; }
+.hero-art { flex-shrink: 0; width: 100%; max-height: 320px; overflow: hidden; background-color: #080b10; }
+.hero-art img { display: block; width: 100%; height: auto; }
+.hero-copy { padding: 24px; }
+#hero-introduction { margin-top: 22px; font-size: 20px; line-height: 1.5; }
+#hero-introduction p { margin-bottom: 16px; }
+.rating-heading { font-size: 20px; color: #c4cfdd; margin: 24px 0 14px; }
+.rating { display: flex; align-items: center; margin-bottom: 9px; font-size: 18px; }
+.rating-label { flex: 1; }
+.stars { display: flex; flex-shrink: 0; margin: 0 10px; }
+.stars img { display: block; width: 110px; height: 28px; }
+.rating-value { width: 72px; text-align: right; flex-shrink: 0; }
+#hero-name { font-size: 36px; margin: 0 0 14px; text-align: left; }
+#hero-built { color: #c4cfdd; font-size: 19px; line-height: 1.5; }
+.rule { height: 1px; background-color: #2b3543; margin: 24px 0; }
+.credit-label { font-size: 18px; color: #8c9db4; margin-bottom: 10px; }
+#hero-authors { color: #c4cfdd; font-size: 19px; line-height: 1.6; }
+.library { width: 61%; display: flex; flex-direction: column; min-height: 0; }
+.games { flex: 1; min-height: 0; overflow-y: auto; }
+.game { box-sizing: border-box; display: flex; align-items: center; width: 100%; min-height: 96px; padding: 12px; margin-bottom: 8px; border: 1px #263140; background-color: #131b26; transition: background-color 0.15s, border-color 0.15s; }
+.game:hover { background-color: #1c2838; border-color: #52677f; }
+.game.keyboard { border-color: #91a2b8; }
+.game img.thumbnail { width: 92px; height: auto; margin-right: 16px; }
+.details { flex: 1; min-width: 0; padding-right: 12px; }
+.name { font-size: 22px; }
+.built { font-size: 16px; color: #a6b5c8; margin-top: 7px; line-height: 1.4; }
+.launch { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; width: 70px; height: 70px; margin-left: 8px; padding: 6px; border: 1px #384659; border-radius: 5px; background-color: #1b2533; transition: background-color 0.15s, border-color 0.15s; }
+.game .launch img { width: 30px; height: 30px; margin: 0 0 4px; }
+.launch span { font-size: 15px; }
+.launch.wasm:hover { background-color: #3b3155; border-color: #ab96f4; }
+.launch.lua:hover { background-color: #243d58; border-color: #83bcec; }
+.launch.editor:hover { background-color: #4a3820; border-color: #e09f3e; }
+.launch.selected { border: 2px #b7f477; background-color: #293a2d; }
+footer { display: flex; align-items: center; margin: 18px 4% 0; padding: 15px 0; border-top: 1px #28313e; }
+footer p { flex: 1; text-align: left; color: #9daec3; font-size: 17px; margin: 0; }
+#quit { width: 125px; padding: 10px; border-color: #344050; background-color: #151e2a; font-size: 19px; }
+#quit span { margin-left: 10px; color: #94a4b9; font-size: 15px; }
+#quit:hover, #quit.selected { background-color: #502e37; border-color: #e799a8; }
+scrollbarvertical { width: 7px; margin-left: 3px; }
+scrollbarvertical slidertrack { background-color: #101620; }
+scrollbarvertical sliderbar { width: 7px; min-height: 30px; background-color: #3e4f65; border-radius: 3px; }
+scrollbarvertical sliderbar:hover { background-color: #8aab79; }
+scrollbarvertical sliderarrowdec, scrollbarvertical sliderarrowinc { height: 0; }

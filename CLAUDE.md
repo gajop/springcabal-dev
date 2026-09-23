@@ -10,34 +10,17 @@ SpringCabal Games is a collection of Spring RTS games developed by SpringCabal, 
 
 ### Initial Setup
 ```bash
-# Download Spring engine and clone all game repositories
-./setup.sh
-
-# Note: setup.sh now automatically:
-# - Downloads and extracts Spring engine if needed
-# - Copies springsettings-custom.cfg to preserve engine settings
+# Clone every game/map repo listed in content.tsv into spring-linux/, and
+# optionally download a Linux engine release into engine/<tag>
+./setup.sh --engine-tag 2026.09.23
 ```
+`content.tsv` is the single list of games, maps and projects: source repo,
+branch, and whether the release ships it. Entries marked `local`/`download`
+(and the unpublished `*-wasm-port` branches) exist only on this machine.
 
-### Configuration Management
-The repository includes `springsettings-custom.cfg` which contains optimized Spring engine settings:
-- **GroundDetail = 200** - Increases visibility range for grass and small terrain details  
-- **MaxMapDetail = 5** - Maximum map detail level
-- **LODScale = 2.0** - Improved Level of Detail scaling
-
-This file is automatically copied over `spring-linux/springsettings.cfg` during setup to preserve settings when the engine is updated.
-
-**Note**: setup.sh doesn't clone all games/maps that exist in the repository. Some were added manually:
-
-**Games missing from setup.sh but present:**
-- `Menu.sdd` - Game menu system
-- `Scenario-Editor-Core.sdd` - Core scenario editor
-- `Scenario-Editor-Gravitas.sdd` - Gravitas-specific scenario editor
-
-**Games in setup.sh but missing from directory:**
-- `LD42.sdd` (My Cube) - Repository exists but game directory missing
-
-**Map discrepancies:**
-- Area17 map exists as `Area17.sd7` but setup.sh tries to clone `Area17Map.sdd`
+`springsettings-custom.cfg` holds the settings the games are tuned for
+(GroundDetail, MaxMapDetail, LODScale, ...); release bundles append it to
+their portable `springsettings.cfg`.
 
 ### Running Games
 
@@ -50,22 +33,21 @@ experimental engine, **not** on `spring-linux/spring`:
 # Launch one WASM game directly
 ./run-wasm.sh --game flove      # also: hunted, area17, ttld
 ```
-`run-wasm.sh` runs `$SPRING_BAR_DIR/build-amd64-linux/install/spring`
-(default `/home/gajop/projects/spring-projects/spring-bar`), builds an isolated
+`run-wasm.sh` runs `$SPRING_ENGINE_DIR/spring`, else
+`$SPRING_BAR_DIR/build-amd64-linux/install/spring` (default `../spring-bar`),
+else `engine/current/spring` from setup. It builds an isolated
 launch view under `wasm-test/`, and prints an error/warning summary from the
 session log when it exits. Rebuild that engine with
 `./docker-build-v2/build.sh linux` in the spring-bar checkout. Rebuild a game's
 guest modules with `just copy` in its `wasm-src/`.
 
-The legacy Lua games use the bundled release engine instead:
-```bash
-# Launch the game menu
-./run.sh
-# This runs: ./spring-linux/spring -menu "Menu 1.0"
+The original Lua versions are launched from the same WASM menu (each row has
+WASM and Lua buttons).
 
-# Run specific game directly
-./spring-linux/spring -menu "GameName 1.0"
-```
+### Releases
+
+`release/package.sh` builds Linux/Windows bundles locally from the checkouts;
+`release/smoke-test.sh` checks one. See `RELEASING.md`.
 
 ## Project Structure
 
@@ -93,15 +75,8 @@ Each game follows this pattern:
 
 ## Game Status
 
-Based on TODO.md (uses rating system: Gold = no issues, Silver = playable with large issues, Bronze = playable with workarounds, Broken = doesn't work):
-
-- **Gravitas**: BROKEN (objects not interactable)
-- **Hunted**: Bronze (works with shadows disabled, tested briefly)
-- **Area17**: Status unknown, needs testing
-- **Flove**: Silver (playable but has projectile errors, deferred rendering issues, missing shaders, units not shooting, units appearing underground)
-- **LD43 (To the Last Drop)**: BROKEN (map shader issues)
-- **LD42 (My Cube)**: NOT SETUP
-- **Parts Needed**: NOT SETUP
+`TODO.md` has the current rating of every WASM and Lua version and the rating
+scale.
 
 ## Development Guidelines
 
@@ -125,11 +100,10 @@ Based on TODO.md (uses rating system: Gold = no issues, Silver = playable with l
 ### Debugging
 
 #### Log Analysis Workflow
-1. Run game via `./run-wasm.sh` (WASM games) or `./run.sh` (legacy Lua games)
+1. Run game via `./run-wasm.sh`
 2. Check for visual defects during gameplay
 3. Analyze error logs: `wasm-test/write/infolog.txt` plus the per-session copy
-   under `wasm-test/write/logs/` for WASM runs, `spring-linux/infolog.txt` for
-   legacy runs
+   under `wasm-test/write/logs/`
 
 #### Verification Suites
 

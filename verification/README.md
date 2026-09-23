@@ -24,7 +24,7 @@ copy-pasted into 18 scripts across `area17-test/`, `wasm-test/`,
 | `gravitas` | `e2e` \| `shots` \| `headless` |
 | `hunted` | `headless` |
 | `ports` | `headless` \| `visual` — plus `mycube` \| `partsneeded` \| `all` |
-| `ttld` | `headless` \| `visual` |
+| `ttld` | `headless` \| `visual` \| `lua-visual` |
 
 `static` is build hygiene only (fmt, clippy, installed artifacts match source).
 `headless` runs the in-game assertions under `spring-headless`. `visual` renders
@@ -47,8 +47,8 @@ out/<suite>/        logs, screenshots and workspace for the last run
 ```
 
 Suites read `wasm-test/spring.conf` and `area17-test/spring.conf` in place
-rather than keeping a copy, because the launchers (`run-wasm.sh`,
-`run-area17-wasm.sh`) own those files.
+rather than keeping a copy, because the launcher (`run-wasm.sh`) owns
+those files.
 
 ## The font cache
 
@@ -89,6 +89,29 @@ Useful helpers beyond those: `vf_stage_game` (copy instead of symlink, for
 suites that must not touch the shipped archive), `vf_write_settings`,
 `vf_run_visual`, `vf_require_screenshots`, `vf_collect_screenshots`, `vf_rmse`,
 `vf_within`, `vf_percent`, `vf_count`, `vf_summary`, `vf_restore_modules`.
+
+`unit-scripts` is the cross-runtime unit-script harness. Its `source` mode
+compares the Lua and Rust animation command tables without starting Spring:
+
+```bash
+./verification/verify unit-scripts source
+```
+
+Its `partsneeded` mode injects the same
+probe gadget into isolated Lua and WASM archive copies, samples model-relative
+piece model matrices at the same simulation frames, then compares the numeric
+traces. This tests the complete engine result—including animated rotation—not
+merely whether the Rust source contains similar-looking keyframes. Run the
+first port with:
+
+```bash
+./verification/verify unit-scripts partsneeded
+```
+
+To add another game, keep the probe fixture and comparator, then add a small
+suite/configuration that names the two archives, map, target unit, sample
+frames, and pieces. The resulting traces remain under
+`verification/out/unit-scripts-<game>-{lua,wasm}/trace.log` for inspection.
 
 A map alias is often needed because a start script names the map by its display
 name, which rarely matches the archive directory name.

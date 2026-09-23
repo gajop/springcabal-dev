@@ -1,0 +1,40 @@
+# Game, map and project content used by the dev setup and the release packager.
+#
+# Columns (tab separated):
+#   kind    game | map | project
+#   path    location under spring-linux/{games,maps,projects}
+#   source  git URL, "local" (exists only in a local checkout for now) or
+#           "download" (a prebuilt archive that has to be placed manually)
+#   branch  branch to check out ("-" for non-git sources)
+#   ship    yes/no: whether release/package.sh puts it in the bundle
+#
+# The *-wasm-port branches are not published yet: setup.sh skips what it
+# cannot clone, and packaging always uses whatever is checked out locally.
+
+# kind	path	source	branch	ship
+game	Gravitas-wasm.sdd	https://github.com/SpringCabal/Gravitas.git	gravitas-wasm-port	yes
+game	Hunted-wasm.sdd	https://github.com/SpringCabal/Hunted.git	hunted-wasm-port	yes
+game	Area17-wasm.sdd	https://github.com/SpringCabal/Area-17.git	area17-wasm-port	yes
+game	Flove-wasm.sdd	https://github.com/SpringCabal/Flove.git	flove-wasm-port	yes
+game	PartsNeeded-wasm.sdd	https://github.com/SpringCabal/LD35.git	partsneeded-wasm-port	yes
+game	MyCube-wasm.sdd	https://github.com/SpringCabal/LD42.git	mycube-wasm-port	yes
+game	ToTheLastDrop-wasm.sdd	https://github.com/SpringCabal/LD43.git	ttld-wasm-port	yes
+game	Gravitas.sdd	https://github.com/SpringCabal/Gravitas.git	master	yes
+game	Hunted.sdd	https://github.com/SpringCabal/Hunted.git	master	yes
+game	Area-17.sdd	https://github.com/SpringCabal/Area-17.git	master	yes
+game	Flove.sdd	https://github.com/SpringCabal/Flove.git	master	yes
+game	PartsNeeded.sdd	https://github.com/SpringCabal/LD35.git	master	yes
+game	MyCube.sdd	https://github.com/SpringCabal/LD42.git	master	yes
+game	ToTheLastDrop.sdd	https://github.com/SpringCabal/LD43.git	master	yes
+game	Scenario-Editor-Core.sdd	local	-	yes
+game	Scenario-Editor-Gravitas.sdd	local	-	yes
+game	Menu.sdd	local	-	no
+map	Gravitas-map.sdd	https://github.com/SpringCabal/Gravitas-map.git	master	yes
+map	HuntedMap.sdd	https://github.com/SpringCabal/Hunted-Map.git	master	yes
+map	LD34-map.sdd	https://github.com/SpringCabal/LD34-map.git	master	yes
+map	LD35-map.sdd	https://github.com/SpringCabal/LD35-map.git	master	yes
+map	LD43-map.sdd	https://github.com/SpringCabal/LD43-map.git	master	yes
+map	Area17.sd7	download	-	yes
+map	MyCube_v1.sd7	download	-	yes
+map	MyCube_v1-wasm.sdd	local	-	yes
+project	Gravity-Enterprise	local	-	yes

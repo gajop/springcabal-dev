@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
+variant=${1:-wasm}
+[[ $variant == lua || $variant == wasm ]] || vf_die 'expected lua or wasm'
+source_game="$GAMES_DIR/Gravitas.sdd"
+wasm_game="$GAMES_DIR/Gravitas-wasm.sdd"
+if [[ $variant == wasm ]]; then
+    (cd "$wasm_game/wasm-src" && cargo build -p gravitas-ui-wasm --features fire-probe --release --target-dir /tmp/gravitas-fire-target)
+fi
+vf_workspace "gravitas-fire-$variant" stable
+staged=$(vf_stage_game "$source_game")
+cp "$FIXTURES_DIR/gravitas/fire_probe_rules.lua" "$staged/LuaRules/main.lua"
+cp "$FIXTURES_DIR/gravitas/fire_probe_rules.lua" "$staged/LuaRules/draw.lua"
+if [[ $variant == lua ]]; then
+    cp "$FIXTURES_DIR/gravitas/fire_probe_ui.lua" "$staged/LuaUI/main.lua"
+else
+    mv "$staged/LuaUI" "$staged/LuaUI-reference"
+    cp -a "$wasm_game/LuaUI" "$staged/LuaUI"
+    cp /tmp/gravitas-fire-target/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm "$staged/LuaUI/wasm/gravitas-ui.wasm"
+fi
+vf_link_map "$MAPS_DIR/Gravitas-map.sdd"
+vf_start_file "$FIXTURES_DIR/gravitas/start.txt"
+sed -i 's/GameType=Gravitas WASM 0.1.0-wasm;/GameType=Gravitas;/' "$VF_START_FILE"
+vf_write_settings <<'CFG'
+Fullscreen = 0
+UseFontConfigLib = 0
+XResolutionWindowed = 1280
+YResolutionWindowed = 720
+WindowBorderless = 1
+GroundDetail = 200
+MaxMapDetail = 5
+LODScale = 2.0
+CFG
+vf_config "$VISUAL_CONFIG"
+vf_run_visual 35
+vf_save_logs
+mapfile -t captures < <(vf_screenshots)
+[[ ${#captures[@]} == 5 ]] || vf_die "expected five fire frames; got ${#captures[@]}"
+vf_forbid 'Error in (Update|DrawWorld)|LuaUI.*Error|shader.*error'
+printf '%s\n' "${captures[@]}"

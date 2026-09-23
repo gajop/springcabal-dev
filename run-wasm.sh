@@ -2,10 +2,20 @@
 set -euo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-engine_root="${SPRING_BAR_DIR:-/home/gajop/projects/spring-projects/spring-bar}"
-engine_bin="$engine_root/build-amd64-linux/install/spring"
+engine_root="${SPRING_BAR_DIR:-$(dirname "$project_root")/spring-bar}"
+# Engine install to run: SPRING_ENGINE_DIR, else a local spring-bar build,
+# else the release fetched by `./setup.sh --engine-tag TAG` (engine/current).
+engine_install="${SPRING_ENGINE_DIR:-}"
+if [[ -z "$engine_install" ]]; then
+    engine_install="$engine_root/build-amd64-linux/install"
+    if [[ ! -x "$engine_install/spring" && -x "$project_root/engine/current/spring" ]]; then
+        engine_install="$project_root/engine/current"
+    fi
+fi
+engine_bin="$engine_install/spring"
 wasm_menu_dir="$project_root/wasm-menu"
-write_dir="$project_root/wasm-test/write"
+run_dir="${SPRING_RUN_DIR:-$project_root/wasm-test}"
+write_dir="$run_dir/write"
 log_dir="$write_dir/logs"
 
 usage() {
@@ -16,6 +26,7 @@ usage() {
     echo "  --game area17       launch Area 17 WASM directly"
     echo "  --game flove        launch Flove WASM directly (bypasses the menu)"
     echo "  --game ttld         launch To the Last Drop WASM directly"
+    echo "  --game gravitas     launch Gravitas WASM directly"
     exit 1
 }
 
@@ -32,6 +43,7 @@ done
 if [[ ! -x "$engine_bin" ]]; then
     echo "Experimental engine not found: $engine_bin" >&2
     echo "Build it with: cd '$engine_root' && ./docker-build-v2/build.sh linux" >&2
+    echo "or download a release with: ./setup.sh --engine-tag TAG" >&2
     exit 1
 fi
 
@@ -42,20 +54,20 @@ fi
 # "[FSA::GetFileModificationTime] error 'No such file or directory'" per
 # archive and then rescanned all of them.  One stable directory per launch
 # mode, since the modes link different archives under different names.
-isolation_dir="$project_root/wasm-test/isolation-${game:-menu}"
+isolation_dir="$run_dir/isolation-${game:-menu}"
 rm -rf -- "$isolation_dir/games" "$isolation_dir/maps"
 mkdir -p "$isolation_dir" "$write_dir" "$log_dir"
 
 session_log="$log_dir/wasm-$(date +%Y%m%d-%H%M%S)-$$.infolog.txt"
-return_marker="AREA17_RETURN_TO_WASM_MENU"
+return_marker="(AREA17|HUNTED|FLOVE|GRAVITAS|MYCUBE|TTLD)_RETURN_TO_WASM_MENU|RETURN_TO_WASM_MENU"
 
 cleanup() {
     if [[ -n "$start_file" ]]; then
         rm -f -- "$start_file"
     fi
+    echo "Kept isolated launch view: $isolation_dir"
     if [[ -f "$write_dir/infolog.txt" ]]; then
         cp -- "$write_dir/infolog.txt" "$session_log"
-        echo "Saved session log: $session_log"
         echo ""
         echo "=========================================="
         echo "===     INFOLOG DIAGNOSTIC SUMMARY     ==="
@@ -72,8 +84,8 @@ cleanup() {
             echo "ALL CLEAR: 0 Errors, 0 Warnings!"
         fi
         echo "=========================================="
+        echo "Saved session log: $session_log"
     fi
-    echo "Kept isolated launch view: $isolation_dir"
 }
 trap cleanup EXIT INT TERM
 
@@ -82,19 +94,22 @@ launch_engine() {
     "$@"
     local status=$?
     set -e
-    if grep -q "$return_marker" "$write_dir/infolog.txt" 2>/dev/null; then
-        echo "Area 17 requested a return to the WASM menu."
+    if grep -q -E "$return_marker" "$write_dir/infolog.txt" 2>/dev/null; then
+        echo "Game requested a return to the WASM menu."
         exec "$project_root/run-wasm.sh"
     fi
     return "$status"
 }
 
-ln -sfn "$engine_root/build-amd64-linux/install/base" "$isolation_dir/base"
-ln -sfn "$engine_root/build-amd64-linux/install/fonts" "$isolation_dir/fonts"
-if [[ -d "$engine_root/build-amd64-linux/install/AI" ]]; then
-    ln -sfn "$engine_root/build-amd64-linux/install/AI" "$isolation_dir/AI"
+ln -sfn "$engine_install/base" "$isolation_dir/base"
+ln -sfn "$engine_install/fonts" "$isolation_dir/fonts"
+if [[ -d "$engine_install/AI" ]]; then
+    ln -sfn "$engine_install/AI" "$isolation_dir/AI"
 elif [[ -d "$project_root/spring-linux/AI" ]]; then
     ln -sfn "$project_root/spring-linux/AI" "$isolation_dir/AI"
+fi
+if [[ -d "$project_root/spring-linux/projects" ]]; then
+    ln -sfn "$project_root/spring-linux/projects" "$isolation_dir/projects"
 fi
 mkdir -p "$isolation_dir/games" "$isolation_dir/maps"
 
@@ -131,7 +146,9 @@ else
             game_dir="$project_root/spring-linux/games/Hunted-wasm.sdd"
             map_dir="$project_root/spring-linux/maps/HuntedMap.sdd"
             start_txt="$project_root/wasm-test/start.txt"
-            config="$project_root/wasm-test/spring.conf"
+            config="$isolation_dir/spring.conf"
+            cp "$project_root/wasm-test/spring.conf" "$config"
+            echo "Shadows = 0" >> "$config"
             ln -sf "$map_dir" "$isolation_dir/maps/Hunted - v04.sdd"
             ;;
         area17)
@@ -155,9 +172,16 @@ else
             config="$project_root/wasm-test/spring.conf"
             ln -sf "$map_dir" "$isolation_dir/maps/LD43-map.sdd"
             ;;
+        gravitas)
+            game_dir="$project_root/spring-linux/games/Gravitas-wasm.sdd"
+            map_dir="$project_root/spring-linux/maps/Gravitas-map.sdd"
+            start_txt="$project_root/wasm-test/gravitas-start.txt"
+            config="$project_root/wasm-test/spring.conf"
+            ln -sf "$map_dir" "$isolation_dir/maps/Gravitas-map.sdd"
+            ;;
         *)
             echo "Unknown game: $game" >&2
-            echo "Supported: hunted, area17, flove, ttld" >&2
+            echo "Supported: hunted, area17, flove, ttld, gravitas" >&2
             exit 1
             ;;
     esac

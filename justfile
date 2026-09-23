@@ -52,15 +52,25 @@ copy-all:
         (cd "spring-linux/games/${g}-wasm.sdd/wasm-src" && just copy) || exit 1; \
     done
 
-# Run setup (downloads engine and clones game repos)
+# Clone game/map repos from content.tsv (optionally fetch an engine release: `just setup 2026.09.23`)
 [group('run')]
-setup:
-    ./setup.sh
+setup ENGINE_TAG="":
+    ./setup.sh {{ if ENGINE_TAG != "" { "--engine-tag " + ENGINE_TAG } else { "" } }}
 
-# Run a game with the engine (e.g. `just run area17`)
+# Launch the WASM menu, or one game directly (e.g. `just run area17`)
 [group('run')]
-run GAME:
-    ./run-wasm.sh {{GAME}}
+run GAME="":
+    ./run-wasm.sh {{ if GAME != "" { "--game " + GAME } else { "" } }}
+
+# Build Linux + Windows release bundles (e.g. `just package 2026.09.23`)
+[group('release')]
+package ENGINE_TAG *ARGS:
+    ./release/package.sh --engine-tag {{ENGINE_TAG}} {{ARGS}}
+
+# Smoke-test an assembled Linux bundle (every menu entry + menu boot)
+[group('release')]
+smoke-test BUNDLE:
+    ./release/smoke-test.sh {{BUNDLE}}
 
 # Configure local engine crate overrides (prompts for path, defaults to ../spring-bar)
 [group('engine')]

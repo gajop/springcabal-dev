@@ -13,11 +13,13 @@ usage: verify <game> [mode] [seconds]
   flove      headless | visual | outline
   gravitas   e2e | shots | headless
   hunted     headless | visual
+  mycube     headless
   ports      headless | visual  [mycube|partsneeded|all]
-  ttld       headless | visual
+  ttld       headless | visual | lua-visual
+  unit-scripts source | partsneeded
 
 Environment:
-  SPRING_BAR_DIR        engine checkout (default /home/gajop/projects/spring-projects/spring-bar)
+  SPRING_BAR_DIR        engine checkout (default ../spring-bar next to this repo)
   SPRING_ENGINE_BIN     override the rendering engine binary
   SPRING_HEADLESS_BIN   override the headless engine binary
   KEEP_TEST_ARTIFACTS=1 keep temporary workspaces

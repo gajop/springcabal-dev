@@ -45,3 +45,10 @@ gemini-work/
 # Local overrides
 .cargo/config.toml
 
+
+# Release packaging output and downloaded engines
+release/out/
+release/cache/
+
+# Engine releases fetched by setup.sh
+engine/

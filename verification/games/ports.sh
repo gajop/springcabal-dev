@@ -2,6 +2,7 @@
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
 port_config() {
+    ENDING_TEST_MARKER=''
     case "${1:?port}" in
         mycube)
             GAME_DIR="$GAMES_DIR/MyCube-wasm.sdd"
@@ -11,6 +12,7 @@ port_config() {
             RULES=mycube_rules_wasm
             UI=mycube_ui_wasm
             TEST_MARKER='ALL MYCUBE INTEGRATION TESTS PASSED'
+            VISUAL_MARKER='MYCUBE VISUAL E2E PASSED'
             ;;
         partsneeded)
             GAME_DIR="$GAMES_DIR/PartsNeeded-wasm.sdd"
@@ -20,6 +22,7 @@ port_config() {
             RULES=partsneeded_rules_wasm
             UI=partsneeded_ui_wasm
             TEST_MARKER='ALL PARTS NEEDED INTEGRATION TESTS PASSED'
+            ENDING_TEST_MARKER='PARTS NEEDED ENDING INTEGRATION TEST PASSED'
             ;;
         *) vf_die "unknown port: $1" ;;
     esac
@@ -50,11 +53,16 @@ port_install() {
 }
 
 port_run() {
-    local key=${1:?port} mode=${2:?mode} seconds=${3:-} shots
+    local key=${1:?port} mode=${2:?mode} seconds=${3:-} shots expected_marker
     port_config "$key"
     trap 'vf_restore_modules "$SOURCE_ROOT"; vf_keep_workspace_unless' EXIT INT TERM
 
-    if [[ $mode == visual ]]; then
+    if [[ $mode == visual && $key == mycube ]]; then
+        # The integration feature deliberately fast-forwards the authored
+        # story to exercise every branch. Keep it out of screenshots: its
+        # synthetic victory is a test result, not a player-visible ending.
+        vf_build "$SOURCE_ROOT" e2e
+    elif [[ $mode == visual ]]; then
         vf_build "$SOURCE_ROOT" e2e,headless-integration
     else
         vf_build "$SOURCE_ROOT" headless-integration
@@ -73,7 +81,10 @@ port_run() {
         [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
             vf_die "$key visual E2E engine exited with $VF_ENGINE_STATUS"
         shots=$(vf_require_screenshots 3)
-        vf_require "$TEST_MARKER" "$key did not reach its test marker"
+        expected_marker=${VISUAL_MARKER:-$TEST_MARKER}
+        vf_require "$expected_marker" "$key did not reach its visual test marker"
+        [[ -z $ENDING_TEST_MARKER ]] ||
+            vf_require "$ENDING_TEST_MARKER" "$key did not reach its ending test marker"
         vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
             "$key visual E2E contains a runtime failure"
         printf '%s visual E2E passed: %s screenshot(s) in %s\n' \

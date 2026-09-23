@@ -1,0 +1,31 @@
+SpringCabal Games @VERSION@
+===========================
+
+Seven Ludum Dare games made by SpringCabal, playable from one menu. Each game
+comes in two versions: a WebAssembly port and the original Lua release.
+
+  Gravitas             Ludum Dare 32  (Apr 2015)
+  Zeus vs Bunnies      Ludum Dare 33 warmup  (Aug 2015)
+  Area 17              Ludum Dare 33  (Aug 2015)
+  Flove                Ludum Dare 34  (Dec 2015)
+  Parts Needed         Ludum Dare 35  (Apr 2016)
+  My Cube              Ludum Dare 42  (Aug 2018)
+  To the Last Drop     Ludum Dare 43  (Dec 2018)
+
+Running
+-------
+
+Start @LAUNCHER@
+
+The menu shows the credits for each game. Up/Down picks a game, Left/Right
+picks a version, and Enter launches it.
+
+This folder is self-contained: settings, logs (infolog.txt) and caches are
+written here, not to your home directory.
+
+Engine
+------
+
+Recoil (Spring RTS fork), experimental build @ENGINE@.
+The engine is licensed under the GPL; see the files in doc/ and the license
+files that came with it. Game content belongs to its respective authors.
