@@ -1,10 +1,10 @@
-recorded   2026-09-23T08:13:49Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 0843bec654bec5c1589971af72790a91ad2bacb1  +58 uncommitted files
-game       spring-linux/games/Hunted-wasm.sdd  hunted-wasm-port 156dc906ef37a5e946d4b3b8d5c7f0ce5f6fcac4
+recorded   2026-09-23T23:52:42Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main bb9e3ce9e79ed505ab3c13051d8451fc9d345c23  +20 uncommitted files
+game       spring-linux/games/Hunted-wasm.sdd  hunted-wasm-port 6b364142f9cbf514118d5ded16681cb46476f61d
 map        spring-linux/maps/HuntedMap.sdd  master 2b3bee4d0e9ce3a35b324edbb887885c3479f644  +2 uncommitted files
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  rust-wip 72e97847e981a2db9de71b7c90ee9e5d012123c1  +1 uncommitted files
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 72e97847e981a2db9de71b7c90ee9e5d012123c1  +1 uncommitted files
-version    Spring Engine Version: 2026.07.01-246-gb764457 rust-wip
+engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  rust-wip 1bed8d708689a409a3fb0107d97e62c16056a326  +11 uncommitted files
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 1bed8d708689a409a3fb0107d97e62c16056a326  +11 uncommitted files
+version    Spring Engine Version: 2026.07.01-273-g1bed8d7 rust-wip
 renderer   gpu
 gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
 gl         4.6.0 NVIDIA 580.178.04
