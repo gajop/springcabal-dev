@@ -79,11 +79,19 @@ unit_scripts_run_one() {
 	vf_keep_workspace_unless
 }
 
+# Compares the Lua animation tables with table-driven Rust gait tables.  That
+# layout (rules-synced/src/unit_scripts/) only ever existed in an unfinished
+# split of unit_scripts.rs; the committed port uses plain Turn() calls.  The
+# trace comparison (partsneeded mode) checks the engine result either way.
 partsneeded_source() {
 	[[ -d $LUA_GAME_DIR && -d $WASM_GAME_DIR ]] || vf_die 'Parts Needed archives are missing'
-    python3 "$SOURCE_COMPARE" \
-        "$LUA_GAME_DIR/Scripts/animations" \
-        "$SOURCE_ROOT/rules-synced/src/unit_scripts"
+	if [[ ! -d $SOURCE_ROOT/rules-synced/src/unit_scripts ]]; then
+		echo 'SKIP  unit-script source comparison: no table-driven rules-synced/src/unit_scripts/ in this checkout'
+		return 0
+	fi
+	python3 "$SOURCE_COMPARE" \
+		"$LUA_GAME_DIR/Scripts/animations" \
+		"$SOURCE_ROOT/rules-synced/src/unit_scripts"
 }
 
 partsneeded_unit_scripts() {

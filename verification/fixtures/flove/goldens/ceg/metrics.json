@@ -2,201 +2,201 @@
  "atlas_columns": 13,
  "captures": {
   "barfgas/far/f02": {
-   "coverage": 0.0896,
-   "diff_noise": 10.999,
-   "diff_noise_pooled": 8.889,
+   "coverage": 0.1172,
+   "diff_noise": 11.537,
+   "diff_noise_pooled": 9.184,
    "visible": 1.0
   },
   "barfgas/far/f12": {
-   "coverage": 0.3389,
-   "diff_noise": 12.961,
-   "diff_noise_pooled": 12.108,
+   "coverage": 0.3672,
+   "diff_noise": 13.521,
+   "diff_noise_pooled": 12.662,
    "visible": 1.0
   },
   "barfgas/near/f02": {
-   "coverage": 0.7473,
-   "diff_noise": 26.353,
-   "diff_noise_pooled": 25.491,
+   "coverage": 0.8408,
+   "diff_noise": 31.47,
+   "diff_noise_pooled": 30.656,
    "visible": 1.0
   },
   "barfgas/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 34.259,
-   "diff_noise_pooled": 34.142,
+   "diff_noise": 41.584,
+   "diff_noise_pooled": 41.401,
    "visible": 1.0
   },
   "barfsplurge/far/f02": {
-   "coverage": 0.0107,
-   "diff_noise": 1.96,
-   "diff_noise_pooled": 1.474,
+   "coverage": 0.009,
+   "diff_noise": 2.043,
+   "diff_noise_pooled": 1.084,
    "visible": 0.812
   },
   "barfsplurge/far/f12": {
-   "coverage": 0.0115,
-   "diff_noise": 2.853,
-   "diff_noise_pooled": 2.362,
-   "visible": 0.688
+   "coverage": 0.0088,
+   "diff_noise": 3.146,
+   "diff_noise_pooled": 2.418,
+   "visible": 0.625
   },
   "barfsplurge/near/f02": {
-   "coverage": 0.0637,
-   "diff_noise": 6.488,
-   "diff_noise_pooled": 5.807,
-   "visible": 1.0
+   "coverage": 0.0598,
+   "diff_noise": 4.989,
+   "diff_noise_pooled": 3.992,
+   "visible": 0.938
   },
   "barfsplurge/near/f12": {
-   "coverage": 0.0366,
-   "diff_noise": 5.956,
-   "diff_noise_pooled": 5.525,
-   "visible": 0.688
+   "coverage": 0.0347,
+   "diff_noise": 6.741,
+   "diff_noise_pooled": 6.189,
+   "visible": 0.75
   },
   "barftrail/far/f02": {
-   "coverage": 0.0005,
-   "diff_noise": 1.195,
-   "diff_noise_pooled": 0.852,
-   "visible": 0.312
+   "coverage": 0.0,
+   "diff_noise": 0.877,
+   "diff_noise_pooled": 0.624,
+   "visible": 0.125
   },
   "barftrail/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.173,
-   "diff_noise_pooled": 0.086,
+   "diff_noise": 0.042,
+   "diff_noise_pooled": 0.018,
    "visible": 0.0
   },
   "barftrail/near/f02": {
    "coverage": 0.0,
-   "diff_noise": 2.035,
-   "diff_noise_pooled": 1.73,
-   "visible": 0.5
+   "diff_noise": 2.752,
+   "diff_noise_pooled": 2.296,
+   "visible": 0.688
   },
   "barftrail/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.345,
-   "diff_noise_pooled": 0.19,
+   "diff_noise": 0.301,
+   "diff_noise_pooled": 0.198,
    "visible": 0.062
   },
   "blackpop/far/f02": {
-   "coverage": 0.5107,
-   "diff_noise": 3.786,
-   "diff_noise_pooled": 3.372,
+   "coverage": 0.5125,
+   "diff_noise": 5.2,
+   "diff_noise_pooled": 4.884,
    "visible": 1.0
   },
   "blackpop/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.797,
-   "diff_noise_pooled": 0.733,
+   "diff_noise": 1.411,
+   "diff_noise_pooled": 1.37,
    "visible": 0.0
   },
   "blackpop/near/f02": {
-   "coverage": 1.0,
-   "diff_noise": 5.513,
-   "diff_noise_pooled": 5.405,
+   "coverage": 0.988,
+   "diff_noise": 7.753,
+   "diff_noise_pooled": 7.685,
    "visible": 1.0
   },
   "blackpop/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.043,
-   "diff_noise_pooled": 0.031,
+   "diff_noise": 0.081,
+   "diff_noise_pooled": 0.069,
    "visible": 0.0
   },
   "dirt/far/f02": {
    "coverage": 0.0,
-   "diff_noise": 0.229,
-   "diff_noise_pooled": 0.131,
+   "diff_noise": 0.217,
+   "diff_noise_pooled": 0.112,
    "visible": 0.0
   },
   "dirt/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.283,
-   "diff_noise_pooled": 0.214,
+   "diff_noise": 0.272,
+   "diff_noise_pooled": 0.187,
    "visible": 0.0
   },
   "dirt/near/f02": {
    "coverage": 0.0,
-   "diff_noise": 0.817,
-   "diff_noise_pooled": 0.685,
+   "diff_noise": 0.918,
+   "diff_noise_pooled": 0.772,
    "visible": 0.125
   },
   "dirt/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.964,
-   "diff_noise_pooled": 0.851,
+   "diff_noise": 0.982,
+   "diff_noise_pooled": 0.879,
    "visible": 0.125
   },
   "dirtfling/far/f02": {
-   "coverage": 0.0005,
-   "diff_noise": 0.755,
-   "diff_noise_pooled": 0.312,
-   "visible": 0.438
+   "coverage": 0.0,
+   "diff_noise": 0.606,
+   "diff_noise_pooled": 0.31,
+   "visible": 0.188
   },
   "dirtfling/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 1.123,
-   "diff_noise_pooled": 0.902,
-   "visible": 0.812
+   "diff_noise": 0.896,
+   "diff_noise_pooled": 0.709,
+   "visible": 0.438
   },
   "dirtfling/near/f02": {
-   "coverage": 0.0078,
-   "diff_noise": 2.638,
-   "diff_noise_pooled": 1.998,
+   "coverage": 0.0061,
+   "diff_noise": 2.373,
+   "diff_noise_pooled": 1.746,
    "visible": 1.0
   },
   "dirtfling/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 2.581,
-   "diff_noise_pooled": 2.34,
+   "diff_noise": 2.661,
+   "diff_noise_pooled": 2.396,
    "visible": 0.875
   },
   "explosion/far/f02": {
-   "coverage": 0.002,
-   "diff_noise": 0.421,
-   "diff_noise_pooled": 0.165,
-   "visible": 0.062
+   "coverage": 0.0017,
+   "diff_noise": 0.356,
+   "diff_noise_pooled": 0.139,
+   "visible": 0.0
   },
   "explosion/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.174,
-   "diff_noise_pooled": 0.089,
+   "diff_noise": 0.147,
+   "diff_noise_pooled": 0.093,
    "visible": 0.0
   },
   "explosion/near/f02": {
-   "coverage": 0.0129,
-   "diff_noise": 1.669,
-   "diff_noise_pooled": 1.383,
+   "coverage": 0.0127,
+   "diff_noise": 1.768,
+   "diff_noise_pooled": 1.337,
    "visible": 1.0
   },
   "explosion/near/f12": {
    "coverage": 0.0005,
-   "diff_noise": 0.441,
-   "diff_noise_pooled": 0.291,
-   "visible": 0.438
+   "diff_noise": 0.5,
+   "diff_noise_pooled": 0.345,
+   "visible": 0.562
   },
   "flashnuke/far/f02": {
    "coverage": 0.3237,
-   "diff_noise": 2.934,
-   "diff_noise_pooled": 1.865,
+   "diff_noise": 3.23,
+   "diff_noise_pooled": 2.085,
    "visible": 1.0
   },
   "flashnuke/far/f12": {
-   "coverage": 0.1819,
-   "diff_noise": 4.403,
-   "diff_noise_pooled": 3.409,
+   "coverage": 0.1843,
+   "diff_noise": 4.261,
+   "diff_noise_pooled": 3.242,
    "visible": 1.0
   },
   "flashnuke/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 8.349,
-   "diff_noise_pooled": 7.015,
+   "diff_noise": 10.287,
+   "diff_noise_pooled": 9.121,
    "visible": 1.0
   },
   "flashnuke/near/f12": {
-   "coverage": 0.9988,
-   "diff_noise": 10.233,
-   "diff_noise_pooled": 9.46,
+   "coverage": 0.9956,
+   "diff_noise": 12.339,
+   "diff_noise_pooled": 11.515,
    "visible": 1.0
   },
   "fuse/far/f02": {
    "coverage": 0.0005,
-   "diff_noise": 0.524,
-   "diff_noise_pooled": 0.176,
+   "diff_noise": 0.601,
+   "diff_noise_pooled": 0.154,
    "visible": 0.0
   },
   "fuse/far/f12": {
@@ -206,10 +206,10 @@
    "visible": 0.0
   },
   "fuse/near/f02": {
-   "coverage": 0.0029,
-   "diff_noise": 1.514,
-   "diff_noise_pooled": 1.183,
-   "visible": 0.562
+   "coverage": 0.0032,
+   "diff_noise": 1.772,
+   "diff_noise_pooled": 1.243,
+   "visible": 0.438
   },
   "fuse/near/f12": {
    "coverage": 0.0,
@@ -219,218 +219,218 @@
   },
   "genericbunnyexplosion-huge-red/far/f02": {
    "coverage": 0.9536,
-   "diff_noise": 10.193,
-   "diff_noise_pooled": 8.67,
+   "diff_noise": 9.914,
+   "diff_noise_pooled": 7.765,
    "visible": 1.0
   },
   "genericbunnyexplosion-huge-red/far/f12": {
    "coverage": 1.0,
-   "diff_noise": 8.621,
-   "diff_noise_pooled": 7.725,
+   "diff_noise": 7.217,
+   "diff_noise_pooled": 6.15,
    "visible": 1.0
   },
   "genericbunnyexplosion-huge-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 29.083,
-   "diff_noise_pooled": 27.932,
+   "diff_noise": 38.244,
+   "diff_noise_pooled": 36.902,
    "visible": 1.0
   },
   "genericbunnyexplosion-huge-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 21.142,
-   "diff_noise_pooled": 20.227,
+   "diff_noise": 23.823,
+   "diff_noise_pooled": 22.75,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/far/f02": {
    "coverage": 0.9619,
-   "diff_noise": 11.05,
-   "diff_noise_pooled": 9.352,
+   "diff_noise": 10.466,
+   "diff_noise_pooled": 8.941,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/far/f12": {
    "coverage": 1.0,
-   "diff_noise": 10.339,
-   "diff_noise_pooled": 9.781,
+   "diff_noise": 9.012,
+   "diff_noise_pooled": 8.233,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 24.46,
-   "diff_noise_pooled": 22.346,
+   "diff_noise": 30.295,
+   "diff_noise_pooled": 28.682,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 16.597,
-   "diff_noise_pooled": 15.293,
+   "diff_noise": 15.876,
+   "diff_noise_pooled": 14.581,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/far/f02": {
-   "coverage": 0.2847,
-   "diff_noise": 14.758,
-   "diff_noise_pooled": 12.684,
+   "coverage": 0.2837,
+   "diff_noise": 10.707,
+   "diff_noise_pooled": 9.281,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/far/f12": {
    "coverage": 0.8843,
-   "diff_noise": 9.012,
-   "diff_noise_pooled": 8.037,
+   "diff_noise": 7.276,
+   "diff_noise_pooled": 6.364,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 43.443,
-   "diff_noise_pooled": 41.827,
+   "diff_noise": 31.982,
+   "diff_noise_pooled": 29.613,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 23.901,
-   "diff_noise_pooled": 23.151,
+   "diff_noise": 18.743,
+   "diff_noise_pooled": 17.405,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/far/f02": {
-   "coverage": 0.272,
-   "diff_noise": 17.935,
-   "diff_noise_pooled": 15.549,
+   "coverage": 0.2717,
+   "diff_noise": 13.472,
+   "diff_noise_pooled": 11.121,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/far/f12": {
-   "coverage": 0.6111,
-   "diff_noise": 10.706,
-   "diff_noise_pooled": 9.553,
+   "coverage": 0.6116,
+   "diff_noise": 9.528,
+   "diff_noise_pooled": 8.772,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 35.282,
-   "diff_noise_pooled": 33.456,
+   "diff_noise": 41.956,
+   "diff_noise_pooled": 39.829,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 28.739,
-   "diff_noise_pooled": 27.923,
+   "diff_noise": 29.904,
+   "diff_noise_pooled": 28.888,
    "visible": 1.0
   },
   "genericshellexplosion-medium/far/f02": {
    "coverage": 0.2034,
-   "diff_noise": 0.284,
-   "diff_noise_pooled": 0.144,
+   "diff_noise": 0.304,
+   "diff_noise_pooled": 0.193,
    "visible": 1.0
   },
   "genericshellexplosion-medium/far/f12": {
-   "coverage": 0.2202,
-   "diff_noise": 0.135,
-   "diff_noise_pooled": 0.067,
+   "coverage": 0.2205,
+   "diff_noise": 0.171,
+   "diff_noise_pooled": 0.085,
    "visible": 1.0
   },
   "genericshellexplosion-medium/near/f02": {
    "coverage": 0.9612,
-   "diff_noise": 1.279,
-   "diff_noise_pooled": 0.61,
+   "diff_noise": 1.282,
+   "diff_noise_pooled": 0.633,
    "visible": 1.0
   },
   "genericshellexplosion-medium/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 0.044,
+   "diff_noise": 0.043,
    "diff_noise_pooled": 0.011,
    "visible": 1.0
   },
   "genericshellexplosion-small/far/f02": {
    "coverage": 0.0471,
-   "diff_noise": 0.25,
-   "diff_noise_pooled": 0.144,
+   "diff_noise": 0.212,
+   "diff_noise_pooled": 0.08,
    "visible": 1.0
   },
   "genericshellexplosion-small/far/f12": {
    "coverage": 0.052,
-   "diff_noise": 0.12,
-   "diff_noise_pooled": 0.065,
+   "diff_noise": 0.063,
+   "diff_noise_pooled": 0.029,
    "visible": 1.0
   },
   "genericshellexplosion-small/near/f02": {
    "coverage": 0.384,
-   "diff_noise": 1.328,
-   "diff_noise_pooled": 0.5,
+   "diff_noise": 1.29,
+   "diff_noise_pooled": 0.661,
    "visible": 1.0
   },
   "genericshellexplosion-small/near/f12": {
-   "coverage": 0.4453,
-   "diff_noise": 0.45,
-   "diff_noise_pooled": 0.247,
+   "coverage": 0.4443,
+   "diff_noise": 0.552,
+   "diff_noise_pooled": 0.312,
    "visible": 1.0
   },
   "genericshellexplosion/far/f02": {
-   "coverage": 0.7124,
-   "diff_noise": 21.87,
-   "diff_noise_pooled": 19.001,
+   "coverage": 0.6721,
+   "diff_noise": 22.017,
+   "diff_noise_pooled": 18.982,
    "visible": 1.0
   },
   "genericshellexplosion/far/f12": {
-   "coverage": 0.6216,
-   "diff_noise": 17.57,
-   "diff_noise_pooled": 16.474,
+   "coverage": 0.5037,
+   "diff_noise": 15.826,
+   "diff_noise_pooled": 14.592,
    "visible": 1.0
   },
   "genericshellexplosion/near/f02": {
-   "coverage": 0.9028,
-   "diff_noise": 22.73,
-   "diff_noise_pooled": 21.767,
+   "coverage": 0.9697,
+   "diff_noise": 20.518,
+   "diff_noise_pooled": 19.412,
    "visible": 1.0
   },
   "genericshellexplosion/near/f12": {
-   "coverage": 0.5947,
-   "diff_noise": 11.809,
-   "diff_noise_pooled": 11.413,
+   "coverage": 0.7202,
+   "diff_noise": 15.758,
+   "diff_noise_pooled": 15.481,
    "visible": 1.0
   },
   "grass_trail/far/f02": {
-   "coverage": 0.0403,
-   "diff_noise": 2.275,
-   "diff_noise_pooled": 1.957,
+   "coverage": 0.041,
+   "diff_noise": 2.546,
+   "diff_noise_pooled": 2.249,
    "visible": 1.0
   },
   "grass_trail/far/f12": {
-   "coverage": 0.1013,
-   "diff_noise": 4.397,
-   "diff_noise_pooled": 3.968,
-   "visible": 1.0
+   "coverage": 0.0872,
+   "diff_noise": 4.9,
+   "diff_noise_pooled": 4.464,
+   "visible": 0.938
   },
   "grass_trail/near/f02": {
-   "coverage": 0.4365,
-   "diff_noise": 10.796,
-   "diff_noise_pooled": 10.278,
+   "coverage": 0.4382,
+   "diff_noise": 11.242,
+   "diff_noise_pooled": 10.805,
    "visible": 1.0
   },
   "grass_trail/near/f12": {
-   "coverage": 0.6733,
-   "diff_noise": 15.082,
-   "diff_noise_pooled": 14.763,
-   "visible": 0.938
+   "coverage": 0.6287,
+   "diff_noise": 13.599,
+   "diff_noise_pooled": 13.327,
+   "visible": 1.0
   },
   "grassfield/far/f02": {
    "coverage": 0.3032,
-   "diff_noise": 0.13,
-   "diff_noise_pooled": 0.08,
+   "diff_noise": 0.17,
+   "diff_noise_pooled": 0.092,
    "visible": 1.0
   },
   "grassfield/far/f12": {
    "coverage": 0.3923,
-   "diff_noise": 0.053,
-   "diff_noise_pooled": 0.026,
+   "diff_noise": 0.135,
+   "diff_noise_pooled": 0.073,
    "visible": 1.0
   },
   "grassfield/near/f02": {
    "coverage": 0.9946,
-   "diff_noise": 0.763,
-   "diff_noise_pooled": 0.468,
+   "diff_noise": 0.732,
+   "diff_noise_pooled": 0.384,
    "visible": 1.0
   },
   "grassfield/near/f12": {
-   "coverage": 0.8069,
-   "diff_noise": 0.485,
-   "diff_noise_pooled": 0.28,
+   "coverage": 0.8071,
+   "diff_noise": 0.405,
+   "diff_noise_pooled": 0.231,
    "visible": 1.0
   },
   "grassfield_aura/far/f02": {
@@ -458,45 +458,45 @@
    "visible": 1.0
   },
   "greymuzzle/far/f02": {
-   "coverage": 0.0054,
-   "diff_noise": 1.446,
-   "diff_noise_pooled": 0.885,
-   "visible": 0.75
+   "coverage": 0.0044,
+   "diff_noise": 1.761,
+   "diff_noise_pooled": 1.296,
+   "visible": 0.812
   },
   "greymuzzle/far/f12": {
-   "coverage": 0.0125,
-   "diff_noise": 3.796,
-   "diff_noise_pooled": 3.377,
-   "visible": 0.75
-  },
-  "greymuzzle/near/f02": {
-   "coverage": 0.0168,
-   "diff_noise": 3.973,
-   "diff_noise_pooled": 3.517,
+   "coverage": 0.011,
+   "diff_noise": 4.37,
+   "diff_noise_pooled": 3.806,
    "visible": 0.562
   },
+  "greymuzzle/near/f02": {
+   "coverage": 0.0193,
+   "diff_noise": 3.082,
+   "diff_noise_pooled": 2.639,
+   "visible": 0.875
+  },
   "greymuzzle/near/f12": {
-   "coverage": 0.0479,
-   "diff_noise": 4.994,
-   "diff_noise_pooled": 4.277,
-   "visible": 0.75
+   "coverage": 0.0686,
+   "diff_noise": 6.025,
+   "diff_noise_pooled": 5.455,
+   "visible": 0.625
   },
   "love_echo/far/f02": {
-   "coverage": 0.2273,
-   "diff_noise": 2.316,
-   "diff_noise_pooled": 2.013,
+   "coverage": 0.2271,
+   "diff_noise": 1.606,
+   "diff_noise_pooled": 1.285,
    "visible": 1.0
   },
   "love_echo/far/f12": {
-   "coverage": 0.427,
-   "diff_noise": 5.194,
-   "diff_noise_pooled": 4.959,
+   "coverage": 0.4229,
+   "diff_noise": 4.447,
+   "diff_noise_pooled": 4.194,
    "visible": 1.0
   },
   "love_echo/near/f02": {
-   "coverage": 0.9995,
-   "diff_noise": 6.586,
-   "diff_noise_pooled": 6.307,
+   "coverage": 0.9993,
+   "diff_noise": 6.153,
+   "diff_noise_pooled": 5.883,
    "visible": 1.0
   },
   "love_echo/near/f12": {
@@ -506,117 +506,117 @@
    "visible": 1.0
   },
   "love_golden/far/f02": {
-   "coverage": 0.0532,
-   "diff_noise": 2.524,
-   "diff_noise_pooled": 2.105,
+   "coverage": 0.0544,
+   "diff_noise": 2.229,
+   "diff_noise_pooled": 1.721,
    "visible": 1.0
   },
   "love_golden/far/f12": {
-   "coverage": 0.4978,
-   "diff_noise": 3.043,
-   "diff_noise_pooled": 2.433,
+   "coverage": 0.499,
+   "diff_noise": 2.976,
+   "diff_noise_pooled": 2.401,
    "visible": 1.0
   },
   "love_golden/near/f02": {
-   "coverage": 0.5234,
-   "diff_noise": 6.296,
-   "diff_noise_pooled": 5.611,
+   "coverage": 0.5129,
+   "diff_noise": 9.585,
+   "diff_noise_pooled": 9.16,
    "visible": 1.0
   },
   "love_golden/near/f12": {
-   "coverage": 0.8286,
-   "diff_noise": 7.736,
-   "diff_noise_pooled": 7.148,
+   "coverage": 0.8064,
+   "diff_noise": 9.827,
+   "diff_noise_pooled": 9.364,
    "visible": 1.0
   },
   "love_happy/far/f02": {
-   "coverage": 0.7639,
-   "diff_noise": 23.021,
-   "diff_noise_pooled": 21.646,
+   "coverage": 0.7612,
+   "diff_noise": 20.803,
+   "diff_noise_pooled": 19.348,
    "visible": 1.0
   },
   "love_happy/far/f12": {
-   "coverage": 0.3821,
-   "diff_noise": 11.391,
-   "diff_noise_pooled": 10.829,
+   "coverage": 0.2957,
+   "diff_noise": 11.351,
+   "diff_noise_pooled": 10.842,
    "visible": 1.0
   },
   "love_happy/near/f02": {
-   "coverage": 0.6233,
-   "diff_noise": 25.764,
-   "diff_noise_pooled": 25.649,
+   "coverage": 0.959,
+   "diff_noise": 27.526,
+   "diff_noise_pooled": 27.382,
    "visible": 1.0
   },
   "love_happy/near/f12": {
-   "coverage": 0.0002,
-   "diff_noise": 9.65,
-   "diff_noise_pooled": 9.617,
+   "coverage": 0.0117,
+   "diff_noise": 10.833,
+   "diff_noise_pooled": 10.771,
    "visible": 0.625
   },
   "love_heals/far/f02": {
    "coverage": 0.1726,
-   "diff_noise": 0.091,
-   "diff_noise_pooled": 0.04,
+   "diff_noise": 0.067,
+   "diff_noise_pooled": 0.028,
    "visible": 1.0
   },
   "love_heals/far/f12": {
-   "coverage": 0.2529,
-   "diff_noise": 0.076,
+   "coverage": 0.2522,
+   "diff_noise": 0.066,
    "diff_noise_pooled": 0.024,
    "visible": 1.0
   },
   "love_heals/near/f02": {
-   "coverage": 0.762,
-   "diff_noise": 0.107,
-   "diff_noise_pooled": 0.045,
+   "coverage": 0.7622,
+   "diff_noise": 0.119,
+   "diff_noise_pooled": 0.049,
    "visible": 1.0
   },
   "love_heals/near/f12": {
-   "coverage": 0.7419,
-   "diff_noise": 0.12,
-   "diff_noise_pooled": 0.06,
+   "coverage": 0.7417,
+   "diff_noise": 0.126,
+   "diff_noise_pooled": 0.064,
    "visible": 1.0
   },
   "love_hurts/far/f02": {
    "coverage": 0.0059,
-   "diff_noise": 0.046,
-   "diff_noise_pooled": 0.032,
+   "diff_noise": 0.054,
+   "diff_noise_pooled": 0.037,
    "visible": 1.0
   },
   "love_hurts/far/f12": {
-   "coverage": 0.1118,
-   "diff_noise": 0.078,
-   "diff_noise_pooled": 0.042,
+   "coverage": 0.1121,
+   "diff_noise": 0.071,
+   "diff_noise_pooled": 0.037,
    "visible": 1.0
   },
   "love_hurts/near/f02": {
-   "coverage": 0.0483,
-   "diff_noise": 0.198,
-   "diff_noise_pooled": 0.13,
+   "coverage": 0.0481,
+   "diff_noise": 0.235,
+   "diff_noise_pooled": 0.154,
    "visible": 1.0
   },
   "love_hurts/near/f12": {
-   "coverage": 0.3716,
-   "diff_noise": 0.177,
-   "diff_noise_pooled": 0.106,
+   "coverage": 0.3711,
+   "diff_noise": 0.199,
+   "diff_noise_pooled": 0.121,
    "visible": 1.0
   },
   "love_impact/far/f02": {
-   "coverage": 0.2585,
-   "diff_noise": 2.129,
-   "diff_noise_pooled": 1.948,
+   "coverage": 0.2588,
+   "diff_noise": 2.309,
+   "diff_noise_pooled": 2.064,
    "visible": 1.0
   },
   "love_impact/far/f12": {
-   "coverage": 0.8567,
-   "diff_noise": 5.799,
-   "diff_noise_pooled": 5.591,
+   "coverage": 0.8533,
+   "diff_noise": 5.623,
+   "diff_noise_pooled": 5.38,
    "visible": 1.0
   },
   "love_impact/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 4.026,
-   "diff_noise_pooled": 3.591,
+   "diff_noise": 7.838,
+   "diff_noise_pooled": 7.578,
    "visible": 1.0
   },
   "love_impact/near/f12": {
@@ -628,199 +628,199 @@
   "mordor1/far/f02": {
    "coverage": 0.0027,
    "diff_noise": 0.029,
-   "diff_noise_pooled": 0.01,
+   "diff_noise_pooled": 0.011,
    "visible": 0.75
   },
   "mordor1/far/f12": {
    "coverage": 0.002,
-   "diff_noise": 0.003,
+   "diff_noise": 0.004,
    "diff_noise_pooled": 0.001,
    "visible": 0.75
   },
   "mordor1/near/f02": {
    "coverage": 0.0222,
-   "diff_noise": 0.283,
-   "diff_noise_pooled": 0.141,
+   "diff_noise": 0.238,
+   "diff_noise_pooled": 0.121,
    "visible": 0.75
   },
   "mordor1/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.02,
-   "diff_noise_pooled": 0.009,
+   "diff_noise": 0.017,
+   "diff_noise_pooled": 0.005,
    "visible": 0.75
   },
   "mordor2/far/f02": {
    "coverage": 0.0054,
-   "diff_noise": 0.086,
-   "diff_noise_pooled": 0.051,
+   "diff_noise": 0.084,
+   "diff_noise_pooled": 0.043,
    "visible": 1.0
   },
   "mordor2/far/f12": {
    "coverage": 0.0105,
-   "diff_noise": 0.028,
-   "diff_noise_pooled": 0.011,
+   "diff_noise": 0.024,
+   "diff_noise_pooled": 0.01,
    "visible": 1.0
   },
   "mordor2/near/f02": {
    "coverage": 0.0391,
-   "diff_noise": 0.552,
-   "diff_noise_pooled": 0.263,
+   "diff_noise": 0.391,
+   "diff_noise_pooled": 0.205,
    "visible": 1.0
   },
   "mordor2/near/f12": {
    "coverage": 0.0933,
-   "diff_noise": 0.135,
-   "diff_noise_pooled": 0.06,
+   "diff_noise": 0.116,
+   "diff_noise_pooled": 0.047,
    "visible": 1.0
   },
   "mordor3/far/f02": {
    "coverage": 0.0051,
-   "diff_noise": 0.083,
-   "diff_noise_pooled": 0.043,
+   "diff_noise": 0.132,
+   "diff_noise_pooled": 0.079,
    "visible": 0.812
   },
   "mordor3/far/f12": {
-   "coverage": 0.0247,
-   "diff_noise": 0.139,
-   "diff_noise_pooled": 0.058,
+   "coverage": 0.0249,
+   "diff_noise": 0.084,
+   "diff_noise_pooled": 0.041,
    "visible": 1.0
   },
   "mordor3/near/f02": {
-   "coverage": 0.0513,
-   "diff_noise": 0.59,
-   "diff_noise_pooled": 0.324,
+   "coverage": 0.0515,
+   "diff_noise": 0.657,
+   "diff_noise_pooled": 0.379,
    "visible": 1.0
   },
   "mordor3/near/f12": {
-   "coverage": 0.1638,
-   "diff_noise": 0.305,
-   "diff_noise_pooled": 0.158,
+   "coverage": 0.1636,
+   "diff_noise": 0.495,
+   "diff_noise_pooled": 0.257,
    "visible": 1.0
   },
   "mordor4/far/f02": {
-   "coverage": 0.009,
-   "diff_noise": 0.196,
-   "diff_noise_pooled": 0.1,
+   "coverage": 0.0093,
+   "diff_noise": 0.158,
+   "diff_noise_pooled": 0.083,
    "visible": 1.0
   },
   "mordor4/far/f12": {
-   "coverage": 0.0737,
-   "diff_noise": 0.266,
-   "diff_noise_pooled": 0.132,
+   "coverage": 0.074,
+   "diff_noise": 0.158,
+   "diff_noise_pooled": 0.083,
    "visible": 1.0
   },
   "mordor4/near/f02": {
-   "coverage": 0.1084,
-   "diff_noise": 1.056,
-   "diff_noise_pooled": 0.566,
+   "coverage": 0.1106,
+   "diff_noise": 1.182,
+   "diff_noise_pooled": 0.657,
    "visible": 1.0
   },
   "mordor4/near/f12": {
    "coverage": 0.6526,
-   "diff_noise": 0.26,
-   "diff_noise_pooled": 0.161,
+   "diff_noise": 0.287,
+   "diff_noise_pooled": 0.186,
    "visible": 1.0
   },
   "mordor5/far/f02": {
    "coverage": 0.0093,
-   "diff_noise": 0.194,
-   "diff_noise_pooled": 0.084,
+   "diff_noise": 0.151,
+   "diff_noise_pooled": 0.067,
    "visible": 1.0
   },
   "mordor5/far/f12": {
-   "coverage": 0.1182,
-   "diff_noise": 0.366,
-   "diff_noise_pooled": 0.189,
+   "coverage": 0.1162,
+   "diff_noise": 0.249,
+   "diff_noise_pooled": 0.128,
    "visible": 1.0
   },
   "mordor5/near/f02": {
    "coverage": 0.0669,
-   "diff_noise": 1.368,
-   "diff_noise_pooled": 0.72,
+   "diff_noise": 0.67,
+   "diff_noise_pooled": 0.337,
    "visible": 1.0
   },
   "mordor5/near/f12": {
    "coverage": 0.4766,
-   "diff_noise": 0.049,
-   "diff_noise_pooled": 0.014,
+   "diff_noise": 0.041,
+   "diff_noise_pooled": 0.011,
    "visible": 1.0
   },
   "mordor6/far/f02": {
-   "coverage": 0.0095,
-   "diff_noise": 0.205,
-   "diff_noise_pooled": 0.083,
+   "coverage": 0.0093,
+   "diff_noise": 0.256,
+   "diff_noise_pooled": 0.103,
    "visible": 1.0
   },
   "mordor6/far/f12": {
-   "coverage": 0.1794,
-   "diff_noise": 0.386,
-   "diff_noise_pooled": 0.201,
+   "coverage": 0.1792,
+   "diff_noise": 0.444,
+   "diff_noise_pooled": 0.218,
    "visible": 1.0
   },
   "mordor6/near/f02": {
-   "coverage": 0.0728,
-   "diff_noise": 0.908,
-   "diff_noise_pooled": 0.444,
+   "coverage": 0.0723,
+   "diff_noise": 0.853,
+   "diff_noise_pooled": 0.457,
    "visible": 1.0
   },
   "mordor6/near/f12": {
-   "coverage": 0.2681,
-   "diff_noise": 0.026,
+   "coverage": 0.2686,
+   "diff_noise": 0.027,
    "diff_noise_pooled": 0.007,
    "visible": 1.0
   },
   "mordor7/far/f02": {
-   "coverage": 0.01,
-   "diff_noise": 0.201,
-   "diff_noise_pooled": 0.081,
+   "coverage": 0.0098,
+   "diff_noise": 0.232,
+   "diff_noise_pooled": 0.093,
    "visible": 0.75
   },
   "mordor7/far/f12": {
-   "coverage": 0.2317,
-   "diff_noise": 0.391,
-   "diff_noise_pooled": 0.216,
+   "coverage": 0.2314,
+   "diff_noise": 0.75,
+   "diff_noise_pooled": 0.398,
    "visible": 1.0
   },
   "mordor7/near/f02": {
-   "coverage": 0.0906,
-   "diff_noise": 1.357,
-   "diff_noise_pooled": 0.664,
+   "coverage": 0.0903,
+   "diff_noise": 1.304,
+   "diff_noise_pooled": 0.597,
    "visible": 1.0
   },
   "mordor7/near/f12": {
-   "coverage": 0.469,
-   "diff_noise": 0.023,
-   "diff_noise_pooled": 0.006,
+   "coverage": 0.4688,
+   "diff_noise": 0.019,
+   "diff_noise_pooled": 0.005,
    "visible": 1.0
   },
   "mordor8/far/f02": {
    "coverage": 0.0107,
-   "diff_noise": 0.375,
-   "diff_noise_pooled": 0.152,
+   "diff_noise": 0.188,
+   "diff_noise_pooled": 0.077,
    "visible": 1.0
   },
   "mordor8/far/f12": {
-   "coverage": 0.3359,
-   "diff_noise": 1.313,
-   "diff_noise_pooled": 0.732,
+   "coverage": 0.3374,
+   "diff_noise": 0.713,
+   "diff_noise_pooled": 0.388,
    "visible": 1.0
   },
   "mordor8/near/f02": {
-   "coverage": 0.092,
-   "diff_noise": 1.273,
-   "diff_noise_pooled": 0.663,
+   "coverage": 0.0898,
+   "diff_noise": 0.749,
+   "diff_noise_pooled": 0.362,
    "visible": 1.0
   },
   "mordor8/near/f12": {
    "coverage": 0.4656,
-   "diff_noise": 0.022,
-   "diff_noise_pooled": 0.007,
+   "diff_noise": 0.025,
+   "diff_noise_pooled": 0.006,
    "visible": 1.0
   },
   "mordor_flowershot/far/f02": {
    "coverage": 0.0098,
-   "diff_noise": 0.87,
-   "diff_noise_pooled": 0.57,
+   "diff_noise": 0.286,
+   "diff_noise_pooled": 0.168,
    "visible": 1.0
   },
   "mordor_flowershot/far/f12": {
@@ -830,9 +830,9 @@
    "visible": 0.0
   },
   "mordor_flowershot/near/f02": {
-   "coverage": 0.0981,
-   "diff_noise": 2.382,
-   "diff_noise_pooled": 2.172,
+   "coverage": 0.0994,
+   "diff_noise": 1.687,
+   "diff_noise_pooled": 1.529,
    "visible": 1.0
   },
   "mordor_flowershot/near/f12": {
@@ -843,26 +843,26 @@
   },
   "mordor_zap/far/f02": {
    "coverage": 0.0095,
-   "diff_noise": 0.439,
-   "diff_noise_pooled": 0.294,
+   "diff_noise": 0.387,
+   "diff_noise_pooled": 0.268,
    "visible": 1.0
   },
   "mordor_zap/far/f12": {
    "coverage": 0.0112,
-   "diff_noise": 0.049,
-   "diff_noise_pooled": 0.023,
+   "diff_noise": 0.061,
+   "diff_noise_pooled": 0.029,
    "visible": 1.0
   },
   "mordor_zap/near/f02": {
-   "coverage": 0.1021,
-   "diff_noise": 1.116,
-   "diff_noise_pooled": 1.054,
+   "coverage": 0.1018,
+   "diff_noise": 1.928,
+   "diff_noise_pooled": 1.819,
    "visible": 1.0
   },
   "mordor_zap/near/f12": {
-   "coverage": 0.1113,
-   "diff_noise": 0.283,
-   "diff_noise_pooled": 0.146,
+   "coverage": 0.1116,
+   "diff_noise": 0.196,
+   "diff_noise_pooled": 0.09,
    "visible": 1.0
   },
   "nothing/far/f02": {
@@ -890,52 +890,52 @@
    "visible": 0.0
   },
   "red_pop/far/f02": {
-   "coverage": 0.2302,
-   "diff_noise": 7.015,
-   "diff_noise_pooled": 6.544,
+   "coverage": 0.2354,
+   "diff_noise": 6.609,
+   "diff_noise_pooled": 6.062,
    "visible": 1.0
   },
   "red_pop/far/f12": {
-   "coverage": 0.1904,
-   "diff_noise": 2.163,
-   "diff_noise_pooled": 1.954,
+   "coverage": 0.1895,
+   "diff_noise": 2.361,
+   "diff_noise_pooled": 2.173,
    "visible": 1.0
   },
   "red_pop/near/f02": {
-   "coverage": 0.9988,
-   "diff_noise": 17.997,
-   "diff_noise_pooled": 17.713,
+   "coverage": 1.0,
+   "diff_noise": 17.533,
+   "diff_noise_pooled": 17.279,
    "visible": 1.0
   },
   "red_pop/near/f12": {
-   "coverage": 0.5957,
-   "diff_noise": 2.409,
-   "diff_noise_pooled": 2.375,
+   "coverage": 0.5847,
+   "diff_noise": 2.076,
+   "diff_noise_pooled": 2.047,
    "visible": 1.0
   },
   "smoke_puff/far/f02": {
-   "coverage": 0.0183,
-   "diff_noise": 1.416,
-   "diff_noise_pooled": 0.988,
+   "coverage": 0.0203,
+   "diff_noise": 1.578,
+   "diff_noise_pooled": 0.999,
    "visible": 1.0
   },
   "smoke_puff/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 2.17,
-   "diff_noise_pooled": 1.644,
-   "visible": 0.875
+   "diff_noise": 2.148,
+   "diff_noise_pooled": 1.54,
+   "visible": 0.938
   },
   "smoke_puff/near/f02": {
-   "coverage": 0.1414,
-   "diff_noise": 5.209,
-   "diff_noise_pooled": 4.047,
+   "coverage": 0.1233,
+   "diff_noise": 5.531,
+   "diff_noise_pooled": 4.508,
    "visible": 1.0
   },
   "smoke_puff/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 4.721,
-   "diff_noise_pooled": 4.288,
-   "visible": 0.875
+   "diff_noise": 4.266,
+   "diff_noise_pooled": 3.96,
+   "visible": 0.938
   }
  },
  "order": [

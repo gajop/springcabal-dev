@@ -3,80 +3,80 @@
  "captures": {
   "dirtfling/far/f02": {
    "coverage": 0.0,
-   "diff_noise": 0.215,
-   "diff_noise_pooled": 0.09,
+   "diff_noise": 0.214,
+   "diff_noise_pooled": 0.102,
    "visible": 0.0
   },
   "dirtfling/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.966,
-   "diff_noise_pooled": 0.546,
-   "visible": 0.562
+   "diff_noise": 1.0,
+   "diff_noise_pooled": 0.667,
+   "visible": 0.625
   },
   "dirtfling/near/f02": {
    "coverage": 0.0039,
-   "diff_noise": 1.939,
-   "diff_noise_pooled": 1.515,
+   "diff_noise": 1.528,
+   "diff_noise_pooled": 1.073,
    "visible": 0.5
   },
   "dirtfling/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 2.426,
-   "diff_noise_pooled": 2.154,
-   "visible": 0.75
+   "diff_noise": 2.341,
+   "diff_noise_pooled": 2.055,
+   "visible": 0.875
   },
   "explosion/far/f02": {
-   "coverage": 0.002,
-   "diff_noise": 0.427,
-   "diff_noise_pooled": 0.11,
+   "coverage": 0.0017,
+   "diff_noise": 0.29,
+   "diff_noise_pooled": 0.101,
    "visible": 0.0
   },
   "explosion/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.171,
-   "diff_noise_pooled": 0.101,
+   "diff_noise": 0.164,
+   "diff_noise_pooled": 0.081,
    "visible": 0.0
   },
   "explosion/near/f02": {
-   "coverage": 0.0127,
-   "diff_noise": 1.981,
-   "diff_noise_pooled": 1.446,
+   "coverage": 0.0132,
+   "diff_noise": 1.476,
+   "diff_noise_pooled": 1.178,
    "visible": 1.0
   },
   "explosion/near/f12": {
-   "coverage": 0.001,
-   "diff_noise": 0.687,
-   "diff_noise_pooled": 0.373,
-   "visible": 0.812
+   "coverage": 0.0,
+   "diff_noise": 0.719,
+   "diff_noise_pooled": 0.354,
+   "visible": 0.5
   },
   "flashnuke/far/f02": {
    "coverage": 0.3145,
-   "diff_noise": 2.96,
-   "diff_noise_pooled": 2.062,
+   "diff_noise": 2.789,
+   "diff_noise_pooled": 1.584,
    "visible": 1.0
   },
   "flashnuke/far/f12": {
-   "coverage": 0.1956,
-   "diff_noise": 4.181,
-   "diff_noise_pooled": 3.183,
+   "coverage": 0.1863,
+   "diff_noise": 3.466,
+   "diff_noise_pooled": 2.117,
    "visible": 1.0
   },
   "flashnuke/near/f02": {
    "coverage": 0.9988,
-   "diff_noise": 9.285,
-   "diff_noise_pooled": 8.019,
+   "diff_noise": 8.513,
+   "diff_noise_pooled": 7.188,
    "visible": 1.0
   },
   "flashnuke/near/f12": {
-   "coverage": 0.9336,
-   "diff_noise": 11.087,
-   "diff_noise_pooled": 10.167,
+   "coverage": 0.8755,
+   "diff_noise": 11.659,
+   "diff_noise_pooled": 10.886,
    "visible": 1.0
   },
   "fuse/far/f02": {
    "coverage": 0.0005,
-   "diff_noise": 0.296,
-   "diff_noise_pooled": 0.088,
+   "diff_noise": 0.244,
+   "diff_noise_pooled": 0.07,
    "visible": 0.0
   },
   "fuse/far/f12": {
@@ -86,9 +86,9 @@
    "visible": 0.0
   },
   "fuse/near/f02": {
-   "coverage": 0.0024,
-   "diff_noise": 1.106,
-   "diff_noise_pooled": 0.655,
+   "coverage": 0.002,
+   "diff_noise": 1.219,
+   "diff_noise_pooled": 0.573,
    "visible": 0.562
   },
   "fuse/near/f12": {
@@ -99,194 +99,194 @@
   },
   "genericbunnyexplosion-huge-red/far/f02": {
    "coverage": 1.0,
-   "diff_noise": 10.907,
-   "diff_noise_pooled": 9.233,
+   "diff_noise": 16.458,
+   "diff_noise_pooled": 14.903,
    "visible": 1.0
   },
   "genericbunnyexplosion-huge-red/far/f12": {
    "coverage": 1.0,
-   "diff_noise": 8.481,
-   "diff_noise_pooled": 7.701,
+   "diff_noise": 17.114,
+   "diff_noise_pooled": 16.343,
    "visible": 1.0
   },
   "genericbunnyexplosion-huge-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 29.035,
-   "diff_noise_pooled": 27.423,
+   "diff_noise": 35.623,
+   "diff_noise_pooled": 34.071,
    "visible": 1.0
   },
   "genericbunnyexplosion-huge-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 24.272,
-   "diff_noise_pooled": 23.478,
+   "diff_noise": 23.363,
+   "diff_noise_pooled": 22.503,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/far/f02": {
    "coverage": 1.0,
-   "diff_noise": 11.129,
-   "diff_noise_pooled": 9.484,
+   "diff_noise": 13.432,
+   "diff_noise_pooled": 11.895,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/far/f12": {
    "coverage": 1.0,
-   "diff_noise": 10.697,
-   "diff_noise_pooled": 9.712,
+   "diff_noise": 7.326,
+   "diff_noise_pooled": 6.393,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 48.488,
-   "diff_noise_pooled": 47.468,
+   "diff_noise": 28.199,
+   "diff_noise_pooled": 26.327,
    "visible": 1.0
   },
   "genericbunnyexplosion-large-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 34.662,
-   "diff_noise_pooled": 34.172,
+   "diff_noise": 17.712,
+   "diff_noise_pooled": 16.582,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/far/f02": {
    "coverage": 0.9373,
-   "diff_noise": 13.526,
-   "diff_noise_pooled": 11.453,
+   "diff_noise": 15.068,
+   "diff_noise_pooled": 12.946,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/far/f12": {
    "coverage": 1.0,
-   "diff_noise": 11.444,
-   "diff_noise_pooled": 10.574,
+   "diff_noise": 9.355,
+   "diff_noise_pooled": 8.534,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 30.249,
-   "diff_noise_pooled": 28.548,
+   "diff_noise": 28.751,
+   "diff_noise_pooled": 26.811,
    "visible": 1.0
   },
   "genericbunnyexplosion-medium-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 25.275,
-   "diff_noise_pooled": 24.365,
+   "diff_noise": 20.091,
+   "diff_noise_pooled": 19.211,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/far/f02": {
    "coverage": 0.4424,
-   "diff_noise": 15.085,
-   "diff_noise_pooled": 12.896,
+   "diff_noise": 21.558,
+   "diff_noise_pooled": 19.834,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/far/f12": {
    "coverage": 0.7795,
-   "diff_noise": 10.184,
-   "diff_noise_pooled": 9.225,
+   "diff_noise": 9.667,
+   "diff_noise_pooled": 9.004,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 42.61,
-   "diff_noise_pooled": 39.948,
+   "diff_noise": 44.703,
+   "diff_noise_pooled": 42.41,
    "visible": 1.0
   },
   "genericbunnyexplosion-small-red/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 28.526,
-   "diff_noise_pooled": 27.532,
+   "diff_noise": 23.586,
+   "diff_noise_pooled": 22.558,
    "visible": 1.0
   },
   "genericshellexplosion-large/far/f02": {
    "coverage": 0.4641,
-   "diff_noise": 0.327,
-   "diff_noise_pooled": 0.16,
+   "diff_noise": 0.422,
+   "diff_noise_pooled": 0.214,
    "visible": 1.0
   },
   "genericshellexplosion-large/far/f12": {
    "coverage": 0.8064,
-   "diff_noise": 0.134,
-   "diff_noise_pooled": 0.072,
+   "diff_noise": 0.24,
+   "diff_noise_pooled": 0.135,
    "visible": 1.0
   },
   "genericshellexplosion-large/near/f02": {
    "coverage": 1.0,
-   "diff_noise": 1.459,
-   "diff_noise_pooled": 1.006,
+   "diff_noise": 1.212,
+   "diff_noise_pooled": 0.726,
    "visible": 1.0
   },
   "genericshellexplosion-large/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 0.021,
-   "diff_noise_pooled": 0.005,
+   "diff_noise": 0.018,
+   "diff_noise_pooled": 0.004,
    "visible": 1.0
   },
   "genericshellexplosion-medium/far/f02": {
    "coverage": 0.2012,
-   "diff_noise": 0.339,
-   "diff_noise_pooled": 0.158,
+   "diff_noise": 0.381,
+   "diff_noise_pooled": 0.188,
    "visible": 1.0
   },
   "genericshellexplosion-medium/far/f12": {
    "coverage": 0.2109,
-   "diff_noise": 0.193,
-   "diff_noise_pooled": 0.095,
+   "diff_noise": 0.216,
+   "diff_noise_pooled": 0.106,
    "visible": 1.0
   },
   "genericshellexplosion-medium/near/f02": {
    "coverage": 0.989,
-   "diff_noise": 1.524,
-   "diff_noise_pooled": 0.765,
+   "diff_noise": 1.852,
+   "diff_noise_pooled": 0.975,
    "visible": 1.0
   },
   "genericshellexplosion-medium/near/f12": {
    "coverage": 1.0,
-   "diff_noise": 0.032,
+   "diff_noise": 0.029,
    "diff_noise_pooled": 0.008,
    "visible": 1.0
   },
   "genericshellexplosion-small/far/f02": {
    "coverage": 0.0496,
-   "diff_noise": 0.255,
-   "diff_noise_pooled": 0.103,
+   "diff_noise": 0.207,
+   "diff_noise_pooled": 0.122,
    "visible": 1.0
   },
   "genericshellexplosion-small/far/f12": {
    "coverage": 0.0522,
-   "diff_noise": 0.127,
-   "diff_noise_pooled": 0.07,
+   "diff_noise": 0.142,
+   "diff_noise_pooled": 0.077,
    "visible": 1.0
   },
   "genericshellexplosion-small/near/f02": {
    "coverage": 0.4321,
-   "diff_noise": 0.754,
-   "diff_noise_pooled": 0.322,
+   "diff_noise": 1.465,
+   "diff_noise_pooled": 0.71,
    "visible": 1.0
   },
   "genericshellexplosion-small/near/f12": {
-   "coverage": 0.4573,
-   "diff_noise": 0.478,
-   "diff_noise_pooled": 0.275,
+   "coverage": 0.4561,
+   "diff_noise": 0.548,
+   "diff_noise_pooled": 0.3,
    "visible": 1.0
   },
   "genericshellexplosion/far/f02": {
    "coverage": 0.0496,
-   "diff_noise": 0.213,
-   "diff_noise_pooled": 0.113,
+   "diff_noise": 0.227,
+   "diff_noise_pooled": 0.129,
    "visible": 1.0
   },
   "genericshellexplosion/far/f12": {
    "coverage": 0.0522,
-   "diff_noise": 0.194,
-   "diff_noise_pooled": 0.103,
+   "diff_noise": 0.137,
+   "diff_noise_pooled": 0.074,
    "visible": 1.0
   },
   "genericshellexplosion/near/f02": {
    "coverage": 0.4294,
-   "diff_noise": 1.181,
-   "diff_noise_pooled": 0.554,
+   "diff_noise": 0.885,
+   "diff_noise_pooled": 0.338,
    "visible": 1.0
   },
   "genericshellexplosion/near/f12": {
    "coverage": 0.4575,
-   "diff_noise": 0.833,
-   "diff_noise_pooled": 0.458,
+   "diff_noise": 0.485,
+   "diff_noise_pooled": 0.264,
    "visible": 1.0
   },
   "nothing/far/f02": {
@@ -314,28 +314,28 @@
    "visible": 0.0
   },
   "smoke_puff/far/f02": {
-   "coverage": 0.0176,
-   "diff_noise": 2.097,
-   "diff_noise_pooled": 1.696,
+   "coverage": 0.0181,
+   "diff_noise": 1.759,
+   "diff_noise_pooled": 1.339,
    "visible": 1.0
   },
   "smoke_puff/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 2.523,
-   "diff_noise_pooled": 2.057,
+   "diff_noise": 2.61,
+   "diff_noise_pooled": 2.031,
    "visible": 1.0
   },
   "smoke_puff/near/f02": {
-   "coverage": 0.1853,
-   "diff_noise": 5.977,
-   "diff_noise_pooled": 4.978,
+   "coverage": 0.1555,
+   "diff_noise": 5.391,
+   "diff_noise_pooled": 4.401,
    "visible": 1.0
   },
   "smoke_puff/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 4.472,
-   "diff_noise_pooled": 3.958,
-   "visible": 0.938
+   "diff_noise": 3.628,
+   "diff_noise_pooled": 3.213,
+   "visible": 0.812
   }
  },
  "order": [

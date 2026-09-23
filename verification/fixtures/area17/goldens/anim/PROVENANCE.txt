@@ -1,0 +1,13 @@
+recorded   2026-09-23T08:13:12Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 0843bec654bec5c1589971af72790a91ad2bacb1  +52 uncommitted files
+game       spring-linux/games/Area17-wasm.sdd  area17-wasm-port 7c376b493cb4baabf4ef7f05903e3755a52bd57a
+map        build/maps/Area17.sdd  main 0843bec654bec5c1589971af72790a91ad2bacb1  +52 uncommitted files
+map from   spring-linux/maps/Area17.sd7  sha1 1aa57a75b531735a600019963fbe00e8058f369f
+map patch  patches/area17-map (in dev repo)
+engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  rust-wip 72e97847e981a2db9de71b7c90ee9e5d012123c1  +1 uncommitted files
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 72e97847e981a2db9de71b7c90ee9e5d012123c1  +1 uncommitted files
+version    Spring Engine Version: 2026.07.01-246-gb764457 rust-wip
+renderer   gpu
+gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
+gl         4.6.0 NVIDIA 580.178.04
+settings   launch/springsettings.cfg sha1 a487bc4da703

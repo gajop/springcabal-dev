@@ -4,6 +4,7 @@
     gallery.py compare ceg|anim CAPTURES GOLDEN REPORT
     gallery.py update  ceg|anim CAPTURES[,CAPTURES...] GOLDEN REPORT
     gallery.py parity  anim     WASM_CAPTURES LUA_CAPTURES REPORT
+    gallery.py screenshots ceg|anim CAPTURES OUT_DIR -
 
 The gallery box-filters every capture on the GPU and writes it as raw RGB
 (`<shot>-64.raw` for comparison, `<shot>-128.raw` for contact sheets), so
@@ -516,11 +517,48 @@ def run_parity(wasm_captures, lua_captures, report_dir):
     return 0
 
 
+def screenshots(kind, captures, out_dir):
+    """Full-size views for people: one JPEG per CEG (near/far x early/late)
+    or per unit (every captured phase), 256 px tiles.  Needs a recording run
+    with gallery_full=1, which keeps each capture as <shot>.jpg."""
+    import shutil
+    if os.path.isdir(out_dir):
+        shutil.rmtree(out_dir)
+    os.makedirs(out_dir)
+    written = 0
+    for item in sorted(os.listdir(captures)):
+        base = os.path.join(captures, item)
+        if not os.path.isdir(base):
+            continue
+        tiles = []
+        if kind == "ceg":
+            for zoom in ("near", "far"):
+                for shot in ("f02", "f12"):
+                    path = os.path.join(base, zoom, "r1", f"{shot}.jpg")
+                    if os.path.isfile(path):
+                        tiles += ["-label", f"{zoom} {shot}", path]
+            columns = 2
+        else:
+            for shot in sorted(os.listdir(base)):
+                if shot.endswith(".jpg"):
+                    tiles += ["-label", shot[:-4], os.path.join(base, shot)]
+            columns = len(tiles) // 3 or 1
+        if tiles:
+            subprocess.run(["montage", *tiles, "-tile", f"{columns}x", "-geometry", "256x256+2+2",
+                            "-pointsize", "11", "-title", item, "-quality", "78",
+                            os.path.join(out_dir, f"{item}.jpg")], check=True)
+            written += 1
+    print(f"  UPDATED  {written} screenshots -> {out_dir}")
+    return 0
+
+
 def main(argv):
     if len(argv) != 5:
         print(__doc__, file=sys.stderr)
         return 2
     mode, kind, a, b, report = argv
+    if mode == "screenshots":
+        return screenshots(kind, a, b)
     if mode == "parity":
         return run_parity(a, b, report)
     if mode not in ("compare", "update") or kind not in ("ceg", "anim"):

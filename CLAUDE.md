@@ -43,6 +43,14 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
 - After an intended visual change, run `just update-goldens <suite>`, look at
   the images, then commit them.
 - `TODO.md` holds the current rating of every WASM and Lua version.
+- In a WASM port, rules code must not call its own unit scripts through the
+  engine (`spring::typed::call_unit_script`). The rules and the unit scripts
+  are the same module, so the call re-enters a module that is still inside a
+  gadget callin. The engine rejects it with ApiError 1, and `let _ =` hides
+  that. Queue the call inside the module and apply it on the Core-CUS tick
+  (see `queue_call` in the TTLD/Gravitas `unit_scripts/mod.rs`). Parts
+  Needed's piece masks, Gravitas' jumps and TTLD's spell/status animations
+  were all silently dropped this way.
 
 ## Logs
 

@@ -92,6 +92,7 @@ vf_share_fontcache() {
 # view.  The checkout is what release/package.sh ships.
 vf_stage_game() {
     local dir=${1:?game dir} staged
+    VF_GAME_DIR=$dir
     staged="$VF_ISOLATION/games/$(basename "$dir")"
     rm -rf -- "$staged"
     mkdir -p "$staged"
@@ -159,12 +160,14 @@ vf_link_engine_data() {
 vf_link_game() {
     local dir=${1:?game dir}
     [[ -e $dir ]] || vf_die "game archive not found: $dir"
+    [[ $dir == "$VF_ISOLATION"/* ]] || VF_GAME_DIR=$dir
     [[ $dir == "$VF_ISOLATION"/* ]] && return 0
     ln -sfn "$dir" "$VF_ISOLATION/games/$(basename "$dir")"
 }
 
 vf_link_map() {
     local path=${1:?map path}; shift
+    VF_MAP=$path
     [[ -e $path ]] || vf_die "map archive not found: $path"
     ln -sfn "$path" "$VF_ISOLATION/maps/$(basename "$path")"
     local alias
@@ -428,6 +431,66 @@ vf_collect_screenshots() {
     printf '%s\n' "$dest"
 }
 
+# vf_source_line LABEL PATH: one provenance line for a game/map/engine source.
+vf_source_line() {
+    local label=$1 path=$2 top rev dirty
+    if [[ -d $path ]] && top=$(git -C "$path" rev-parse --show-toplevel 2>/dev/null); then
+        rev=$(git -C "$path" rev-parse HEAD)
+        dirty=$(git -C "$path" status --porcelain --untracked-files=no | wc -l)
+        printf '%-10s %s  %s %s%s\n' "$label" "${path#"$PROJECT_ROOT"/}" \
+            "$(git -C "$path" rev-parse --abbrev-ref HEAD)" "$rev" \
+            "$([[ $dirty -gt 0 ]] && echo "  +$dirty uncommitted files")"
+    elif [[ -f $path ]]; then
+        printf '%-10s %s  sha1 %s\n' "$label" "${path#"$PROJECT_ROOT"/}" "$(sha1sum "$path" | cut -d' ' -f1)"
+    else
+        printf '%-10s %s  (not a git checkout)\n' "$label" "${path#"$PROJECT_ROOT"/}"
+    fi
+}
+
+# The game and map of the current run, resolved from the isolation view (the
+# helpers that set them often run in a subshell).
+vf_run_game() {
+    local entry
+    [[ -n ${VF_GAME_DIR:-} ]] && { printf '%s\n' "$VF_GAME_DIR"; return; }
+    for entry in "$VF_ISOLATION"/games/*; do
+        [[ -L $entry ]] && { readlink -f "$entry"; return; }
+        [[ -d $entry ]] && { printf '%s\n' "$GAMES_DIR/$(basename "$entry")"; return; }
+    done
+}
+
+vf_run_map() {
+    local entry
+    [[ -n ${VF_MAP:-} ]] && { printf '%s\n' "$VF_MAP"; return; }
+    for entry in "$VF_ISOLATION"/maps/*; do
+        readlink -f "$entry"
+        return
+    done
+}
+
+# vf_provenance FILE GAME_DIR MAP [MAP_SOURCE]: records what a golden was made
+# from, so a recording can be reproduced or explained later.  Uses the log of
+# the last run in $VF_WRITE_DIR for the engine version and GPU.
+vf_provenance() {
+    local file=${1:?file} game_dir=${2:?game dir} map=${3:?map} map_source=${4:-} log="$VF_WRITE_DIR/stdout.txt"
+    mkdir -p "$(dirname "$file")"
+    {
+        printf 'recorded   %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        vf_source_line "dev repo" "$PROJECT_ROOT"
+        vf_source_line "game" "$game_dir"
+        vf_source_line "map" "$map"
+        [[ -n $map_source ]] && vf_source_line "map from" "$map_source"
+        [[ -d $PROJECT_ROOT/patches ]] && [[ $map == *Area17* ]] &&
+            printf '%-10s patches/area17-map (in dev repo)\n' "map patch"
+        vf_source_line "engine" "$ENGINE_INSTALL"
+        [[ -d $ENGINE_ROOT/.git ]] && vf_source_line "engine src" "$ENGINE_ROOT"
+        printf '%-10s %s\n' "version" "$(grep -m1 -oE 'Spring Engine Version: .*|Recoil .*version.*' "$log" | head -1)"
+        printf '%-10s %s\n' "renderer" "$(vf_renderer)"
+        printf '%-10s %s\n' "gpu" "$(grep -m1 -oE 'GL renderer : .*' "$log" | sed 's/GL renderer : //')"
+        printf '%-10s %s\n' "gl" "$(grep -m1 -oE 'GL version  : .*' "$log" | sed 's/GL version  : //')"
+        printf '%-10s %s\n' "settings" "launch/springsettings.cfg sha1 $(sha1sum "$LAUNCH_DIR/springsettings.cfg" | cut -c1-12)"
+    } >"$file"
+}
+
 # vf_golden GAME NAME IMAGE [TOLERANCE_PERCENT] [CROP]
 # Compares IMAGE with verification/fixtures/GAME/goldens/NAME.png by RMSE.
 # Renders are not bit-identical between runs, so the default tolerance only
@@ -451,6 +514,7 @@ vf_golden() {
         mkdir -p "$(dirname "$golden")"
         cp "$current" "$golden"
         printf '  UPDATED  %s\n' "${golden#"$PROJECT_ROOT"/}"
+        vf_provenance "$FIXTURES_DIR/$game/goldens/PROVENANCE.txt" "$(vf_run_game)" "$(vf_run_map)"
         return 0
     fi
     if [[ ! -f $golden ]]; then

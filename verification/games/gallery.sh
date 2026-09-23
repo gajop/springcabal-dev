@@ -174,7 +174,9 @@ gallery_golden() {
         [[ $kind == ceg ]] && runs=${GALLERY_RECORD_RUNS:-4} || runs=${GALLERY_RECORD_RUNS:-2}
     fi
     for ((i = 1; i <= runs; i++)); do
-        gallery_run "$kind" "$game" wasm
+        # The first recording run also keeps full-size captures for screenshots.
+        GALLERY_FULL=$([[ ${VF_UPDATE_GOLDENS:-0} == 1 && $i == 1 ]] && echo 1 || echo "${GALLERY_FULL:-0}") \
+            gallery_run "$kind" "$game" wasm
         if [[ $runs -gt 1 ]]; then
             rm -rf -- "$VF_OUT_DIR/captures-$i"
             mv "$VF_OUT_DIR/captures" "$VF_OUT_DIR/captures-$i"
@@ -187,7 +189,14 @@ gallery_golden() {
     else
         GALLERY_CAPTURES="$VF_OUT_DIR/captures"
     fi
-    gallery_compare "$kind" "$game"
+    gallery_compare "$kind" "$game" || return
+    if [[ ${VF_UPDATE_GOLDENS:-0} == 1 ]]; then
+        local first=${GALLERY_CAPTURES%%,*}
+        python3 "$GALLERY_TOOL" screenshots "$kind" "$first" "$FIXTURES_DIR/$game/screenshots/$kind" -
+        gallery_game "$game"
+        vf_provenance "$FIXTURES_DIR/$game/goldens/$kind/PROVENANCE.txt" "$WASM_DIR" "$MAP" \
+            "$([[ $game == area17 ]] && echo "$MAPS_DIR/Area17.sd7")"
+    fi
 }
 
 gallery_parity() {

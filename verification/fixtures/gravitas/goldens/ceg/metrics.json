@@ -27,27 +27,27 @@
   },
   "explosion/far/f02": {
    "coverage": 0.002,
-   "diff_noise": 0.384,
-   "diff_noise_pooled": 0.179,
-   "visible": 0.0
+   "diff_noise": 0.411,
+   "diff_noise_pooled": 0.149,
+   "visible": 0.062
   },
   "explosion/far/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.114,
-   "diff_noise_pooled": 0.052,
+   "diff_noise": 0.093,
+   "diff_noise_pooled": 0.033,
    "visible": 0.0
   },
   "explosion/near/f02": {
-   "coverage": 0.0161,
-   "diff_noise": 1.418,
-   "diff_noise_pooled": 0.961,
+   "coverage": 0.0159,
+   "diff_noise": 1.155,
+   "diff_noise_pooled": 0.838,
    "visible": 1.0
   },
   "explosion/near/f12": {
    "coverage": 0.0,
-   "diff_noise": 0.353,
-   "diff_noise_pooled": 0.266,
-   "visible": 0.688
+   "diff_noise": 0.464,
+   "diff_noise_pooled": 0.316,
+   "visible": 0.812
   },
   "flashnuke/far/f02": {
    "coverage": 0.0,

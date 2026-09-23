@@ -215,6 +215,25 @@ Lua game, and lists per unit how far their poses differ.  It is a report, not
 a pass/fail check: some differences are expected (a Lua unit attacking ground
 where the port does not, script timing).
 
+## Screenshots and provenance
+
+The comparison images are tiny (64x64 / 128x128) on purpose.  For people,
+recording also keeps full-size captures from the first run and writes one
+mosaic per CEG (near/far, early/late) or per unit (every phase) to
+`fixtures/<game>/screenshots/{ceg,anim}/<name>.jpg`, using 256 px tiles.
+Open these to see what a golden actually looked like.
+
+Every recording writes a `PROVENANCE.txt` next to its goldens
+(`fixtures/<game>/goldens/{ceg,anim}/PROVENANCE.txt`, plus
+`fixtures/<game>/goldens/PROVENANCE.txt` for scenario screenshots).  It
+records:
+- this repo's commit;
+- the game archive's and map's branch and commit, flagging uncommitted files;
+- the engine install and source commit, and the engine version string;
+- the renderer, GPU and GL driver, and a hash of `launch/springsettings.cfg`.
+
+Game repos are never written to; everything lives here.
+
 ## Probes
 
 `probes/` holds debugging tools that aren't regression tests. They need

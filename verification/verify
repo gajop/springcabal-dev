@@ -19,7 +19,7 @@ declare -A MODES=(
 ALL_RUNS=(
     'area17 static' 'area17 headless' 'flove headless' 'gravitas e2e'
     'hunted headless' 'mycube headless' 'mycube lua-headless'
-    'partsneeded headless' 'ttld headless' 'unit-scripts source'
+    'partsneeded headless' 'ttld headless' 'unit-scripts partsneeded'
 )
 # What `verify visual` and `verify update-goldens` run: the golden comparisons.
 VISUAL_RUNS=(
