@@ -1,0 +1,12 @@
+# LeakSanitizer suppressions for verification runs on an ASAN engine
+# (SPRING_ENGINE_BIN / SPRING_HEADLESS_BIN pointed at one). Keep this narrow:
+# only process-lifetime allocations in third-party libraries the engine cannot
+# free. A leak whose stack reaches engine or game code must still fail.
+
+# The proprietary NVIDIA driver's allocations while the gpu renderer brings up
+# OpenGL.
+leak:libnvidia-glcore.so
+
+# NVIDIA registers with the session bus during driver initialization; there is
+# no teardown API for it.
+leak:dbus_bus_register

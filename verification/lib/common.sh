@@ -243,9 +243,28 @@ vf_config() {
     [[ ${VF_SOUND:-0} == 1 ]] || printf 'snd_volmaster = 0\n' >>"$VF_CONFIG_FILE"
 }
 
+# Settings for an ASAN engine; plain builds ignore them. Leak checking stays on
+# with only the third-party leaks in lsan.supp suppressed, and a run that
+# leaks fails (vf_check_leaks). Suppressions passed in LSAN_OPTIONS win.
+vf_sanitizer_env() {
+    export ASAN_OPTIONS=${ASAN_OPTIONS:-allocator_may_return_null=1}
+    if [[ ${LSAN_OPTIONS:-} != *suppressions=* ]]; then
+        export LSAN_OPTIONS="${LSAN_OPTIONS:+$LSAN_OPTIONS:}suppressions=$VERIFICATION_ROOT/lsan.supp:print_suppressions=0"
+    fi
+}
+
+vf_check_leaks() {
+    local stdout="$VF_WRITE_DIR/stdout.txt"
+    grep -q 'ERROR: LeakSanitizer' "$stdout" 2>/dev/null || return 0
+    cp -f -- "$stdout" "$VF_OUT_DIR/last.stdout.txt" 2>/dev/null || true
+    grep -E '^SUMMARY: AddressSanitizer' "$stdout" >&2 || true
+    vf_die "LeakSanitizer reported leaks (full report: $VF_OUT_DIR/last.stdout.txt; add a narrow third-party entry to verification/lsan.supp only if the stack never reaches engine or game code)"
+}
+
 vf_run_headless() {
     local seconds=${1:?seconds} engine
     engine=$(vf_engine_bin headless)
+    vf_sanitizer_env
     rm -f -- "$VF_WRITE_DIR/infolog.txt"
 
     set +e
@@ -257,6 +276,7 @@ vf_run_headless() {
         "$VF_START_FILE" >"$VF_WRITE_DIR/stdout.txt" 2>&1
     VF_ENGINE_STATUS=$?
     set -e
+    vf_check_leaks
     return 0
 }
 
@@ -305,6 +325,7 @@ vf_run_visual() {
     width=${screen%%x*}
     height=${screen#*x}; height=${height%%x*}
     rm -f -- "$VF_WRITE_DIR/infolog.txt"
+    vf_sanitizer_env
     rm -rf -- "${VF_WRITE_DIR:?}/screenshots"/*
 
     local -a args=(--window --write-dir "$VF_WRITE_DIR" --isolation --isolation-dir "$VF_ISOLATION"
@@ -312,7 +333,6 @@ vf_run_visual() {
     set +e
     case "$renderer" in
         software)
-            ASAN_OPTIONS=detect_leaks=0:allocator_may_return_null=1 \
             LIBGL_ALWAYS_SOFTWARE=1 SDL_VIDEODRIVER=x11 WAYLAND_DISPLAY= \
                 timeout --signal=TERM "${seconds}s" \
                 xvfb-run -a -s "-screen 0 $screen +extension GLX" \
@@ -326,7 +346,7 @@ vf_run_visual() {
             vf_config_set WindowBorderless 1
             vf_config_set XResolutionWindowed "$width"
             vf_config_set YResolutionWindowed "$height"
-            ASAN_OPTIONS=detect_leaks=0:allocator_may_return_null=1 SDL_VIDEODRIVER=offscreen \
+            SDL_VIDEODRIVER=offscreen \
                 timeout --signal=TERM "${seconds}s" \
                 "$engine" "${args[@]}" >"$VF_WRITE_DIR/stdout.txt" 2>&1
             ;;
@@ -335,8 +355,7 @@ vf_run_visual() {
             vf_config_set Fullscreen 0
             vf_config_set XResolutionWindowed "$width"
             vf_config_set YResolutionWindowed "$height"
-            ASAN_OPTIONS=detect_leaks=0:allocator_may_return_null=1 \
-                timeout --signal=TERM "${seconds}s" \
+            timeout --signal=TERM "${seconds}s" \
                 "$engine" "${args[@]}" >"$VF_WRITE_DIR/stdout.txt" 2>&1
             ;;
         *) set -e; vf_die "unknown VF_RENDERER: $renderer (software, gpu or screen)" ;;
@@ -346,6 +365,7 @@ vf_run_visual() {
     local actual
     actual=$(grep -m1 -oE 'GL renderer : .*' "$VF_WRITE_DIR/stdout.txt" | sed 's/GL renderer : //')
     printf 'renderer: %s (%s)\n' "$renderer" "${actual:-unknown}"
+    vf_check_leaks
     return 0
 }
 
