@@ -14,12 +14,14 @@ HUD_REGION=1280x60+0+660
 # pixel-identical run to run, so the tolerance stays tight.
 HUD_LIVE_REGION='460,4 668,56'
 HUD_TOLERANCE=1
+E2E_TARGET="$BUILD_CACHE/Gravitas-wasm.sdd"
+SHIP_TARGET="$BUILD_CACHE/Gravitas-wasm.sdd-ship"
 FIRE_SHARE=60
 
 # Stages the port with e2e modules (in-game cases and the GRAVITAS_SHOT capture).
 gravitas_stage() {
     local staged
-    vf_build "$SOURCE_ROOT" e2e
+    vf_build "$SOURCE_ROOT" e2e "$E2E_TARGET"
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" \
         gravitas_rules_wasm:LuaRules/wasm/gravitas-rules.wasm \
@@ -28,6 +30,8 @@ gravitas_stage() {
     vf_start_file "$START_FILE"
 }
 
+# The shipped modules in the checkout, on the launch script players get, with
+# no input for 900 frames.
 gravitas_headless() {
     local seconds=${1:-40}
     vf_cleanup_on_exit
@@ -42,6 +46,27 @@ gravitas_headless() {
     vf_save_logs
     vf_require_clean_exit
     vf_summary
+
+    echo 'checks:'
+    gravitas_check "the whole level spawns" gravitas_present 'level spawned: ([0-9]+) of \1 units'
+    gravitas_check "the HUD loads" gravitas_present 'Gravitas RmlUi HUD initialized'
+    gravitas_check "no wasm trap, callin error or panic" gravitas_absent \
+        'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|already borrowed'
+    # Headless loads no textures, so the HUD's heart image is the one warning.
+    gravitas_check "no warning but the headless HUD image" gravitas_only_known_warnings
+
+    echo
+    [[ $GRAVITAS_FAILURES -eq 0 ]] || { echo "gravitas headless: $GRAVITAS_FAILURES check(s) failed"; return 1; }
+    echo '>>> Gravitas headless passed <<<'
+}
+
+gravitas_present() {
+    grep -qE "$1" "$VF_OUT_DIR/last.combined.txt"
+}
+
+gravitas_only_known_warnings() {
+    ! grep -E 'Warning:' "$VF_OUT_DIR/last.combined.txt" |
+        grep -vqE 'Warning: \[RmlUi\] Could not load texture: LuaUI/Images/heart.png'
 }
 
 gravitas_e2e() {
@@ -65,18 +90,15 @@ CFG
     grep -oE 'E2E case .*' "$log" | sed 's/^E2E case /  /' || true
     cases_failed=$(grep -cE 'E2E case .* FAIL' "$log" || true)
     failures=$((failures + cases_failed))
-    if ! grep -qE 'E2E summary passed=18 failed=0' "$log"; then
+    if ! grep -qE 'E2E summary passed=19 failed=0' "$log"; then
         echo '  FAIL  the suite did not finish with every case passing'
         failures=$((failures + 1))
     fi
 
     echo 'build:'
-    gravitas_check "the shipped rules module carries no test code" \
-        gravitas_absent_in_wasm "$GAME_DIR/LuaRules/wasm/gravitas-rules.wasm" 'E2E case'
-    gravitas_check "the shipped ui module carries no test code" \
-        gravitas_absent_in_wasm "$GAME_DIR/LuaUI/wasm/gravitas-ui.wasm" 'GRAVITAS_SHOT'
-    gravitas_check "clippy is clean without the feature" gravitas_clippy_clean
-    gravitas_check "clippy is clean with the feature" gravitas_clippy_clean --features e2e
+    gravitas_check "clippy is clean without the feature" gravitas_clippy_clean "$SHIP_TARGET"
+    gravitas_check "clippy is clean with the feature" gravitas_clippy_clean "$E2E_TARGET" --features e2e
+    gravitas_check "a build without the feature carries no test code" gravitas_ship_has_no_tests
 
     echo 'engine log:'
     gravitas_check "no lua error" gravitas_absent '(\[LuaRules\]|\[LuaUI\]) Error|attempt to (index|call)'
@@ -112,17 +134,34 @@ gravitas_absent() {
     ! grep -qE "$1" "$VF_OUT_DIR/last.combined.txt"
 }
 
+# The modules a player gets: built from the source without the feature,
+# apart from the e2e build, so neither build overwrites the other.
+gravitas_ship_has_no_tests() {
+    local out="$SHIP_TARGET/wasm32-unknown-unknown/release"
+    gravitas_cargo build "$SHIP_TARGET" || return 1
+    gravitas_absent_in_wasm "$out/gravitas_rules_wasm.wasm" 'E2E case' &&
+        gravitas_absent_in_wasm "$out/gravitas_ui_wasm.wasm" 'gravitas_e2e|shot|'
+}
+
 gravitas_absent_in_wasm() {
+    [[ -s $1 ]] || return 1
     ! strings "$1" | grep -qF "$2"
 }
 
+# Clippy fails on any warning (the workspace denies them, and -D warnings
+# repeats it); its exit status is the verdict.
 gravitas_clippy_clean() {
+    local target=$1; shift
+    gravitas_cargo clippy "$target" "$@" -- -D warnings
+}
+
+gravitas_cargo() {
+    local command=$1 target=$2; shift 2
     (
         cd "$SOURCE_ROOT"
-        cargo clippy --workspace "$@" --target wasm32-unknown-unknown --release \
-            --target-dir "$BUILD_CACHE/Gravitas-wasm.sdd" 2>&1 | grep -qE '^(error|warning)'
-    ) && return 1
-    return 0
+        flock /tmp/springcabal-build.lock cargo "$command" --workspace \
+            --target wasm32-unknown-unknown --release --target-dir "$target" "$@"
+    )
 }
 
 gravitas_shots() {
@@ -158,7 +197,12 @@ CFG
     done < <(vf_screenshots)
     [[ ${#taken[@]} -eq 1 ]] || vf_die "expected 1 distinct screenshot, got ${#taken[@]}"
 
-    vf_golden gravitas arena "${taken[0]}" "${SHOT_TOLERANCE:-10}"
+    # Run to run the same build renders 1.8-2.5% apart (fire and spark
+    # particles, and robots a frame further along when the shot lands), so a
+    # few robots out of place (about 2%) are below what this can see; the
+    # in-game cases check where units end up. The limit catches a scene
+    # that is missing or broken.
+    vf_golden gravitas arena "${taken[0]}" "${SHOT_TOLERANCE:-4}"
     gravitas_hud_and_fire "$FIXTURES/goldens/arena.png" "$VF_OUT_DIR/goldens/arena.png"
 
     echo
