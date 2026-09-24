@@ -103,58 +103,53 @@ Committed-HEAD baseline for those two, without the uncommitted work:
 Engine runs must be serialized, because every launch script uses `HostPort=8452`. Wrap them as
 `flock /tmp/springcabal-verify.lock ./verification/verify ...`.
 
-## After the refactors (2026-09-24)
+## After the refactors (2026-09-24, round 2)
 
-The refactors are done: seven game branches, none pushed.
-
-- **Final run.** Engine `rust-wip` `1bed8d7086` (`2026.07.01-273-g1bed8d7`):
-  - `spring` sha256 prefix `5a524fd0cb41074c`, `spring-headless` sha256 prefix `56a921da3c3442e9`, both built 04:40.
-  - Run with `VF_GAMES_DIR=~/worktrees/springcabal-review/games`.
-- **Checking a failure against the baseline.** Worktrees at the baseline commits above, built against the same crates, are in `~/worktrees/springcabal-baseline/games`. Run the same suite there to tell engine drift from a refactor change.
+Two refactor rounds are done; none of it is pushed. The round-1 briefs are in
+`~/worktrees/springcabal-review/BRIEF.md` and the round-2 briefs in `BRIEF2.md` there. All games are in
+place on their main branches. Gravitas and TTLD were fast-forwarded from the `code-review` branches,
+which are now deleted.
+- **TTLD:** the previously uncommitted work is committed on top as `299c830`.
+- **Gravitas:** its uncommitted fire work is unchanged (`git diff` sha256 prefix still `27504512bc638a0b`).
 
 | game | branch | HEAD |
 |---|---|---|
-| Area17 | `area17-wasm-port` | `2d12ece` |
-| Flove | `flove-wasm-port` | `202fbda` |
-| Gravitas | `code-review` (worktree) | `b79e24c` |
-| Hunted | `hunted-wasm-port` | `6b36414` |
-| MyCube | `mycube-wasm-port` | `960aef0` |
-| PartsNeeded | `partsneeded-wasm-port` | `32ca96b` |
-| TTLD | `code-review` (worktree) | `39be341` |
+| Area17 | `area17-wasm-port` | `089c41d` |
+| Flove | `flove-wasm-port` | `ca06da0` |
+| Gravitas | `gravitas-wasm-port` | `6623a88` (+ uncommitted fire work) |
+| Hunted | `hunted-wasm-port` | `8fe3af1` |
+| MyCube | `mycube-wasm-port` | `ee46ca3` |
+| PartsNeeded | `partsneeded-wasm-port` | `59a9903` |
+| TTLD | `ttld-wasm-port` | `15fd2d3` |
 
-### Headless
+**Engine:** binaries built 2026-09-24 08:52, reporting `2026.07.01-273-g1bed8d7 rust-wip`.
 
-Everything matches the baseline, except for these:
+**`just verify-all`:** all 10 runs pass. Counts that changed:
+- **Area17 Rust: 18 → 24.** The UFO death path is now tested.
+- **Flove rules: 68 → 70.** A restart test was added.
+- **TTLD: 31.** The carried-over work adds 7 to the committed 24.
 
-- **Flove rules assertions: 68 → 70.** A new restart test adds two.
-- **Parts Needed ending test flaked at the refactor's last commit.** That commit moved the ending's spawn offsets to the synced RNG, and the frame-260 check assumed a fixed spawn distance. It failed 20–35% of runs. `32ca96b` now checks that the wisp approaches the player instead; it passed 6 of 6 runs.
-- **TTLD: 24 assertions.** That is the committed-HEAD baseline; the WIP's 7 are not on `code-review`.
+The other counts are unchanged:
+- Area17 Lua 12
+- Flove UI input 6 / scenario 14
+- Gravitas 14/14 stages
+- Hunted 4 waves
+- MyCube 21 and the Lua headless run
+- Parts Needed 48 (+3 ending checks)
+- the Parts Needed unit-script comparison (the source comparison now runs)
 
-### Visual
+**`just verify-visual`:** all 9 runs pass, including every CEG and anim gallery. The earlier known
+flakes are gone:
+- Flove's shots are now captured on exact frames.
+- Area17's `frame_080` no longer depends on real-time pacing.
+- The Parts Needed anim "drift" was a stale rules module in the old goldens, not the engine.
 
-| run | result |
-|---|---|
-| area17 visual | `frame_080` is **flaky**. Details below. |
-| flove visual | 9/9 on rerun. The first run failed 3 shots at 5.1–7.2% against the 5% limit under load average 15–30. |
-| gravitas, hunted, mycube, partsneeded visual | PASS |
-| ttld visual | fails `selection fixture did not select the player` on both the baseline and `code-review`. That marker only exists in the uncommitted TTLD WIP (`dbg_e2e.rs`). |
-| gallery ceg all | PASS |
-| gallery anim area17, flove, gravitas | PASS (goldens re-recorded for the RNG switch) |
-| gallery anim partsneeded | fails by exactly the baseline numbers (engine drift) |
-| gallery anim hunted, mycube, ttld | fail. Bisected; the causes are below. Goldens not re-recorded yet. |
+Every re-recorded golden has a commit message explaining it, and the old goldens and failing
+reports are saved under `~/worktrees/golden-diffs-2026-09-24/<game>/`.
 
-**Area17 `frame_080`.** The test camera sits at ground height over the crater point. Whether the beam digs that spot before frame 80 depends on real-time pacing. `8d54f3a` removed a quadratic start-up stall (0.5–0.7 s), which exposed the problem; the game itself did not change. Making the test timing-independent needs a test change and a golden re-record.
-
-**Why the anim galleries changed** (no bugs found):
-
-- **Hunted:**
-  - The roster now iterates in unit-id order (`e596b3b`), which changes the unit ids the gallery units get.
-  - `6b36414` switched the scripts to the engine RNG; the draws match the Lua scripts.
-- **MyCube:** only `960aef0`, the engine RNG, both in the story spawns and in the iglu and drill-ship scripts. It matches the Lua's `math.random` ranges.
-- **TTLD:**
-  - `8c7c554` applies def `hscale`/`vscale` without the UI, as the Lua `unit_enlarger` gadget does.
-  - `d985abd` moved the ork bob phase to the engine RNG.
-  - The `crossbowman attack 15` failure is engine drift; the baseline shows it too.
+**Comparing against the baseline:** worktrees at the baseline commits, built against the same
+crates, are in `~/worktrees/springcabal-baseline/games`. Run a suite with `VF_GAMES_DIR` pointing
+there to tell engine drift from game changes.
 
 ## How to re-check
 
