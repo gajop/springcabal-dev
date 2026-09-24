@@ -45,6 +45,7 @@ flove_headless() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
 
     vf_note 'Flove headless run finished'
     printf 'Rust rules assertions passed:  %s\n' "$(vf_count '\[Flove-Rust-Test\] ASSERTION PASSED')"
@@ -55,6 +56,8 @@ flove_headless() {
     vf_forbid 'ASSERTION FAILED' 'one or more in-game assertions failed'
     vf_require 'ALL FLOVE RUST INTEGRATION TESTS PASSED' 'the Rust rules suite did not complete'
     vf_require 'ALL FLOVE EXTENDED TEST ASSERTIONS PASSED' 'the scenario suite did not complete'
+    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
+        'the run contains a runtime failure'
     echo '>>> Flove headless verification passed <<<'
 }
 

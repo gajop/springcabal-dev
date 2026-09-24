@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
-# Golden RMSE limit (no goldens recorded yet; revisit once measured).
+# Golden RMSE limit.  Run-to-run drift has not been measured for this suite;
+# 8% matches the other scenario suites (see verification/README.md).
 GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-8}
 
 GAME_DIR="$GAMES_DIR/PartsNeeded-wasm.sdd"
@@ -60,6 +61,7 @@ partsneeded_headless() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
 
     vf_require "$TEST_MARKER" 'the headless integration assertions did not pass'
     vf_require "$ENDING_TEST_MARKER" 'the type-1 ending integration assertions did not pass'
@@ -69,7 +71,7 @@ partsneeded_headless() {
     vf_forbid 'Unknown tag "(new|clone|append)"|really low power|table for CEG .* invalid|excess char' \
         'the game data still produces engine warnings'
 
-    grep -- '\[PartsNeeded-Rust-Test\]' "$VF_OUT_DIR/last.combined.txt" || true
+    grep -- '\[PartsNeeded-Rust-Test\]' "$(vf_count_log)" || true
     echo '>>> Parts Needed headless verification passed <<<'
 }
 
@@ -81,8 +83,7 @@ partsneeded_visual() {
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
-    [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
-        vf_die "Parts Needed visual E2E engine exited with $VF_ENGINE_STATUS"
+    vf_require_exit_or_timeout
     shots=$(vf_require_screenshots 3)
     vf_require "$TEST_MARKER" 'Parts Needed did not reach its test marker'
     vf_require "$ENDING_TEST_MARKER" 'Parts Needed did not reach its ending test marker'

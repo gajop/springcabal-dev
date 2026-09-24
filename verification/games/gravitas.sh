@@ -40,11 +40,12 @@ gravitas_headless() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
     vf_summary
 }
 
 gravitas_e2e() {
-    local seconds=${1:-40} failures=0 cases_failed
+    local seconds=${1:-40} failures=0 cases_failed log
 
     vf_workspace gravitas-e2e
     vf_cleanup_on_exit
@@ -57,12 +58,14 @@ CFG
     vf_run_headless "$seconds"
     vf_save_logs
     [[ -s "$VF_OUT_DIR/last.combined.txt" ]] || vf_die 'engine produced no output'
+    vf_require_clean_exit
+    log=$(vf_count_log)
 
     echo 'in-game cases:'
-    grep -oE 'E2E case .*' "$VF_OUT_DIR/last.combined.txt" | sed 's/^E2E case /  /' || true
-    cases_failed=$(grep -cE 'E2E case .* FAIL' "$VF_OUT_DIR/last.combined.txt" || true)
+    grep -oE 'E2E case .*' "$log" | sed 's/^E2E case /  /' || true
+    cases_failed=$(grep -cE 'E2E case .* FAIL' "$log" || true)
     failures=$((failures + cases_failed))
-    if ! grep -qE 'E2E summary passed=[0-9]+ failed=0' "$VF_OUT_DIR/last.combined.txt"; then
+    if ! grep -qE 'E2E summary passed=[0-9]+ failed=0' "$log"; then
         echo '  FAIL  the suite did not finish with every case passing'
         failures=$((failures + 1))
     fi
@@ -143,6 +146,7 @@ CFG
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
+    vf_require_exit_or_timeout
 
     # The capture repeats while the engine settles; keep distinct frames only.
     while read -r shot; do

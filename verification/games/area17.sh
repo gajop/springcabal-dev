@@ -64,6 +64,7 @@ area17_headless() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
 
     vf_note 'Area 17 headless run finished'
     printf 'Rust integration assertions passed: %s\n' "$(vf_count '\[Area17-Rust-Test\] ASSERTION PASSED')"
@@ -72,6 +73,9 @@ area17_headless() {
 
     vf_require 'ALL AREA17 RUST INTEGRATION TESTS PASSED' 'the Rust suite did not complete'
     vf_require 'ALL AREA17 LUA INTEGRATION TESTS PASSED' 'the Lua suite did not complete'
+    vf_forbid 'ASSERTION FAILED' 'one or more in-game assertions failed'
+    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
+        'the run contains a runtime failure'
     echo '>>> Area 17 headless verification passed <<<'
 }
 
@@ -87,8 +91,7 @@ area17_visual() {
     vf_run_visual "$seconds"
     vf_save_logs
 
-    [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
-        vf_die "engine exited with status $VF_ENGINE_STATUS"
+    vf_require_exit_or_timeout
 
     shots=$(vf_require_screenshots 3)
 

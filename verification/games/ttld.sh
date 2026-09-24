@@ -69,6 +69,7 @@ ttld_lua_visual() {
     printf 'AllowDeferredMapRendering = 1\nAllowDeferredModelRendering = 1\nAllowDeferredModelBufferClear = 1\n' >>"$VF_CONFIG_FILE"
     vf_run_visual "$seconds" "$screen"
     vf_save_logs
+    vf_require_exit_or_timeout
 
     shots=$(vf_require_screenshots 3)
     vf_require '\[TTLD Lua E2E\] fixture boss=[0-9]+ orkbig=[0-9]+' \
@@ -186,6 +187,7 @@ ttld_headless() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
 
     vf_require "$TEST_MARKER" 'the headless integration assertions did not pass'
     vf_forbid 'world state re-entered' 'the synced module re-entered its world state'
@@ -194,7 +196,7 @@ ttld_headless() {
     vf_forbid 'Unknown tag "(new|clone|append)"|really low power|table for CEG .* invalid|Failed to load icon|excess char' \
         'the game data still produces engine warnings'
 
-    grep -- '\[TTLD-Rust-Test\]' "$VF_OUT_DIR/last.combined.txt" || true
+    grep -- '\[TTLD-Rust-Test\]' "$(vf_count_log)" || true
     echo '>>> To the Last Drop headless verification passed <<<'
 }
 
@@ -204,12 +206,13 @@ ttld_pose_parity() {
     vf_cleanup_on_exit
 
     vf_workspace ttld-pose-rust stable
-    rust_log="$VF_OUT_DIR/last.combined.txt"
     ttld_stage pose-probe
     vf_quit_when '[UnitScriptProbe] DONE unit='
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
+    rust_log=$(vf_count_log)
     vf_require '\[UnitScriptProbe\] DONE unit=[0-9]+ last_frame=195' \
         'Rust pose probe did not complete'
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|\[UnitScriptProbe\] ERROR' \
@@ -221,7 +224,6 @@ ttld_pose_parity() {
     rm -f "$staged/LuaUI/Widgets/ui_begingame.lua"
     cp "$FIXTURES_DIR/ttld/lua_pose_probe.lua" \
         "$staged/LuaRules/Gadgets/ttld_lua_pose_probe.lua"
-    lua_log="$VF_OUT_DIR/last.combined.txt"
     vf_link_game "$staged"
     vf_link_map "$MAP_DIR"
     ttld_start "$LUA_GAME_NAME"
@@ -229,6 +231,8 @@ ttld_pose_parity() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
+    lua_log=$(vf_count_log)
     vf_require '\[UnitScriptProbe\] DONE unit=[0-9]+ last_frame=195' \
         'Lua pose probe did not complete'
     vf_forbid 'LuaRules.*(Error|error)|Lua.*syntax|\[UnitScriptProbe\] ERROR' \
@@ -255,6 +259,7 @@ ttld_visual() {
     printf 'AllowDeferredMapRendering = 1\nAllowDeferredModelRendering = 1\nAllowDeferredModelBufferClear = 1\n' >>"$VF_CONFIG_FILE"
     vf_run_visual "$seconds" "$screen"
     vf_save_logs
+    vf_require_exit_or_timeout
 
     shots=$(vf_require_screenshots 3)
     ttld_assert_leader_render

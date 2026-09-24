@@ -474,8 +474,22 @@ vf_save_logs() {
     printf 'logs: %s\n' "$VF_OUT_DIR/last.combined.txt"
 }
 
+# vf_count_log: the one log to count or list lines in.  last.combined.txt is
+# stdout plus the infolog, and the engine writes every line to both, so
+# counting in it doubles everything; it is only for vf_require/vf_forbid.
+# The infolog is complete after a clean exit.  spring-headless only flushes it
+# on a clean exit, so after a timeout or crash use stdout instead.
+vf_count_log() {
+    if [[ ${VF_ENGINE_STATUS:-0} -eq 0 && -s $VF_OUT_DIR/last.infolog.txt ]]; then
+        printf '%s\n' "$VF_OUT_DIR/last.infolog.txt"
+    else
+        printf '%s\n' "$VF_OUT_DIR/last.stdout.txt"
+    fi
+}
+
 vf_summary() {
-    local log="$VF_OUT_DIR/last.combined.txt"
+    local log
+    log=$(vf_count_log)
     [[ -f $log ]] || return 0
     printf 'Errors: %s  Warnings: %s\n' \
         "$(grep -c -E '\bError:' "$log" || true)" \
@@ -483,7 +497,7 @@ vf_summary() {
 }
 
 vf_count() {
-    grep -c -- "${1:?pattern}" "$VF_OUT_DIR/last.combined.txt" 2>/dev/null || true
+    grep -c -- "${1:?pattern}" "$(vf_count_log)" 2>/dev/null || true
 }
 
 vf_require() {
@@ -497,6 +511,27 @@ vf_forbid() {
         grep -E -- "$pattern" "$VF_OUT_DIR/last.combined.txt" >&2 || true
         vf_die "$message"
     fi
+}
+
+# vf_require_clean_exit: the engine must have exited with status 0.  Headless
+# suites end themselves with quitforce (vf_quit_when), so a timeout (124)
+# means the run never finished, and anything else is a crash.
+vf_require_clean_exit() {
+    case $VF_ENGINE_STATUS in
+        0) return 0 ;;
+        124) vf_die "the engine was stopped by the timeout (status 124) before the suite ended it; read $VF_OUT_DIR/last.stdout.txt" ;;
+        *) vf_die "the engine exited with status $VF_ENGINE_STATUS (crash or abnormal exit); read $VF_OUT_DIR/last.stdout.txt" ;;
+    esac
+}
+
+# vf_require_exit_or_timeout: status 0, or 124 when the timeout ended the run.
+# Visual scenarios that don't quit themselves (Area 17, TTLD) always end by
+# the timeout; for those, completion is proven by the required markers and
+# screenshot counts, not by the exit status.  Any other status (a crash, a
+# signal, xvfb failing to start) fails.
+vf_require_exit_or_timeout() {
+    [[ $VF_ENGINE_STATUS -eq 124 ]] && return 0
+    vf_require_clean_exit
 }
 
 vf_screenshots() {

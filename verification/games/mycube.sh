@@ -54,6 +54,7 @@ mycube_headless() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
     vf_require 'ALL MYCUBE INTEGRATION TESTS PASSED' 'MyCube did not reach its test marker'
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
         'the MyCube headless run contains a runtime failure'
@@ -70,8 +71,7 @@ mycube_visual() {
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
-    [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
-        vf_die "MyCube visual E2E engine exited with $VF_ENGINE_STATUS"
+    vf_require_exit_or_timeout
     shots=$(vf_require_screenshots 3)
     vf_require 'MYCUBE VISUAL E2E PASSED' 'MyCube did not reach its visual test marker'
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
@@ -85,7 +85,8 @@ mycube_visual() {
 
 # The original Lua game must boot on this engine without any Lua errors.
 mycube_lua_headless() {
-    local seconds=${1:-20} asset unexpected_errors
+    # Frame 450 comes about 18 s in, and the exit takes another second or two.
+    local seconds=${1:-45} asset unexpected_errors
     vf_cleanup_on_exit
 
     for asset in \
@@ -108,12 +109,13 @@ mycube_lua_headless() {
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
+    vf_require_clean_exit
     vf_summary
 
     # The headless renderer has no usable GL texture limit, so the engine
     # reports the groundFX atlas allocation once during startup. Ignore only
     # that renderer limitation; every other engine error is a game failure.
-    unexpected_errors=$(grep -E 'Error:' "$VF_OUT_DIR/last.combined.txt" |
+    unexpected_errors=$(grep -E 'Error:' "$(vf_count_log)" |
         grep -vF 'Could not finalize groundFX texture atlas' || true)
     if [[ -n $unexpected_errors ]]; then
         printf '%s\n' "$unexpected_errors" >&2

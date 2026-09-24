@@ -68,21 +68,23 @@ unit_scripts_run_one() {
 	vf_link_map "$MAP_DIR"
 	vf_link_game "$staged"
 	unit_scripts_start "$game"
+	vf_quit_when '[UnitScriptProbe] DONE'
 	vf_config
 	vf_run_visual "$seconds" 1280x720x24
 	vf_save_logs
+	vf_require_clean_exit
 	vf_forbid 'Fatal:|Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|\[UnitScriptProbe\] ERROR' \
 		"$label unit-script probe contains a runtime failure"
 	grep -qF '[UnitScriptProbe] DONE' "$VF_OUT_DIR/last.combined.txt" ||
 		vf_die "$label unit-script probe did not complete"
-	cp "$VF_OUT_DIR/last.combined.txt" "$VF_OUT_DIR/trace.log"
+	# One log only: the combined log holds every line twice.
+	cp "$(vf_count_log)" "$VF_OUT_DIR/trace.log"
 	vf_keep_workspace_unless
 }
 
-# Compares the Lua animation tables with table-driven Rust gait tables.  That
-# layout (rules-synced/src/unit_scripts/) only ever existed in an unfinished
-# split of unit_scripts.rs; the committed port uses plain Turn() calls.  The
-# trace comparison (partsneeded mode) checks the engine result either way.
+# Compares the Lua animation tables (Scripts/animations/) with the port's
+# table-driven gait tables in rules-synced/src/unit_scripts/.  The trace
+# comparison (partsneeded mode) checks the engine result either way.
 partsneeded_source() {
 	[[ -d $LUA_GAME_DIR && -d $WASM_GAME_DIR ]] || vf_die 'Parts Needed archives are missing'
 	if [[ ! -d $SOURCE_ROOT/rules-synced/src/unit_scripts ]]; then

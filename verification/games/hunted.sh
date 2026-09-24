@@ -37,9 +37,8 @@ hunted_headless() {
     vf_run_headless "$seconds"
     vf_save_logs
 
+    vf_require_clean_exit
     [[ -s "$VF_OUT_DIR/last.infolog.txt" ]] || vf_die 'the headless run produced no infolog'
-    [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
-        vf_die "engine exited unexpectedly with status $VF_ENGINE_STATUS"
 
     vf_require 'static carrots, burrows, and lighthouses spawned' 'static content never spawned'
     vf_require 'rabbit wave started:' 'no rabbit wave started'
@@ -71,8 +70,7 @@ hunted_visual() {
     vf_run_visual "$seconds"
     vf_save_logs
 
-    [[ $VF_ENGINE_STATUS -eq 0 || $VF_ENGINE_STATUS -eq 124 ]] ||
-        vf_die "Hunted visual E2E engine exited with $VF_ENGINE_STATUS"
+    vf_require_exit_or_timeout
     shots=$(vf_require_screenshots 3)
 
     # The UI world is skipped in headless, so these are the only checks that
