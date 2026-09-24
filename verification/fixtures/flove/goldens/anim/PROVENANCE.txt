@@ -1,10 +1,10 @@
-recorded   2026-09-23T16:19:05Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 7aa69e24bad5c2780ed8bd6f84d2c32a9691ce8b  +55 uncommitted files
-game       spring-linux/games/Flove-wasm.sdd  flove-wasm-port 202fbdafaeb82f5fd0b11451bb12b7d187a60450
+recorded   2026-09-24T00:23:41Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 1b11e3decea27eca7afc927c868d01f1a3ffeb2e  +36 uncommitted files
+game       spring-linux/games/Flove-wasm.sdd  flove-wasm-port 4c3219154f0eaefa552be58f17291aa2243640a5  +3 uncommitted files
 map        spring-linux/maps/LD34-map.sdd  master 669fdb954b8d26bb450abe7737c17941728c4e7f  +2 uncommitted files
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  rust-wip cf230a7726ef9495a687f5f281c729b0e7283c78  +11 uncommitted files
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip cf230a7726ef9495a687f5f281c729b0e7283c78  +11 uncommitted files
-version    Spring Engine Version: 2026.07.01-264-gcf230a7 rust-wip
+engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  rust-wip f4a443a3ae5850da2e715a40433d9f442407a470  +3 uncommitted files
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip f4a443a3ae5850da2e715a40433d9f442407a470  +3 uncommitted files
+version    Spring Engine Version: 2026.07.01-273-g1bed8d7 rust-wip
 renderer   gpu
 gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
 gl         4.6.0 NVIDIA 580.178.04
