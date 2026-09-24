@@ -251,22 +251,27 @@ ttld_pose_parity() {
 }
 
 ttld_visual() {
-    local seconds=${1:-60} screen=${2:-1280x720x24} shots
+    local seconds=${1:-150} screen=${2:-1280x720x24} shots
 
     vf_workspace ttld-visual stable
     ttld_stage e2e
+    # Particle effects draw from the engine's unsynced RNG.
+    vf_start_set FixedUnsyncedRNGSeed 1
+    vf_quit_when 'TTLD E2E done'
     vf_config "$VISUAL_CONFIG"
     printf 'AllowDeferredMapRendering = 1\nAllowDeferredModelRendering = 1\nAllowDeferredModelBufferClear = 1\n' >>"$VF_CONFIG_FILE"
     vf_run_visual "$seconds" "$screen"
     vf_save_logs
-    vf_require_exit_or_timeout
+    vf_require_clean_exit
 
-    shots=$(vf_require_screenshots 3)
+    vf_require 'TTLD E2E done' 'the e2e run did not reach its last step'
+    vf_forbid 'TTLD E2E missed the pause' 'a golden screenshot was not taken on its paused frame'
+    shots=$(vf_require_screenshots 14)
     ttld_assert_leader_render
-    vf_require 'TTLD E2E hover fixture=orkboss unit=[0-9]+.*trace=1:[0-9]+ move_ok=true' \
-        'WASM hover did not trace orkboss'
-    vf_require 'TTLD E2E hover fixture=orkbig unit=[0-9]+.*trace=1:[0-9]+ move_ok=true' \
-        'WASM hover did not trace orkbig'
+    vf_require 'TTLD E2E hover check fixture=orkboss unit=([0-9]+) hud_target=\1 cursor=\1( |$)' \
+        'hovering the ork leader did not make it the HUD target'
+    vf_require 'TTLD E2E hover check fixture=orkbig unit=([0-9]+) hud_target=\1 cursor=\1( |$)' \
+        'hovering a big ork did not make it the HUD target'
     vf_require 'TTLD E2E mouse wheel accepted=true .*captured=true' \
         'the HUD did not capture the mouse wheel'
     vf_require 'TTLD E2E poultice sent: true' 'the e2e Poultice cast was not accepted'
@@ -274,12 +279,19 @@ ttld_visual() {
         'Poultice did not throw its target 100+ elmos'
     vf_require 'TTLD E2E tracking after_move: .* error=0\.[0-9]' \
         'the camera did not keep tracking the moving blood mage'
+    vf_require 'TTLD E2E tracking late: .* error=0\.[0-9]' \
+        'the camera did not keep tracking the blood mage to the end of its walk'
     vf_require 'TTLD E2E selection seeded=1' 'selection fixture did not select the player'
     vf_require 'TTLD E2E selection cleared=0' 'the player remained selected in the engine UI'
     vf_forbid 'GLSL-PO::Validate\] program-object name: SMFShader' \
         'the map SMF shader still fails to validate; terrain will not render'
     vf_note 'To the Last Drop goldens'
-    vf_goldens_by_index ttld shot_1 shot_2 shot_3
+    vf_goldens_by_index ttld shot_1 shot_2
+    # The fireball shot: its drain's blood puffs are random (1.4% between
+    # runs); a fireball missing or a frame off is 7% or more.
+    local -a all_shots
+    mapfile -t all_shots < <(vf_screenshots)
+    vf_golden ttld shot_3 "${all_shots[2]}" 3
     vf_goldens_done
     printf 'captured %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
     echo '>>> To the Last Drop visual verification passed <<<'
