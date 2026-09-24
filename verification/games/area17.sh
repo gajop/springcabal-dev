@@ -19,6 +19,8 @@ area17_stage() {
     vf_build "$SOURCE_ROOT" "$features"
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" "${MODULES[@]}"
+    # The Lua observer and the visual scenario's camera; test-only.
+    cp "$FIXTURES_DIR/area17/scenario.lua" "$staged/LuaRules/Gadgets/test_area17_scenario.lua"
     vf_link_map "$("$PROJECT_ROOT/scripts/area17-map.sh" --dir)"
 }
 
@@ -156,12 +158,12 @@ area17_visual() {
         'the visual smoke-test scenario did not complete'
     vf_require 'Area 17 RmlUi HUD render pass reached' \
         'the RmlUi render pass was never reached'
-    vf_require 'Area 17 RmlUi callback: cheat resources' \
-        'the RmlUi Cheat Resources callback never dispatched'
+    vf_require 'Area 17 test resources granted' \
+        "the rules never received the e2e test's resources request"
     vf_require 'Area 17 RmlUi callback: technology toggle' \
-        'the RmlUi Technology callback never dispatched'
-    vf_require 'SDL/RmlUi input integration passed: four weapons fired and four abilities activated' \
-        'SDL/RmlUi input was not verified through engine gameplay'
+        'clicking the technology button never reached its RmlUi callback'
+    vf_require 'UI input reached the rules through the engine: four weapons fired, four abilities requested' \
+        "the UI's weapon and ability input did not reach the rules"
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
         'the visual run contains a runtime failure'
 

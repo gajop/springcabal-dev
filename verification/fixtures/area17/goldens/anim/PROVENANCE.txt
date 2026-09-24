@@ -1,13 +1,13 @@
-recorded   2026-09-24T07:18:58Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main c1c01ed337f3e7fa709d5bbbfc215c036624ab45  +21 uncommitted files
-game       spring-linux/games/Area17-wasm.sdd  area17-wasm-port 29aeedae182b443eed0d89c7ccda9ceda545ef71
+recorded   2026-09-24T23:24:03Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 55b0e9130571b60477a71fb60affd8d2d69010df  +23 uncommitted files
+game       spring-linux/games/Area17-wasm.sdd  area17-wasm-port 0f119318d0e282f31cf07c5c1f21f3201d14d7a8
 map        build/maps/Area17.sdd  (not version-controlled)
 map from   spring-linux/maps/Area17.sd7  sha1 1aa57a75b531735a600019963fbe00e8058f369f
 map patch  patches/area17-map (in dev repo)
-springcabal springcabal-rs  main 827e9c86cea895e3c2e26fd11a227255252a4aa2
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.07.01-279-g765edd6 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 1c9b010fe46b1ca1241a186f0b27233d56697141  +3 uncommitted files
-version    Spring Engine Version: 2026.07.01-279-g765edd6 rust-wip
+springcabal springcabal-rs  main 3187499d779251b4a8ec6dbf0a39b2a7f48f842d
+engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
+version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
 renderer   gpu
 gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
 gl         4.6.0 NVIDIA 580.178.04
