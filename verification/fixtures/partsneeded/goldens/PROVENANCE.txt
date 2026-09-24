@@ -1,11 +1,11 @@
-recorded   2026-09-24T09:57:57Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main e27e908e17c46f21aa56b277f587c810887f593d  +5 uncommitted files
-game       spring-linux/games/PartsNeeded-wasm.sdd  partsneeded-wasm-port ffbee410571e3bf6a9841f618ae4b72cab88111a
+recorded   2026-09-24T22:44:00Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 36774e444d69068712c8b71beb8395fb04e7ee6d  +21 uncommitted files
+game       spring-linux/games/PartsNeeded-wasm.sdd  partsneeded-wasm-port 92792687f65714193611547176d8c13cec626e23  +6 uncommitted files
 map        spring-linux/maps/LD35-map.sdd  master 4809b4e68667ef5df2034e6a3616201fb3ec270b  +2 uncommitted files
-springcabal springcabal-rs  main 416a90efe895edfbcf006b9cc71e8f2c4e03edad
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.07.01-279-g765edd6 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 1c9b010fe46b1ca1241a186f0b27233d56697141  +3 uncommitted files
-version    Spring Engine Version: 2026.07.01-279-g765edd6 rust-wip
+springcabal springcabal-rs  main 3187499d779251b4a8ec6dbf0a39b2a7f48f842d
+engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
+version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
 renderer   software
 gpu        llvmpipe (LLVM 20.1.2, 256 bits)
 gl         4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
