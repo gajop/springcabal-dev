@@ -267,6 +267,13 @@ ttld_visual() {
         'WASM hover did not trace orkboss'
     vf_require 'TTLD E2E hover fixture=orkbig unit=[0-9]+.*trace=1:[0-9]+ move_ok=true' \
         'WASM hover did not trace orkbig'
+    vf_require 'TTLD E2E mouse wheel accepted=true .*captured=true' \
+        'the HUD did not capture the mouse wheel'
+    vf_require 'TTLD E2E poultice sent: true' 'the e2e Poultice cast was not accepted'
+    vf_require 'TTLD E2E poultice target=[0-9]+ after=.* moved=[1-9][0-9]{2,}' \
+        'Poultice did not throw its target 100+ elmos'
+    vf_require 'TTLD E2E tracking after_move: .* error=0\.[0-9]' \
+        'the camera did not keep tracking the moving blood mage'
     vf_require 'TTLD E2E selection seeded=1' 'selection fixture did not select the player'
     vf_require 'TTLD E2E selection cleared=0' 'the player remained selected in the engine UI'
     vf_forbid 'GLSL-PO::Validate\] program-object name: SMFShader' \
