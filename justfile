@@ -15,7 +15,7 @@ wasm_games := `awk -F'\t' '$1 == "game" && $2 ~ /-wasm\.sdd$/ { printf "spring-l
 verify SUITE MODE="" *ARGS:
     ./verification/verify {{SUITE}} {{MODE}} {{ARGS}}
 
-# Every headless and static suite (in-game assertions, no screenshots)
+# Every in-game assertion suite and static check, no screenshots (unit-scripts needs xvfb)
 [group('test')]
 verify-all:
     ./verification/verify all

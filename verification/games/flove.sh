@@ -196,7 +196,7 @@ flove_original() {
     printf 'original -> %s\n' "$VF_OUT_DIR/original.png"
 }
 
-case "${1:-headless}" in
+case "${1:-}" in
     headless) flove_headless "${2:-}" ;;
     visual) flove_visual "${2:-}" ;;
     outline) flove_outline "${2:-}" ;;

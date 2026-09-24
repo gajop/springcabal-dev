@@ -199,7 +199,7 @@ gravitas_lit() {
         -format "%[fx:int(w*h*mean)]" info: 2>/dev/null
 }
 
-case "${1:-e2e}" in
+case "${1:-}" in
     headless) gravitas_headless "${2:-}" ;;
     e2e) gravitas_e2e "${2:-}" ;;
     shots) gravitas_shots "${2:-}" ;;

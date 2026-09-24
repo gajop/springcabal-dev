@@ -193,7 +193,7 @@ vf_start_file() {
 
     VF_START_FILE="$VF_TEST_ROOT/start.txt"
     cp "$fixture" "$VF_START_FILE"
-    sed -E -i "s/[Hh]ostport=[0-9]+;/hostport=$(shuf -i 20000-60000 -n 1);/" "$VF_START_FILE"
+    vf_random_host_port
     [[ -n $minspeed ]] && sed -E -i "s/minspeed=[^;]+;/minspeed=$minspeed;/" "$VF_START_FILE"
     [[ -n $maxspeed ]] && sed -E -i "s/maxspeed=[^;]+;/maxspeed=$maxspeed;/" "$VF_START_FILE"
     return 0
@@ -202,7 +202,13 @@ vf_start_file() {
 vf_start_inline() {
     VF_START_FILE="$VF_TEST_ROOT/start.txt"
     cat >"$VF_START_FILE"
-    sed -E -i "s/[Hh]ostport=[0-9]+;/hostport=$(shuf -i 20000-60000 -n 1);/" "$VF_START_FILE"
+    vf_random_host_port
+}
+
+# Every run gets its own host port, so runs never collide on the fixed 8452 of
+# the launch scripts (which spell it HostPort, hostport or Hostport).
+vf_random_host_port() {
+    sed -E -i "s/hostport[[:space:]]*=[[:space:]]*[0-9]+;/hostport=$(shuf -i 20000-60000 -n 1);/I" "$VF_START_FILE"
 }
 
 # vf_start_set KEY VALUE: set a top-level [GAME] entry such as GameType,

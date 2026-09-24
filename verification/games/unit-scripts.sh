@@ -114,7 +114,7 @@ partsneeded_unit_scripts() {
 	echo '>>> Parts Needed Lua/WASM unit-script verification passed <<<'
 }
 
-case "${1:-partsneeded}" in
+case "${1:-}" in
 	source) partsneeded_source ;;
 	partsneeded) partsneeded_unit_scripts "${2:-}" ;;
 	*) vf_die 'usage: unit-scripts.sh [source|partsneeded]' ;;

@@ -124,7 +124,7 @@ mycube_lua_headless() {
     echo '>>> My Cube Lua headless verification passed <<<'
 }
 
-case "${1:-headless}" in
+case "${1:-}" in
     headless) mycube_headless "${2:-}" ;;
     visual) mycube_visual "${2:-}" ;;
     lua-headless) mycube_lua_headless "${2:-}" ;;

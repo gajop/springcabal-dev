@@ -100,8 +100,11 @@ Committed-HEAD baseline for those two, without the uncommitted work:
 - **ttld headless:** **24** assertions. The uncommitted work adds 7, which is where the 31 above comes from.
 - **gravitas e2e:** passes, with the same 14 stages and checks as above.
 
-Engine runs must be serialized, because every launch script uses `HostPort=8452`. Wrap them as
-`flock /tmp/springcabal-verify.lock ./verification/verify ...`.
+Engine runs must be serialized. (This used to say "because every launch script uses
+`HostPort=8452`", but the suites randomize the host port now.) They share the `out/<suite>/`
+workspaces, the font and build caches, and the CPU, which real-time visual scenarios are sensitive to.
+`verification/verify` takes the lock (`/tmp/springcabal-verify.lock`) itself; wrapping it in
+`flock` is no longer needed.
 
 ## After the refactors (2026-09-24, round 2)
 

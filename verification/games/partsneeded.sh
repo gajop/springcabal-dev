@@ -95,7 +95,7 @@ partsneeded_visual() {
     printf 'Parts Needed visual E2E passed: %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
 }
 
-case "${1:-headless}" in
+case "${1:-}" in
     headless) partsneeded_headless "${2:-}" ;;
     visual) partsneeded_visual "${2:-}" ;;
     *) vf_die 'usage: partsneeded.sh [headless|visual] [seconds]' ;;

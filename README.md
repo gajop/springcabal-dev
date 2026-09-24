@@ -146,7 +146,7 @@ dir, logs and isolation views.
 ```bash
 just verify-list             # suites, modes, probes
 just verify flove            # one suite, default mode
-just verify-all              # every headless/static suite
+just verify-all              # every assertion suite and static check
 just verify-visual           # screenshot suites against committed goldens
 just update-goldens flove    # re-record goldens after an intended change
 ```

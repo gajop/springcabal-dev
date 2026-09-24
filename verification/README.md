@@ -6,7 +6,7 @@ Automated checks for every game, driven from the repository root with `just`:
 just verify-list                 # suites, modes, probes
 just verify flove                # one suite, default mode
 just verify flove visual         # one suite, one mode
-just verify-all                  # every headless/static suite
+just verify-all                  # every assertion suite and static check
 just verify-visual               # every screenshot suite against its goldens
 just update-goldens [suite]      # re-record goldens after an intended change
 just probe gravitas-fire lua     # a debugging probe
@@ -37,8 +37,17 @@ just probe gravitas-fire lua     # a debugging probe
 - `flove outline`, `wisps` and `original` render images for manual A/B
   inspection and do not fail on pixels.
 
-`verify all` runs every in-game assertion suite. `verify visual` runs every
-golden comparison. Both run their mode list from the table in `verify`.
+`verify all` runs every in-game assertion suite and the Area 17 static check.
+They run headless, except the unit-script comparison, which renders the
+Lua and WASM games under xvfb.  `verify visual` runs every golden comparison.
+Both take their run lists from the tables in `verify`, and that table's first
+mode per suite is the only place a default mode is defined.
+
+Only one `verify` runs at a time: it takes a `flock` on
+`/tmp/springcabal-verify.lock` (`VF_LOCK_FILE`) and waits for any other run.
+Runs share the `out/<suite>/` workspaces, the font and build caches and the
+CPU, and the real-time visual scenarios drift under load.  Wrapping `verify`
+in `flock` yourself is no longer needed, but still works.
 
 ## Renderer and graphics settings
 

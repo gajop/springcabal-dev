@@ -122,7 +122,7 @@ area17_visual() {
     echo '>>> Area 17 visual verification passed <<<'
 }
 
-case "${1:-headless}" in
+case "${1:-}" in
     static) area17_static ;;
     headless) area17_headless "${2:-}" ;;
     visual) area17_visual "${2:-}" ;;

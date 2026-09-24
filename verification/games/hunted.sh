@@ -92,7 +92,7 @@ hunted_visual() {
     echo '>>> Hunted visual verification passed <<<'
 }
 
-case "${1:-headless}" in
+case "${1:-}" in
     headless) hunted_headless "${2:-}" ;;
     visual) hunted_visual "${2:-}" ;;
     *) vf_die 'usage: hunted.sh [headless|visual] [seconds]' ;;

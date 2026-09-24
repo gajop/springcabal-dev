@@ -273,7 +273,7 @@ ttld_visual() {
     echo '>>> To the Last Drop visual verification passed <<<'
 }
 
-case "${1:-headless}" in
+case "${1:-}" in
     headless) ttld_headless "${2:-}" ;;
     visual) ttld_visual "${2:-}" "${3:-}" ;;
     lua-visual) ttld_lua_visual "${2:-}" "${3:-}" ;;

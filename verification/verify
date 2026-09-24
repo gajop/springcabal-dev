@@ -3,7 +3,8 @@ set -euo pipefail
 
 VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
-# suite: modes (the first is the default).  Keep in sync with games/*.sh.
+# suite: modes.  The first is the default: this table is the only place that
+# says so, and verify always passes a mode to games/<suite>.sh.
 declare -A MODES=(
     [area17]='headless visual static all'
     [flove]='headless visual outline wisps original'
@@ -15,7 +16,9 @@ declare -A MODES=(
     [unit-scripts]='partsneeded source'
     [gallery]='ceg anim parity'
 )
-# What `verify all` runs: every in-game assertion suite, no screenshots.
+# What `verify all` runs: every in-game assertion suite and the static checks,
+# no golden screenshots.  All but the unit-script comparison run headless; that
+# one renders under xvfb (the Lua and WASM traces come from the real engine).
 ALL_RUNS=(
     'area17 static' 'area17 headless' 'flove headless' 'gravitas e2e'
     'hunted headless' 'mycube headless' 'mycube lua-headless'
@@ -33,7 +36,8 @@ usage() {
 usage: verify <suite> [mode] [seconds]    run one suite (default mode: first listed)
        verify gallery ceg|anim|parity [game|all] [--only name,...]
        verify list                       suites and their modes
-       verify all                        every headless/static suite
+       verify all                        every assertion suite and static check
+                                         (headless, except unit-scripts: xvfb)
        verify visual                     every screenshot suite, compared to goldens
        verify update-goldens [suite]     re-record goldens from fresh renders
        verify probe <name> [args]        run a debugging probe (verification/probes)
@@ -46,6 +50,8 @@ Environment:
   SPRING_HEADLESS_BIN   override the headless engine binary
   GOLDEN_TOLERANCE      override the RMSE % limit against goldens (set per suite)
   KEEP_TEST_ARTIFACTS=1 keep temporary workspaces
+  VF_LOCK_FILE          lock that serializes verify runs
+                        (default /tmp/springcabal-verify.lock)
 
 Output, logs and screenshots land in verification/out/<suite>-<mode>/.
 EOS
@@ -78,10 +84,73 @@ run_all() {
     printf '\nall %d runs passed\n' "$#"
 }
 
+# One verify at a time: runs share verification/out/<suite>/ workspaces, the
+# font and build caches, and the CPU, and real-time visual scenarios drift
+# when they compete for it.  Nested runs skip the lock: this verify's own
+# children see VF_LOCK_HELD, and a caller that already holds it (the old
+# `flock /tmp/springcabal-verify.lock ./verification/verify ...`) passes the
+# locked descriptor down or is our ancestor.  flock on a fresh descriptor
+# there would wait for our own parent forever.
+take_lock() {
+    local lock=${VF_LOCK_FILE:-/tmp/springcabal-verify.lock} fd link holder
+    [[ ${VF_LOCK_HELD:-} == "$lock" ]] && return 0
+    touch "$lock"
+    for fd in /proc/$$/fd/*; do
+        link=$(readlink "$fd" 2>/dev/null) || continue
+        if [[ $link == "$(readlink -f "$lock")" ]]; then
+            fd=${fd##*/}
+            break
+        fi
+        fd=''
+    done
+    if [[ -z ${fd:-} ]]; then
+        exec {fd}>>"$lock"
+    fi
+    if ! flock -n "$fd"; then
+        holder=$(lock_holder "$lock")
+        if [[ -n $holder ]] && is_ancestor "$holder"; then
+            export VF_LOCK_HELD=$lock
+            return 0
+        fi
+        printf 'waiting for another verify run (%s, pid %s)...\n' "$lock" "${holder:-?}" >&2
+        flock "$fd"
+    fi
+    export VF_LOCK_HELD=$lock
+}
+
+# The pid that holds a flock on FILE, from /proc/locks.
+lock_holder() {
+    local inode
+    inode=$(stat -c %i "$1")
+    awk -v inode=":$inode" '$2 == "FLOCK" && substr($6, length($6) - length(inode) + 1) == inode { print $5; exit }' /proc/locks
+}
+
+is_ancestor() {
+    local pid=$PPID
+    while [[ -n $pid && $pid -gt 1 ]]; do
+        [[ $pid == "$1" ]] && return 0
+        pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+    done
+    return 1
+}
+
 [[ $# -ge 1 ]] || usage
 
 case "$1" in
     list) list_suites; exit 0 ;;
+    -h|--help) usage ;;
+    all|visual|update-goldens|probe) ;;
+    *)
+        [[ -n ${MODES[$1]:-} ]] || { printf 'unknown suite: %s\n\n' "$1" >&2; usage; }
+        if [[ -n ${2:-} && " ${MODES[$1]} " != *" $2 "* ]]; then
+            printf 'unknown mode for %s: %s (modes: %s)\n' "$1" "$2" "${MODES[$1]}" >&2
+            exit 2
+        fi
+        ;;
+esac
+take_lock
+
+case "$1" in
     all) run_all "${ALL_RUNS[@]}"; exit ;;
     visual) run_all "${VISUAL_RUNS[@]}"; exit ;;
     update-goldens)
@@ -105,10 +174,9 @@ case "$1" in
         shift 2
         exec bash "$probe" "$@"
         ;;
-    -h|--help) usage ;;
 esac
 
-[[ -n ${MODES[$1]:-} ]] || { printf 'unknown suite: %s\n\n' "$1" >&2; usage; }
 suite=$1
 shift
+[[ $# -gt 0 ]] || set -- "${MODES[$suite]%% *}"
 exec "$VERIFICATION_ROOT/games/$suite.sh" "$@"
