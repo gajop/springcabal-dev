@@ -43,14 +43,19 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
 - After an intended visual change, run `just update-goldens <suite>`, look at
   the images, then commit them.
 - `TODO.md` holds the current rating of every WASM and Lua version.
-- In a WASM port, rules code must not call its own unit scripts through the
-  engine (`spring::typed::call_unit_script`). The rules and the unit scripts
-  are the same module, so the call re-enters a module that is still inside a
-  gadget callin. The engine rejects it with ApiError 1, and `let _ =` hides
-  that. Queue the call inside the module and apply it on the Core-CUS tick
-  (see `queue_call` in the TTLD/Gravitas `unit_scripts/mod.rs`). Parts
-  Needed's piece masks, Gravitas' jumps and TTLD's spell/status animations
-  were all silently dropped this way.
+- In a WASM port, rules code reaches its own unit scripts directly through
+  `with_cus_module(|m| ...)` (defined by `export_core_cus!`): attach in
+  `UnitCreated`, call script functions in place. It returns `None` while the
+  CUS state is busy (inside a CUS export or a nested call); each game keeps a
+  small deferred list for that case only. Run a script's `Create` exactly
+  once: the engine also sends one after the attaching dispatch, and running
+  both doubled every animation task in Area17 and Hunted.
+- Don't hide engine errors behind `let _ =` where failure breaks gameplay
+  (orders, unit creation, script calls, document loads): log them. For
+  months every `call_unit_script` with arguments failed with ApiError 1 (a
+  crate bug, fixed in spring-bar `d1d5b0188c`), and `let _ =` hid it: Parts
+  Needed's piece masks, Gravitas' jumps and TTLD's spell animations were all
+  silently dropped.
 
 ## Logs
 

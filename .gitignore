@@ -57,3 +57,6 @@ __pycache__/
 
 # Personal launcher settings (see launch/local.cfg.example)
 launch/local.cfg
+
+# Shared SpringCabal crate: its own git repository
+springcabal-rs/
