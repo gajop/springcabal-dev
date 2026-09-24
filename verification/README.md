@@ -295,6 +295,7 @@ GAME_DIR="$GAMES_DIR/Example-wasm.sdd"
 
 example_headless() {
     local staged
+    vf_cleanup_on_exit          # remove the temp workspace, also on Ctrl+C
     vf_build "$GAME_DIR/wasm-src" headless-integration
     vf_workspace example-headless
     staged=$(vf_stage_game "$GAME_DIR")
@@ -306,10 +307,20 @@ example_headless() {
     vf_config
     vf_run_headless 45
     vf_save_logs
+    vf_require_clean_exit       # quitforce, not the timeout or a crash
     vf_require 'ALL EXAMPLE TESTS PASSED' 'the suite did not complete'
     vf_forbid 'panic|Wasm.*trap' 'the run contains a runtime failure'
+    printf 'assertions passed: %s\n' "$(vf_count 'ASSERTION PASSED')"
 }
 ```
+
+The engine writes every log line to stdout and to the infolog, and
+`last.combined.txt` holds both.  `vf_require` and `vf_forbid` search it,
+but anything that counts or lists lines reads one log, `vf_count_log` (the
+infolog after a clean exit, else stdout): `vf_count` and `vf_summary` do.
+Visual runs check `vf_require_exit_or_timeout` instead of
+`vf_require_clean_exit`: scenarios that don't quit themselves end by the
+timeout (status 124), and their markers and screenshots prove they finished.
 
 Then add the suite and its modes to the tables in `verify`. For a screenshot
 mode, end with `vf_goldens_by_index example shot_1 shot_2` (or `vf_golden`
@@ -317,7 +328,7 @@ per image) and `vf_goldens_done`.
 
 Other helpers: `vf_write_settings`, `vf_run_visual`, `vf_require_screenshots`,
 `vf_collect_screenshots`, `vf_rmse`, `vf_within`, `vf_percent`, `vf_count`,
-`vf_summary`.
+`vf_count_log`, `vf_summary`, `vf_renderer_info`, `vf_renderer_matches`.
 
 A map alias is often needed, because a start script names the map by its
 display name, which rarely matches the archive name.
