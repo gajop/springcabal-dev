@@ -72,16 +72,6 @@ flove_visual() {
     flove_start 10.0 30.0
     vf_config "$VISUAL_CONFIG"
     vf_graphics flove
-    # KNOWN DEVIATION from what players get (engine default SoftParticles=1):
-    # with soft particles on, no CEG or projectile sprite renders here (the
-    # zap, the spire's flare column, the upgrade burst).  Engine bug, not the
-    # game's: DepthBufferCopy blits the window's 24-bit depth into a 32-bit
-    # depth texture, and Mesa rejects the blit ("GL_INVALID_OPERATION in
-    # glBlitFramebuffer(depth attachment format mismatch)" with DebugGL=1,
-    # 2026-09-24), so every particle fades against a depth copy that never
-    # happened.  Likely every Mesa driver (Intel, radeonsi), not just llvmpipe.
-    # Remove this line once the engine copies depth in a matching format.
-    vf_config_set SoftParticles 0
     vf_run_visual "$seconds"
     vf_save_logs
     # test_scenario.lua ends the run with quitforce.
