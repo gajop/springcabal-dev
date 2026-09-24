@@ -61,8 +61,17 @@ mycube_headless() {
     echo '>>> MyCube headless verification passed <<<'
 }
 
+# The village in a 1280x720 screenshot from the engine's start camera, which
+# looks at the middle of the map from far away, through the fog (as the Lua
+# game does). The crop's contrast is stretched before the comparison: in the
+# raw crop the whole village is only 2% away from flat fog. Stretched, flat
+# fog is 15% off, and runs differ by up to 1.8% (drill ships, craters).
+VILLAGE_CROP=400x200+440+300
+VILLAGE_TOLERANCE=${VILLAGE_TOLERANCE:-4}
+
 mycube_visual() {
-    local seconds=${1:-75} shots
+    # The last screenshot comes at frame 2000, about 70 s in.
+    local seconds=${1:-100} shots index village
 
     # The integration feature fast-forwards the story to exercise every branch;
     # keep its synthetic victory out of the screenshots.
@@ -78,7 +87,16 @@ mycube_visual() {
         'the MyCube visual run contains a runtime failure'
 
     vf_note 'MyCube goldens'
-    vf_goldens_by_index mycube shot_1 shot_2 shot_3 shot_4 shot_5
+    local -a images
+    mapfile -t images < <(vf_screenshots)
+    # The whole screen once, for the HUD; then the village at each shot.
+    vf_golden mycube hud "${images[0]}"
+    mkdir -p "$VF_OUT_DIR/village"
+    for index in 0 1 2 3 4; do
+        village="$VF_OUT_DIR/village/village_$((index + 1)).png"
+        convert "${images[$index]}" -crop "$VILLAGE_CROP" +repage -normalize "$village"
+        vf_golden mycube "village_$((index + 1))" "$village" "$VILLAGE_TOLERANCE"
+    done
     vf_goldens_done
     printf 'MyCube visual E2E passed: %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
 }
