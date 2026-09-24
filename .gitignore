@@ -39,6 +39,7 @@ gemini-work/
 
 # Local overrides
 .cargo/config.toml
+.cargo/config.toml.bak
 
 
 # Release packaging output and downloaded engines
