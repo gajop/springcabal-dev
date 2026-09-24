@@ -90,3 +90,38 @@ setup-dev-engine ENGINE_PATH="":
 [group('engine')]
 remove-dev-engine:
     ./setup.sh --no-dev-engine
+
+# Free space in verification/out/: delete run workspaces, and whole dirs untouched for DAYS (`--dry-run` lists only)
+[group('test')]
+clean-verification-out DAYS="14" *FLAGS:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # What is kept: every out/<name>/ touched in the last DAYS days, minus its
+    # run/ workspace (the engine write dir and isolation view, rebuilt by the
+    # next run); its last.* logs, screenshots and golden diffs stay.
+    out=verification/out
+    dry=0
+    [[ " {{FLAGS}} " == *" --dry-run "* ]] && dry=1
+    [[ -d $out ]] || { echo "nothing to clean: no $out"; exit 0; }
+    # Never delete the workspace of a run in progress: wait for verify's lock.
+    if [[ $dry == 0 ]]; then
+        exec {lock}>>"${VF_LOCK_FILE:-/tmp/springcabal-verify.lock}"
+        flock -n "$lock" || { echo "waiting for the running verify to finish..."; flock "$lock"; }
+    fi
+    before=$(du -sh "$out" | cut -f1)
+    remove() {
+        du -sh "$1" | sed "s|^|  $([[ $dry == 1 ]] && echo would\ remove || echo removing)  |"
+        [[ $dry == 1 ]] || rm -rf -- "$1"
+    }
+    for dir in "$out"/*/; do
+        dir=${dir%/}
+        if [[ -z $(find "$dir" -newermt "-{{DAYS}} days" -print -quit) ]]; then
+            remove "$dir"
+        elif [[ -d $dir/run ]]; then
+            remove "$dir/run"
+        fi
+    done
+    for file in "$out"/*; do
+        [[ -f $file && -n $(find "$file" -mtime +{{DAYS}}) ]] && remove "$file"
+    done
+    echo "$out: $before before$([[ $dry == 1 ]] && echo ' (dry run: nothing removed)' || echo ", $(du -sh "$out" | cut -f1) now")"

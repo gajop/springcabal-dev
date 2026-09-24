@@ -272,6 +272,13 @@ cache/              font cache and build targets, shared across runs
 out/<suite>/        logs, screenshots and workspace of the last run
 ```
 
+`out/` only grows: every suite and probe keeps its last workspace in
+`out/<name>/run/`, and ad-hoc runs add directories of their own.
+`just clean-verification-out [DAYS] [--dry-run]` deletes every `run/`
+workspace, and every directory untouched for DAYS days (default 14).  The
+`last.*` logs, screenshots and golden diffs of recent runs stay.  It waits
+for a running `verify` first.
+
 Start scripts come from `launch/games/` (`vf_launch_script GAME [wasm|lua]`),
 the same files the menu compiles in and `run-wasm.sh` plays.  Suites add what
 they need with `vf_modoption test_mode 1` and `vf_start_set ...`. Suites whose scenario needs a special team layout
