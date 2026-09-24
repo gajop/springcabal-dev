@@ -158,8 +158,9 @@ graphics overrides) live in `lib.rs`. Rebuild after Rust changes with
 `just --justfile wasm-menu/wasm-src/justfile copy`, and restart the engine after
 editing RML/RCSS (styles may be cached across reloads).
 
-Games return to the menu in-process (`reloadforce`). `run-wasm.sh` relaunches
-the menu only when a game logs a return marker and then quits the process.
+Games return to the menu in-process (`reloadforce`, e.g. Ctrl+Q). A game
+launched directly (`./run-wasm.sh --game ...`) is started with the WASM menu
+named as the engine's menu, so quitting it lands in the WASM menu as well.
 
 To try the menu on a separate X display without touching your runtime files:
 ```bash

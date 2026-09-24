@@ -76,7 +76,6 @@ rm -rf -- "$isolation_dir/games" "$isolation_dir/maps"
 mkdir -p "$isolation_dir/games" "$isolation_dir/maps" "$write_dir" "$log_dir"
 
 session_log="$log_dir/wasm-$(date +%Y%m%d-%H%M%S)-$$.infolog.txt"
-return_marker="(AREA17|HUNTED|FLOVE|GRAVITAS|MYCUBE|TTLD)_RETURN_TO_WASM_MENU|RETURN_TO_WASM_MENU"
 
 cleanup() {
     if [[ -n "$start_file" ]]; then
@@ -104,32 +103,11 @@ cleanup() {
         echo "Saved session log: $session_log"
     fi
 }
-trap cleanup EXIT INT TERM
-
-launch_engine() {
-    set +e
-    "$@"
-    local status=$?
-    set -e
-    # Games normally return to the menu in-process (reloadforce).  Only a game
-    # that logs a return marker and then quits the process (MyCube's Ctrl+Q)
-    # needs the menu relaunched, so require the marker to come after the last
-    # time the menu was (re)loaded.
-    if returned_by_quitting "$write_dir/infolog.txt"; then
-        echo "Game requested a return to the WASM menu."
-        exec "$project_root/run-wasm.sh"
-    fi
-    return "$status"
-}
-
-returned_by_quitting() {
-    local log=$1 marker_line menu_line
-    [[ -f $log ]] || return 1
-    marker_line=$(grep -n -E "$return_marker" "$log" | tail -1 | cut -d: -f1)
-    [[ -n $marker_line ]] || return 1
-    menu_line=$(grep -n 'LuaMenuController::Reset' "$log" | tail -1 | cut -d: -f1)
-    (( marker_line > ${menu_line:-0} ))
-}
+# The summary runs once, on exit.  INT/TERM only exit, which runs it; a
+# handler on INT itself would run it twice.
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 # Engine data and every archive, as in the release bundle.
 ln -sfn "$engine_install/base" "$isolation_dir/base"
@@ -173,7 +151,7 @@ config="$run_dir/springsettings.cfg"
 if [[ -z "$game" ]]; then
     echo "Launching WASM Menu with experimental engine: $engine_bin"
     echo "Live log: $write_dir/infolog.txt"
-    launch_engine "$engine_bin" --window --write-dir "$write_dir" \
+    "$engine_bin" --window --write-dir "$write_dir" \
         --isolation --isolation-dir "$isolation_dir" --config "$config" \
         -menu "WasmMenu 1.0"
 else
@@ -185,7 +163,11 @@ else
 
     echo "Launching $game ($variant) with experimental engine: $engine_bin (port $host_port)"
     echo "Live log: $write_dir/infolog.txt"
-    launch_engine "$engine_bin" --window --write-dir "$write_dir" \
+    # Games leave with `reloadforce` (Ctrl+Q, quit buttons), which goes to the
+    # engine's menu.  Naming the WASM menu here makes that the menu, as it is
+    # when the game was started from it, so quitting a directly launched game
+    # also lands in the WASM menu, in the same process.
+    "$engine_bin" --window --write-dir "$write_dir" \
         --isolation --isolation-dir "$isolation_dir" --config "$config" \
-        "$start_file"
+        -menu "WasmMenu 1.0" "$start_file"
 fi
