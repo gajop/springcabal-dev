@@ -3,7 +3,7 @@
 This is a static review of the seven Rust/WASM ports under `spring-linux/games/*-wasm.sdd/wasm-src`. It is meant to drive follow-up work. Nothing was changed in the games.
 
 - The verified starting state is in [`BASELINE.md`](../BASELINE.md).
-- Items that belong to the engine or its crates are in `../spring-bar/WASM_GAME_API_TODO_2026-09-23.md`.
+- Items that belong to the engine or its crates are in `spring-bar/WASM_GAME_API_TODO_2026-09-24.md`, next to this repository (`../../spring-bar/` from here). It was `WASM_GAME_API_TODO_2026-09-23.md` when this review was written.
 
 ## Decisions (from review feedback)
 

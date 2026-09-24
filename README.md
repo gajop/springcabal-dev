@@ -17,16 +17,22 @@ are archived in [game-info/](game-info/README.md).
 
 ```text
 ├── content.tsv              # Every game/map/project: source repo, branch, shipped or not
-├── setup.sh                 # Clones content.tsv into spring-linux/, optionally fetches an engine
+├── setup.sh                 # Clones content.tsv and springcabal-rs, writes .cargo/config.toml,
+│                            #   optionally fetches an engine
 ├── run-wasm.sh              # Launches the WASM menu or a single game
 ├── wasm-menu/               # The game-selection menu (RmlUi + Rust/WASM)
-├── release/                 # Release packaging and smoke test (see RELEASING.md)
+├── release/                 # Release packaging and smoke test
+├── RELEASING.md             # How releases are built and published
 ├── verification/            # Automated test suite (headless, visual, static)
+├── BASELINE.md              # The last verified state: suite results and counts
+├── TODO.md                  # Current rating of every WASM and Lua version
+├── docs/                    # Code reviews of the WASM ports
 ├── game-info/               # Archived jam entries (descriptions, credits, ratings)
 ├── launch/                  # The one source of launch settings (see "Launch settings")
 ├── patches/                 # Patches applied to third-party archives (Area 17 map)
 ├── scripts/                 # Helper scripts (patched map builder)
 ├── justfile                 # Root commands for building, checking, testing, releasing
+├── springcabal-rs/          # (Gitignored, own private repo) the shared springcabal crates
 └── spring-linux/            # (Gitignored) game and map checkouts
 ```
 
