@@ -8,13 +8,14 @@ GAME_DIR="$GAMES_DIR/Hunted-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/HuntedMap.sdd"
 START_FILE="$(vf_launch_script hunted)"
+TEST_MARKER='ALL HUNTED INTEGRATION TESTS PASSED'
 MODULES=(
     hunted_rules_wasm:LuaRules/wasm/hunted-rules.wasm
     hunted_ui_wasm:LuaUI/wasm/hunted-ui.wasm
 )
 
 hunted_headless() {
-    local seconds=${1:-50} asset waves
+    local seconds=${1:-60} asset staged waves checks
     vf_cleanup_on_exit
 
     for asset in \
@@ -26,13 +27,15 @@ hunted_headless() {
         [[ -f $asset ]] || vf_die "required sound asset is missing: $asset"
     done
 
+    vf_build "$SOURCE_ROOT" hunted-rules-wasm/headless-integration
     vf_workspace hunted-headless
-    vf_link_game "$GAME_DIR"
+    staged=$(vf_stage_game "$GAME_DIR")
+    vf_install_modules "$staged" "${MODULES[@]}"
     vf_link_map "$MAP_DIR" 'Hunted - v04.sdd'
     vf_start_file "$START_FILE"
-    vf_quit_when 'static carrots, burrows, and lighthouses spawned' \
-        'rabbit wave started:' 'rabbit wave started:' \
-        'rabbit finished eating and is carrying a carrot' 'status sent frame='
+    vf_quit_when "$TEST_MARKER" 'static carrots, burrows, and lighthouses spawned' \
+        'rabbit wave started:' 'rabbit finished eating and is carrying a carrot' \
+        'status received frame='
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -40,19 +43,23 @@ hunted_headless() {
     vf_require_clean_exit
     [[ -s "$VF_OUT_DIR/last.infolog.txt" ]] || vf_die 'the headless run produced no infolog'
 
+    vf_forbid 'ASSERTION FAILED' 'one or more in-game assertions failed'
+    vf_require "$TEST_MARKER" 'the integration assertions did not pass'
     vf_require 'static carrots, burrows, and lighthouses spawned' 'static content never spawned'
     vf_require 'rabbit wave started:' 'no rabbit wave started'
     vf_require 'rabbit motion frame=.*moving=[1-9]' 'rabbits never moved'
     vf_require 'rabbit finished eating and is carrying a carrot' 'rabbits never ate a carrot'
-    vf_require 'status sent frame=' 'synced status never reached the UI boundary'
+    # Logged by the UI module, so the status crossed from the rules to the UI.
+    vf_require 'status received frame=' 'the synced status never reached the UI'
     vf_forbid 'AddressSanitizer|Segmentation fault|Wasm trap|fatal error|Lua.*error' \
         'the run contains a runtime failure'
 
     waves=$(vf_count 'rabbit wave started:')
-    [[ ${waves:-0} -ge 2 ]] || vf_die "expected at least two rabbit waves, observed ${waves:-0}"
+    checks=$(vf_count '\[Hunted-Rust-Test\] ASSERTION PASSED')
 
     vf_summary
     printf 'rabbit waves: %s\n' "$waves"
+    printf 'Rust rules assertions passed: %s\n' "$checks"
     echo '>>> Hunted headless verification passed <<<'
 }
 
@@ -71,17 +78,17 @@ hunted_visual() {
     vf_save_logs
 
     vf_require_exit_or_timeout
-    shots=$(vf_require_screenshots 3)
+    shots=$(vf_require_screenshots 4)
 
-    # The UI world is skipped in headless, so these are the only checks that
-    # exercise the Rust widgets at all: the HUD, the flashlight volume and the
-    # rabbit-visibility pass all run only under a real renderer.
+    # The HUD, the flashlight volume and the rabbit-visibility pass only draw
+    # under a real renderer.
+    vf_require 'HUNTED VISUAL SHOTS TAKEN' 'the visual run did not take its screenshots'
     vf_require 'rabbit wave started:' 'no rabbit wave started in the visual run'
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
         'the Hunted visual run contains a runtime failure'
 
     vf_note 'Hunted goldens'
-    vf_goldens_by_index hunted shot_1 shot_2 shot_3
+    vf_goldens_by_index hunted shot_1 shot_2 shot_3 shot_4
     vf_goldens_done
 
     vf_summary
