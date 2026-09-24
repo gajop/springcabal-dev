@@ -65,7 +65,7 @@ CFG
     grep -oE 'E2E case .*' "$log" | sed 's/^E2E case /  /' || true
     cases_failed=$(grep -cE 'E2E case .* FAIL' "$log" || true)
     failures=$((failures + cases_failed))
-    if ! grep -qE 'E2E summary passed=[0-9]+ failed=0' "$log"; then
+    if ! grep -qE 'E2E summary passed=18 failed=0' "$log"; then
         echo '  FAIL  the suite did not finish with every case passing'
         failures=$((failures + 1))
     fi
@@ -84,7 +84,8 @@ CFG
     gravitas_check "no undefined CEG" gravitas_absent 'CCEG::Load'
     gravitas_check "every model has a primary texture" gravitas_absent 'could not load primary texture'
     gravitas_check "no zero-power unit" gravitas_absent 'has really low power'
-    gravitas_check "no re-entered world state" gravitas_absent 'world state re-entered'
+    gravitas_check "no wasm trap, callin error or panic" gravitas_absent \
+        'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|already borrowed'
 
     echo
     if [[ ${GRAVITAS_FAILURES:-0} -eq 0 && $failures -eq 0 ]]; then
