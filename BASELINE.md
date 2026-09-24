@@ -110,6 +110,70 @@ workspaces, the font and build caches, and the CPU, which real-time visual scena
 `verification/verify` takes the lock (`/tmp/springcabal-verify.lock`) itself; wrapping it in
 `flock` is no longer needed.
 
+## Current state (2026-09-24 evening, after rounds 3-5)
+
+This is the reference now. The sections below it are history.
+
+**What rounds 3-5 changed:**
+- **Round 3:** the games moved onto the shared crates `gajop/springcabal-rs` (`springcabal`,
+  `springcabal-control`, commit `416a90e`), and the harness was fixed. Counts no longer double,
+  `verify` takes the lock itself, and the galleries show UI effects.
+- **Round 4:** fixes for `docs/wasm-quality-review-2026-09-24.md`.
+- **Round 5:** the games moved onto the engine's `CusHost`, with `Create` delivered exactly once.
+
+**Engine:** `2026.07.01-279-g765edd6 rust-wip`, binaries built 2026-09-24 16:04.
+
+| game | branch | HEAD |
+|---|---|---|
+| Area17 | `area17-wasm-port` | `43cc58f` |
+| Flove | `flove-wasm-port` | `de4a033` |
+| Gravitas | `gravitas-wasm-port` | `f419485` (+ another session's uncommitted fire work) |
+| Hunted | `hunted-wasm-port` | `ca44329` |
+| MyCube | `mycube-wasm-port` | `97860a6` |
+| PartsNeeded | `partsneeded-wasm-port` | `6bc91b6` |
+| TTLD | `ttld-wasm-port` | `b452b0e` |
+
+`just verify-all` (all runs pass; counts are real, not doubled):
+
+| run | result |
+|---|---|
+| area17 static / headless | pass; Rust **17**, Lua **6**; log 1 error, 4 warnings |
+| flove headless | rules **46**, UI input **4**, scenario **8**; log 1 error, 9 warnings |
+| gravitas e2e | **18/18** cases (adds flee, shoot, death and level) plus the build/log checks |
+| hunted headless | **20** assertions, 2 rabbit waves; log 1 error, 0 warnings |
+| mycube headless / lua-headless | **29** assertions / pass |
+| partsneeded headless | **57** + **3** ending |
+| ttld headless | **42** (adds a round-2 restart check) |
+| unit-scripts partsneeded | pass; source comparison active |
+
+`just verify-visual`: every scenario suite passes, and more shots are compared now:
+
+| suite | shots compared |
+|---|---|
+| MyCube | 5 |
+| Parts Needed | 4, plus the ending's final frame |
+| Hunted | 4 |
+| TTLD | 3, plus the e2e wheel, Poultice and tracking checks |
+
+The galleries:
+- **Anim galleries** pass for six games.
+- **Gravitas anim** fails in the main checkout, only on the fire units (cometopapa, fire, electrafi,
+  gate, wall1). The installed UI module includes the uncommitted fire work; it passes from a clean
+  worktree of HEAD. Re-record it when that work is committed.
+- **CEG galleries** pass. `area17 sickfires/near/f02` and `flove barftrail/near/f02` are known to
+  flake on engine particle noise; rerun once before concluding.
+
+Every golden re-record is explained in its commit message, and the evidence is under
+`~/worktrees/golden-diffs-2026-09-24/<game>/`.
+
+**Known engine issues affecting the games** (the `spring-bar/WASM_GAME_API_TODO_2026-09-24.md`
+items are named in brackets):
+- the cylinder query searches a sphere at height 0 [F]; Flove and Hunted query a bounding square
+  instead;
+- soft particles vanish on Mesa [G]; the Flove visual suite pins `SoftParticles 0`;
+- identical unsynced random streams [J];
+- `CusHost`'s pre-game clock [I]; the games attach pre-game units on the first frame.
+
 ## After the refactors (2026-09-24, round 2)
 
 Two refactor rounds are done; none of it is pushed. The round-1 briefs are in
