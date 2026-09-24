@@ -22,22 +22,27 @@ area17_stage() {
     vf_link_map "$("$PROJECT_ROOT/scripts/area17-map.sh" --dir)"
 }
 
+# Build hygiene: fmt, clippy, and the installed modules match a fresh build of
+# the source, built outside the checkout (see area17_static_target).
 area17_static() {
-    local target_root="$SOURCE_ROOT/target/wasm32-unknown-unknown/release" artifact
+    local reference="$SOURCE_ROOT/target" target pair crate installed fresh
 
-    (
-        cd "$SOURCE_ROOT"
-        cargo fmt --all -- --check
-        cargo clippy --workspace --target wasm32-unknown-unknown --release -- -D warnings
-        cargo build --workspace --target wasm32-unknown-unknown --release
-    )
-
-    for artifact in area17_rules_wasm.wasm area17_ui_wasm.wasm; do
-        [[ -s "$target_root/$artifact" ]] || vf_die "missing build artifact: $artifact"
+    VF_OUT_DIR="$VERIFICATION_ROOT/out/area17-static"
+    mkdir -p "$VF_OUT_DIR"
+    target=$(area17_static_target "$reference")
+    vf_build "$SOURCE_ROOT" '' "$target"
+    for pair in "${MODULES[@]}"; do
+        crate=${pair%%:*}
+        installed="$GAME_DIR/${pair#*:}"
+        fresh="$VF_OUT_DIR/$crate.wasm"
+        [[ -s "$VF_BUILD_OUT/$crate.wasm" ]] || vf_die "missing build artifact: $crate.wasm"
+        # Name the fresh build's target directory as `just copy` names it.
+        FROM=$target TO=$reference perl -0777 -pe 's/\Q$ENV{FROM}\E/$ENV{TO}/g' \
+            "$VF_BUILD_OUT/$crate.wasm" | area17_code_only >"$fresh"
+        area17_code_only <"$installed" >"$fresh.installed"
+        cmp "$fresh" "$fresh.installed" ||
+            vf_die "$installed does not match its source; rebuild it with \`just copy\` in $SOURCE_ROOT"
     done
-
-    cmp "$target_root/area17_rules_wasm.wasm" "$GAME_DIR/LuaRules/wasm/area17-rules.wasm"
-    cmp "$target_root/area17_ui_wasm.wasm" "$GAME_DIR/LuaUI/wasm/area17-ui.wasm"
 
     if grep -rnE --include='*.rs' '\bunsafe\b|align4|to_le_bytes|from_le_bytes|#!\[allow\(clippy::all\)\]' \
         "$SOURCE_ROOT/rules-synced/src" "$SOURCE_ROOT/ui/src"; then
@@ -50,6 +55,50 @@ area17_static() {
     done
 
     echo '>>> Area 17 static verification passed <<<'
+}
+
+# A wasm module without its custom sections (the name section, producers):
+# code, data, types, imports and exports.  ThinLTO suffixes local symbol
+# names with a hash of the object file's path (`.llvm.<hash>`), so the name
+# section changes with the target directory even when the code does not.
+area17_code_only() {
+    python3 -c '
+import sys
+data = sys.stdin.buffer.read()
+def leb(i):
+    value = shift = 0
+    while True:
+        byte = data[i]; i += 1
+        value |= (byte & 0x7f) << shift; shift += 7
+        if byte < 0x80:
+            return value, i
+out, i = bytearray(data[:8]), 8
+while i < len(data):
+    size, body = leb(i + 1)
+    if data[i] != 0:
+        out += data[i:body + size]
+    i = body + size
+sys.stdout.buffer.write(out)
+'
+}
+
+# The modules embed their build directory: the spring crate's generated
+# bindings live in OUT_DIR, and their panic locations name it.  So a build in
+# verification/cache/ can't be byte-identical to the checkout's target/, which
+# the suites never write to.  Instead, build into a cache directory whose path
+# has exactly the length of REFERENCE, so the only difference is the text of
+# that path, which area17_static replaces before comparing.  (Cargo's metadata
+# hashes don't depend on the target directory.)
+area17_static_target() {
+    local reference=${1:?reference} base pad
+    for base in "$BUILD_CACHE/Area17-static-" "${TMPDIR:-/tmp}/vf-a17-"; do
+        pad=$(( ${#reference} - ${#base} ))
+        if (( pad >= 1 )); then
+            printf '%s%s\n' "$base" "$(printf '%*s' "$pad" '' | tr ' ' x)"
+            return
+        fi
+    done
+    vf_die "no build directory as short as $reference; the static check needs one of equal length"
 }
 
 area17_headless() {

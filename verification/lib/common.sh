@@ -442,14 +442,15 @@ vf_run_visual() {
     return 0
 }
 
-# vf_build SOURCE_ROOT [FEATURES]
-# fmt + clippy + build into verification/cache/target/<game>, never into the
-# checkout's own target/ (whose output `just copy` installs).  Sets VF_BUILD_OUT.
+# vf_build SOURCE_ROOT [FEATURES] [TARGET_DIR]
+# fmt + clippy + build into verification/cache/target/<game> (or TARGET_DIR),
+# never into the checkout's own target/ (whose output `just copy` installs).
+# Sets VF_BUILD_OUT.
 vf_build() {
-    local source_root=${1:?wasm-src} features=${2:-} game target
+    local source_root=${1:?wasm-src} features=${2:-} game target=${3:-}
     [[ -d $source_root ]] || vf_die "wasm source not found: $source_root"
     game=$(basename "$(dirname "$source_root")")
-    target="$BUILD_CACHE/$game"
+    [[ -n $target ]] || target="$BUILD_CACHE/$game"
     local -a feature_args=()
     [[ -n $features ]] && feature_args=(--features "$features")
     (
