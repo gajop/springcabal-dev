@@ -525,9 +525,13 @@ vf_collect_screenshots() {
 }
 
 # vf_source_line LABEL PATH: one provenance line for a game/map/engine source.
+# Only a directory that is itself the top of a git checkout gets a commit: a
+# plain folder inside another repository (build/maps/, or anything under the
+# gitignored spring-linux/) would otherwise report that repository's HEAD.
 vf_source_line() {
     local label=$1 path=$2 top rev dirty
-    if [[ -d $path ]] && top=$(git -C "$path" rev-parse --show-toplevel 2>/dev/null); then
+    if [[ -d $path ]] && top=$(git -C "$path" rev-parse --show-toplevel 2>/dev/null) &&
+        [[ $(readlink -f "$top") == "$(readlink -f "$path")" ]]; then
         rev=$(git -C "$path" rev-parse HEAD)
         dirty=$(git -C "$path" status --porcelain --untracked-files=no | wc -l)
         printf '%-10s %s  %s %s%s\n' "$label" "${path#"$PROJECT_ROOT"/}" \
@@ -536,8 +540,72 @@ vf_source_line() {
     elif [[ -f $path ]]; then
         printf '%-10s %s  sha1 %s\n' "$label" "${path#"$PROJECT_ROOT"/}" "$(sha1sum "$path" | cut -d' ' -f1)"
     else
-        printf '%-10s %s  (not a git checkout)\n' "$label" "${path#"$PROJECT_ROOT"/}"
+        printf '%-10s %s  (not version-controlled)\n' "$label" "${path#"$PROJECT_ROOT"/}"
     fi
+}
+
+# vf_crates_line: where the shared springcabal crates came from.  With the
+# [patch] that setup-dev-engine writes into .cargo/config.toml, the local
+# springcabal-rs checkout; otherwise the git revision in each game's Cargo.lock.
+vf_crates_line() {
+    local checkout="$PROJECT_ROOT/springcabal-rs"
+    if [[ -d $checkout ]] && grep -qs 'springcabal-rs' "$PROJECT_ROOT/.cargo/config.toml"; then
+        vf_source_line "springcabal" "$checkout"
+    else
+        printf '%-10s %s\n' "springcabal" "git dependency (revision in the game's wasm-src/Cargo.lock)"
+    fi
+}
+
+# vf_engine_version: the version string of the rendering engine binary.
+vf_engine_version() {
+    local bin=${SPRING_ENGINE_BIN:-$ENGINE_INSTALL/spring}
+    [[ -x $bin ]] || { printf 'unknown (no %s)\n' "$bin"; return; }
+    timeout 20 "$bin" --version 2>/dev/null | grep -m1 -E 'version' || printf 'unknown\n'
+}
+
+# Renderer identity of the last run, as "key value" lines (the format of the
+# gallery's renderer.txt):
+#   backend      software | gpu | screen (VF_RENDERER)
+#   gl_renderer  the GL renderer string: the GPU, or llvmpipe and its LLVM
+#   gl_version   the GL version string, which names the driver
+# Pixels are only compared against goldens from the same backend, GPU and
+# driver; a different one skips the pixel checks with a message.
+vf_renderer_info() {
+    local log="$VF_WRITE_DIR/stdout.txt"
+    printf 'backend %s\n' "$(vf_renderer)"
+    printf 'gl_renderer %s\n' "$(grep -m1 -oE 'GL renderer : .*' "$log" 2>/dev/null | sed 's/GL renderer : //')"
+    printf 'gl_version %s\n' "$(grep -m1 -oE 'GL version  : .*' "$log" 2>/dev/null | sed 's/GL version  : //')"
+}
+
+# vf_recorded_renderer DIR: the renderer info a golden directory was recorded
+# with: DIR/renderer.txt, else the renderer/gpu/gl lines of DIR/PROVENANCE.txt
+# (goldens recorded before renderer.txt existed).  Prints nothing if neither.
+vf_recorded_renderer() {
+    local dir=${1:?golden dir}
+    if [[ -s $dir/renderer.txt ]]; then
+        cat "$dir/renderer.txt"
+    elif [[ -s $dir/PROVENANCE.txt ]]; then
+        awk '$1 == "renderer" { $1 = ""; print "backend" $0 }
+             $1 == "gpu"      { $1 = ""; print "gl_renderer" $0 }
+             $1 == "gl"       { $1 = ""; print "gl_version" $0 }' "$dir/PROVENANCE.txt"
+    fi
+}
+
+# vf_renderer_matches DIR: whether the last run's renderer is the one the
+# goldens in DIR were recorded with.  On a mismatch, prints both and returns 1.
+# No record at all counts as a match.
+vf_renderer_matches() {
+    local dir=${1:?golden dir} recorded current
+    recorded=$(vf_recorded_renderer "$dir")
+    [[ -n $recorded ]] || return 0
+    current=$(vf_renderer_info)
+    [[ $recorded == "$current" ]] && return 0
+    printf '  WARNING  the goldens in %s were recorded on another renderer; pixel comparisons are skipped.\n' \
+        "${dir#"$PROJECT_ROOT"/}"
+    printf '           recorded: %s\n' "$(tr '\n' ';' <<<"$recorded" | sed 's/;$//; s/;/; /g')"
+    printf '           this run: %s\n' "$(tr '\n' ';' <<<"$current" | sed 's/;$//; s/;/; /g')"
+    printf '           Re-record them on this renderer (just update-goldens), or match VF_RENDERER.\n'
+    return 1
 }
 
 # The game and map of the current run, resolved from the isolation view (the
@@ -561,8 +629,10 @@ vf_run_map() {
 }
 
 # vf_provenance FILE GAME_DIR MAP [MAP_SOURCE]: records what a golden was made
-# from, so a recording can be reproduced or explained later.  Uses the log of
-# the last run in $VF_WRITE_DIR for the engine version and GPU.
+# from, so a recording can be reproduced or explained later.  The engine line
+# is the binary's own version string; "engine src" is the spring-bar checkout,
+# whose working tree also provides the spring crates.  Uses the log of the last
+# run in $VF_WRITE_DIR for the logged version and the GPU.
 vf_provenance() {
     local file=${1:?file} game_dir=${2:?game dir} map=${3:?map} map_source=${4:-} log="$VF_WRITE_DIR/stdout.txt"
     mkdir -p "$(dirname "$file")"
@@ -574,7 +644,8 @@ vf_provenance() {
         [[ -n $map_source ]] && vf_source_line "map from" "$map_source"
         [[ -d $PROJECT_ROOT/patches ]] && [[ $map == *Area17* ]] &&
             printf '%-10s patches/area17-map (in dev repo)\n' "map patch"
-        vf_source_line "engine" "$ENGINE_INSTALL"
+        vf_crates_line
+        printf '%-10s %s  %s\n' "engine" "${ENGINE_INSTALL#"$PROJECT_ROOT"/}" "$(vf_engine_version)"
         [[ -d $ENGINE_ROOT/.git ]] && vf_source_line "engine src" "$ENGINE_ROOT"
         printf '%-10s %s\n' "version" "$(grep -m1 -oE 'Spring Engine Version: .*|Recoil .*version.*' "$log" | head -1)"
         printf '%-10s %s\n' "renderer" "$(vf_renderer)"
@@ -608,11 +679,16 @@ vf_golden() {
         cp "$current" "$golden"
         printf '  UPDATED  %s\n' "${golden#"$PROJECT_ROOT"/}"
         vf_provenance "$FIXTURES_DIR/$game/goldens/PROVENANCE.txt" "$(vf_run_game)" "$(vf_run_map)"
+        vf_renderer_info >"$FIXTURES_DIR/$game/goldens/renderer.txt"
         return 0
     fi
     if [[ ! -f $golden ]]; then
         printf '  MISSING  %s (run with VF_UPDATE_GOLDENS=1 to record it)\n' "$name"
         GOLDEN_FAILURES=$((GOLDEN_FAILURES + 1))
+        return 0
+    fi
+    if ! vf_golden_renderer_ok "$game"; then
+        printf '  SKIP     %s (recorded on another renderer, see above)\n' "$name"
         return 0
     fi
     difference=$(vf_rmse "$golden" "$current" "$work/$name.diff.png")
@@ -623,6 +699,17 @@ vf_golden() {
             "$name" "$(vf_percent "$difference")" "$tolerance" "$work/$name.diff.png"
         GOLDEN_FAILURES=$((GOLDEN_FAILURES + 1))
     fi
+}
+
+# vf_golden_renderer_ok GAME: vf_renderer_matches for the game's scenario
+# goldens, checked (and explained) once per run.
+VF_GOLDEN_RENDERER_OK=''
+vf_golden_renderer_ok() {
+    if [[ -z $VF_GOLDEN_RENDERER_OK ]]; then
+        VF_GOLDEN_RENDERER_OK=1
+        vf_renderer_matches "$FIXTURES_DIR/${1:?game}/goldens" || VF_GOLDEN_RENDERER_OK=0
+    fi
+    [[ $VF_GOLDEN_RENDERER_OK == 1 ]]
 }
 
 # vf_goldens_by_index GAME NAME... : the Nth screenshot of the run is golden NAME.

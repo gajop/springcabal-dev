@@ -165,6 +165,7 @@ CFG
 gravitas_hud_and_fire() {
     local golden=$1 current=$2 hud hud_percent now want floor
     [[ -f $golden && -f $current ]] || return 0
+    vf_golden_renderer_ok gravitas || return 0
 
     # `compare` takes no drawing options, so the masked crops are rendered
     # first. See vf_rmse: `compare` signals "images differ" through its status.

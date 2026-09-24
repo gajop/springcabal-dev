@@ -71,8 +71,13 @@ the start of every run (`[Gallery] graphics ...`).
 Galleries default to `gpu` (720x720).  The scenario suites capture at
 1280x720, which doesn't fit the offscreen display, so they default to
 `software`; run them with `VF_RENDERER=screen` when fidelity matters.  Goldens
-store the renderer they were recorded with.  Runs on a different renderer
-still check poses and presence, but skip pixel comparisons with a warning.
+store the renderer they were recorded with: the backend, the GL renderer
+string (the GPU, or llvmpipe with its LLVM version) and the GL version string
+(the driver), in `renderer.txt` next to them (older scenario goldens: the
+`renderer`/`gpu`/`gl` lines of their `PROVENANCE.txt`).  A run on a different
+renderer still checks poses, markers and presence, but skips pixel comparisons
+and says why.  `lib/common.sh` has the shared helpers: `vf_renderer_info`
+writes the record, `vf_renderer_matches DIR` compares a run with it.
 
 ## Suites never touch the game checkouts
 
@@ -237,8 +242,13 @@ Every recording writes a `PROVENANCE.txt` next to its goldens
 `fixtures/<game>/goldens/PROVENANCE.txt` for scenario screenshots).  It
 records:
 - this repo's commit;
-- the game archive's and map's branch and commit, flagging uncommitted files;
-- the engine install and source commit, and the engine version string;
+- the game archive's and map's branch and commit, flagging uncommitted files
+  (a folder that isn't the top of its own git checkout, like the extracted
+  Area 17 map, is "not version-controlled");
+- the engine install with its binary's version string, and the spring-bar
+  checkout (`engine src`), whose working tree provides the `spring` crates;
+- the springcabal crates: the `springcabal-rs` checkout's commit when
+  `.cargo/config.toml` patches it in, else the game's `Cargo.lock` revision;
 - the renderer, GPU and GL driver, and a hash of `launch/springsettings.cfg`.
 
 Game repos are never written to; everything lives here.
