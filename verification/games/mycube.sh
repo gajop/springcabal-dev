@@ -44,7 +44,7 @@ mycube_stage() {
 }
 
 mycube_headless() {
-    # The integration suite finishes at frame 1020 (~40s headless).
+    # The integration suite finishes at frame 1036 (~37s headless).
     local seconds=${1:-60}
     vf_cleanup_on_exit
 
@@ -72,13 +72,13 @@ mycube_visual() {
     vf_run_visual "$seconds"
     vf_save_logs
     vf_require_exit_or_timeout
-    shots=$(vf_require_screenshots 3)
+    shots=$(vf_require_screenshots 5)
     vf_require 'MYCUBE VISUAL E2E PASSED' 'MyCube did not reach its visual test marker'
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
         'the MyCube visual run contains a runtime failure'
 
     vf_note 'MyCube goldens'
-    vf_goldens_by_index mycube shot_1 shot_2 shot_3
+    vf_goldens_by_index mycube shot_1 shot_2 shot_3 shot_4 shot_5
     vf_goldens_done
     printf 'MyCube visual E2E passed: %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
 }
