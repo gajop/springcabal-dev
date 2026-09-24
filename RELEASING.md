@@ -76,8 +76,8 @@ just smoke-test release/out/SpringCabal-<ver>-linux
 ```
 
 The smoke test starts every menu entry under `spring-headless`, with the same
-start script the menu uses. Each one must load and simulate at least 150
-frames. It also boots the menu under xvfb, and prints a per-game error count
+start script the menu uses. Each one must load and still be running at the
+timeout; the frame count is informational. It also boots the menu under xvfb, and prints a per-game error count
 from the infolog. After that, play at least one WASM and one Lua game from the
 menu on each platform, and return to the menu from inside a game.
 

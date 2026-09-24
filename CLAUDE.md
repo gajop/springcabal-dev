@@ -43,13 +43,13 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
 - After an intended visual change, run `just update-goldens <suite>`, look at
   the images, then commit them.
 - `TODO.md` holds the current rating of every WASM and Lua version.
-- In a WASM port, rules code reaches its own unit scripts directly through
-  `with_cus_module(|m| ...)` (defined by `export_core_cus!`): attach in
-  `UnitCreated`, call script functions in place. It returns `None` while the
-  CUS state is busy (inside a CUS export or a nested call); each game keeps a
-  small deferred list for that case only. Run a script's `Create` exactly
-  once: the engine also sends one after the attaching dispatch, and running
-  both doubled every animation task in Area17 and Hunted.
+- `BASELINE.md` holds the counts every change must reproduce, and
+  `docs/open-problems.md` the known open problems (delete entries when fixed).
+- In a WASM port, unit scripts are hosted by the engine SDK's
+  `spring::cus::host::CusHost`. Rules code attaches scripts in `UnitCreated`
+  and calls them through `with_cus_module_or_defer` (from `export_core_cus!`),
+  which queues the call while the CUS state is busy. The engine delivers
+  `Create` exactly once; never run it yourself.
 - Don't hide engine errors behind `let _ =` where failure breaks gameplay
   (orders, unit creation, script calls, document loads): log them. For
   months every `call_unit_script` with arguments failed with ApiError 1 (a

@@ -57,9 +57,7 @@ plus the per-game overrides the menu applies (`vf_graphics` reads
 `launch/games/<game>/graphics.cfg`: Area 17 gets 200,000 particles, shadows
 and water level 4; Hunted gets shadows off).  The
 only test-only changes are the window size, a muted mixer, a hidden console and
-hidden FPS/speed counters, plus one known deviation: Flove's visual suite turns
-soft particles off, because with them its upgrade explosion doesn't render
-under llvmpipe (see `games/flove.sh`).  The gallery logs the effective settings and GPU at
+hidden FPS/speed counters.  The gallery logs the effective settings and GPU at
 the start of every run (`[Gallery] graphics ...`).
 
 `VF_RENDERER` picks the backend:
