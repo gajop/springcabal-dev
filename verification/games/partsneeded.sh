@@ -52,7 +52,7 @@ EOS
 
 partsneeded_headless() {
     local seconds=${1:-120}
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     vf_workspace partsneeded-headless
     partsneeded_stage headless-integration

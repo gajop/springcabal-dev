@@ -137,6 +137,16 @@ vf_percent() {
     awk -v value="${1:-1}" 'BEGIN { printf "%.1f", value * 100 }'
 }
 
+# vf_cleanup_on_exit: remove the temporary workspace when the suite ends.
+# Only EXIT runs the cleanup.  INT and TERM just exit (130/143), which runs
+# the EXIT trap once; a handler on INT itself would let the script continue
+# after Ctrl+C and then clean up a second time on exit.
+vf_cleanup_on_exit() {
+    trap 'vf_keep_workspace_unless' EXIT
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
+}
+
 vf_keep_workspace_unless() {
     local keep=${KEEP_TEST_ARTIFACTS:-0}
     [[ $keep == 1 ]] && return 0

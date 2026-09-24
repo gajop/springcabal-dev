@@ -54,7 +54,7 @@ area17_static() {
 
 area17_headless() {
     local seconds=${1:-90}
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     vf_workspace area17-headless
     area17_stage headless-integration

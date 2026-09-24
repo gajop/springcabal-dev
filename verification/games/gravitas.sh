@@ -30,7 +30,7 @@ gravitas_stage() {
 
 gravitas_headless() {
     local seconds=${1:-40}
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     vf_workspace gravitas-headless
     vf_link_game "$GAME_DIR"
@@ -47,7 +47,7 @@ gravitas_e2e() {
     local seconds=${1:-40} failures=0 cases_failed
 
     vf_workspace gravitas-e2e
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
     gravitas_stage
     vf_write_settings <<'CFG'
 UseFontConfigLib = 0

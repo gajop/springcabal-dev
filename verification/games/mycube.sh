@@ -46,7 +46,7 @@ mycube_stage() {
 mycube_headless() {
     # The integration suite finishes at frame 1020 (~40s headless).
     local seconds=${1:-60}
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     vf_workspace mycube-headless
     mycube_stage headless-integration
@@ -86,7 +86,7 @@ mycube_visual() {
 # The original Lua game must boot on this engine without any Lua errors.
 mycube_lua_headless() {
     local seconds=${1:-20} asset unexpected_errors
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     for asset in \
         "$LUA_GAME_DIR/ModInfo.lua" \

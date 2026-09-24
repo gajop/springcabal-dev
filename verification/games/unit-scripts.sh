@@ -96,7 +96,7 @@ partsneeded_source() {
 
 partsneeded_unit_scripts() {
 	local seconds=${1:-25}
-	trap 'vf_keep_workspace_unless' EXIT INT TERM
+	vf_cleanup_on_exit
 	[[ -f $PROBE ]] || vf_die "unit-script probe is missing: $PROBE"
 	[[ -d $MAP_DIR ]] || vf_die "map archive is missing: $MAP_DIR"
 	partsneeded_source

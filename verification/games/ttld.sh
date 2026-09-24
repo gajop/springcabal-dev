@@ -178,7 +178,7 @@ ttld_assert_leader_render() {
 
 ttld_headless() {
     local seconds=${1:-45}
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     vf_workspace ttld-headless
     ttld_stage headless-integration
@@ -201,7 +201,7 @@ ttld_headless() {
 ttld_pose_parity() {
     local seconds=${1:-14}
     local rust_log lua_log
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     vf_workspace ttld-pose-rust stable
     rust_log="$VF_OUT_DIR/last.combined.txt"

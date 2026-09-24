@@ -15,7 +15,7 @@ MODULES=(
 
 hunted_headless() {
     local seconds=${1:-50} asset waves
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     for asset in \
         "$GAME_DIR/LuaUI/sounds/Zeus_vs_Bunnies.ogg" \

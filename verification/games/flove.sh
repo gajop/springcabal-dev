@@ -35,7 +35,7 @@ flove_start() {
 
 flove_headless() {
     local seconds=${1:-45}
-    trap 'vf_keep_workspace_unless' EXIT INT TERM
+    vf_cleanup_on_exit
 
     vf_build "$SOURCE_ROOT" headless-integration
     vf_workspace flove-headless
