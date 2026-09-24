@@ -64,18 +64,23 @@ flove_headless() {
 flove_visual() {
     local seconds=${1:-45} shots
 
-    vf_build "$SOURCE_ROOT" headless-integration
+    # Only the scenario's commands: the Rust integration suites would restart
+    # the round and click through the story between the shots.
+    vf_build "$SOURCE_ROOT" test-commands
     vf_workspace flove-visual stable
     flove_stage >/dev/null
     flove_start 10.0 30.0
     vf_config "$VISUAL_CONFIG"
     vf_graphics flove
     # KNOWN DEVIATION from what players get (engine default SoftParticles=1):
-    # with soft particles on, the golden-upgrade explosion in the 05_* shots
-    # does not show under llvmpipe (2026-09-24: 9.8% and 10.2% off golden,
-    # the effect missing; everything else within 3.4%).  Not investigated yet:
-    # it may be llvmpipe-only or a real soft-particle bug.  Remove this line
-    # once that is settled.
+    # with soft particles on, no CEG or projectile sprite renders here (the
+    # zap, the spire's flare column, the upgrade burst).  Engine bug, not the
+    # game's: DepthBufferCopy blits the window's 24-bit depth into a 32-bit
+    # depth texture, and Mesa rejects the blit ("GL_INVALID_OPERATION in
+    # glBlitFramebuffer(depth attachment format mismatch)" with DebugGL=1,
+    # 2026-09-24), so every particle fades against a depth copy that never
+    # happened.  Likely every Mesa driver (Intel, radeonsi), not just llvmpipe.
+    # Remove this line once the engine copies depth in a matching format.
     vf_config_set SoftParticles 0
     vf_run_visual "$seconds"
     vf_save_logs
