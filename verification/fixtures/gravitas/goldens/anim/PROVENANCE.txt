@@ -1,10 +1,10 @@
-recorded   2026-09-24T08:34:15Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main bb0fde013adc850468a3d0e2fbf1bc10d532fbc1  +60 uncommitted files
-game       /home/gajop/worktrees/gravitas-r4/head-games/Gravitas-wasm.sdd  HEAD 2761ab11dded02da704b75ed88030d89de591a2d
+recorded   2026-09-24T10:47:57Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main e6be4bc85c12c93bee9d07d813e431b718e23a1d  +17 uncommitted files
+game       /home/gajop/worktrees/gravitas-r5/games/Gravitas-wasm.sdd  HEAD 29df33fce34a74e77452af8f4e1916707e35317a
 map        spring-linux/maps/Gravitas-map.sdd  master bcd4d95d488c60ff9aaefd9a6c649d454d517afa  +1 uncommitted files
-springcabal springcabal-rs  main 1ebb366aa4e4b67685b9cb6c019226bc5222eb64
+springcabal springcabal-rs  main 416a90efe895edfbcf006b9cc71e8f2c4e03edad
 engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.07.01-279-g765edd6 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 1c9b010fe46b1ca1241a186f0b27233d56697141  +3 uncommitted files
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 53c7bdb1684d11b1884511d53551de616576205a  +3 uncommitted files
 version    Spring Engine Version: 2026.07.01-279-g765edd6 rust-wip
 renderer   gpu
 gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
