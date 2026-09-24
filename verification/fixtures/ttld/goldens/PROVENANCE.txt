@@ -1,10 +1,11 @@
-recorded   2026-09-24T00:47:48Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 1b11e3decea27eca7afc927c868d01f1a3ffeb2e  +65 uncommitted files
-game       spring-linux/games/ToTheLastDrop-wasm.sdd  ttld-wasm-port 92b357718bf075264f31c8d95390750bc5902aca  +5 uncommitted files
+recorded   2026-09-24T11:03:19Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main aaef05d724adb95124d3ff75de5b1979d559d05d  +4 uncommitted files
+game       spring-linux/games/ToTheLastDrop-wasm.sdd  ttld-wasm-port b452b0ef32f176225e6cd8395450a4e5794bd916
 map        spring-linux/maps/LD43-map.sdd  master c8f42d0c1c4c73ef8de0d62e7913f333f165589a  +2 uncommitted files
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  rust-wip f4a443a3ae5850da2e715a40433d9f442407a470  +3 uncommitted files
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip f4a443a3ae5850da2e715a40433d9f442407a470  +3 uncommitted files
-version    Spring Engine Version: 2026.07.01-273-g1bed8d7 rust-wip
+springcabal springcabal-rs  main 416a90efe895edfbcf006b9cc71e8f2c4e03edad
+engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.07.01-279-g765edd6 rust-wip
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 53c7bdb1684d11b1884511d53551de616576205a  +3 uncommitted files
+version    Spring Engine Version: 2026.07.01-279-g765edd6 rust-wip
 renderer   software
 gpu        llvmpipe (LLVM 20.1.2, 256 bits)
 gl         4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
