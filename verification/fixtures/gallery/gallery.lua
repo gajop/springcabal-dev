@@ -21,6 +21,12 @@
 --
 -- CEG particles use the engine's unsynced RNG, which nothing can seed, so CEG
 -- captures still vary from run to run and are compared statistically.
+--
+-- The `gallery` modoption also tells the game's own UI module to run in gallery
+-- mode: it keeps the widgets that draw world effects (glows, fire, lights,
+-- post-processing) and drops the HUD, RmlUi documents, input and camera.  So a
+-- capture is taken after every screen effect (DrawScreenPost), and shows what a
+-- player would see of the unit or effect, minus the HUD.
 
 function gadget:GetInfo()
 	return {
@@ -287,6 +293,14 @@ local function log(fmt, ...)
 	Spring.Echo(PREFIX .. string.format(fmt, ...))
 end
 
+-- The capture runs after the mouse cursor is drawn, so the cursor is parked in
+-- a corner, outside the centred crop and clear of the edge-scroll band.
+local CURSOR_PARK = 48
+
+local function parkCursor()
+	Spring.WarpMouse(CURSOR_PARK, CURSOR_PARK)
+end
+
 local function setCamera(x, y, z, dist)
 	Spring.SetCameraState({
 		name = "spring", mode = 2,
@@ -346,8 +360,40 @@ local function cegFrame(job, t, frame)
 	end
 end
 
+-- How far the camera stands from a unit: six times its def radius, at least
+-- 170.  Some defs declare a radius far below their model's size (MyCube's iglu:
+-- radius 20, about 430 elmos across), which put the camera inside the model.
+-- When the model's half-extent reaches past half that distance, the camera is
+-- framed on the model instead.  Models are not reframed for merely exceeding
+-- their radius: many games draw units scaled (TTLD) or keep far-off helper
+-- pieces, and their radius framing is right.
+local REFRAME = 2
+local distances = {}
+local function cameraDistance(job)
+	local dist = distances[job.name]
+	if dist then
+		return dist
+	end
+	dist = math.max(170, job.radius * 6)
+	local def = UnitDefNames[job.name]
+	local model = def and def.model
+	if model and model.maxx then
+		local half = 0.5 * math.max(model.maxx - model.minx, model.maxy - model.miny, model.maxz - model.minz)
+		if half * REFRAME > dist then
+			log("note model-bounds unit=%s radius=%.1f half-extent=%.1f: camera distance %.0f -> %.0f",
+				job.name, job.radius, half, dist, half * 6)
+			dist = half * 6
+		elseif half > job.radius then
+			log("note model-bounds unit=%s radius=%.1f half-extent=%.1f: camera distance %.0f kept",
+				job.name, job.radius, half, dist)
+		end
+	end
+	distances[job.name] = dist
+	return dist
+end
+
 local function animFrame(job, t, frame, index)
-	local dist = math.max(170, job.radius * 6)
+	local dist = cameraDistance(job)
 	local unitID = galleryUnit(index)
 	if unitID then
 		local _, _, _, mx, my, mz = Spring.GetUnitPosition(unitID, true)
@@ -376,6 +422,7 @@ function gadget:Initialize()
 	Spring.SendCommands("hideinterface 1")
 	Spring.SetVideoCapturingMode(true)
 	Spring.SetVideoCapturingTimeOffset(0)
+	parkCursor()
 	log("start mode=%s items=%d frames=%d-%d out=%s", MODE, #JOBS, FIRST_FRAME, END_FRAME, OUT)
 	if SPOTS < 8 then
 		log("ERROR only %d land spots on this map", SPOTS)
@@ -400,6 +447,7 @@ function gadget:GameFrame(frame)
 		Spring.SendCommands("quitforce")
 		return
 	end
+	parkCursor()
 	local job, t, index = jobAt(frame)
 	if not job then
 		return
@@ -469,9 +517,12 @@ function gadget:Shutdown()
 	end
 end
 
--- DrawScreenEffects runs after the world (particles included) and before any
--- HUD, minimap, tooltip or cursor, and still runs with the interface hidden.
-function gadget:DrawScreenEffects(vsx, vsy)
+-- DrawScreenPost runs after every client's DrawScreenEffects, so the capture
+-- includes the UI module's screen passes (Parts Needed's bloom and wisp
+-- sprites, TTLD's deferred lights), which run after this gadget's own
+-- DrawScreenEffects.  With the interface hidden and no RmlUi document in
+-- gallery mode, nothing else is drawn in between.
+function gadget:DrawScreenPost(vsx, vsy)
 	if not pendingShot or Spring.GetGameFrame() ~= pendingShot.frame then
 		return
 	end

@@ -6,6 +6,10 @@
 #   gallery.sh anim [game|all]           unit poses + images against goldens
 #   gallery.sh parity [game|all]         WASM vs Lua unit poses (report)
 #   gallery.sh <kind> <game> --only a,b  restrict to some CEGs / unit defs
+#
+# The WASM UI module stays loaded: the `gallery` modoption puts it in gallery
+# mode, where it registers only the widgets that draw world effects and no HUD,
+# RmlUi document, input or camera.  GALLERY_UI=0 strips it instead (A/B runs).
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
 GALLERY_FIXTURE="$FIXTURES_DIR/gallery/gallery.lua"
@@ -41,17 +45,37 @@ gallery_game() {
     esac
 }
 
-# Removes game code that would move the camera or draw over the capture.
-# CEG runs also drop every rules gadget and module: CEGs are pure game data.
+# Removes game code that would move the camera or draw over the capture: Lua
+# widgets always (the WASM games ship none; the Lua originals' whole UI is
+# Lua), and the WASM UI module with GALLERY_UI=0.  CEG runs also drop the rules
+# gadgets and synced rules modules, as CEGs are pure game data; draw-only
+# rules-unsynced modules (Flove's outlines, TTLD's unit scaling) stay unless
+# GALLERY_UI=0.
 gallery_strip() {
-    local staged=$1 kind=$2
+    local staged=$1 kind=$2 rules="$1/LuaRules/wasm/manifest.txt"
     rm -rf -- "$staged/LuaUI/Widgets" "$staged/LuaUI/widgets"
-    [[ -f $staged/LuaUI/wasm/manifest.txt ]] && : >"$staged/LuaUI/wasm/manifest.txt"
+    if [[ ${GALLERY_UI:-1} == 0 && -f $staged/LuaUI/wasm/manifest.txt ]]; then
+        : >"$staged/LuaUI/wasm/manifest.txt"
+    fi
     if [[ $kind == ceg ]]; then
         find "$staged/LuaRules/Gadgets" -maxdepth 1 -type f -delete 2>/dev/null || true
-        [[ -f $staged/LuaRules/wasm/manifest.txt ]] && : >"$staged/LuaRules/wasm/manifest.txt"
+        if [[ -f $rules ]]; then
+            if [[ ${GALLERY_UI:-1} == 0 ]]; then
+                : >"$rules"
+            else
+                sed -i '/rules-synced/d' "$rules"
+            fi
+        fi
     fi
     return 0
+}
+
+# gallery_ui_mode STAGED: whether the staged game loads a WASM UI module.  Such
+# a module must honour the `gallery` modoption and log `gallery mode:` with the
+# widgets it kept; the run fails if it doesn't, rather than letting its HUD
+# and camera into the captures.
+gallery_ui_mode() {
+    grep -qE '^[[:space:]]*module\(' "$1/LuaUI/wasm/manifest.txt" 2>/dev/null
 }
 
 # Several WASM ports switch unsynced LuaRules off (draw.lua is `return true`).
@@ -68,7 +92,7 @@ gadget = {}
 gadgetHandler = { IsSyncedCode = function() return false end }
 VFS.Include("LuaRules/Gadgets/zz_golden_gallery.lua", nil, VFS.ZIP_FIRST)
 function GameFrame(n) if gadget.GameFrame then gadget:GameFrame(n) end end
-function DrawScreenEffects(vsx, vsy) if gadget.DrawScreenEffects then gadget:DrawScreenEffects(vsx, vsy) end end
+function DrawScreenPost(vsx, vsy) if gadget.DrawScreenPost then gadget:DrawScreenPost(vsx, vsy) end end
 if gadget.Initialize then gadget:Initialize() end
 LUA
 }
@@ -83,6 +107,8 @@ gallery_run() {
     vf_workspace "gallery-$kind-$game-$variant" stable
     staged=$(vf_stage_game "$dir")
     gallery_strip "$staged" "$kind"
+    local ui_mode=0
+    gallery_ui_mode "$staged" && ui_mode=1
     mkdir -p "$staged/LuaRules/Gadgets"
     cp "$GALLERY_FIXTURE" "$staged/LuaRules/Gadgets/zz_golden_gallery.lua"
     gallery_unsynced_entry "$staged" "$kind"
@@ -126,9 +152,22 @@ gallery_run() {
     vf_forbid 'Gallery\] ERROR (effects-file|pose-no-piece-map|job|create-unit|spawn-ceg|save-failed)' \
         "the gallery reported an error"
     vf_require 'Gallery\] COMPLETE' "the $kind gallery did not finish (see $VF_OUT_DIR/last.combined.txt)"
+    if [[ $ui_mode == 1 ]]; then
+        vf_require 'gallery mode:' "the game's UI module did not switch to gallery mode (it must honour the gallery modoption; GALLERY_UI=0 strips it)"
+        grep -m1 -oE 'gallery mode:.*' "$VF_WRITE_DIR/stdout.txt" | sed 's/^/  UI /'
+    fi
 
     rm -rf -- "$VF_OUT_DIR/captures"
+    GALLERY_ITEMS=$(grep -m1 -oE 'Gallery\] start .* items=[0-9]+' "$VF_WRITE_DIR/stdout.txt" | sed 's/.*items=//')
+    if [[ ${GALLERY_ITEMS:-0} == 0 ]]; then
+        # A game without CEGs (MyCube, Parts Needed) or an --only that matched
+        # nothing: there is nothing to capture or compare.
+        return 0
+    fi
     mv "$VF_WRITE_DIR/gallery" "$VF_OUT_DIR/captures"
+    # What rendered the captures: pixels are only compared against goldens
+    # from the same backend, GPU and driver.
+    vf_renderer_info >"$VF_OUT_DIR/captures/renderer.txt"
 
     grep -oE '\[Gallery\] pose .*' "$VF_WRITE_DIR/stdout.txt" | sed 's/^\[Gallery\] pose //' \
         >"$VF_OUT_DIR/captures/poses.txt" || true
@@ -141,7 +180,7 @@ gallery_compare() {
     local mode=compare
     [[ ${VF_UPDATE_GOLDENS:-0} == 1 ]] && mode=update
     local t0=$EPOCHREALTIME status=0
-    GALLERY_RENDERER=$(vf_renderer) python3 "$GALLERY_TOOL" "$mode" "$kind" \
+    python3 "$GALLERY_TOOL" "$mode" "$kind" \
         "${GALLERY_CAPTURES:-$VF_OUT_DIR/captures}" "$golden" "$VF_OUT_DIR/report" || status=$?
     printf 'timing: compare %.1fs\n' "$(echo "$EPOCHREALTIME - $t0" | bc)"
     return $status
@@ -177,6 +216,11 @@ gallery_golden() {
         # The first recording run also keeps full-size captures for screenshots.
         GALLERY_FULL=$([[ ${VF_UPDATE_GOLDENS:-0} == 1 && $i == 1 ]] && echo 1 || echo "${GALLERY_FULL:-0}") \
             gallery_run "$kind" "$game" wasm
+        if [[ ${GALLERY_ITEMS:-0} == 0 ]]; then
+            printf '  SKIP     %s has no %s items to capture%s\n' "$game" "$kind" \
+                "${GALLERY_ONLY:+ matching --only $GALLERY_ONLY}"
+            return 0
+        fi
         if [[ $runs -gt 1 ]]; then
             rm -rf -- "$VF_OUT_DIR/captures-$i"
             mv "$VF_OUT_DIR/captures" "$VF_OUT_DIR/captures-$i"
@@ -203,6 +247,7 @@ gallery_parity() {
     local game=$1 wasm lua
     gallery_run anim "$game" wasm
     wasm="$VF_OUT_DIR/captures"
+    [[ ${GALLERY_ITEMS:-0} == 0 ]] && { echo "  SKIP     no units to compare"; return 0; }
     gallery_run anim "$game" lua
     lua="$VF_OUT_DIR/captures"
     python3 "$GALLERY_TOOL" parity anim "$wasm" "$lua" "$VERIFICATION_ROOT/out/gallery-parity-$game"

@@ -52,7 +52,6 @@ POSE_NOISE_FACTOR = 4.0    # shots whose poses drifted while recording
 ANIM_RMSE = float(os.environ.get("GALLERY_ANIM_RMSE", "1.5"))   # percent, minimum limit
 IMAGE_NOISE_FACTOR = 2.5   # image limit: this times the difference between recordings
 
-RENDERER = os.environ.get("GALLERY_RENDERER", "unknown")
 
 
 # ----------------------------------------------------------------------------
@@ -128,19 +127,48 @@ def contact_sheet(entries, path, columns=6):
 # Renderer bookkeeping
 # ----------------------------------------------------------------------------
 
-def write_renderer(golden_dir):
+RENDERER_KEYS = ("backend", "gl_renderer", "gl_version")
+
+
+def read_renderer(directory):
+    """renderer.txt: `backend`, `gl_renderer` (GPU) and `gl_version` (driver)
+    lines.  Goldens recorded before the GPU was stored hold only the backend."""
+    path = os.path.join(directory, "renderer.txt")
+    if not os.path.isfile(path):
+        return {}
+    lines = [line.strip() for line in open(path) if line.strip()]
+    if len(lines) == 1 and " " not in lines[0]:
+        return {"backend": lines[0]}
+    return dict(line.split(" ", 1) if " " in line else (line, "") for line in lines)
+
+
+def describe_renderer(info):
+    return ", ".join(f"{key} '{info[key]}'" for key in RENDERER_KEYS if key in info) or "unknown"
+
+
+def write_renderer(golden_dir, captures):
+    info = read_renderer(captures)
     with open(os.path.join(golden_dir, "renderer.txt"), "w") as f:
-        f.write(RENDERER + "\n")
+        for key in RENDERER_KEYS:
+            f.write(f"{key} {info.get(key, 'unknown')}\n")
+    return describe_renderer(info)
 
 
-def images_comparable(golden_dir):
-    """Pixels are only comparable between runs on the same renderer."""
-    path = os.path.join(golden_dir, "renderer.txt")
-    recorded = open(path).read().strip() if os.path.isfile(path) else None
-    if recorded and recorded != RENDERER:
-        print(f"  WARNING  golden recorded with the {recorded} renderer, this run used {RENDERER}: "
-              "image checks skipped (record goldens with this renderer, or set VF_RENDERER)")
+def images_comparable(golden_dir, captures):
+    """Pixels are only comparable between runs on the same backend, GPU and
+    driver.  Poses and presence are still checked when they differ."""
+    golden, current = read_renderer(golden_dir), read_renderer(captures)
+    differing = [key for key in RENDERER_KEYS if key in golden and golden[key] != current.get(key)]
+    if differing:
+        print(f"  SKIP     image checks: the golden was rendered with {describe_renderer(golden)}, "
+              f"this run with {describe_renderer(current)} ({', '.join(differing)} "
+              f"{'differs' if len(differing) == 1 else 'differ'}).  "
+              "Re-record the goldens on this renderer (VF_UPDATE_GOLDENS=1), or run on the golden's "
+              "(VF_RENDERER).")
         return False
+    if "gl_renderer" not in golden:
+        print(f"  NOTE     the golden records only its backend ({golden.get('backend', 'none')}), "
+              "not the GPU or driver; re-record to store them")
     return True
 
 
@@ -236,6 +264,10 @@ def ceg_sheet_entries(captures, zoom, only=None):
 
 def run_ceg(mode, captures, golden_dir, report_dir):
     capture_dirs = captures.split(",")
+    missing = [c for c in capture_dirs if not os.path.isdir(c)]
+    if missing:
+        print(f"  no CEG captures: {', '.join(missing)} does not exist", file=sys.stderr)
+        return 1
     runs = [ceg_samples(c) for c in capture_dirs]
     current = runs[0]
     if not current:
@@ -270,8 +302,8 @@ def run_ceg(mode, captures, golden_dir, report_dir):
             json.dump(golden, f, indent=1, sort_keys=True)
         for zoom in ("near", "far"):
             contact_sheet(ceg_sheet_entries(capture_dirs[0], zoom), os.path.join(golden_dir, f"sheet-{zoom}.jpg"))
-        write_renderer(golden_dir)
-        print(f"  UPDATED  {len(keys)} CEG captures from {len(runs)} runs ({RENDERER} renderer) -> {golden_dir}")
+        renderer = write_renderer(golden_dir, capture_dirs[0])
+        print(f"  UPDATED  {len(keys)} CEG captures from {len(runs)} runs ({renderer}) -> {golden_dir}")
         return 0
 
     if not os.path.isfile(metrics_file):
@@ -280,7 +312,7 @@ def run_ceg(mode, captures, golden_dir, report_dir):
     with open(metrics_file) as f:
         golden = json.load(f)
     order, entries = golden["order"], golden["captures"]
-    compare_images = images_comparable(golden_dir)
+    compare_images = images_comparable(golden_dir, capture_dirs[0])
     refs = dict(zip(order, load_atlas(atlas_file, CMP, golden["atlas_columns"], len(order)))) \
         if compare_images else {}
     failures, rows = [], []
@@ -397,6 +429,9 @@ def rmse_percent(a, b):
 
 def run_anim(mode, captures, golden_dir, report_dir):
     capture_dirs = captures.split(",")
+    if not os.path.isdir(capture_dirs[0]):
+        print(f"  no animation captures: {capture_dirs[0]} does not exist", file=sys.stderr)
+        return 1
     poses_file = os.path.join(capture_dirs[0], "poses.txt")
     current = read_poses(poses_file)
     images = anim_images(capture_dirs[0])
@@ -431,10 +466,10 @@ def run_anim(mode, captures, golden_dir, report_dir):
         with open(noise_file, "w") as f:
             json.dump(noise, f, indent=1, sort_keys=True)
         contact_sheet([(name, images[name]) for name in noise["order"]], os.path.join(golden_dir, "sheet.jpg"))
-        write_renderer(golden_dir)
+        renderer = write_renderer(golden_dir, capture_dirs[0])
         units = {k[0] for k in current}
         print(f"  UPDATED  {len(units)} units, {len(images)} images, {len(current)} piece poses "
-              f"from {len(capture_dirs)} runs ({RENDERER} renderer) -> {golden_dir}")
+              f"from {len(capture_dirs)} runs ({renderer}) -> {golden_dir}")
         for shot, (trans, rot) in sorted(noise["poses"].items()):
             print(f"  NOTE     poses not reproducible: {shot} (drift {trans} elmos / {rot})")
         return 0
@@ -457,7 +492,7 @@ def run_anim(mode, captures, golden_dir, report_dir):
         kept.append((shot, reason))
     failures = kept
     image_rows = []
-    if images_comparable(golden_dir):
+    if images_comparable(golden_dir, capture_dirs[0]):
         refs = dict(zip(noise["order"],
                         load_atlas(atlas_file, THUMB, noise["atlas_columns"], len(noise["order"]))))
         for name, path in images.items():

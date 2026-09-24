@@ -172,13 +172,61 @@ What makes it fast:
 `fixtures/gallery/gallery.lua` does the work in-engine.
 `Spring.SetVideoCapturingMode(true)` advances exactly one simulation frame per
 drawn frame and pins interpolation at 0, so a capture taken at game frame N
-shows frame N exactly.  Captures happen in `DrawScreenEffects`, after the world
-and before any HUD, with the interface hidden and global LOS granted
-(particles outside line of sight are not drawn).  `lib/gallery.py` compares
-the results.
+shows frame N exactly.  Captures happen in `DrawScreenPost`, after every
+client's screen effects (the UI module's bloom, lights and sprites run after
+the gallery's own `DrawScreenEffects`), with the interface hidden, no HUD
+widgets loaded, the mouse cursor parked in a corner outside the crop, and
+global LOS granted (particles outside line of sight are not drawn).
+`lib/gallery.py` compares the results.
 
-**CEGs.**  Only game data is loaded: LuaUI, rules gadgets and WASM modules are
-stripped from the staged copy.  Each CEG is spawned at fixed land spots, near
+**UI effects: gallery mode.**  A capture should show what a player sees of a
+unit or effect, minus the HUD, and much of that is drawn by the game's WASM UI
+module, not the engine.  So the UI module stays loaded, and the `gallery`
+modoption (which the gallery always sets) puts it in gallery mode:
+`ui/src/widgets/gallery.rs` in each game registers only the widgets that draw
+into the world, plus the state they need, and logs `gallery mode: <widgets>`.
+No HUD, RmlUi document, input, camera or sound widget runs.  A run whose UI
+module loads without logging `gallery mode:` fails, so a new game can't leak its
+HUD or camera into the captures; its `setup` needs the same
+`if gallery::active() { gallery::setup(handler); return; }` switch.
+`GALLERY_UI=0` strips the UI module instead, for A/B comparisons.
+
+| game | kept in gallery mode | shows | left out, and why |
+| --- | --- | --- | --- |
+| Area 17 | ApiSync, GfxVolumes | the UFO's abduction cone | full view (the gallery grants LOS itself) |
+| Flove | GfxGrass, GfxHideTriggers | full grass detail, hidden trigger markers | (the outlines are the rules-unsynced module, kept in both kinds) |
+| Gravitas | GameClock, GfxRulesEffects, GfxFire, GfxMapEdge | fire, sparks, arcs and smoke the rules report, heat distortion, map edge | health bars (HUD) |
+| Hunted | none | | the flashlight follows the cursor, and rabbit visibility hides every rabbit outside it |
+| MyCube | none | | the game draws no world effects; health bars and texts are HUD |
+| Parts Needed | ApiSync, GfxBlood, GfxEyesEffect | wisp glow sprites, the player wisp's trail, floor decals, the spirit-form screen pass | the lever highlight follows the cursor |
+| TTLD | ApiSync, GfxLighting, GfxFire, GfxMapEdge, GfxHighlight, GalleryPointer | the dark sun, house, staff, projectile and cursor lights, bloom, burning houses, the hover highlight | |
+
+TTLD's cursor light and hover highlight follow the player's pointer, so gallery
+mode's `GalleryPointer` stands in for the input widget: a cursor resting on the
+middle of the view, where the subject is.  Effects that need the rules module
+(Gravitas' fire, TTLD's staff light and house fires, Area 17's cone, Parts
+Needed's form) appear only in animation runs, since CEG runs have no rules.
+
+**Framing.**  The camera stands six def radii from a unit, at least 170 elmos
+away.  Some defs declare a radius far below their model (MyCube's iglu: radius
+20, about 430 elmos across), which put the camera inside the model.  When the
+model's half-extent (from the `UnitDefs[id].model` bounds) reaches past half
+that distance, the camera stands six half-extents away instead.  Every unit
+whose model is bigger than its radius is logged (`note model-bounds`).  Mere
+excess is not reframed, because scaled units (TTLD) and far-off helper pieces
+would then be framed too small.
+
+**Renderer.**  Every capture directory and golden has a `renderer.txt`
+(backend, GL renderer, GL version, as `vf_renderer_info` writes it).  When any
+of them differs from the golden's, the gallery still checks poses and whether
+effects appear, but skips pixel comparisons and says which differ.
+
+**Nothing to capture.**  A game without CEGs (MyCube, Parts Needed), or an
+`--only` that matches nothing, is skipped with `SKIP ... has no ceg items`.
+
+**CEGs.**  Only game data and drawing are loaded: Lua widgets, rules gadgets
+and the synced rules module are stripped from the staged copy; the UI module
+(in gallery mode) and any draw-only rules-unsynced module stay.  Each CEG is spawned at fixed land spots, near
 (camera distance 180) and far (520), four times each.  Every spawn gets a
 background frame and captures 2 and 12 frames after it.  CEG particles use the
 engine's unsynced RNG, which nothing can seed, so no two spawns look the same.
@@ -206,7 +254,7 @@ limits.  The report lists every capture's distance and limit, so weakly
 guarded effects are visible.
 
 **Animations.**  The game runs as shipped (rules, WASM modules, unit scripts),
-minus its UI, with `FixedRNGSeed=1`.  Every unit type is spawned at its own
+with its UI module in gallery mode and `FixedRNGSeed=1`.  Every unit type is spawned at its own
 spot and put through idle, a move order and an attack-ground order.  At each
 capture the gallery logs every piece's matrix and takes a zoomed image.
 
