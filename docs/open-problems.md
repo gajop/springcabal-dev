@@ -36,10 +36,6 @@ Delete an entry when it is fixed.
   - Lua zeroes only hits without an attacker. On this engine unit collisions carry one, so Lua
     lets them through.
   - A robot slammed into a wall by the gravity gun takes no damage, and that is the core mechanic.
-- **TTLD: Poultice throws enemies away; the committed Lua pulls them onto the mage.**
-  - The code: `player/spells.rs:352-366`.
-  - Both test suites check for the throw.
-  - The Lua checkout has an uncommitted edit that flips Lua to match the port (see §7).
 - **TTLD: a stunned ork that attacks is disarmed for the rest of the round.**
   - `combat/attributes.rs:113-126` sets only slot 0's `reloadTime`, and never touches
     `reloadState`.
@@ -240,7 +236,8 @@ No game uses the SDK's `ResultExt::log_err`/`log_err_once` yet. Use it on these:
 
 - **Gravitas' UI** still has global state (`ui/src/state.rs:35`, and `unsafe impl Sync` in
   `fire/distortion.rs`). It uses none of the crate: its music loop, camera, screenshots, Ctrl+Q and
-  message parsing are all hand-rolled. The uncommitted fire work blocks this.
+  message parsing are all hand-rolled. Its anim goldens still show the fire work, which is committed
+  now (`4215745`); re-record them.
 - **Copied between games; should move to the crate or the SDK:**
   - `send_to_rules` (6×);
   - `gallery::active()` (7×);
@@ -284,12 +281,9 @@ No game uses the SDK's `ResultExt::log_err`/`log_err_once` yet. Use it on these:
 
 ## 7. Decisions for the user
 
-- **TTLD's Lua checkout (`ToTheLastDrop.sdd`) has 22 uncommitted edits,** including a new
-  `GameData/weapondefs_post.lua` and the Poultice flip. `lua-visual` and `pose-parity` compare
-  against this modified copy. Are those edits wanted? And should Poultice pull, as the jam game
-  does?
-- **`CusHost::game_frame`** would wake unit scripts on Lua's schedule. It is optional, and would
-  move the anim goldens.
-- **Gravitas' fire work** is uncommitted and blocks §6's Gravitas UI items and the Gravitas anim
-  goldens.
-- **Deleting the ~21 GB of clutter.**
+- **Deleting the ~21 GB of clutter** (waiting for confirmation).
+
+Decided on 2026-09-25:
+- **Poultice throws enemies away,** in both versions. The Lua checkout's compatibility edits are
+  committed (`ToTheLastDrop.sdd` `b039bb8`, not pushed).
+- **Gravitas' fire work is committed** (`4215745`).
