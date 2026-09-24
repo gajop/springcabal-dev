@@ -110,9 +110,38 @@ workspaces, the font and build caches, and the CPU, which real-time visual scena
 `verification/verify` takes the lock (`/tmp/springcabal-verify.lock`) itself; wrapping it in
 `flock` is no longer needed.
 
-## Current state (2026-09-24 evening, after rounds 3-5)
+## Current state (2026-09-25, after round 6)
 
 This is the reference now. The sections below it are history.
+
+**Round 6:** the engine fixed every item of `spring-bar/WASM_GAME_API_TODO_2026-09-24.md`, and the
+games dropped their workarounds: their own cylinder queries, the pre-game `u32::MAX` clock, Area17's
+debris remapping, and hand-written engine constants. The crate (`springcabal-rs` `3187499`) arms the
+camera tracker with `spring::track_unit`. UI messages to the rules now arrive over the network, a
+frame later. New engine gaps are in `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`.
+
+**Engine:** `2026.09.23-46-ge2262a1 rust-wip` (spring-bar `e2262a19fe`), built 2026-09-24 23:40.
+
+| game | HEAD |
+|---|---|
+| Area17 | `6a873f5` |
+| Flove | `0280dfe` |
+| Gravitas | `32f6ad1` (+ another session's uncommitted fire work) |
+| Hunted | `3e0665c` |
+| MyCube | `8063a04` |
+| PartsNeeded | `421ecbc` |
+| TTLD | `d0fe137` |
+
+Every count is the same as below, except that **Hunted has 21** (a new mine-on-a-hill check).
+`verify visual`, the scenario suites and both galleries pass, apart from two known exceptions:
+- **Gravitas anim:** its fire units fail in the main checkout, as below.
+- **Soft particles:** the Flove visual suite renders with them on again.
+
+Golden changes in round 6:
+- **TTLD visual:** the camera tracker centres on the unit's mid position, as Lua's does.
+- **Hunted anim:** the SDK's `Create` ordering changes rabbit facing and the lighthouse angle.
+
+## State after rounds 3-5 (2026-09-24 evening)
 
 **What rounds 3-5 changed:**
 - **Round 3:** the games moved onto the shared crates `gajop/springcabal-rs` (`springcabal`,
