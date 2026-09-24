@@ -5,7 +5,7 @@
 # Engine runtime & downloads
 spring-linux/
 spring-linux.7z
-springsettings.cfg
+/springsettings.cfg
 
 # Compiled binaries and bytecode
 *.cwasm
