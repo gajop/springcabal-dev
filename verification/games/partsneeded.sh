@@ -84,14 +84,19 @@ partsneeded_visual() {
     vf_run_visual "$seconds"
     vf_save_logs
     vf_require_exit_or_timeout
-    shots=$(vf_require_screenshots 3)
+    shots=$(vf_require_screenshots 6)
     vf_require "$TEST_MARKER" 'Parts Needed did not reach its test marker'
     vf_require "$ENDING_TEST_MARKER" 'Parts Needed did not reach its ending test marker'
     vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
         'the Parts Needed visual run contains a runtime failure'
 
     vf_note 'Parts Needed goldens'
-    vf_goldens_by_index partsneeded shot_1 shot_2 shot_3
+    vf_goldens_by_index partsneeded shot_1 shot_2 shot_3 shot_4
+    # Shots 5 and 6 are the ending's start and final frame. The start is left
+    # out: the arriving wisps' spawn offsets come from the synced RNG.
+    local all_shots
+    mapfile -t all_shots < <(vf_screenshots)
+    vf_golden partsneeded ending_final "${all_shots[5]}"
     vf_goldens_done
     printf 'Parts Needed visual E2E passed: %s screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
 }
