@@ -1,6 +1,6 @@
-recorded   2026-09-25T04:13:49Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main fe779141d993579c88eef95026fe9d3ac3032fb0  +12 uncommitted files
-game       spring-linux/games/Flove-wasm.sdd  flove-wasm-port 825566d3c0746fe5162c67cd154c6a75fc5e77f6  +2 uncommitted files
+recorded   2026-09-25T04:36:50Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 97b89b9e780d05dc7a03376364f0b44c5d95c7db  +6 uncommitted files
+game       spring-linux/games/Flove-wasm.sdd  flove-wasm-port 5644cf8364abc19a9d7e361e8c154e1a6175d084
 map        spring-linux/maps/LD34-map.sdd  master 669fdb954b8d26bb450abe7737c17941728c4e7f  +2 uncommitted files
 springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
 engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
