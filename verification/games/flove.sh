@@ -93,7 +93,9 @@ flove_visual() {
 # game, then reports the pixel difference.  Informational: the two renderers
 # are expected to differ slightly.
 flove_outline() {
-    local seconds=${1:-60} staged out="$VERIFICATION_ROOT/out/flove-outline"
+    # An upper bound: each run quits once its first shot is taken, which can
+    # take over a minute on llvmpipe.
+    local seconds=${1:-240} staged out="$VERIFICATION_ROOT/out/flove-outline"
 
     vf_build "$SOURCE_ROOT" headless-integration
 
@@ -121,11 +123,15 @@ MANIFEST
 flove_outline_shot() {
     local tag=${1:?tag} seconds=${2:?seconds} shot
     flove_start
+    # Only the scenario's first shot is compared.
+    vf_quit_when 'Taking screenshot 1 (initial grove)'
     vf_config "$FIXTURES/spring.conf"
     vf_run_visual "$seconds"
+    vf_save_logs
+    vf_require_clean_exit
 
     shot=$(vf_screenshots | head -n 1)
-    [[ -n $shot ]] || { vf_save_logs; vf_die "failed to capture $tag.png"; }
+    [[ -n $shot ]] || vf_die "failed to capture $tag.png"
     cp "$shot" "$VF_OUT_DIR/$tag.png"
     printf 'captured %s\n' "$VF_OUT_DIR/$tag.png"
 }
