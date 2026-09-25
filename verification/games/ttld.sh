@@ -8,9 +8,6 @@ GAME_DIR="$GAMES_DIR/ToTheLastDrop-wasm.sdd"
 LUA_GAME_DIR="$GAMES_DIR/ToTheLastDrop.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/LD43-map.sdd"
-MAP_NAME='Eyam'
-GAME_NAME='To the Last Drop WASM 0.1.0-wasm'
-LUA_GAME_NAME='ToTheLastDrop.sdd'
 TEST_MARKER='ALL TO THE LAST DROP INTEGRATION TESTS PASSED'
 
 ttld_assets() {
@@ -28,22 +25,11 @@ ttld_assets() {
         vf_die "map still overrides the engine SMF shaders: $MAP_DIR/shaders"
 }
 
+# ttld_start [wasm|lua]: the start script the menu uses for that version:
+# the player and the orks' AI team. Team 2, where both versions move the
+# villagers blood magic consumes, is Gaia there.
 ttld_start() {
-    local game_name=${1:-$GAME_NAME}
-    vf_start_inline <<EOS
-[GAME]
-{
-[team0] { startposx=5580; startposz=7100; allyteam=0; teamleader=0; }
-[team1] { startposx=5650; startposz=2700; allyteam=1; teamleader=0; }
-[team2] { startposx=5650; startposz=2700; allyteam=2; teamleader=0; }
-[allyteam0] { numallies=0; }
-[allyteam1] { numallies=0; }
-[allyteam2] { numallies=0; }
-[player0] { team=0; spectator=0; name=wasm-test; }
-ishost=1; hostip=127.0.0.1; gamemode=0; numteams=3; numusers=1; numplayers=1; myplayernum=0; myplayername=wasm-test; hostport=8452; startpostype=0; gamestartdelay=0;
-gametype=$game_name; mapname=$MAP_NAME;
-}
-EOS
+    vf_start_file "$(vf_launch_script ttld "${1:-wasm}")"
     # The rules draw from the engine's synced RNG; pin it so runs repeat.
     vf_start_set FixedRNGSeed 1
 }
@@ -64,7 +50,7 @@ ttld_lua_visual() {
 
     vf_link_game "$staged"
     vf_link_map "$MAP_DIR"
-    ttld_start "$LUA_GAME_NAME"
+    ttld_start lua
     vf_config "$VISUAL_CONFIG"
     printf 'AllowDeferredMapRendering = 1\nAllowDeferredModelRendering = 1\nAllowDeferredModelBufferClear = 1\n' >>"$VF_CONFIG_FILE"
     vf_run_visual "$seconds" "$screen"
@@ -227,7 +213,7 @@ ttld_pose_parity() {
         "$staged/LuaRules/Gadgets/ttld_lua_pose_probe.lua"
     vf_link_game "$staged"
     vf_link_map "$MAP_DIR"
-    ttld_start "$LUA_GAME_NAME"
+    ttld_start lua
     vf_quit_when '[UnitScriptProbe] DONE unit='
     vf_config
     vf_run_headless "$seconds"
