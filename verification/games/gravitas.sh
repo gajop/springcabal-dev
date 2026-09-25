@@ -167,11 +167,16 @@ gravitas_shots() {
     command -v xvfb-run >/dev/null 2>&1 || vf_die 'xvfb-run not found'
     vf_workspace gravitas-shots stable
     gravitas_stage e2e
+    vf_quit_when 'E2E summary passed='
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
-    vf_require_exit_or_timeout
+    vf_require_clean_exit
     vf_forbid_runtime_failures 'the Gravitas shots run'
+    # The scene case checks, on the frame it asks for the shot, that every
+    # unit is where its case left it; the golden below only checks the render.
+    grep -qE 'E2E case visuals PASS' "$VF_OUT_DIR/last.combined.txt" ||
+        vf_die "the arena was not in place for the shot: $(grep -m1 -oE 'E2E case visuals .*' "$VF_OUT_DIR/last.combined.txt" || echo 'no verdict')"
 
     # The capture repeats while the engine settles; keep distinct frames only.
     while read -r shot; do
@@ -182,11 +187,10 @@ gravitas_shots() {
     done < <(vf_screenshots)
     [[ ${#taken[@]} -eq 1 ]] || vf_die "expected 1 distinct screenshot, got ${#taken[@]}"
 
-    # Run to run the same build renders 1.8-2.5% apart (fire and spark
-    # particles, and robots a frame further along when the shot lands), so a
-    # few robots out of place (about 2%) are below what this can see; the
-    # in-game cases check where units end up. The limit catches a scene
-    # that is missing or broken.
+    # A render check only: run to run the same build renders a few percent
+    # apart (fire and spark particles), about what a robot out of place
+    # costs, so the scene case above checks where the units are. The limit
+    # catches a scene that is missing or broken.
     vf_golden gravitas arena "${taken[0]}" "${SHOT_TOLERANCE:-4}"
     gravitas_hud_and_fire "$FIXTURES/goldens/arena.png" "$VF_OUT_DIR/goldens/arena.png"
 

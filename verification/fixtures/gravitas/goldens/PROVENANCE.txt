@@ -1,8 +1,8 @@
-recorded   2026-09-24T23:06:32Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 766724c42f3e791983e0b6c9d12b22eb4d02cb94  +25 uncommitted files
-game       spring-linux/games/Gravitas-wasm.sdd  gravitas-wasm-port cc8482cb5cbf33fbc313e231ce8f2be5fe4e741d
+recorded   2026-09-25T03:59:55Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 56f0fe43f71676c2b95bb8e910b38a646b707aaa  +24 uncommitted files
+game       spring-linux/games/Gravitas-wasm.sdd  gravitas-wasm-port 2c9e7f94e37d6de8cf382035d08ec9ee2dd9a26c
 map        spring-linux/maps/Gravitas-map.sdd  master bcd4d95d488c60ff9aaefd9a6c649d454d517afa  +1 uncommitted files
-springcabal springcabal-rs  main 3187499d779251b4a8ec6dbf0a39b2a7f48f842d
+springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
 engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
 engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
 version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
