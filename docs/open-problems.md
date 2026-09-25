@@ -27,13 +27,18 @@ Paths are relative to `spring-linux/games/<Game>-wasm.sdd/wasm-src/` unless stat
 
 - **Hunted's anim gallery isn't reproducible.** The same code passed in round 6 and fails now on the
   same engine: the lighthouse `LightPitch` pose and the rabbit images. Their start angles come from
-  the synced RNG, which apparently isn't seeded the same way each run.
-- **Area17's visual `frame_080` is flaky under load (8.3–12.7% against 8%).** The scenario runs in
+  the synced RNG, which apparently isn't seeded the same way each run. On 2026-09-25 three runs
+  (two after phase B1, one at the HEADs before it) failed with identical numbers: today the runs
+  agree with each other and the goldens are the odd ones out.
+- **Area17's visual `frame_080` is flaky (8.3–12.7% against 8%; three runs on an idle machine on
+  2026-09-25 all failed, 9.8–11.2%).** The scenario runs in
   real time, so the shot catches the God Gun's first impact at a varying moment. Frame-lock it, as
   TTLD does with `pauseatframe`.
 - **The anim galleries run the full rules module,** so a change to one unit's logic (Area17's
   civilians) shifts the RNG and moves unrelated units' poses.
 - **Area17's anim gallery:** the drone flies out of frame in every drone shot.
+- **`unit-scripts partsneeded` can time out:** its Lua run hit the timeout (status 124) once in
+  a `verify all` on 2026-09-25 and passed on the rerun.
 
 ## 3. Harness and tooling
 
@@ -61,47 +66,23 @@ Paths are relative to `spring-linux/games/<Game>-wasm.sdd/wasm-src/` unless stat
   marker. That's slower, and a hang passes.
 - **Release:**
   - `BUILDINFO.txt` doesn't record the crate or engine-crate revisions;
-  - the test-build guard misses Flove's `test-commands`;
+  - the test-build guard misses Flove's `e2e` build (its test commands);
   - the smoke test never starts the shipped graphics profile;
   - the menu's staleness check ignores `game-info/*/README.md`.
 - **Stray tracked files:** `port-reference/` in Area17 and MyCube, and Flove's
   `verification/animation_trace.sh`.
 
-## 4. Shared crate (`springcabal-rs`)
+## 4. Duplication and conventions across games
 
-- **Unpinned git dependency.** A fresh clone without the local `[patch]` builds whatever HEAD is at
-  the time. Pin a rev or tag.
-- **`Encoder`** doesn't escape `|` or `=`, and writes `NaN`, which the parser drops.
-- **`flag("false")` reads as true.**
-- **`check::Suite` passes with 0 checks** unless a minimum is set. Make the minimum a constructor
-  argument.
-- **Untested modules:** `check`, `menu`, `music` and `shots`. `Screenshots` checks the shot order only
-  with `debug_assert`.
-- **`MusicLoop` logs a failure once per call site,** so a second track's failure is never logged.
-- **Camera:**
-  - `CameraFollow` holds its borrow across `set_camera_state`;
-  - `arm_tracker` never retries after a failure;
-  - `goal::map_rect` hard-codes the square size.
-- **Dead API:** `KeyMoveWidget`, `VelocityDrive`, `ground_under_mouse`.
-- **Stale doc:** `message.rs:3` names `send_lua_ui_msg`.
-
-## 5. Duplication and conventions across games
-
-- **Copied between games; should move to the crate or the SDK:**
-  - `send_to_rules` (6×);
-  - `gallery::active()` (7×);
-  - per-game warning/`warning_once` helpers (use `log_err`/`log_once!`);
-  - `thread_local!` def caches (12×);
-  - the unit-script attach gadget (5×), which belongs in `spring-addons`;
+- **Copied between games:**
+  - the unit-script attach gadget (5×): it belongs in `spring-addons`, filed as
+    §5 of `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`;
   - two ports each of map-edge and fire.
-- **Conventions differ:**
-  - addon names are snake_case in Area17 and PascalCase elsewhere;
-  - file prefixes differ;
-  - `e2e` means different things in different games;
-  - `attach_existing()` is called in `init` by 5 games. No game has units at the rules' `init` on a
-    normal start, except Parts Needed (278, including map gates).
+- **File prefixes differ** between games (left alone on purpose).
+- **`attach_existing()` is called in `init` by 5 games.** No game has units at the
+  rules' `init` on a normal start, except Parts Needed (278, including map gates).
 
-## 6. Decisions for the user
+## 5. Decisions for the user
 
 - **Hunted doesn't wake its unit scripts on Lua's schedule** (`CusHost::game_frame`). The other six
   do. In Hunted it moved rabbit poses further from the Lua gallery (2 → 4 differing shots, the hop
