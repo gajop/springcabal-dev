@@ -45,6 +45,11 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
 - `TODO.md` holds the current rating of every WASM and Lua version.
 - `BASELINE.md` holds the counts every change must reproduce, and
   `docs/open-problems.md` the known open problems (delete entries when fixed).
+- A WASM port matches its Lua original's gameplay, but never gets worse for
+  it: WASM-only improvements stay (e.g. Flove's animated outline shaders and
+  mouse-over highlight). Each game's README lists them under "Improvements
+  over the Lua version"; port such features to Lua if parity matters, never
+  remove them from WASM.
 - In a WASM port, unit scripts are hosted by the engine SDK's
   `spring::cus::host::CusHost`. Rules code attaches scripts in `UnitCreated`
   and calls them through `with_cus_module_or_defer` (from `export_core_cus!`),
