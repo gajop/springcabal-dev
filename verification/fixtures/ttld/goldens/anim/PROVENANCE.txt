@@ -1,6 +1,6 @@
-recorded   2026-09-25T01:22:20Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 21f5fc328602229be3cffc3cf01892b73c996b45  +281 uncommitted files
-game       spring-linux/games/ToTheLastDrop-wasm.sdd  ttld-wasm-port 9bc157675cf69f7c091f05285481231902cadd12
+recorded   2026-09-25T05:02:08Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 465b3883920c2a30b7b00827d256ace037e0f4cb  +42 uncommitted files
+game       spring-linux/games/ToTheLastDrop-wasm.sdd  ttld-wasm-port a08870037b288084a9ab50d63c3a6f9e770bdcde
 map        spring-linux/maps/LD43-map.sdd  master c8f42d0c1c4c73ef8de0d62e7913f333f165589a  +2 uncommitted files
 springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
 engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
