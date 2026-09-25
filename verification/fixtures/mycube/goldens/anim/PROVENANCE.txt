@@ -1,6 +1,6 @@
-recorded   2026-09-25T01:21:52Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 21f5fc328602229be3cffc3cf01892b73c996b45  +242 uncommitted files
-game       spring-linux/games/MyCube-wasm.sdd  mycube-wasm-port 01f807aafea0002cfab5c6d6d5d09f7ba85d71b5
+recorded   2026-09-25T05:01:55Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 465b3883920c2a30b7b00827d256ace037e0f4cb  +35 uncommitted files
+game       spring-linux/games/MyCube-wasm.sdd  mycube-wasm-port ac65f59e4fdaad4ca2bd9f297e833ada91f43a9a
 map        spring-linux/maps/MyCube_v1-wasm.sdd  (not version-controlled)
 springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
 engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
