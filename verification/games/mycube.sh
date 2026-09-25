@@ -31,17 +31,15 @@ mycube_stage() {
 }
 
 mycube_headless() {
-    # The integration suite finishes at frame 1036 (~37s headless).
+    # The integration suite finishes around frame 1100, a few seconds in at
+    # 100x. Its checks wait for the UI's messages, whose round trip takes more
+    # frames the faster the game runs.
     local seconds=${1:-60}
     vf_cleanup_on_exit
 
     vf_workspace mycube-headless
     mycube_stage headless-integration
     vf_quit_when 'ALL MYCUBE INTEGRATION TESTS PASSED'
-    # The suite checks the UI's messages (buy coal, terrain trade) on fixed
-    # frames a few frames after the UI sends them, so it needs the game to
-    # run no faster than the UI updates: 1x, not the headless default.
-    vf_speed 1
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
