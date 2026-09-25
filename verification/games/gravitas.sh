@@ -51,8 +51,7 @@ gravitas_headless() {
     echo 'checks:'
     gravitas_check "the whole level spawns" gravitas_present 'level spawned: ([0-9]+) of \1 units'
     gravitas_check "the HUD loads" gravitas_present 'Gravitas RmlUi HUD initialized'
-    gravitas_check "no wasm trap, callin error or panic" gravitas_absent \
-        'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|already borrowed'
+    gravitas_check "no wasm trap, callin error, panic or crash" gravitas_absent "$RUNTIME_FAILURE_PATTERN"
     # Headless loads no textures, so the HUD's heart image is the one warning.
     gravitas_check "no warning but the headless HUD image" gravitas_only_known_warnings
 
@@ -76,9 +75,6 @@ gravitas_e2e() {
     vf_workspace gravitas-e2e
     vf_cleanup_on_exit
     gravitas_stage headless-integration
-    vf_write_settings <<'CFG'
-UseFontConfigLib = 0
-CFG
     vf_quit_when 'E2E summary passed='
     vf_config
     vf_run_headless "$seconds"
@@ -107,8 +103,7 @@ CFG
     gravitas_check "no undefined CEG" gravitas_absent 'CCEG::Load'
     gravitas_check "every model has a primary texture" gravitas_absent 'could not load primary texture'
     gravitas_check "no zero-power unit" gravitas_absent 'has really low power'
-    gravitas_check "no wasm trap, callin error or panic" gravitas_absent \
-        'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|already borrowed'
+    gravitas_check "no wasm trap, callin error, panic or crash" gravitas_absent "$RUNTIME_FAILURE_PATTERN"
 
     echo
     if [[ ${GRAVITAS_FAILURES:-0} -eq 0 && $failures -eq 0 ]]; then
@@ -172,22 +167,11 @@ gravitas_shots() {
     command -v xvfb-run >/dev/null 2>&1 || vf_die 'xvfb-run not found'
     vf_workspace gravitas-shots stable
     gravitas_stage e2e
-    vf_write_settings <<CFG
-Fullscreen = 0
-UseFontConfigLib = 0
-XResolutionWindowed = 1280
-YResolutionWindowed = 720
-WindowBorderless = 1
-WindowPosX = 0
-WindowPosY = 0
-GroundDetail = 200
-MaxMapDetail = 5
-LODScale = 2.0
-CFG
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
     vf_require_exit_or_timeout
+    vf_forbid_runtime_failures 'the Gravitas shots run'
 
     # The capture repeats while the engine settles; keep distinct frames only.
     while read -r shot; do

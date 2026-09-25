@@ -31,14 +31,14 @@ unit_scripts_start() {
 [allyteam0] { numallies=0; }
 [player0] { team=0; spectator=0; name=unit-script-probe; }
 [modoptions] { probe_unit=wisp; probe_frames=$SAMPLE_FRAMES; probe_pieces=$PROBE_PIECES; probe_info_pieces=Body; unit_script_probe=1; }
-minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; numusers=1; numplayers=1; myplayernum=0; myplayername=unit-script-probe; hostport=8452; startpostype=0; gamestartdelay=0;
+ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; numusers=1; numplayers=1; myplayernum=0; myplayername=unit-script-probe; hostport=8452; startpostype=0; gamestartdelay=0;
 gametype=$game; mapname=$MAP_NAME;
 }
 EOS
 }
 
 unit_scripts_run_one() {
-	local label=${1:?label} archive=${2:?archive} game=${3:?game} seconds=${4:-25}
+	local label=${1:?label} archive=${2:?archive} game=${3:?game} seconds=${4:-60}
 	VF_OUT_DIR="$VERIFICATION_ROOT/out/unit-scripts-partsneeded-$label"
 	vf_workspace "unit-scripts-partsneeded-$label"
 	local staged
@@ -73,8 +73,8 @@ unit_scripts_run_one() {
 	vf_run_visual "$seconds" 1280x720x24
 	vf_save_logs
 	vf_require_clean_exit
-	vf_forbid 'Fatal:|Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|\[UnitScriptProbe\] ERROR' \
-		"$label unit-script probe contains a runtime failure"
+	vf_forbid '\[UnitScriptProbe\] ERROR' "the $label unit-script probe reported an error"
+	vf_forbid_runtime_failures "the $label unit-script probe"
 	grep -qF '[UnitScriptProbe] DONE' "$VF_OUT_DIR/last.combined.txt" ||
 		vf_die "$label unit-script probe did not complete"
 	# One log only: the combined log holds every line twice.
@@ -97,7 +97,9 @@ partsneeded_source() {
 }
 
 partsneeded_unit_scripts() {
-	local seconds=${1:-25}
+	# Each run quits itself at the probe's DONE; the timeout is only the
+	# backstop, sized for a loaded machine (25 s once cut off a Lua run).
+	local seconds=${1:-60}
 	vf_cleanup_on_exit
 	[[ -f $PROBE ]] || vf_die "unit-script probe is missing: $PROBE"
 	[[ -d $MAP_DIR ]] || vf_die "map archive is missing: $MAP_DIR"

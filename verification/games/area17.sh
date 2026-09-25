@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
-# Golden RMSE limit.  Run-to-run drift measured 0.4-5.5% (2026-09-23); the
-# scenario runs in real time, not frame-locked like the galleries.
+# Golden RMSE limit.  Every step and capture runs paused on its frame, so the
+# scene is the same each run; particles and time-driven shaders still drift
+# 0.3-3.8% between runs (2026-09-25).
 GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-8}
 
 GAME_DIR="$GAMES_DIR/Area17-wasm.sdd"
@@ -24,27 +25,12 @@ area17_stage() {
     vf_link_map "$("$PROJECT_ROOT/scripts/area17-map.sh" --dir)"
 }
 
-# Build hygiene: fmt, clippy, and the installed modules match a fresh build of
-# the source, built outside the checkout (see area17_static_target).
+# Build hygiene: fmt, clippy, the installed modules match a fresh build of
+# the source (vf_installed_matches_source), and no unsafe or ABI-packing code.
 area17_static() {
-    local reference="$SOURCE_ROOT/target" target pair crate installed fresh
-
     VF_OUT_DIR="$VERIFICATION_ROOT/out/area17-static"
     mkdir -p "$VF_OUT_DIR"
-    target=$(area17_static_target "$reference")
-    vf_build "$SOURCE_ROOT" '' "$target"
-    for pair in "${MODULES[@]}"; do
-        crate=${pair%%:*}
-        installed="$GAME_DIR/${pair#*:}"
-        fresh="$VF_OUT_DIR/$crate.wasm"
-        [[ -s "$VF_BUILD_OUT/$crate.wasm" ]] || vf_die "missing build artifact: $crate.wasm"
-        # Name the fresh build's target directory as `just copy` names it.
-        FROM=$target TO=$reference perl -0777 -pe 's/\Q$ENV{FROM}\E/$ENV{TO}/g' \
-            "$VF_BUILD_OUT/$crate.wasm" | area17_code_only >"$fresh"
-        area17_code_only <"$installed" >"$fresh.installed"
-        cmp "$fresh" "$fresh.installed" ||
-            vf_die "$installed does not match its source; rebuild it with \`just copy\` in $SOURCE_ROOT"
-    done
+    vf_installed_matches_source "$GAME_DIR"
 
     if grep -rnE --include='*.rs' '\bunsafe\b|align4|to_le_bytes|from_le_bytes|#!\[allow\(clippy::all\)\]' \
         "$SOURCE_ROOT/rules-synced/src" "$SOURCE_ROOT/ui/src"; then
@@ -59,57 +45,13 @@ area17_static() {
     echo '>>> Area 17 static verification passed <<<'
 }
 
-# A wasm module without its custom sections (the name section, producers):
-# code, data, types, imports and exports.  ThinLTO suffixes local symbol
-# names with a hash of the object file's path (`.llvm.<hash>`), so the name
-# section changes with the target directory even when the code does not.
-area17_code_only() {
-    python3 -c '
-import sys
-data = sys.stdin.buffer.read()
-def leb(i):
-    value = shift = 0
-    while True:
-        byte = data[i]; i += 1
-        value |= (byte & 0x7f) << shift; shift += 7
-        if byte < 0x80:
-            return value, i
-out, i = bytearray(data[:8]), 8
-while i < len(data):
-    size, body = leb(i + 1)
-    if data[i] != 0:
-        out += data[i:body + size]
-    i = body + size
-sys.stdout.buffer.write(out)
-'
-}
-
-# The modules embed their build directory: the spring crate's generated
-# bindings live in OUT_DIR, and their panic locations name it.  So a build in
-# verification/cache/ can't be byte-identical to the checkout's target/, which
-# the suites never write to.  Instead, build into a cache directory whose path
-# has exactly the length of REFERENCE, so the only difference is the text of
-# that path, which area17_static replaces before comparing.  (Cargo's metadata
-# hashes don't depend on the target directory.)
-area17_static_target() {
-    local reference=${1:?reference} base pad
-    for base in "$BUILD_CACHE/Area17-static-" "${TMPDIR:-/tmp}/vf-a17-"; do
-        pad=$(( ${#reference} - ${#base} ))
-        if (( pad >= 1 )); then
-            printf '%s%s\n' "$base" "$(printf '%*s' "$pad" '' | tr ' ' x)"
-            return
-        fi
-    done
-    vf_die "no build directory as short as $reference; the static check needs one of equal length"
-}
-
 area17_headless() {
     local seconds=${1:-90}
     vf_cleanup_on_exit
 
     vf_workspace area17-headless
     area17_stage headless-integration
-    vf_start_file "$START_FILE" 100.0 100.0
+    vf_start_file "$START_FILE"
     vf_modoption test_mode 1
     vf_quit_when 'ALL AREA17 RUST INTEGRATION TESTS PASSED' 'ALL AREA17 LUA INTEGRATION TESTS PASSED'
     vf_config
@@ -125,8 +67,7 @@ area17_headless() {
     vf_require 'ALL AREA17 RUST INTEGRATION TESTS PASSED' 'the Rust suite did not complete'
     vf_require 'ALL AREA17 LUA INTEGRATION TESTS PASSED' 'the Lua suite did not complete'
     vf_forbid 'ASSERTION FAILED' 'one or more in-game assertions failed'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
-        'the run contains a runtime failure'
+    vf_forbid_runtime_failures
     echo '>>> Area 17 headless verification passed <<<'
 }
 
@@ -137,12 +78,14 @@ area17_visual() {
     area17_stage e2e
     vf_start_file "$START_FILE"
     vf_modoption visual_test 1
+    # Particle effects draw from the engine's unsynced RNG.
+    vf_start_set FixedUnsyncedRNGSeed 1
     vf_config "$VISUAL_CONFIG"
     vf_graphics area17
     vf_run_visual "$seconds"
     vf_save_logs
-
-    vf_require_exit_or_timeout
+    # The scenario gadget quits after its last capture.
+    vf_require_clean_exit
 
     shots=$(vf_require_screenshots 3)
 
@@ -164,8 +107,9 @@ area17_visual() {
         'clicking the technology button never reached its RmlUi callback'
     vf_require 'UI input reached the rules through the engine: four weapons fired, four abilities requested' \
         "the UI's weapon and ability input did not reach the rules"
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
-        'the visual run contains a runtime failure'
+    vf_forbid 'ASSERTION FAILED' 'an in-game assertion failed'
+    vf_forbid_runtime_failures 'the visual run'
+    vf_forbid 'missed the pause' 'a step or capture ran after its paused frame'
 
     vf_note 'Area 17 goldens'
     vf_goldens_by_index area17 frame_020 frame_080 frame_450

@@ -48,8 +48,8 @@ hunted_headless() {
 
     vf_forbid 'ASSERTION FAILED' 'one or more in-game assertions failed'
     vf_require "$TEST_MARKER" 'the integration assertions did not pass'
-    vf_forbid 'AddressSanitizer|Segmentation fault|Wasm trap|fatal error|Lua.*error' \
-        'the run contains a runtime failure'
+    vf_forbid 'fatal error|Lua.*error' 'the run logged a Lua or fatal error'
+    vf_forbid_runtime_failures
 
     checks=$(vf_count '\[Hunted-Rust-Test\] ASSERTION PASSED')
 
@@ -67,19 +67,19 @@ hunted_visual() {
     vf_install_modules "$staged" "${MODULES[@]}"
     vf_link_map "$MAP_DIR" 'Hunted - v04.sdd'
     vf_start_file "$START_FILE"
+    vf_quit_when 'HUNTED VISUAL SHOTS TAKEN'
     vf_config "$VISUAL_CONFIG"
     vf_graphics hunted
     vf_run_visual "$seconds"
     vf_save_logs
 
-    vf_require_exit_or_timeout
+    vf_require_clean_exit
     shots=$(vf_require_screenshots 5)
 
     # The HUD, the flashlight volume and the rabbit-visibility pass only draw
     # under a real renderer.
     vf_require 'HUNTED VISUAL SHOTS TAKEN' 'the visual run did not take its screenshots'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
-        'the Hunted visual run contains a runtime failure'
+    vf_forbid_runtime_failures 'the Hunted visual run'
 
     vf_note 'Hunted goldens'
     vf_goldens_by_index hunted shot_1 shot_2 shot_3 shot_4 shot_5

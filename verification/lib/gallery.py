@@ -156,20 +156,26 @@ def write_renderer(golden_dir, captures):
 
 def images_comparable(golden_dir, captures):
     """Pixels are only comparable between runs on the same backend, GPU and
-    driver.  Poses and presence are still checked when they differ."""
+    driver.  Returns (comparable, failure): on another renderer the images are
+    not compared, and that is a failure unless VF_ALLOW_RENDERER_MISMATCH=1
+    (poses and presence are still checked either way).  A driver or Mesa
+    update would otherwise turn every pixel check off and still pass."""
     golden, current = read_renderer(golden_dir), read_renderer(captures)
     differing = [key for key in RENDERER_KEYS if key in golden and golden[key] != current.get(key)]
     if differing:
-        print(f"  SKIP     image checks: the golden was rendered with {describe_renderer(golden)}, "
-              f"this run with {describe_renderer(current)} ({', '.join(differing)} "
-              f"{'differs' if len(differing) == 1 else 'differ'}).  "
-              "Re-record the goldens on this renderer (VF_UPDATE_GOLDENS=1), or run on the golden's "
-              "(VF_RENDERER).")
-        return False
+        reason = (f"the golden was rendered with {describe_renderer(golden)}, "
+                  f"this run with {describe_renderer(current)} ({', '.join(differing)} "
+                  f"{'differs' if len(differing) == 1 else 'differ'}).  "
+                  "Re-record the goldens on this renderer (VF_UPDATE_GOLDENS=1), or run on the "
+                  "golden's (VF_RENDERER)")
+        if os.environ.get("VF_ALLOW_RENDERER_MISMATCH") == "1":
+            print(f"  SKIP     image checks (VF_ALLOW_RENDERER_MISMATCH=1): {reason}")
+            return False, None
+        return False, f"image checks impossible: {reason}; VF_ALLOW_RENDERER_MISMATCH=1 skips them"
     if "gl_renderer" not in golden:
         print(f"  NOTE     the golden records only its backend ({golden.get('backend', 'none')}), "
               "not the GPU or driver; re-record to store them")
-    return True
+    return True, None
 
 
 # ----------------------------------------------------------------------------
@@ -312,10 +318,12 @@ def run_ceg(mode, captures, golden_dir, report_dir):
     with open(metrics_file) as f:
         golden = json.load(f)
     order, entries = golden["order"], golden["captures"]
-    compare_images = images_comparable(golden_dir, capture_dirs[0])
+    compare_images, renderer_failure = images_comparable(golden_dir, capture_dirs[0])
     refs = dict(zip(order, load_atlas(atlas_file, CMP, golden["atlas_columns"], len(order)))) \
         if compare_images else {}
     failures, rows = [], []
+    if renderer_failure:
+        failures.append(("renderer", renderer_failure))
     for key in sorted(set(entries) | set(current)):
         if key not in current:
             failures.append((key, "not captured any more"))
@@ -492,7 +500,10 @@ def run_anim(mode, captures, golden_dir, report_dir):
         kept.append((shot, reason))
     failures = kept
     image_rows = []
-    if images_comparable(golden_dir, capture_dirs[0]):
+    compare_images, renderer_failure = images_comparable(golden_dir, capture_dirs[0])
+    if renderer_failure:
+        failures.append((("renderer",), renderer_failure))
+    if compare_images:
         refs = dict(zip(noise["order"],
                         load_atlas(atlas_file, THUMB, noise["atlas_columns"], len(noise["order"]))))
         for name, path in images.items():

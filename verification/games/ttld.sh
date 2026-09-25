@@ -40,7 +40,7 @@ ttld_start() {
 [allyteam1] { numallies=0; }
 [allyteam2] { numallies=0; }
 [player0] { team=0; spectator=0; name=wasm-test; }
-minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=3; numusers=1; numplayers=1; myplayernum=0; myplayername=wasm-test; hostport=8452; startpostype=0; gamestartdelay=0;
+ishost=1; hostip=127.0.0.1; gamemode=0; numteams=3; numusers=1; numplayers=1; myplayernum=0; myplayername=wasm-test; hostport=8452; startpostype=0; gamestartdelay=0;
 gametype=$game_name; mapname=$MAP_NAME;
 }
 EOS
@@ -190,9 +190,10 @@ ttld_headless() {
     vf_require_clean_exit
 
     vf_require "$TEST_MARKER" 'the headless integration assertions did not pass'
-    vf_forbid 'world state re-entered' 'the synced module re-entered its world state'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|LuaUnitScript.*error' \
-        'the run contains a runtime failure'
+    # A re-entered world state shows up as a borrow conflict ("already
+    # borrowed"), which vf_forbid_runtime_failures covers.
+    vf_forbid 'LuaUnitScript.*error' 'a Lua unit script failed'
+    vf_forbid_runtime_failures
     vf_forbid 'Unknown tag "(new|clone|append)"|really low power|table for CEG .* invalid|Failed to load icon|excess char' \
         'the game data still produces engine warnings'
 
@@ -215,8 +216,8 @@ ttld_pose_parity() {
     rust_log=$(vf_count_log)
     vf_require '\[UnitScriptProbe\] DONE unit=[0-9]+ last_frame=195' \
         'Rust pose probe did not complete'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|\[UnitScriptProbe\] ERROR' \
-        'Rust pose probe contains a runtime failure'
+    vf_forbid '\[UnitScriptProbe\] ERROR' 'the Rust pose probe reported an error'
+    vf_forbid_runtime_failures 'the Rust pose probe'
 
     vf_workspace ttld-pose-lua stable
     staged=$(vf_stage_game "$LUA_GAME_DIR")
@@ -265,6 +266,7 @@ ttld_visual() {
     vf_require_clean_exit
 
     vf_require 'TTLD E2E done' 'the e2e run did not reach its last step'
+    vf_forbid_runtime_failures 'the TTLD visual run'
     vf_forbid 'TTLD E2E missed the pause' 'a golden screenshot was not taken on its paused frame'
     shots=$(vf_require_screenshots 14)
     ttld_assert_leader_render

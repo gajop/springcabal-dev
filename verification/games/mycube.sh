@@ -7,29 +7,16 @@ GOLDEN_TOLERANCE=${GOLDEN_TOLERANCE:-9}
 GAME_DIR="$GAMES_DIR/MyCube-wasm.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/MyCube_v1-wasm.sdd"
-MAP_NAME='MyCube v1 WASM'
-GAME_NAME='MyCube WASM 0.1.0-wasm'
 LUA_GAME_DIR="$GAMES_DIR/MyCube.sdd"
 LUA_MAP_DIR="$MAPS_DIR/MyCube_v1.sd7"
-LUA_GAME_NAME='Ludum Dare 42 Git'
-LUA_MAP_NAME='MyCube'
 MODULES=(
     mycube_rules_wasm:LuaRules/wasm/mycube-rules.wasm
     mycube_ui_wasm:LuaUI/wasm/mycube-ui.wasm
 )
 
+# mycube_start wasm|lua: the start script the menu uses for that version.
 mycube_start() {
-    local game=${1:?game} map=${2:?map}
-    vf_start_inline <<EOS
-[GAME]
-{
-[team0] { startposx=4096; startposz=4096; allyteam=0; teamleader=0; }
-[allyteam0] { numallies=0; }
-[player0] { team=0; spectator=0; name=test; }
-minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; numusers=1; numplayers=1; myplayernum=0; myplayername=test; hostport=8452; startpostype=0; gamestartdelay=0;
-gametype=$game; mapname=$map;
-}
-EOS
+    vf_start_file "$(vf_launch_script mycube "${1:?wasm or lua}")"
     # The rules draw from the engine's synced RNG; pin it so runs repeat.
     vf_start_set FixedRNGSeed 1
 }
@@ -40,7 +27,7 @@ mycube_stage() {
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" "${MODULES[@]}"
     vf_link_map "$MAP_DIR"
-    mycube_start "$GAME_NAME" "$MAP_NAME"
+    mycube_start wasm
 }
 
 mycube_headless() {
@@ -51,13 +38,16 @@ mycube_headless() {
     vf_workspace mycube-headless
     mycube_stage headless-integration
     vf_quit_when 'ALL MYCUBE INTEGRATION TESTS PASSED'
+    # The suite checks the UI's messages (buy coal, terrain trade) on fixed
+    # frames a few frames after the UI sends them, so it needs the game to
+    # run no faster than the UI updates: 1x, not the headless default.
+    vf_speed 1
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
     vf_require_clean_exit
     vf_require 'ALL MYCUBE INTEGRATION TESTS PASSED' 'MyCube did not reach its test marker'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic' \
-        'the MyCube headless run contains a runtime failure'
+    vf_forbid_runtime_failures 'the MyCube headless run'
     echo '>>> MyCube headless verification passed <<<'
 }
 
@@ -77,14 +67,15 @@ mycube_visual() {
     # keep its synthetic victory out of the screenshots.
     vf_workspace mycube-visual stable
     mycube_stage e2e
+    vf_quit_when 'MYCUBE VISUAL E2E PASSED'
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
-    vf_require_exit_or_timeout
+    vf_require_clean_exit
     shots=$(vf_require_screenshots 5)
     vf_require 'MYCUBE VISUAL E2E PASSED' 'MyCube did not reach its visual test marker'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
-        'the MyCube visual run contains a runtime failure'
+    vf_forbid 'ASSERTION FAILED' 'an in-game assertion failed'
+    vf_forbid_runtime_failures 'the MyCube visual run'
 
     vf_note 'MyCube goldens'
     local -a images
@@ -122,7 +113,7 @@ mycube_lua_headless() {
     vf_workspace mycube-lua-headless
     vf_link_game "$LUA_GAME_DIR"
     vf_link_map "$LUA_MAP_DIR"
-    mycube_start "$LUA_GAME_NAME" "$LUA_MAP_NAME"
+    mycube_start lua
     vf_quit_when --frame 450
     vf_config
     vf_run_headless "$seconds"

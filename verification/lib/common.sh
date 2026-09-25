@@ -3,6 +3,8 @@
 set -euo pipefail
 
 VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+# shellcheck source=failures.sh
+source "$VERIFICATION_ROOT/lib/failures.sh"
 PROJECT_ROOT=$(CDPATH= cd -- "$VERIFICATION_ROOT/.." && pwd)
 ENGINE_ROOT=${SPRING_BAR_DIR:-$(dirname "$PROJECT_ROOT")/spring-bar}
 # Same lookup order as run-wasm.sh: SPRING_ENGINE_DIR, the spring-bar build,
@@ -116,10 +118,6 @@ vf_install_modules() {
     done
 }
 
-vf_write_settings() {
-    cat >"$VF_WRITE_DIR/springsettings.cfg"
-}
-
 # `compare` exits non-zero whenever the images differ at all, so its status says
 # nothing about success and must not reach `set -o pipefail`. A genuine failure
 # (a missing or mismatched image) prints no metric, and the empty result fails
@@ -188,15 +186,39 @@ vf_link_map() {
 }
 
 vf_start_file() {
-    local fixture=${1:?start fixture} minspeed=${2:-} maxspeed=${3:-}
+    local fixture=${1:?start fixture}
     [[ -f $fixture ]] || vf_die "start script not found: $fixture"
 
     VF_START_FILE="$VF_TEST_ROOT/start.txt"
     cp "$fixture" "$VF_START_FILE"
     vf_random_host_port
-    [[ -n $minspeed ]] && sed -E -i "s/minspeed=[^;]+;/minspeed=$minspeed;/" "$VF_START_FILE"
-    [[ -n $maxspeed ]] && sed -E -i "s/maxspeed=[^;]+;/maxspeed=$maxspeed;/" "$VF_START_FILE"
-    return 0
+}
+
+# vf_speed MIN [MAX]: the game speed range, and so the speed the game starts
+# at (1, clamped into the range).  The engine reads MinSpeed and MaxSpeed only
+# from [modoptions]; the top-level MaxSpeed/MinSpeed in the launch scripts are
+# ignored (defaults 0.1 and 20).  Headless runs default to 100x and visual
+# runs to 1x (vf_default_speed); call this before the run to choose otherwise.
+vf_speed() {
+    local min=${1:?min speed} max=${2:-$1}
+    vf_modoption MinSpeed "$min"
+    vf_modoption MaxSpeed "$max"
+}
+
+# vf_default_speed SPEED: pin the speed (VF_SPEED overrides it, for
+# debugging) unless the suite chose one.
+vf_default_speed() {
+    grep -qiE '(^|[[:space:];{])MaxSpeed[[:space:]]*=' <(vf_modoptions_text) || vf_speed "${VF_SPEED:-${1:?speed}}"
+}
+
+# The [modoptions] section of the current start script.
+vf_modoptions_text() {
+    python3 - "$VF_START_FILE" <<'PY'
+import re, sys
+text = open(sys.argv[1]).read()
+section = re.search(r'(?i)\[modoptions\]\s*\{([^}]*)\}', text)
+print(section.group(1) if section else '')
+PY
 }
 
 vf_start_inline() {
@@ -338,6 +360,7 @@ vf_run_headless() {
     local seconds=${1:?seconds} engine
     engine=$(vf_engine_bin headless)
     vf_sanitizer_env
+    vf_default_speed 100
     rm -f -- "$VF_WRITE_DIR/infolog.txt"
 
     set +e
@@ -397,6 +420,8 @@ vf_run_visual() {
     renderer=$(vf_renderer)
     width=${screen%%x*}
     height=${screen#*x}; height=${height%%x*}
+    # Scenarios and captures run in real time.
+    vf_default_speed 1
     rm -f -- "$VF_WRITE_DIR/infolog.txt"
     vf_sanitizer_env
     rm -rf -- "${VF_WRITE_DIR:?}/screenshots"/*
@@ -464,6 +489,79 @@ vf_build() {
     VF_BUILD_OUT="$target/wasm32-unknown-unknown/release"
 }
 
+# vf_installed_matches_source GAME_DIR: the modules `just copy` installs in
+# the game (its justfile's copy recipe) match a fresh build of wasm-src/,
+# made outside the checkout (see vf_same_length_target).  Custom sections
+# (names, producers) are ignored: ThinLTO suffixes local symbol names with a
+# hash of the object file's path, so they change with the target directory
+# even when the code does not.
+vf_installed_matches_source() {
+    local game_dir=${1:?game dir} source_root reference target line crate dest installed fresh count=0
+    source_root="$game_dir/wasm-src"
+    reference="$source_root/target"
+    target=$(vf_same_length_target "$reference" "$(basename "$game_dir" -wasm.sdd)")
+    vf_build "$source_root" '' "$target"
+    while read -r line; do
+        crate=$(sed -E 's|.*release/([^ ]+)\.wasm .*|\1|' <<<"$line")
+        dest=$(sed -E 's|.* \.\./([^ ]+)$|\1|' <<<"$line")
+        installed="$game_dir/$dest"
+        fresh="$VF_OUT_DIR/$crate.wasm"
+        [[ -s "$VF_BUILD_OUT/$crate.wasm" ]] || vf_die "missing build artifact: $crate.wasm"
+        [[ -s $installed ]] || vf_die "not installed: $installed (run \`just copy\` in $source_root)"
+        # Name the fresh build's target directory as `just copy` names it.
+        FROM=$target TO=$reference perl -0777 -pe 's/\Q$ENV{FROM}\E/$ENV{TO}/g' \
+            "$VF_BUILD_OUT/$crate.wasm" | vf_wasm_code_only >"$fresh"
+        vf_wasm_code_only <"$installed" >"$fresh.installed"
+        cmp -s "$fresh" "$fresh.installed" ||
+            vf_die "$installed does not match its source; rebuild it with \`just copy\` in $source_root"
+        count=$((count + 1))
+    done < <(grep -E '^[[:space:]]+cp target/wasm32-unknown-unknown/release/[^ ]+\.wasm \.\./' "$source_root/justfile")
+    [[ $count -gt 0 ]] || vf_die "no module copies found in $source_root/justfile"
+    printf 'installed modules match the source: %s (%s modules)\n' "$(basename "$game_dir")" "$count"
+}
+
+# A wasm module without its custom sections (the name section, producers):
+# code, data, types, imports and exports.
+vf_wasm_code_only() {
+    python3 -c '
+import sys
+data = sys.stdin.buffer.read()
+def leb(i):
+    value = shift = 0
+    while True:
+        byte = data[i]; i += 1
+        value |= (byte & 0x7f) << shift; shift += 7
+        if byte < 0x80:
+            return value, i
+out, i = bytearray(data[:8]), 8
+while i < len(data):
+    size, body = leb(i + 1)
+    if data[i] != 0:
+        out += data[i:body + size]
+    i = body + size
+sys.stdout.buffer.write(out)
+'
+}
+
+# vf_same_length_target REFERENCE NAME: a build directory whose path is
+# exactly as long as REFERENCE.  The modules embed their build directory (the
+# spring crate's generated bindings live in OUT_DIR, and panic locations name
+# it), so a build elsewhere can't be byte-identical to the checkout's
+# target/, which the suites never write to.  With equal lengths, the only
+# difference is the text of that path, which the caller replaces.  (Cargo's
+# metadata hashes don't depend on the target directory.)
+vf_same_length_target() {
+    local reference=${1:?reference} name=${2:?name} base pad
+    for base in "$BUILD_CACHE/$name-static-" "${TMPDIR:-/tmp}/vf-$name-" "${TMPDIR:-/tmp}/vf-"; do
+        pad=$(( ${#reference} - ${#base} ))
+        if (( pad >= 1 )); then
+            printf '%s%s\n' "$base" "$(printf '%*s' "$pad" '' | tr ' ' x)"
+            return
+        fi
+    done
+    vf_die "no build directory as short as $reference; the check needs one of equal length"
+}
+
 vf_log() {
     cat "$VF_WRITE_DIR/stdout.txt" "$VF_WRITE_DIR/infolog.txt" 2>/dev/null
 }
@@ -512,6 +610,12 @@ vf_forbid() {
         grep -E -- "$pattern" "$VF_OUT_DIR/last.combined.txt" >&2 || true
         vf_die "$message"
     fi
+}
+
+# vf_forbid_runtime_failures [WHAT]: no Wasm trap, callin error, panic, Lua
+# error or crash in the run's log (lib/failures.sh).  Every suite calls it.
+vf_forbid_runtime_failures() {
+    vf_forbid "$RUNTIME_FAILURE_PATTERN" "${1:-the run} contains a runtime failure"
 }
 
 # vf_require_clean_exit: the engine must have exited with status 0.  Headless
@@ -636,7 +740,7 @@ vf_renderer_matches() {
     [[ -n $recorded ]] || return 0
     current=$(vf_renderer_info)
     [[ $recorded == "$current" ]] && return 0
-    printf '  WARNING  the goldens in %s were recorded on another renderer; pixel comparisons are skipped.\n' \
+    printf '  WARNING  the goldens in %s were recorded on another renderer; pixels cannot be compared.\n' \
         "${dir#"$PROJECT_ROOT"/}"
     printf '           recorded: %s\n' "$(tr '\n' ';' <<<"$recorded" | sed 's/;$//; s/;/; /g')"
     printf '           this run: %s\n' "$(tr '\n' ';' <<<"$current" | sed 's/;$//; s/;/; /g')"
@@ -724,7 +828,12 @@ vf_golden() {
         return 0
     fi
     if ! vf_golden_renderer_ok "$game"; then
-        printf '  SKIP     %s (recorded on another renderer, see above)\n' "$name"
+        if [[ ${VF_ALLOW_RENDERER_MISMATCH:-0} == 1 ]]; then
+            printf '  SKIP     %s (recorded on another renderer, see above)\n' "$name"
+        else
+            printf '  FAIL     %s (recorded on another renderer, see above; VF_ALLOW_RENDERER_MISMATCH=1 skips it)\n' "$name"
+            GOLDEN_FAILURES=$((GOLDEN_FAILURES + 1))
+        fi
         return 0
     fi
     difference=$(vf_rmse "$golden" "$current" "$work/$name.diff.png")

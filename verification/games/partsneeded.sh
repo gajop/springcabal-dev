@@ -16,8 +16,6 @@ GAME_DIR="$GAMES_DIR/PartsNeeded-wasm.sdd"
 LUA_GAME_DIR="$GAMES_DIR/PartsNeeded.sdd"
 SOURCE_ROOT="$GAME_DIR/wasm-src"
 MAP_DIR="$MAPS_DIR/LD35-map.sdd"
-MAP_NAME='LD35 map 0.1'
-GAME_NAME='Parts Needed WASM 0.1.0-wasm'
 TEST_MARKER='ALL PARTS NEEDED INTEGRATION TESTS PASSED'
 ENDING_TEST_MARKER='PARTS NEEDED ENDING INTEGRATION TEST PASSED'
 RESTART_TEST_MARKER='PARTS NEEDED RESTART INTEGRATION TEST PASSED'
@@ -57,17 +55,7 @@ partsneeded_stage() {
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" "${MODULES[@]}"
     vf_link_map "$MAP_DIR"
-    vf_start_inline <<EOS
-[GAME]
-{
-[team0] { startposx=2000; startposz=2000; allyteam=0; teamleader=0; }
-[allyteam0] { numallies=0; }
-[player0] { team=0; spectator=0; name=wasm-test; }
-[modoptions] { gamemode=play; }
-minspeed=100; maxspeed=100; ishost=1; hostip=127.0.0.1; gamemode=0; numteams=1; numusers=1; numplayers=1; myplayernum=0; myplayername=wasm-test; hostport=8452; startpostype=0; gamestartdelay=0;
-gametype=$GAME_NAME; mapname=$MAP_NAME;
-}
-EOS
+    vf_start_file "$(vf_launch_script partsneeded)"
 }
 
 partsneeded_headless() {
@@ -86,8 +74,8 @@ partsneeded_headless() {
     vf_require "$ENDING_TEST_MARKER" 'the type-1 ending integration assertions did not pass'
     vf_require "$RESTART_TEST_MARKER" 'the restart integration assertions did not pass'
     vf_forbid 'ASSERTION FAILED' 'an integration assertion failed'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|LuaUnitScript.*error' \
-        'the run contains a runtime failure'
+    vf_forbid 'LuaUnitScript.*error' 'a Lua unit script failed'
+    vf_forbid_runtime_failures
     vf_forbid 'Unknown tag "(new|clone|append)"|really low power|table for CEG .* invalid|excess char' \
         'the game data still produces engine warnings'
 
@@ -103,12 +91,13 @@ partsneeded_visual() {
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs
-    vf_require_exit_or_timeout
+    # The e2e widget quits after the ending's final shot.
+    vf_require_clean_exit
     shots=$(vf_require_screenshots 6)
     vf_require "$TEST_MARKER" 'Parts Needed did not reach its test marker'
     vf_require "$ENDING_TEST_MARKER" 'Parts Needed did not reach its ending test marker'
-    vf_forbid 'Wasm.*(trap|error|Error)|CallIn.*(error|Error)|panic|ASSERTION FAILED' \
-        'the Parts Needed visual run contains a runtime failure'
+    vf_forbid 'ASSERTION FAILED' 'an in-game assertion failed'
+    vf_forbid_runtime_failures 'the Parts Needed visual run'
     vf_forbid 'E2E camera not settled' \
         'shot 3 or 4 was taken while the camera was still moving'
 

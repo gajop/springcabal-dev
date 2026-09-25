@@ -131,8 +131,7 @@ gallery_run() {
 
     vf_start_file "$(vf_launch_script "$game" "$variant")"
     vf_start_set FixedRNGSeed 1
-    vf_start_set minspeed 1
-    vf_start_set maxspeed 1
+    vf_speed 1
     vf_modoption gallery "$kind"
     vf_modoption gallery_out gallery
     [[ -n ${GALLERY_ONLY:-} ]] && vf_modoption gallery_only "$GALLERY_ONLY"
@@ -151,6 +150,9 @@ gallery_run() {
     vf_save_logs
     vf_forbid 'Gallery\] ERROR (effects-file|pose-no-piece-map|job|create-unit|spawn-ceg|save-failed)' \
         "the gallery reported an error"
+    # The Lua originals are compared for poses only (parity) and keep their
+    # own errors; the ports must run clean.
+    [[ $variant == lua ]] || vf_forbid_runtime_failures "the $kind gallery"
     vf_require 'Gallery\] COMPLETE' "the $kind gallery did not finish (see $VF_OUT_DIR/last.combined.txt)"
     if [[ $ui_mode == 1 ]]; then
         vf_require 'gallery mode:' "the game's UI module did not switch to gallery mode (it must honour the gallery modoption; GALLERY_UI=0 strips it)"

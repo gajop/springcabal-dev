@@ -9,7 +9,7 @@ staged=$(vf_stage_game "$GAMES_DIR/Flove.sdd")
 cp "$FIXTURES_DIR/flove/ceg_probe.lua" "$staged/LuaUI/Widgets/ceg_probe.lua"
 cp "$FIXTURES_DIR/flove/draw_callback_probe.lua" "$staged/LuaRules/Gadgets/draw_callback_probe.lua"
 vf_link_map "$MAPS_DIR/LD34-map.sdd" 'The Grove 0.3.sdd'
-vf_start_file "$(vf_launch_script flove)" 1 1
+vf_start_file "$(vf_launch_script flove)"
 vf_start_set gametype 'Flove $VERSION'
 vf_modoption test_mode 1
 [[ ${PROBE_FORCE_LEGACY:-0} == 1 ]] && vf_modoption ceg_force_legacy 1

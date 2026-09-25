@@ -24,17 +24,11 @@ fi
 vf_link_map "$MAPS_DIR/Gravitas-map.sdd"
 vf_start_file "$(vf_launch_script gravitas)"
 vf_start_set GameType Gravitas
-vf_write_settings <<'CFG'
-Fullscreen = 0
-UseFontConfigLib = 0
-XResolutionWindowed = 1280
-YResolutionWindowed = 720
-WindowBorderless = 1
-GroundDetail = 200
-MaxMapDetail = 5
-LODScale = 2.0
-CFG
 vf_config "$VISUAL_CONFIG"
+vf_config_set UseFontConfigLib 0
+vf_config_set GroundDetail 200
+vf_config_set MaxMapDetail 5
+vf_config_set LODScale 2.0
 vf_run_visual 35
 vf_save_logs
 mapfile -t captures < <(vf_screenshots)

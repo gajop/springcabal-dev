@@ -7,7 +7,7 @@ VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 # says so, and verify always passes a mode to games/<suite>.sh.
 declare -A MODES=(
     [area17]='headless visual static all'
-    [flove]='headless visual outline wisps original'
+    [flove]='headless visual animation-trace outline wisps original'
     [gravitas]='e2e shots headless'
     [hunted]='headless visual'
     [mycube]='headless visual lua-headless'
@@ -15,14 +15,18 @@ declare -A MODES=(
     [ttld]='headless visual lua-visual pose-parity'
     [unit-scripts]='partsneeded source'
     [gallery]='ceg anim parity'
+    [host]='tests'
+    [installed]='all area17 flove gravitas hunted mycube partsneeded ttld'
 )
-# What `verify all` runs: every in-game assertion suite and the static checks,
-# no golden screenshots.  All but the unit-script comparison run headless; that
-# one renders under xvfb (the Lua and WASM traces come from the real engine).
+# What `verify all` runs: every in-game assertion suite, the Lua/Rust pose
+# comparisons, host unit tests and the static checks; no golden screenshots.
+# All engine runs are headless, except the Parts Needed unit-script
+# comparison, which renders under xvfb (the traces come from the real engine).
 ALL_RUNS=(
-    'area17 static' 'area17 headless' 'flove headless' 'gravitas e2e'
-    'hunted headless' 'mycube headless' 'mycube lua-headless'
-    'partsneeded headless' 'ttld headless' 'unit-scripts partsneeded'
+    'host tests' 'installed all' 'area17 static' 'area17 headless' 'flove headless'
+    'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'hunted headless' 'mycube headless'
+    'mycube lua-headless' 'partsneeded headless' 'ttld headless' 'ttld pose-parity'
+    'unit-scripts partsneeded'
 )
 # What `verify visual` and `verify update-goldens` run: the golden comparisons.
 VISUAL_RUNS=(
@@ -36,7 +40,8 @@ usage() {
 usage: verify <suite> [mode] [seconds]    run one suite (default mode: first listed)
        verify gallery ceg|anim|parity [game|all] [--only name,...]
        verify list                       suites and their modes
-       verify all                        every assertion suite and static check
+       verify all                        every assertion suite, pose comparison,
+                                         host test and static check
                                          (headless, except unit-scripts: xvfb)
        verify visual                     every screenshot suite, compared to goldens
        verify update-goldens [suite]     re-record goldens from fresh renders

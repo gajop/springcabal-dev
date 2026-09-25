@@ -17,7 +17,7 @@ just probe gravitas-fire lua     # a debugging probe
 | suite | modes (first = default) |
 | --- | --- |
 | `area17` | `headless` \| `visual` \| `static` \| `all` |
-| `flove` | `headless` \| `visual` \| `outline` \| `wisps [stage]` \| `original` |
+| `flove` | `headless` \| `visual` \| `animation-trace` \| `outline` \| `wisps [stage]` \| `original` |
 | `gravitas` | `e2e` \| `shots` \| `headless` |
 | `hunted` | `headless` \| `visual` |
 | `mycube` | `headless` \| `visual` \| `lua-headless` |
@@ -25,6 +25,8 @@ just probe gravitas-fire lua     # a debugging probe
 | `ttld` | `headless` \| `visual` \| `lua-visual` \| `pose-parity` |
 | `unit-scripts` | `partsneeded` \| `source` |
 | `gallery` | `ceg [game]` \| `anim [game]` \| `parity [game]` (game defaults to `all`) |
+| `host` | `tests` |
+| `installed` | `all` \| `<game>` |
 
 - `headless` runs the in-game assertions (modules built with the
   `headless-integration` feature) under `spring-headless`.
@@ -32,14 +34,20 @@ just probe gravitas-fire lua     # a debugging probe
   scripted scenario and compares its screenshots with goldens.
 - `static` is build hygiene only (fmt, clippy, installed artifacts match source).
 - `lua-*` modes check the original Lua game on this engine.
-- `pose-parity` and `unit-scripts` compare Lua and Rust unit-script animation
-  traces numerically.
+- `pose-parity`, `animation-trace` and `unit-scripts` compare Lua and Rust
+  unit-script animation traces numerically.
+- `host tests` runs the host unit tests: `springcabal-rs` and every game's
+  `shared` (and Hunted's `ai`) crate.
+- `installed` checks that the modules installed in each game folder match a
+  fresh build of its `wasm-src/`.
 - `flove outline`, `wisps` and `original` render images for manual A/B
   inspection and do not fail on pixels.
 
-`verify all` runs every in-game assertion suite and the Area 17 static check.
-They run headless, except the unit-script comparison, which renders the
-Lua and WASM games under xvfb.  `verify visual` runs every golden comparison.
+`verify all` runs every in-game assertion suite, the Lua/Rust pose
+comparisons, the host tests and the static checks (installed modules, Area
+17's source checks).  They run headless, at 100x (MyCube's at 1x, see
+`mycube.sh`), except the unit-script comparison, which renders the Lua and
+WASM games under xvfb.  `verify visual` runs every golden comparison.
 Both take their run lists from the tables in `verify`, and that table's first
 mode per suite is the only place a default mode is defined.
 
@@ -75,8 +83,10 @@ store the renderer they were recorded with: the backend, the GL renderer
 string (the GPU, or llvmpipe with its LLVM version) and the GL version string
 (the driver), in `renderer.txt` next to them (older scenario goldens: the
 `renderer`/`gpu`/`gl` lines of their `PROVENANCE.txt`).  A run on a different
-renderer still checks poses, markers and presence, but skips pixel comparisons
-and says why.  `lib/common.sh` has the shared helpers: `vf_renderer_info`
+renderer still checks poses, markers and presence, but fails: it can't compare
+pixels, and a driver or Mesa update would otherwise switch every pixel check
+off unnoticed.  `VF_ALLOW_RENDERER_MISMATCH=1` skips the pixel comparisons
+instead, with a message.  `lib/common.sh` has the shared helpers: `vf_renderer_info`
 writes the record, `vf_renderer_matches DIR` compares a run with it.
 
 ## Suites never touch the game checkouts
@@ -177,6 +187,16 @@ widgets loaded, the mouse cursor parked in a corner outside the crop, and
 global LOS granted (particles outside line of sight are not drawn).
 `lib/gallery.py` compares the results.
 
+**One unit at a time (animations).**  The game's rules run as they ship, so
+they would spawn their level, waves and respawns, and every one of those
+units' logic draws from the synced RNG the unit scripts share: a change to
+one unit's logic would move every later unit's random start angles and idles.
+So the anim gallery removes every unit but its own each frame, and reseeds the
+synced RNG each frame from the unit's name and the frame within its job.  A
+unit's captures depend on its own script, the rules' logic for it, and the
+rules' global logic (spawn timers) only.  Aircraft are framed on the view ray
+through the unit (the spring camera always focuses on the ground).
+
 **UI effects: gallery mode.**  A capture should show what a player sees of a
 unit or effect, minus the HUD, and much of that is drawn by the game's WASM UI
 module, not the engine.  So the UI module stays loaded, and the `gallery`
@@ -217,7 +237,8 @@ would then be framed too small.
 **Renderer.**  Every capture directory and golden has a `renderer.txt`
 (backend, GL renderer, GL version, as `vf_renderer_info` writes it).  When any
 of them differs from the golden's, the gallery still checks poses and whether
-effects appear, but skips pixel comparisons and says which differ.
+effects appear, and fails, saying which differ (`VF_ALLOW_RENDERER_MISMATCH=1`
+skips the pixel comparisons instead).
 
 **Nothing to capture.**  A game without CEGs (MyCube, Parts Needed), or an
 `--only` that matches nothing, is skipped with `SKIP ... has no ceg items`.
@@ -347,7 +368,7 @@ example_headless() {
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" example_rules_wasm:LuaRules/wasm/example-rules.wasm
     vf_link_map "$MAPS_DIR/Example-map.sdd" 'Display Name.sdd'
-    vf_start_file "$(vf_launch_script example)" 100.0 100.0
+    vf_start_file "$(vf_launch_script example)"
     vf_modoption test_mode 1
     vf_quit_when 'ALL EXAMPLE TESTS PASSED'
     vf_config
@@ -355,7 +376,7 @@ example_headless() {
     vf_save_logs
     vf_require_clean_exit       # quitforce, not the timeout or a crash
     vf_require 'ALL EXAMPLE TESTS PASSED' 'the suite did not complete'
-    vf_forbid 'panic|Wasm.*trap' 'the run contains a runtime failure'
+    vf_forbid_runtime_failures
     printf 'assertions passed: %s\n' "$(vf_count 'ASSERTION PASSED')"
 }
 ```
@@ -372,7 +393,16 @@ Then add the suite and its modes to the tables in `verify`. For a screenshot
 mode, end with `vf_goldens_by_index example shot_1 shot_2` (or `vf_golden`
 per image) and `vf_goldens_done`.
 
-Other helpers: `vf_write_settings`, `vf_run_visual`, `vf_require_screenshots`,
+Every suite calls `vf_forbid_runtime_failures`: no Wasm trap or fault, skipped
+callin, panic, borrow conflict, Lua error or crash in the log.  The pattern is
+`lib/failures.sh`, which the release smoke test uses too.
+
+Speeds: the engine takes `MinSpeed`/`MaxSpeed` only from `[modoptions]` (the
+top-level keys in `launch/` are ignored), and starts at 1x clamped into that
+range.  `vf_run_headless` runs at 100x and `vf_run_visual` at 1x unless the
+suite called `vf_speed MIN [MAX]`.
+
+Other helpers: `vf_config_set`, `vf_run_visual`, `vf_require_screenshots`,
 `vf_collect_screenshots`, `vf_rmse`, `vf_within`, `vf_percent`, `vf_count`,
 `vf_count_log`, `vf_summary`, `vf_renderer_info`, `vf_renderer_matches`.
 
