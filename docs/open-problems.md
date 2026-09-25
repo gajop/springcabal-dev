@@ -3,53 +3,36 @@
 What's still wrong in the seven ports, the shared crate and the harness. Nothing fixed is listed;
 git history has the reviews and fixes. Delete an entry when it's fixed.
 
+A port matches its Lua original's gameplay but keeps its own improvements. Those are listed in each
+game's README under "Improvements over the Lua version", and aren't problems.
+
 Paths are relative to `spring-linux/games/<Game>-wasm.sdd/wasm-src/` unless stated otherwise.
 
-## 1. Games
+## Games
 
-- **Gravitas: the arena golden can't see robots in the wrong place.** Runs of the same build differ
-  by 1.0–2.5%, which is about what a misplaced robot costs. Assert unit positions at the shot frame
-  instead.
-- **Gravitas: all e2e cases share one arena on a hard-coded frame schedule.** Some cases depend on
-  earlier ones finishing first. Fixing this needs a runner rewrite.
-- **TTLD: Adrenaline, Heartburn and Poultice are cast directly in the headless suite,** not through
-  the input message. Migraine and Transfusion already go through it.
-- **Parts Needed: no check covers a lever and the kill plate opening the same cage in one pass.**
-  The port handles it; a check would need both scenarios reworked.
-- **Hunted: the pellet count and spray are hard-coded,** because the SDK's `WeaponDefInfo` has no
-  `projectiles` or `sprayAngle` (engine).
-- **Flove: the poison mushroom's poses differ from the Lua original's by 3.2 elmos** (unchanged since
-  before round 7).
-- **Hunted: the rabbit's hop runs 1 frame behind Lua's after each blocking `WaitForMove`**
-  (gallery parity: rabbit move f30, 0.5 elmos). The SDK resumes `Wait*` tasks on the frame after
-  `AnimFinished`; Lua resumes them inside it. Filed as §7 of
-  `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`; it applies to every game.
-- **Area17: a human re-lifted by the beam floats again;** Lua only floats on the first lift. This is
-  deliberate and in the README.
+- **Hunted: the end screen lacks Lua's "Kills: N" line.** (In progress.)
+- **Hunted: rabbit speed has a floor of 0.25 with no recorded reason,** in `ai/src/mood.rs:30`.
+  Check it against `rabbit_ai.lua`. (In progress.)
+- **Flove: the big mushroom's muzzle turns 0.42 rad differently from Lua's in attack shots**
+  (`gallery parity flove`). Turn acceleration was ruled out. (In progress.)
 
-## 2. Flaky or non-deterministic checks
+## Waiting on the engine
 
-- **MyCube's headless suite and Gravitas' e2e run at 1x,** not the 100x of the other headless
-  suites. They check the UI's messages on fixed frames a few frames after the UI sends them
-  (MyCube: buy coal, terrain trade; Gravitas: input, restart, the level case's restart), and at
-  100x the UI's round trip takes more frames: MyCube failed every time, Gravitas' level case once
-  in three runs. Waiting for each message, as Hunted's gun check now does, would let them run at
-  100x.
+These are filed in `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`:
+- **§4, Hunted's pellet count and spray are hard-coded:** `WeaponDefInfo` has no `projectiles` or
+  `sprayAngle`.
+- **§7, scripts resume one frame late after a blocking `Wait*`:** the SDK resumes them on the frame
+  after `AnimFinished`, while Lua resumes them inside it. Hunted's rabbit hop is 0.5 elmos off Lua's
+  in the parity gallery because of it, and it applies to every game.
+- **§5, the unit-script attach gadget is copied 7×:** it belongs in `spring-addons`.
+- **§8, no typed getter for a game rules param:** so MyCube's test handshake and Flove's status
+  ride on a carrier unit.
 
-## 3. Harness and tooling
+## Checks
 
-- **TTLD's suites and the probes use inline start scripts** (TTLD's has three teams, the menu's
-  two), so TTLD's headless suite doesn't test the layout players get.
-- **The launch scripts' top-level `MaxSpeed`/`MinSpeed` are dead:** the engine reads them only
-  from `[modoptions]`. They hold the engine defaults, so players see no difference.
-- **Gravitas shots and TTLD's `lua-visual` still accept the timeout** as their end.
-
-## 4. Duplication and conventions across games
-
-- **Copied between games:**
-  - the unit-script attach gadget (5×): it belongs in `spring-addons`, filed as
-    §5 of `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`;
-  - two ports each of map-edge and fire.
-- **File prefixes differ** between games (left alone on purpose).
-- **`attach_existing()` is called in `init` by 5 games.** No game has units at the
-  rules' `init` on a normal start, except Parts Needed (278, including map gates).
+- **CEG gallery captures flake on engine particle noise,** now and then; rerun once before
+  concluding. BASELINE.md lists the captures seen failing.
+- **Parts Needed's visual shots 3–4 can fail "camera not settled"** on a heavily loaded machine
+  (load average about 45); a rerun passes.
+- **The whole `verify visual` wasn't rerun after the last Flove anim re-record,** though
+  `gallery anim flove` passed twice after it. The next full run covers it.
