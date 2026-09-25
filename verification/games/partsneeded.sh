@@ -19,6 +19,7 @@ MAP_DIR="$MAPS_DIR/LD35-map.sdd"
 TEST_MARKER='ALL PARTS NEEDED INTEGRATION TESTS PASSED'
 ENDING_TEST_MARKER='PARTS NEEDED ENDING INTEGRATION TEST PASSED'
 RESTART_TEST_MARKER='PARTS NEEDED RESTART INTEGRATION TEST PASSED'
+SAME_PASS_TEST_MARKER='PARTS NEEDED SAME-PASS INTEGRATION TEST PASSED'
 MODULES=(
     partsneeded_rules_wasm:LuaRules/wasm/partsneeded-rules.wasm
     partsneeded_ui_wasm:LuaUI/wasm/partsneeded-ui.wasm
@@ -64,7 +65,7 @@ partsneeded_headless() {
 
     vf_workspace partsneeded-headless
     partsneeded_stage headless-integration
-    vf_quit_when "$TEST_MARKER" "$ENDING_TEST_MARKER" "$RESTART_TEST_MARKER"
+    vf_quit_when "$TEST_MARKER" "$ENDING_TEST_MARKER" "$RESTART_TEST_MARKER" "$SAME_PASS_TEST_MARKER"
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -73,6 +74,8 @@ partsneeded_headless() {
     vf_require "$TEST_MARKER" 'the headless integration assertions did not pass'
     vf_require "$ENDING_TEST_MARKER" 'the type-1 ending integration assertions did not pass'
     vf_require "$RESTART_TEST_MARKER" 'the restart integration assertions did not pass'
+    vf_require "$SAME_PASS_TEST_MARKER" \
+        'the same-pass lever and kill plate assertions did not pass'
     vf_forbid 'ASSERTION FAILED' 'an integration assertion failed'
     vf_forbid 'LuaUnitScript.*error' 'a Lua unit script failed'
     vf_forbid_runtime_failures
