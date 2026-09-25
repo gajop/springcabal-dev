@@ -1,6 +1,6 @@
-recorded   2026-09-25T01:20:53Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 21f5fc328602229be3cffc3cf01892b73c996b45  +174 uncommitted files
-game       spring-linux/games/Area17-wasm.sdd  area17-wasm-port 35ebbc09382e39fe3ae7836c55d48357017a71fa
+recorded   2026-09-25T05:01:38Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 465b3883920c2a30b7b00827d256ace037e0f4cb  +19 uncommitted files
+game       spring-linux/games/Area17-wasm.sdd  area17-wasm-port 95514c98943802b5c7272d16606ed6856873e5bf
 map        build/maps/Area17.sdd  (not version-controlled)
 map from   spring-linux/maps/Area17.sd7  sha1 1aa57a75b531735a600019963fbe00e8058f369f
 map patch  patches/area17-map (in dev repo)
