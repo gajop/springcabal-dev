@@ -90,8 +90,9 @@ fi
 
 # Strings that only exist in modules built with a test feature (e2e,
 # headless-integration, *-probe).  A test build left in a game folder must
-# never ship.
-test_markers='ASSERTION (PASSED|FAILED)|INTEGRATION TESTS? PASSED|VISUAL E2E|E2E case|E2E summary|GRAVITAS_SHOT|UnitScriptProbe|TTLD E2E|Visual-Test|fire-probe'
+# never ship.  Flove's e2e build logs "FLOVE E2E BUILD" (its test commands
+# compile to no strings).
+test_markers='ASSERTION (PASSED|FAILED)|INTEGRATION TESTS? PASSED|VISUAL E2E|E2E case|E2E summary|GRAVITAS_SHOT|UnitScriptProbe|TTLD E2E|Visual-Test|fire-probe|FLOVE E2E BUILD'
 
 check_wasm_modules() {
     local dir="$1" module hits
@@ -123,7 +124,7 @@ mkdir -p "$content_dir/games" "$content_dir/maps" "$content_dir/projects"
 base_excludes=(
     --exclude=/.git --exclude=/.gitmodules --exclude=/.gitignore
     --exclude=/.vscode --exclude=/.idea
-    --exclude=/wasm-src --exclude=/wasm-test --exclude=/port-reference
+    --exclude=/wasm-src --exclude=/wasm-test
     --exclude=/verification --exclude=/springignore.txt
     --exclude=target/ --exclude='*.cwasm' --exclude='*.log'
 )
@@ -165,8 +166,31 @@ build_info="$content_dir/BUILDINFO.txt"
     echo "SpringCabal $version"
     echo "engine: ${engine_tag:-local} ($engine_repo)"
     echo "dev repo: $(git -C "$project_root" rev-parse --short HEAD)$(git -C "$project_root" diff --quiet HEAD -- wasm-menu || echo ' +local changes in wasm-menu')"
-    echo ""
 } > "$build_info"
+
+# Where the modules' crates came from.  The [patch] in .cargo/config.toml
+# (setup.sh) builds against local checkouts; without it, cargo uses each
+# game's pinned springcabal-rs rev and the spring-rust branch in Cargo.lock.
+checkout_rev() {
+    local dir=$1 dirty=""
+    [[ -n "$(git -C "$dir" status --porcelain --untracked-files=no 2>/dev/null)" ]] && dirty=" +uncommitted changes"
+    printf '%s %s%s' "$(git -C "$dir" rev-parse --abbrev-ref HEAD)" "$(git -C "$dir" rev-parse --short HEAD)" "$dirty"
+}
+{
+    cargo_config="$project_root/.cargo/config.toml"
+    if grep -qs 'springcabal-rs/crates' "$cargo_config"; then
+        echo "springcabal crates: local [patch] springcabal-rs $(checkout_rev "$project_root/springcabal-rs")"
+    else
+        echo "springcabal crates: each game's pinned rev (below)"
+    fi
+    spring_dir="$(dirname "$project_root")/spring-bar"
+    if grep -qs 'spring-bar/rust/crates' "$cargo_config"; then
+        echo "spring crates: local [patch] spring-bar $(checkout_rev "$spring_dir")"
+    else
+        echo "spring crates: each game's Cargo.lock (below)"
+    fi
+    echo ""
+} >> "$build_info"
 
 record_source() {
     local label="$1" src="$2"
@@ -187,6 +211,12 @@ log "Packing games"
 while IFS=$'\t' read -r kind path source branch ship; do
     [[ "$ship" == yes ]] || continue
     record_source "$kind/$path" "$content_root/${kind}s/$path"
+    if [[ $kind == game && -f "$content_root/games/$path/wasm-src/Cargo.toml" ]]; then
+        printf '%-32s springcabal rev %s, spring %s\n' "  crates" \
+            "$(grep -m1 -oE 'springcabal-rs\.git", rev = "[0-9a-f]{7}' "$content_root/games/$path/wasm-src/Cargo.toml" | tail -c 8 || echo '?')" \
+            "$(grep -m1 -oE 'spring-rust\?branch=[^#"]+#[0-9a-f]{10}' "$content_root/games/$path/wasm-src/Cargo.lock" | sed 's/.*branch=//' || echo 'path (local [patch])')" \
+            >> "$build_info"
+    fi
     case "$kind" in
         game)
             src="$content_root/games/$path"
@@ -220,9 +250,10 @@ done < <(manifest)
 log "Packing WasmMenu"
 menu_wasm="$project_root/wasm-menu/WasmMenu/wasm-menu.wasm"
 [[ -f "$menu_wasm" ]] || die "wasm-menu.wasm missing (run with --build)"
-# The menu compiles in launch/games/ (start scripts, per-game graphics).
-if [[ -n "$(find "$project_root/launch/games" -newer "$menu_wasm" -print -quit)" ]]; then
-    die "launch/games/ changed after wasm-menu.wasm was built (run with --build)"
+# The menu compiles in launch/games/ (start scripts, per-game graphics) and
+# game-info/*/README.md (the games' descriptions).
+if [[ -n "$(find "$project_root/launch/games" "$project_root/game-info" -newer "$menu_wasm" -print -quit)" ]]; then
+    die "launch/games/ or game-info/ changed after wasm-menu.wasm was built (run with --build)"
 fi
 menu_tmp="$(mktemp -d)"
 rsync -a --exclude=/wasm-src --exclude=/generate-rating-stars.sh \
