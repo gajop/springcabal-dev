@@ -15,6 +15,16 @@
 -- FixedRNGSeed in the start script the simulation, and every game's own logic
 -- acting on the gallery's units, repeats exactly.
 --
+-- Isolation (anim): the game's rules run as they ship, so they would spawn
+-- their level, waves and respawns, and every one of those units' logic draws
+-- from the synced RNG that the unit scripts share.  A change to one unit's
+-- logic would then move every later unit's random start angles and idles.  So
+-- the synced half removes every unit but the gallery's own, every frame, and
+-- reseeds the synced RNG every frame from the unit's name and the frame within
+-- its job.  A unit's captures then depend only on its own script, the rules'
+-- logic for it, and whatever global logic (spawn timers) the rules run with no
+-- units around.  Units a gallery unit creates are removed too.
+--
 -- Spring.SetVideoCapturingMode(true) makes the engine simulate exactly one
 -- frame per drawn frame with interpolation pinned at 0, so a capture taken
 -- while GetGameFrame() == N shows simulation frame N.
@@ -230,10 +240,35 @@ if SYNCED then
 		end
 	end
 
+	-- A seed from the unit's name (not its place in the schedule), so adding or
+	-- removing a unit type leaves the others' random numbers alone.
+	local function nameSeed(name)
+		local hash = 5381
+		for i = 1, #name do
+			hash = (hash * 33 + name:byte(i)) % 1000003
+		end
+		return hash
+	end
+
+	-- Removes every unit but the gallery's (reclaimed: no explosion, no wreck).
+	local function clearWorld()
+		for _, other in ipairs(Spring.GetAllUnits()) do
+			if other ~= unitID then
+				Spring.DestroyUnit(other, false, true)
+			end
+		end
+	end
+
 	function gadget:GameFrame(frame)
+		if MODE == "anim" then
+			clearWorld()
+		end
 		local job, t, index = jobAt(frame)
 		if not job then
 			return
+		end
+		if MODE == "anim" then
+			math.randomseed(nameSeed(job.name) * 128 + t)
 		end
 		if MODE == "ceg" then
 			if t == CEG_SPAWN then
@@ -397,6 +432,20 @@ local function animFrame(job, t, frame, index)
 	local unitID = galleryUnit(index)
 	if unitID then
 		local _, _, _, mx, my, mz = Spring.GetUnitPosition(unitID, true)
+		-- The spring camera always focuses on the ground, so an aircraft
+		-- (Area 17's drone cruises 200 elmos up) would be above the view.  Focus
+		-- where the view ray through the unit meets the ground instead (marched
+		-- in steps: the ground there can be far lower), and back off by as
+		-- much, so the unit sits in the centre at the usual distance.
+		if my - Spring.GetGroundHeight(mx, mz) > job.radius then
+			local down, back = -math.cos(PITCH), math.sin(PITCH)
+			local along = 0
+			while along < 4000 and my - down * along > Spring.GetGroundHeight(mx, mz - back * along) do
+				along = along + 4
+			end
+			mz = mz - back * along
+			dist = dist + along
+		end
 		setCamera(mx, my, mz, dist)
 	else
 		setCamera(job.x, Spring.GetGroundHeight(job.x, job.z) + job.radius, job.z, dist)

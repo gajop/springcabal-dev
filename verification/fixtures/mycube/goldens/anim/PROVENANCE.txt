@@ -1,11 +1,11 @@
-recorded   2026-09-24T10:34:35Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main b37a6b5870ce8a24a67ebe1d82a1313be85e90d0  +10 uncommitted files
-game       spring-linux/games/MyCube-wasm.sdd  mycube-wasm-port 97860a6c86ab7ede5622d54715dc17bd8877e2da
+recorded   2026-09-25T01:21:52Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 21f5fc328602229be3cffc3cf01892b73c996b45  +242 uncommitted files
+game       spring-linux/games/MyCube-wasm.sdd  mycube-wasm-port 01f807aafea0002cfab5c6d6d5d09f7ba85d71b5
 map        spring-linux/maps/MyCube_v1-wasm.sdd  (not version-controlled)
-springcabal springcabal-rs  main 416a90efe895edfbcf006b9cc71e8f2c4e03edad
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.07.01-279-g765edd6 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip 53c7bdb1684d11b1884511d53551de616576205a  +3 uncommitted files
-version    Spring Engine Version: 2026.07.01-279-g765edd6 rust-wip
+springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
+engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
+engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
+version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
 renderer   gpu
 gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
 gl         4.6.0 NVIDIA 580.178.04

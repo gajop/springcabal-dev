@@ -1,8 +1,8 @@
-recorded   2026-09-24T15:04:03Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 37d801137085124c1fbb5840bf81e42713bc7ba8  +11 uncommitted files
-game       spring-linux/games/Hunted-wasm.sdd  hunted-wasm-port ca44329283027b3a050e28e591bc650adb2b7a4a  +10 uncommitted files
+recorded   2026-09-25T01:21:43Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 21f5fc328602229be3cffc3cf01892b73c996b45  +232 uncommitted files
+game       spring-linux/games/Hunted-wasm.sdd  hunted-wasm-port d48a8a299db36b2f932f9256388e501ee1f7ca95
 map        spring-linux/maps/HuntedMap.sdd  master 2b3bee4d0e9ce3a35b324edbb887885c3479f644  +2 uncommitted files
-springcabal springcabal-rs  main 3187499d779251b4a8ec6dbf0a39b2a7f48f842d
+springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
 engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
 engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
 version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
