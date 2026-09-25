@@ -19,7 +19,7 @@ the rev every game pins), through the `[patch]` in `.cargo/config.toml` (generat
 | Area17 | `area17-wasm-port` | `35ebbc0` |
 | Flove | `flove-wasm-port` | `4ca3f52` |
 | Gravitas | `gravitas-wasm-port` | `33cdeb9` |
-| Hunted | `hunted-wasm-port` | `d48a8a2` |
+| Hunted | `hunted-wasm-port` | `4b998d0` |
 | MyCube | `mycube-wasm-port` | `01f807a` |
 | PartsNeeded | `partsneeded-wasm-port` | `17f1f0a` |
 | TTLD | `ttld-wasm-port` | `9bc1576` |
@@ -69,6 +69,8 @@ The galleries:
 - **Anim galleries** pass for all seven games, every pose exact. Each unit is captured alone
   with the synced RNG reseeded per frame (`fixtures/gallery/gallery.lua`), so one unit's logic
   can't move another's poses.
+- **Parity gallery** (WASM vs Lua poses, report only): Hunted differs in 1 shot, rabbit move f30
+  by 0.5 elmos (see open problems).
 - **CEG galleries** pass. These captures flake on engine particle noise, so rerun once before
   concluding. Seen failing once each: Area17 `sickfires/near/f02`,
   `genericbunnyexplosion-medium-red/far/f12`, `explosion/near/f12`; Flove `barftrail/near/f02`,

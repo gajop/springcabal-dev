@@ -20,6 +20,10 @@ Paths are relative to `spring-linux/games/<Game>-wasm.sdd/wasm-src/` unless stat
   `projectiles` or `sprayAngle` (engine).
 - **Flove: the poison mushroom's poses differ from the Lua original's by 3.2 elmos** (unchanged since
   before round 7).
+- **Hunted: the rabbit's hop runs 1 frame behind Lua's after each blocking `WaitForMove`**
+  (gallery parity: rabbit move f30, 0.5 elmos). The SDK resumes `Wait*` tasks on the frame after
+  `AnimFinished`; Lua resumes them inside it. Filed as §7 of
+  `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`; it applies to every game.
 - **Area17: a human re-lifted by the beam floats again;** Lua only floats on the first lift. This is
   deliberate and in the README.
 
@@ -49,9 +53,3 @@ Paths are relative to `spring-linux/games/<Game>-wasm.sdd/wasm-src/` unless stat
 - **File prefixes differ** between games (left alone on purpose).
 - **`attach_existing()` is called in `init` by 5 games.** No game has units at the
   rules' `init` on a normal start, except Parts Needed (278, including map gates).
-
-## 5. Decisions for the user
-
-- **Hunted doesn't wake its unit scripts on Lua's schedule** (`CusHost::game_frame`). The other six
-  do. In Hunted it moved rabbit poses further from the Lua gallery (2 → 4 differing shots, the hop
-  included), so its agent reverted it. Keep Hunted as the exception, or investigate why?
