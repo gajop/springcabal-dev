@@ -23,8 +23,6 @@
     MyPlayerNum=1;
     MyPlayerName=0;
     NumRestrictions=0;
-    MaxSpeed=20;
-    MinSpeed=0.1;
 
     [TEAM0]
     {

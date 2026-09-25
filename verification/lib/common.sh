@@ -196,9 +196,9 @@ vf_start_file() {
 
 # vf_speed MIN [MAX]: the game speed range, and so the speed the game starts
 # at (1, clamped into the range).  The engine reads MinSpeed and MaxSpeed only
-# from [modoptions]; the top-level MaxSpeed/MinSpeed in the launch scripts are
-# ignored (defaults 0.1 and 20).  Headless runs default to 100x and visual
-# runs to 1x (vf_default_speed); call this before the run to choose otherwise.
+# from [modoptions] (defaults 0.1 and 20); the launch scripts set neither.
+# Headless runs default to 100x and visual runs to 1x (vf_default_speed);
+# call this before the run to choose otherwise.
 vf_speed() {
     local min=${1:?min speed} max=${2:-$1}
     vf_modoption MinSpeed "$min"

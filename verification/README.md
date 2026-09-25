@@ -397,9 +397,9 @@ Every suite calls `vf_forbid_runtime_failures`: no Wasm trap or fault, skipped
 callin, panic, borrow conflict, Lua error or crash in the log.  The pattern is
 `lib/failures.sh`, which the release smoke test uses too.
 
-Speeds: the engine takes `MinSpeed`/`MaxSpeed` only from `[modoptions]` (the
-top-level keys in `launch/` are ignored), and starts at 1x clamped into that
-range.  `vf_run_headless` runs at 100x and `vf_run_visual` at 1x unless the
+Speeds: the engine takes `MinSpeed`/`MaxSpeed` only from `[modoptions]`
+(defaults 0.1 and 20; `launch/` sets neither), and starts at 1x clamped into
+that range.  `vf_run_headless` runs at 100x and `vf_run_visual` at 1x unless the
 suite called `vf_speed MIN [MAX]`.
 
 Other helpers: `vf_config_set`, `vf_run_visual`, `vf_require_screenshots`,
