@@ -20,10 +20,15 @@
 -- from the synced RNG that the unit scripts share.  A change to one unit's
 -- logic would then move every later unit's random start angles and idles.  So
 -- the synced half removes every unit but the gallery's own, every frame, and
--- reseeds the synced RNG every frame from the unit's name and the frame within
--- its job.  A unit's captures then depend only on its own script, the rules'
--- logic for it, and whatever global logic (spawn timers) the rules run with no
--- units around.  Units a gallery unit creates are removed too.
+-- reseeds the synced RNG for every frame from the unit's name and the frame
+-- within its job.  A unit's captures then depend only on its own script, the
+-- rules' logic for it, and whatever global logic (spawn timers) the rules run
+-- with no units around.  Units a gallery unit creates are removed too.
+--
+-- The reseed for frame N happens at the end of frame N-1 (GameFramePost), so
+-- every draw of frame N comes from one stream, whatever order the game's code
+-- runs in: Lua rules gadgets run before this gadget and a WASM rules module
+-- after it, and a reseed inside GameFrame split them onto different streams.
 --
 -- Spring.SetVideoCapturingMode(true) makes the engine simulate exactly one
 -- frame per drawn frame with interpolation pinned at 0, so a capture taken
@@ -241,13 +246,16 @@ if SYNCED then
 	end
 
 	-- A seed from the unit's name (not its place in the schedule), so adding or
-	-- removing a unit type leaves the others' random numbers alone.
-	local function nameSeed(name)
+	-- removing a unit type leaves the others' random numbers alone.  Lua numbers
+	-- are 32-bit floats here, exact only below 2^24: the hash stays below
+	-- 65521 * 33 + 255 and the seed below 65521 * 256, so every frame of a job
+	-- (ANIM_LENGTH < 256) gets its own seed.
+	local function frameSeed(name, t)
 		local hash = 5381
 		for i = 1, #name do
-			hash = (hash * 33 + name:byte(i)) % 1000003
+			hash = (hash * 33 + name:byte(i)) % 65521
 		end
-		return hash
+		return hash * 256 + t
 	end
 
 	-- Removes every unit but the gallery's (reclaimed: no explosion, no wreck).
@@ -259,6 +267,17 @@ if SYNCED then
 		end
 	end
 
+	-- Seeds the next frame's stream, after all of this frame's game code.
+	function gadget:GameFramePost(frame)
+		if MODE ~= "anim" then
+			return
+		end
+		local job, t = jobAt(frame + 1)
+		if job then
+			math.randomseed(frameSeed(job.name, t))
+		end
+	end
+
 	function gadget:GameFrame(frame)
 		if MODE == "anim" then
 			clearWorld()
@@ -266,9 +285,6 @@ if SYNCED then
 		local job, t, index = jobAt(frame)
 		if not job then
 			return
-		end
-		if MODE == "anim" then
-			math.randomseed(nameSeed(job.name) * 128 + t)
 		end
 		if MODE == "ceg" then
 			if t == CEG_SPAWN then
