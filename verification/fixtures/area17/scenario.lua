@@ -56,11 +56,45 @@ if not gadgetHandler:IsSyncedCode() then
 			Spring.SetCameraState(cameraState, 0)
 		end
 	end
+	-- Each capture is taken with the game paused on its frame (pauseatframe),
+	-- a few draws into the pause so the draw has settled, and the game
+	-- resumes a few draws after it: every run captures the same frame.  The
+	-- UI module's e2e driver pauses on its own, different frames.
+	local SETTLE_DRAWS, PAUSED_DRAWS = 2, 10
+	local pausesRequested, settledDraws, resumeIn = false, 0, nil
+	local function paused()
+		local _, _, isPaused = Spring.GetGameSpeed()
+		return isPaused
+	end
 	function gadget:DrawScreen()
 		local frame = Spring.GetGameFrame()
 		frameCrater()
+		if not pausesRequested and frame >= 0 then
+			pausesRequested = true
+			for _, captureFrame in ipairs(captureFrames) do
+				Spring.SendCommands("pauseatframe " .. captureFrame)
+			end
+		end
+		if resumeIn then
+			resumeIn = resumeIn - 1
+			if resumeIn <= 0 then
+				resumeIn = nil
+				Spring.SendCommands("pause 0")
+			end
+			return
+		end
 		for _, captureFrame in ipairs(captureFrames) do
 			if frame >= captureFrame and not capturedFrames[captureFrame] then
+				if frame == captureFrame then
+					settledDraws = paused() and settledDraws + 1 or 0
+					if settledDraws <= SETTLE_DRAWS then
+						return
+					end
+					resumeIn = PAUSED_DRAWS
+				else
+					Spring.Echo("[Area17-Visual-Test] missed the pause at frame " .. captureFrame .. " (now " .. frame .. ")")
+				end
+				settledDraws = 0
 				capturedFrames[captureFrame] = true
 				Spring.Echo("[Area17-Visual-Test] Capturing crater frame " .. captureFrame)
 				Spring.SendCommands("screenshot png")
