@@ -16,13 +16,13 @@ the rev every game pins), through the `[patch]` in `.cargo/config.toml` (generat
 
 | game | branch | HEAD |
 |---|---|---|
-| Area17 | `area17-wasm-port` | `95514c9` |
-| Flove | `flove-wasm-port` | `5644cf8` |
+| Area17 | `area17-wasm-port` | `a6b1a88` |
+| Flove | `flove-wasm-port` | `8a8c7f0` |
 | Gravitas | `gravitas-wasm-port` | `336534e` |
-| Hunted | `hunted-wasm-port` | `f6d8016` |
-| MyCube | `mycube-wasm-port` | `ac65f59` |
+| Hunted | `hunted-wasm-port` | `cc7a8ad` |
+| MyCube | `mycube-wasm-port` | `a315a11` |
 | PartsNeeded | `partsneeded-wasm-port` | `a47655b` |
-| TTLD | `ttld-wasm-port` | `a088700` |
+| TTLD | `ttld-wasm-port` | `9b97efc` |
 
 ## `just verify-all` (every run passes)
 
@@ -31,7 +31,7 @@ suite ran at 1x.
 
 | run | result |
 |---|---|
-| host tests | **111** tests: springcabal-rs 40, area17-shared 6, flove-shared 6, gravitas-shared 9, hunted-ai 27, mycube-shared 9, partsneeded-shared 4, ttld-shared 10 |
+| host tests | **112** tests: springcabal-rs 40, area17-shared 6, flove-shared 6, gravitas-shared 9, hunted-ai 28, mycube-shared 9, partsneeded-shared 4, ttld-shared 10 |
 | installed all | the installed modules of all seven games match their source |
 | area17 static / headless | pass; Rust **22**, Lua **6**; log 1 error, 4 warnings |
 | flove headless | rules **66**, UI input **9**, scenario **8**; log 1 error, 9 warnings |
@@ -68,9 +68,14 @@ The galleries:
 - **Anim galleries** pass for all seven games, every pose exact. Each unit is captured alone
   with the synced RNG reseeded per frame (`fixtures/gallery/gallery.lua`), so one unit's logic
   can't move another's poses.
-- **Parity gallery** (WASM vs Lua poses, report only):
-  - Hunted differs in 1 shot: rabbit move f30, by 0.5 elmos (the engine's `Wait*` lag).
-  - Flove differs in 2 shots: the big mushroom's muzzle, by 0.42 rad.
+- **Parity gallery** (WASM vs Lua poses, report only). Flove, Gravitas, MyCube and Parts Needed
+  match Lua in every shot. The rest:
+  - **Hunted**, 1 shot: rabbit move f30, by 0.5 elmos (the engine's `Wait*` lag).
+  - **TTLD**, 4 shots: the builder. Its Lua script was never shipped, so the port deliberately
+    gives it the crossbowman's (see the README).
+  - **Area17**, 259 shots: all pieces missing from Lua's capture, because Lua's respawned player
+    UFO abducts the gallery UFO (see open problems). Wherever both captured the UFO, its poses
+    match exactly.
 - **CEG galleries** pass. These captures flake on engine particle noise, so rerun once before
   concluding. Seen failing once each: Area17 `sickfires/near/f02`,
   `genericbunnyexplosion-medium-red/far/f12`, `explosion/near/f12`; Flove `barftrail/near/f02`,
