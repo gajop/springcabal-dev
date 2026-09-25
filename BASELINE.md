@@ -16,56 +16,63 @@ the rev every game pins), through the `[patch]` in `.cargo/config.toml` (generat
 
 | game | branch | HEAD |
 |---|---|---|
-| Area17 | `area17-wasm-port` | `84b766f` |
-| Flove | `flove-wasm-port` | `d2bfb90` |
+| Area17 | `area17-wasm-port` | `35ebbc0` |
+| Flove | `flove-wasm-port` | `4ca3f52` |
 | Gravitas | `gravitas-wasm-port` | `33cdeb9` |
-| Hunted | `hunted-wasm-port` | `37656ff` |
-| MyCube | `mycube-wasm-port` | `c10b490` |
+| Hunted | `hunted-wasm-port` | `d48a8a2` |
+| MyCube | `mycube-wasm-port` | `01f807a` |
 | PartsNeeded | `partsneeded-wasm-port` | `17f1f0a` |
-| TTLD | `ttld-wasm-port` | `18f4a1c` |
+| TTLD | `ttld-wasm-port` | `9bc1576` |
 
 ## `just verify-all` (every run passes)
 
+Headless runs play at 100x, except MyCube's and Gravitas' e2e (1x, see open problems); the
+speed now really applies (it is a `[modoptions]` key; before round 7 phase B every suite ran at
+1x).
+
 | run | result |
 |---|---|
+| host tests | **111** tests: springcabal-rs 40, area17-shared 6, flove-shared 6, gravitas-shared 9, hunted-ai 27, mycube-shared 9, partsneeded-shared 4, ttld-shared 10 |
+| installed all | the installed modules of all seven games match their source |
 | area17 static / headless | pass; Rust **22**, Lua **6**; log 1 error, 4 warnings |
 | flove headless | rules **66**, UI input **9**, scenario **8**; log 1 error, 9 warnings |
-| gravitas e2e | **19/19** cases, plus the build and log checks |
+| flove animation-trace | skeletons and 19,760 pose samples match Lua within 2e-3 |
+| gravitas e2e / headless | **19/19** cases, plus the build and log checks / pass |
 | hunted headless | **33** assertions, `ALL HUNTED INTEGRATION TESTS PASSED`; log 1 error |
 | mycube headless / lua-headless | **32** assertions / pass |
 | partsneeded headless | **58** + **4** ending + **4** restart |
-| ttld headless | **52** |
-| unit-scripts partsneeded | pass; source comparison active (its Lua run once timed out, see open problems) |
+| ttld headless / pose-parity | **52** / 105 samples, exact |
+| unit-scripts partsneeded | pass; the source comparison covers walk legs, walk arms, hover arms and idle |
 
-Each suite passes its exact count to `Suite::new`, so a run with fewer checks fails.
+Each suite passes its exact count to `Suite::new`, so a run with fewer checks fails. Every suite
+also fails on any runtime failure (`verification/lib/failures.sh`).
 
 The "1 error" is the engine's headless `Could not finalize groundFX texture atlas`. Any other new
 error or warning is a regression until explained.
 
 ## `just verify-visual`
 
-Every scenario suite passes, except Area17's `frame_080`, which is flaky (9.8–11.2% against 8%
-on 2026-09-25, the same at the previous HEADs; see open problems):
+Every scenario suite passes. A renderer other than the goldens' fails unless
+`VF_ALLOW_RENDERER_MISMATCH=1`.
 
 | suite | shots compared |
 |---|---|
-| Area17 | 3 |
+| Area17 | 3, each paused on its frame (0.0 / 3.5 / 2.0% after the re-record) |
 | Flove | 9 (soft particles on) |
 | Gravitas | arena, HUD, fire pixels |
-| Hunted | 4 |
+| Hunted | 5, plus the HUD crops and the end screen |
 | MyCube | 5 |
 | Parts Needed | 4, plus the ending's final frame |
 | TTLD | 3, plus the e2e wheel, Poultice and tracking checks |
 
 The galleries:
-- **Anim galleries** pass for six games.
-- **Hunted anim** fails: lighthouse `idle 30` (`LightPitch` 0.204 elmos / 1.1902) and the rabbit's
-  `idle-f30`, `move-f15`, `move-f30` images (10.7–11.9%). The numbers are identical run to run and
-  at the previous HEAD, so the goldens are what disagrees (open problems §2).
+- **Anim galleries** pass for all seven games, every pose exact. Each unit is captured alone
+  with the synced RNG reseeded per frame (`fixtures/gallery/gallery.lua`), so one unit's logic
+  can't move another's poses.
 - **CEG galleries** pass. These captures flake on engine particle noise, so rerun once before
-  concluding:
-  - Area17: `sickfires/near/f02` and `genericbunnyexplosion-medium-red/far/f12`;
-  - Flove: `barftrail/near/f02` and `explosion/near/f12`.
+  concluding. Seen failing once each: Area17 `sickfires/near/f02`,
+  `genericbunnyexplosion-medium-red/far/f12`, `explosion/near/f12`; Flove `barftrail/near/f02`,
+  `explosion/near/f12`; Hunted `genericbunnyexplosion-large-red/{near,far}/f12`.
 
 Every golden re-record is explained in its commit message. The evidence is under
 `~/worktrees/golden-diffs-2026-09-24/<game>/`.
