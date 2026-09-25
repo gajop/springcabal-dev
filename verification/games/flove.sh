@@ -66,7 +66,7 @@ flove_visual() {
 
     # Only the scenario's commands: the Rust integration suites would restart
     # the round and click through the story between the shots.
-    vf_build "$SOURCE_ROOT" test-commands
+    vf_build "$SOURCE_ROOT" e2e
     vf_workspace flove-visual stable
     flove_stage >/dev/null
     flove_start 10.0 30.0

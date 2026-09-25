@@ -18,10 +18,11 @@ E2E_TARGET="$BUILD_CACHE/Gravitas-wasm.sdd"
 SHIP_TARGET="$BUILD_CACHE/Gravitas-wasm.sdd-ship"
 FIRE_SHARE=60
 
-# Stages the port with e2e modules (in-game cases and the GRAVITAS_SHOT capture).
+# Stages the port with test modules built for FEATURES: headless-integration
+# (the in-game cases) or e2e (the cases, and the screenshot they request).
 gravitas_stage() {
-    local staged
-    vf_build "$SOURCE_ROOT" e2e "$E2E_TARGET"
+    local features=$1 staged
+    vf_build "$SOURCE_ROOT" "$features" "$E2E_TARGET"
     staged=$(vf_stage_game "$GAME_DIR")
     vf_install_modules "$staged" \
         gravitas_rules_wasm:LuaRules/wasm/gravitas-rules.wasm \
@@ -74,7 +75,7 @@ gravitas_e2e() {
 
     vf_workspace gravitas-e2e
     vf_cleanup_on_exit
-    gravitas_stage
+    gravitas_stage headless-integration
     vf_write_settings <<'CFG'
 UseFontConfigLib = 0
 CFG
@@ -170,7 +171,7 @@ gravitas_shots() {
 
     command -v xvfb-run >/dev/null 2>&1 || vf_die 'xvfb-run not found'
     vf_workspace gravitas-shots stable
-    gravitas_stage
+    gravitas_stage e2e
     vf_write_settings <<CFG
 Fullscreen = 0
 UseFontConfigLib = 0
