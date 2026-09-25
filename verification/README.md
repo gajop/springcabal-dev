@@ -45,8 +45,8 @@ just probe gravitas-fire lua     # a debugging probe
 
 `verify all` runs every in-game assertion suite, the Lua/Rust pose
 comparisons, the host tests and the static checks (installed modules, Area
-17's source checks).  They run headless, at 100x (MyCube's at 1x, see
-`mycube.sh`), except the unit-script comparison, which renders the Lua and
+17's source checks).  They run headless, at 100x (MyCube's and Gravitas'
+e2e at 1x, see their scripts), except the unit-script comparison, which renders the Lua and
 WASM games under xvfb.  `verify visual` runs every golden comparison.
 Both take their run lists from the tables in `verify`, and that table's first
 mode per suite is the only place a default mode is defined.

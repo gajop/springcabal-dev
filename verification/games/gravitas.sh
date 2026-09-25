@@ -76,6 +76,11 @@ gravitas_e2e() {
     vf_cleanup_on_exit
     gravitas_stage headless-integration
     vf_quit_when 'E2E summary passed='
+    # The cases run on a fixed frame schedule, and some (input, restart,
+    # level) wait a fixed number of frames for a round trip through the UI
+    # module, which only holds at 1x: at 100x the level case once found no
+    # level spawned yet.
+    vf_speed 1
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
