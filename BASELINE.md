@@ -16,19 +16,18 @@ the rev every game pins), through the `[patch]` in `.cargo/config.toml` (generat
 
 | game | branch | HEAD |
 |---|---|---|
-| Area17 | `area17-wasm-port` | `35ebbc0` |
-| Flove | `flove-wasm-port` | `4ca3f52` |
-| Gravitas | `gravitas-wasm-port` | `33cdeb9` |
-| Hunted | `hunted-wasm-port` | `4b998d0` |
-| MyCube | `mycube-wasm-port` | `01f807a` |
-| PartsNeeded | `partsneeded-wasm-port` | `17f1f0a` |
-| TTLD | `ttld-wasm-port` | `9bc1576` |
+| Area17 | `area17-wasm-port` | `95514c9` |
+| Flove | `flove-wasm-port` | `5644cf8` |
+| Gravitas | `gravitas-wasm-port` | `336534e` |
+| Hunted | `hunted-wasm-port` | `f6d8016` |
+| MyCube | `mycube-wasm-port` | `ac65f59` |
+| PartsNeeded | `partsneeded-wasm-port` | `a47655b` |
+| TTLD | `ttld-wasm-port` | `a088700` |
 
 ## `just verify-all` (every run passes)
 
-Headless runs play at 100x, except MyCube's and Gravitas' e2e (1x, see open problems); the
-speed now really applies (it is a `[modoptions]` key; before round 7 phase B every suite ran at
-1x).
+Every headless run plays at 100x. The speed is a `[modoptions]` key; before round 7 phase B, every
+suite ran at 1x.
 
 | run | result |
 |---|---|
@@ -40,8 +39,8 @@ speed now really applies (it is a `[modoptions]` key; before round 7 phase B eve
 | gravitas e2e / headless | **19/19** cases, plus the build and log checks / pass |
 | hunted headless | **33** assertions, `ALL HUNTED INTEGRATION TESTS PASSED`; log 1 error |
 | mycube headless / lua-headless | **32** assertions / pass |
-| partsneeded headless | **58** + **4** ending + **4** restart |
-| ttld headless / pose-parity | **52** / 105 samples, exact |
+| partsneeded headless | **58** + **4** ending + **4** restart + **5** same-pass |
+| ttld headless / pose-parity | **54** / 105 samples, exact |
 | unit-scripts partsneeded | pass; the source comparison covers walk legs, walk arms, hover arms and idle |
 
 Each suite passes its exact count to `Suite::new`, so a run with fewer checks fails. Every suite
@@ -69,8 +68,9 @@ The galleries:
 - **Anim galleries** pass for all seven games, every pose exact. Each unit is captured alone
   with the synced RNG reseeded per frame (`fixtures/gallery/gallery.lua`), so one unit's logic
   can't move another's poses.
-- **Parity gallery** (WASM vs Lua poses, report only): Hunted differs in 1 shot, rabbit move f30
-  by 0.5 elmos (see open problems).
+- **Parity gallery** (WASM vs Lua poses, report only):
+  - Hunted differs in 1 shot: rabbit move f30, by 0.5 elmos (the engine's `Wait*` lag).
+  - Flove differs in 2 shots: the big mushroom's muzzle, by 0.42 rad.
 - **CEG galleries** pass. These captures flake on engine particle noise, so rerun once before
   concluding. Seen failing once each: Area17 `sickfires/near/f02`,
   `genericbunnyexplosion-medium-red/far/f12`, `explosion/near/f12`; Flove `barftrail/near/f02`,
