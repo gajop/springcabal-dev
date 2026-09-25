@@ -35,7 +35,8 @@ ttld_start() {
 }
 
 ttld_lua_visual() {
-    local seconds=${1:-20} screen=${2:-1280x720x24} staged shots
+    # A backstop: the run quits itself after its last screenshot.
+    local seconds=${1:-90} screen=${2:-1280x720x24} staged shots
 
     vf_workspace ttld-lua-visual stable
     staged=$(vf_stage_game "$LUA_GAME_DIR")
@@ -51,11 +52,12 @@ ttld_lua_visual() {
     vf_link_game "$staged"
     vf_link_map "$MAP_DIR"
     ttld_start lua
+    vf_quit_when '[TTLD Lua E2E] done'
     vf_config "$VISUAL_CONFIG"
     printf 'AllowDeferredMapRendering = 1\nAllowDeferredModelRendering = 1\nAllowDeferredModelBufferClear = 1\n' >>"$VF_CONFIG_FILE"
     vf_run_visual "$seconds" "$screen"
     vf_save_logs
-    vf_require_exit_or_timeout
+    vf_require_clean_exit
 
     shots=$(vf_require_screenshots 3)
     vf_require '\[TTLD Lua E2E\] fixture boss=[0-9]+ orkbig=[0-9]+' \
@@ -64,6 +66,7 @@ ttld_lua_visual() {
         'Lua hover did not trace orkboss'
     vf_require '\[TTLD Lua E2E\] hover orkbig unit=[0-9]+.*trace=unit:[0-9]+' \
         'Lua hover did not trace orkbig'
+    vf_require '\[TTLD Lua E2E\] done' 'the Lua hover capture did not finish'
     vf_forbid 'LuaRules.*(Error|error)|LuaUI.*(Error|error)|attempt to (index|call)|Lua.*syntax' \
         'the Lua render run contains a runtime failure'
     printf 'captured %s Lua screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
@@ -238,7 +241,8 @@ ttld_pose_parity() {
 }
 
 ttld_visual() {
-    local seconds=${1:-150} screen=${2:-1280x720x24} shots
+    # A backstop: the run quits itself at frame ~1230 (TTLD E2E done).
+    local seconds=${1:-300} screen=${2:-1280x720x24} shots
 
     vf_workspace ttld-visual stable
     ttld_stage e2e

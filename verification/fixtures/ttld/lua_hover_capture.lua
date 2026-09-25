@@ -57,5 +57,9 @@ function widget:Update()
     elseif phase == 4 and frame >= 130 then
         Spring.SendCommands("screenshot")
         phase = 5
+    elseif phase == 5 and frame >= 135 then
+        -- The suite quits on this (vf_quit_when).
+        Spring.Echo("[TTLD Lua E2E] done")
+        phase = 6
     end
 end
