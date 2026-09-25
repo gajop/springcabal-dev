@@ -95,7 +95,9 @@ to ship one.
 Games depend on `spring` and `spring-addons` from the engine repository
 (`https://github.com/gajop/spring-rust`, branch `rust-wip`), and on the shared
 `springcabal` crates from the private repository
-`ssh://git@github.com/gajop/springcabal-rs.git`.
+`ssh://git@github.com/gajop/springcabal-rs.git`, pinned to a commit
+(`rev = "..."` in each game's `wasm-src/Cargo.toml`; bump it in all seven
+after pushing the crate).
 
 ```bash
 just check-all     # cargo check every WASM game and the menu

@@ -57,6 +57,25 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
   Needed's piece masks, Gravitas' jumps and TTLD's spell animations were all
   silently dropped.
 
+## Conventions in the WASM ports
+
+- Addon names (`Widget::name` / `Gadget::name`) are PascalCase: the type's
+  name without its `Widget` / `Gadget` suffix (`GuiCamera`, `UnitScripts`).
+- Cargo features mean the same in every game: `headless-integration` builds
+  the headless assertion suite, `e2e` the visual scenario (it may enable
+  `headless-integration` too). Probes are `*-probe`; `diagnostics` only adds
+  log lines.
+- Use the shared crate (`springcabal-rs`) instead of per-game copies:
+  `springcabal::message` for encoding and parsing messages and for sending
+  them (`send_to_rules` from the UI, `send_to_ui` from the rules; both log a
+  failure), `check::Suite::new(tag, title, expected)` for test tallies with the
+  suite's exact check count, `gallery` for gallery mode and `defs::DefCache`
+  for defs resolved once. Warnings go through the SDK (`spring::log_warning!`,
+  `log_once!`, `ResultExt::log_err` / `log_err_once`), not game helpers.
+- The games pin the crate with `rev = "..."` in `wasm-src/Cargo.toml`; the
+  `[patch]` in `.cargo/config.toml` builds against the local checkout. After
+  pushing `springcabal-rs`, bump the rev in all seven games.
+
 ## Logs
 
 - `run-wasm.sh` writes `wasm-test/write/infolog.txt` and a per-session copy in
