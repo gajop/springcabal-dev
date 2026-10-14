@@ -277,12 +277,17 @@ check("rabbit idle animates its tail and restores the resting pose", function()
 end)
 
 for _, initiallyEnabled in ipairs({false, true}) do
-    check("restart preserves cheats=" .. tostring(initiallyEnabled), function()
+  for _, analyticsAvailable in ipairs({false, true}) do
+    check("restart preserves cheats=" .. tostring(initiallyEnabled) .. ", leaderboard=" .. tostring(analyticsAvailable), function()
         local cheats, reloads, restart = initiallyEnabled, 0, nil
+        local submit, nameBox, namesSent = nil, nil, 0
         local control = {}
         function control:New(options)
             options.Dispose = function() end
+            options.SetCaption = function(self, caption) self.caption = caption end
             if options.caption == "Restart" then restart = options end
+            if options.caption == "Submit" then submit = options end
+            if options.hint == "Leaderboard Name" then nameBox = options end
             return options
         end
         local chili = {Screen0 = {AddChild = function() end}}
@@ -307,13 +312,30 @@ for _, initiallyEnabled in ipairs({false, true}) do
                     end
                 end,
             }}, {__index = _G})
+        if analyticsAvailable then
+            env.WG.analytics = {SendEvent = function(_, event, value)
+                if event == "player_name" then
+                    assert(value == "Test")
+                    namesSent = namesSent + 1
+                end
+            end}
+        end
         local chunk = assert(loadfile(root .. "/LuaUI/Widgets/ui_endgame.lua"))
         setfenv(chunk, env)()
         env.widget:Initialize()
         env.widget:GameOver({})
-        assert(restart, "restart button missing").OnClick[1]()
+        assert(restart, "restart button missing")
+        if analyticsAvailable then
+            assert(submit and nameBox, "available leaderboard controls disappeared")
+            nameBox.text = "Test"
+        else
+            assert(not submit and not nameBox, "unavailable leaderboard controls were offered")
+        end
+        assert(env.widget:KeyPress(13, {}, false), "Enter did not restart")
         assert(reloads == 1 and cheats == initiallyEnabled)
+        assert(namesSent == (analyticsAvailable and 1 or 0))
     end)
+  end
 end
 
 print(string.format("Hunted Lua regressions: %d passed, %d failed", passed, failed))
