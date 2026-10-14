@@ -163,6 +163,84 @@ check("the initial lighthouse scare area matches its published beam", function()
     assert(area.x == params.lighthouse_x and area.z == params.lighthouse_z)
 end)
 
+check("a restart does not carry a kill streak into the next round", function()
+    local kills, frame, events = 0, 1000, 0
+    local control = {}
+    function control:New(options)
+        options.SetCaption, options.SetValue = function() end, function() end
+        return options
+    end
+    local env = setmetatable({widget = {},
+        UnitDefNames = {rabbit = {id = 1}, carrot = {id = 2}},
+        WG = {Chili = {Label = control, Progressbar = control, Screen0 = {}},
+            AddEvent = function() events = events + 1 end},
+        Spring = {
+            GetWindowGeometry = function() return 1280, 720 end,
+            GetMyTeamID = function() return 0 end,
+            GetTeamUnitDefCount = function() return 0 end,
+            GetGameRulesParam = function(key) return key == "rabbits_killed" and kills or 0 end,
+            GetGameFrame = function() return frame end,
+            PlaySoundFile = function() end,
+        }}, {__index = _G})
+    local chunk = assert(loadfile(root .. "/LuaUI/Widgets/ui_stats.lua"))
+    setfenv(chunk, env)()
+    env.widget:Initialize()
+    for _, count in ipairs({4, 0, 1}) do
+        kills, frame = count, frame + 1
+        env.widget:GameFrame()
+    end
+    assert(events == 0, "the previous round's four kills joined the new round's first kill")
+    kills = 5
+    env.widget:GameFrame()
+    assert(events == 1, "a five-kill streak in the new round was lost")
+end)
+
+check("aiming during reload leaves the gun ready for the next shot", function()
+    local active, task
+    local turns, moves = {}, {}
+    local env = setmetatable({script = {}, x_axis = 1, y_axis = 2, z_axis = 3,
+        piece = function(name) return name end,
+        Hide = function() end, Explode = function() end,
+        Turn = function(name, _, target) turns[name] = target end,
+        Move = function(name, _, target) moves[name] = target end,
+        Signal = function(mask)
+            if task and task ~= active and task.mask == mask then task.cancelled = true end
+        end,
+        SetSignalMask = function(mask) active.mask = mask end,
+        WaitForMove = function() coroutine.yield() end,
+        StartThread = function(fn)
+            task = {thread = coroutine.create(fn)}
+            active = task
+            assert(coroutine.resume(task.thread))
+            active = nil
+        end,
+    }, {__index = _G})
+    local chunk = assert(loadfile(root .. "/Scripts/shotgun.lua"))
+    setfenv(chunk, env)()
+    env.script.Create()
+    env.SetPitch(0.6)
+    env.Fire()
+    assert(moves.ReloadAnim == -10, "reload did not start")
+    env.SetPitch(1.1)
+    assert(not task.cancelled, "aiming cancelled the reload")
+    active = task
+    assert(coroutine.resume(task.thread))
+    assert(coroutine.status(task.thread) == "dead")
+    assert(moves.ReloadAnim == 0 and turns.KickBackRotator == 0, "recoil did not return to neutral")
+    assert(turns.Shotgun == 1.1, "reload changed the aim")
+end)
+
+check("Space-click outside the map tolerates an unavailable external menu", function()
+    local env = setmetatable({widget = {}, WG = {},
+        Spring = {
+            TraceScreenRay = function() return nil end,
+            GetModKeyState = function() return false, false, true, false end,
+        }}, {__index = _G})
+    local chunk = assert(loadfile(root .. "/LuaUI/Widgets/map_edge_extension.lua"))
+    setfenv(chunk, env)()
+    assert(not env.widget:MousePress(0, 0, 1))
+end)
+
 for _, initiallyEnabled in ipairs({false, true}) do
     check("restart preserves cheats=" .. tostring(initiallyEnabled), function()
         local cheats, reloads, restart = initiallyEnabled, 0, nil

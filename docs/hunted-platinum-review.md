@@ -32,20 +32,26 @@ follow those commits.
 | `d0a648c` | Detach dropped food from its former owner so destroying it cannot clear a newly carried carrot. |
 | `a89d864` | Restart with cheats already enabled, and preserve the previous cheat state. |
 | `e2a7858` | Register initial lighthouse scare areas at the actual beam's x/z coordinates. |
+| `e3eacbb` | Reset the HUD's kill streak when restarting resets the kill count. |
+| `d6d49fd` | Let reload finish during continuous aiming; restore the recoil parent to neutral. |
+| `790444b` | Keep the optional external menu shortcut from crashing on an off-map Space-click. |
 
 ## Verification
 
 - All 120 game-owned Lua files pass `luac -p` (libraries are not rewritten).
 - `lua verification/fixtures/hunted/lua_regressions.lua spring-linux/games/Hunted.sdd`:
-  eight cases pass. Against original `master`, seven cases fail and the existing
+  eleven cases pass. Against original `master`, ten cases fail and the existing
   cheats-disabled restart case passes.
-- A short isolated engine run exercised drawing, shooting, mine placement,
-  and the loss screen with zero errors or warnings. The original Lua build
+- `./verification/verify probe hunted-lua-review` runs those cases, then a short
+  isolated engine check of drawing, shooting, mine placement, the loss screen,
+  and restart with cheats already enabled. Restart restores 100 carrots,
+  clears shot/mine counts, and preserves cheats. It passed with zero errors or
+  warnings. The original Lua build
   logged rabbit-shader compilation/callback errors and a map-edge shader error.
-- Reviewed images:
-  `verification/out/hunted-lua-platinum/run/write/screenshots/lua-1.png` and
-  `lua-2.png`. This is a focused Linux check, not a Windows or full playthrough
-  certification. The smoke script is `/tmp/hunted-lua-platinum-smoke.sh`.
+- Reviewed images: `verification/out/hunted-lua-platinum/screens/screen_lua_1.png`
+  (hunt), `screen_lua_2.png` (loss) and `screen_lua_3.png` (restart). This is a
+  focused Linux check, not a Windows or full playthrough certification. The
+  probe stages its extra scripts outside the game checkout.
 
 ## Behavior decisions under discussion
 
@@ -58,9 +64,10 @@ follow those commits.
 
 ## Remaining review
 
-- Check the shotgun reload cancellation: `SetPitch` signals the reload thread
-  every frame. Its recoil return target also applies `math.rad` to a pitch
-  already in radians. Establish intended animation before changing it.
+- The shotgun model confirms that `KickBackRotator` is the parent of the aimed
+  `Shotgun` piece. The aiming/reload fix returns that parent to zero while
+  preserving the child's aim. Carry this fix to CUS, and the HUD streak reset
+  to WASM's HUD.
 - Check the rabbit idle tail's speed argument and its idle pose reset before
   carrying fixes to CUS. The tail speed is passed to `math.rad`, which ignores
   it; `reseT` loops over an array but receives a table keyed by piece name.
