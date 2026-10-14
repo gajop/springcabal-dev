@@ -10,3 +10,8 @@ renderer   gpu
 gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
 gl         4.6.0 NVIDIA 580.178.04
 settings   launch/springsettings.cfg sha1 a487bc4da703
+
+Partial refresh: rabbit move-f30 pose and image tile only.
+Shared spring CUS runtime ca1985b144 resumes animation waits in their completion frame.
+Hunted WASM 88668b09b890ac87fd2b9230ea78c1c7549f21b5; Lua fcb7ab7aadcb7c6dc829f6cd0fa1197fc5b649e6.
+Verified all nine unit types match Lua; image tolerances and other atlas tiles unchanged.

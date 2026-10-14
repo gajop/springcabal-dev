@@ -78,11 +78,12 @@ suite, including the HUD/end-screen crops, with zero errors or warnings. The
 final port also passed all 28 AI unit tests. Stage logs and captures are retained
 under `verification/out/hunted-platinum-stages/{lua-unitscripts,cus}/`.
 
-The final Lua/CUS pose gallery compares nine unit types. Eight match exactly;
-the rabbit retains the previously documented 0.5-elmo translation difference at
-`move f30 BLeg1` (no rotation difference). The current WASM captures also pass
-the existing animation goldens: 15 poses match exactly and 15 images are within
-tolerance. No golden changes were required.
+The final Lua/CUS pose gallery compares nine unit types, all now matching exactly
+with shared `spring` runtime commit `ca1985b144` in the local `spring-bar` checkout.
+Before that fix, the rabbit had a 0.5-elmo translation difference at
+`move f30 BLeg1` (no rotation difference). The corrected rabbit move-f30 pose
+and its single image tile were refreshed in the goldens; the other fourteen
+atlas tiles and every tolerance are unchanged. All 15 poses and images pass.
 
 ## Conservative behavior choices
 
@@ -125,12 +126,31 @@ the fixes above, a beam-read forwarding helper used by the two-stage split, and
 documentation. Existing port improvements, content, and the OSD correction are
 preserved. No commits or FX work were dropped.
 
+## Shared CUS animation-wait correction
+
+`spring-bar` commit `ca1985b144` resumes the waiters woken by an `AnimFinished`
+event during that dispatch, after the typed script callback releases its state
+borrow. The normal once-per-frame timer/waker guard remains. No game-specific
+timing adjustment or extra Hunted commit was added. The games workspace's
+generated local Cargo patch selects this crate; this engine commit is local.
+
+All 25 crate tests pass. New cases cover completion after the frame drain,
+unrelated timers and self-wakers, all waiters in task order, state access after
+the callback, a following sleep and second animation wait, and cancellation
+inside the callback. Two regression cases fail against the previous runtime.
+Native Clippy passes with only `type_complexity` allowed for the two pre-existing
+errors in `commands.rs`; the WASM target also checks successfully.
+
+All seven CUS games were rebuilt and their animation galleries rerun using
+isolated staged release modules. Flove, Gravitas, MyCube, Parts Needed, and
+To The Last Drop pass their existing pose/image goldens unchanged. Hunted passes
+after the targeted golden correction described above. Area17's 51 poses pass;
+17 image failures also occur with its previously installed modules. Those
+unrelated image goldens were not changed. Previous Hunted captures and the
+Area17 control/fixed-runtime evidence are under `codex-work/cus-wait-fix/`.
+
 ## Limits of the result
 
-The existing SDK `AnimFinished` scheduling difference remains: a completion
-after the frame's scheduler drain resumes the script next frame, where Lua
-resumes inside the callback. It explains the one rabbit pose difference above
-and is already tracked in `docs/open-problems.md`; no game-specific timing hack
-was added. This review verifies the focused Linux scenarios and the requested
-history structure. It does not claim exhaustive playtesting or Windows
-certification, and does not change the ratings in `TODO.md`.
+This review verifies focused Linux scenarios and the requested history structure.
+It does not claim exhaustive playtesting or Windows certification, and does not
+change the ratings in `TODO.md`.

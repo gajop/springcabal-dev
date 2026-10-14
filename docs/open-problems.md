@@ -13,9 +13,6 @@ Paths are relative to `spring-linux/games/<Game>-wasm.sdd/wasm-src/` unless stat
 These are filed in `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`:
 - **§4: Hunted's pellet count and spray are hard-coded.** `WeaponDefInfo` has no `projectiles` or
   `sprayAngle`.
-- **§7: scripts resume a frame late after a blocking `Wait*`.** The SDK resumes them on the frame
-  after `AnimFinished`, where Lua resumes them inside it. Because of it, Hunted's rabbit hop is
-  0.5 elmos off Lua's in the parity gallery. It applies to every game.
 - **§5: the unit-script attach gadget is copied 7×.** It belongs in `spring-addons`.
 - **§8: there is no typed getter for a game rules param.** So MyCube's test handshake and Flove's
   status ride on a carrier unit.

@@ -71,6 +71,8 @@ The galleries:
 - **Parity gallery** (WASM vs Lua poses, report only). Flove, Gravitas, MyCube and Parts Needed
   match Lua in every shot. The rest:
   - **Hunted**, 1 shot: rabbit move f30, by 0.5 elmos (the engine's `Wait*` lag).
+    Subsequently fixed in the shared `spring` crate by `spring-bar` commit
+    `ca1985b144`; the rebuilt port now matches Lua for all nine gallery unit types.
   - **TTLD**, 4 shots: the builder. Its Lua script was never shipped, so the port deliberately
     gives it the crossbowman's (see the README).
   - **Area17**, 259 shots: all pieces missing from Lua's capture, because Lua's respawned player
