@@ -3,6 +3,7 @@
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 original=${FLOVE_LUA_DIR:-$GAMES_DIR/Flove.sdd}
 lua "$FIXTURES_DIR/flove/lua_regressions.lua" "$original"
+lua "$FIXTURES_DIR/flove/outline_regressions.lua" "$original"
 vf_workspace flove-lua-platinum stable
 staged=$(vf_stage_game "$original")
 cat > "$staged/LuaUI/Widgets/zz_platinum_probe.lua" <<'LUA'

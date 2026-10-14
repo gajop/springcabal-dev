@@ -97,6 +97,23 @@ check('upgrade cursor ignores a unit destroyed between ray and def queries', fun
         GetUnitDefID = function() return nil end, SendLuaRulesMsg = noop}, UnitDefs = {}})
     assert(e.widget:MousePress(300,300,3))
 end)
+check('tree growth survives a destroyed spire while waiting for restart', function()
+    local e,s = world('LuaRules/Gadgets/unit_poisoner.lua')
+    setmetatable(e.UnitDefNames, {__index = function(t,k) local def={id=100}; rawset(t,k,def); return def end})
+    e.UnitDefs[1] = {customParams = {}}
+    e.UnitDefs[4] = {customParams = {tree = true}}
+    s.units[4] = {def = 4,params = {}}
+    load('LuaRules/Gadgets/grove_spawner.lua', e)
+    e.TryToSpawnANewTreeSomewhereNearToThisTree = function() return true,{x=4100,z=4100} end
+    local spawned=0
+    e.SpawnATreeHereNOW = function() spawned=spawned+1 end
+    e.SpawnTree(); assert(spawned==0)
+    s.units[1] = {def=1,params={}}
+    e.RecordUnitCreatedFrame(1,1)
+    e.SpawnTree(); assert(spawned==1,'live spire stopped tree growth')
+    s.units[1]=nil
+    e.SpawnTree(); assert(spawned==1,'dead spire grew a weighted tree')
+end)
 for _,file in ipairs({'1_tree_normalmapping.lua','1_mushroom_shader.lua'}) do
     check(file .. ' refreshes uniforms after shader replacement', function()
         local queries = 0
