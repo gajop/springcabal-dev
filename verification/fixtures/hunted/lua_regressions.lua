@@ -241,6 +241,41 @@ check("Space-click outside the map tolerates an unavailable external menu", func
     assert(not env.widget:MousePress(0, 0, 1))
 end)
 
+check("rabbit idle animates its tail and restores the resting pose", function()
+    local names = {"center", "Head", "WiggleTail", "Body", "BLeg1", "BLeg2", "FLeg1", "FLeg2"}
+    local pieces, rotations, positions, tailSpeed = {}, {}, {}, nil
+    for i, name in ipairs(names) do pieces[name] = i end
+    local env = setmetatable({script = {}, unitID = 1, x_axis = 1, y_axis = 2, z_axis = 3,
+        Game = {mapSizeX = 6144, mapSizeZ = 6144},
+        Spring = {
+            GetUnitPieceList = function() return names end,
+            GetUnitPieceMap = function() return pieces end,
+        },
+        piece = function(name) return assert(pieces[name]) end,
+        Turn = function(id, axis, target, speed)
+            rotations[id .. ":" .. axis] = target
+            if id == pieces.WiggleTail and tailSpeed == nil then tailSpeed = speed or false end
+        end,
+        Move = function(id, axis, target) positions[id .. ":" .. axis] = target end,
+        WaitForTurn = function() end,
+    }, {__index = _G})
+    env.include = function(filename)
+        local chunk = assert(loadfile(root .. "/Scripts/" .. filename))
+        return setfenv(chunk, env)()
+    end
+    env.include("rabbit.lua")
+    env.Move(pieces.center, 2, 5)
+    env.Turn(pieces.Body, 1, -0.3)
+    env.idle()
+    assert(tailSpeed == 8, "idle tail speed was not passed to Turn")
+    for _, id in pairs(pieces) do
+        for axis = 1, 3 do
+            assert(rotations[id .. ":" .. axis] == 0, "idle left a rotated piece")
+            assert(positions[id .. ":" .. axis] == 0, "idle left a displaced piece")
+        end
+    end
+end)
+
 for _, initiallyEnabled in ipairs({false, true}) do
     check("restart preserves cheats=" .. tostring(initiallyEnabled), function()
         local cheats, reloads, restart = initiallyEnabled, 0, nil

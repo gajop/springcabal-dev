@@ -35,12 +35,13 @@ follow those commits.
 | `e3eacbb` | Reset the HUD's kill streak when restarting resets the kill count. |
 | `d6d49fd` | Let reload finish during continuous aiming; restore the recoil parent to neutral. |
 | `790444b` | Keep the optional external menu shortcut from crashing on an off-map Space-click. |
+| `626261f` | Give the idle reset helper an array of pieces and pass the tail speed to `Turn`. |
 
 ## Verification
 
 - All 120 game-owned Lua files pass `luac -p` (libraries are not rewritten).
 - `lua verification/fixtures/hunted/lua_regressions.lua spring-linux/games/Hunted.sdd`:
-  eleven cases pass. Against original `master`, ten cases fail and the existing
+  twelve cases pass. Against original `master`, eleven cases fail and the existing
   cheats-disabled restart case passes.
 - `./verification/verify probe hunted-lua-review` runs those cases, then a short
   isolated engine check of drawing, shooting, mine placement, the loss screen,
@@ -68,14 +69,22 @@ follow those commits.
   `Shotgun` piece. The aiming/reload fix returns that parent to zero while
   preserving the child's aim. Carry this fix to CUS, and the HUD streak reset
   to WASM's HUD.
-- Check the rabbit idle tail's speed argument and its idle pose reset before
-  carrying fixes to CUS. The tail speed is passed to `math.rad`, which ignores
-  it; `reseT` loops over an array but receives a table keyed by piece name.
+- Carry the rabbit idle fixes to CUS: reset its pieces in the same places as
+  Lua, and animate the tail at speed 8. Preserve the current gait offset until
+  the pending variation choice is answered.
 - Review restart/UI state, input handling, and the WASM improvements that should
   also exist in Lua. Keep diagnostics unless a replacement is presented.
 - After Lua behavior is agreed, reconstruct WASM directly above that Lua tip
   as exactly two commits: gameplay/UI, then unit scripts. Both intermediate
   versions must work. Preserve the OSD fix and all existing port improvements;
   document how Lua fixes are implemented or already satisfied in the port.
+
+The original gameplay/UI port (`24bb6bf`) also changed seven files in `Scripts/`
+to provide exports and destruction helpers. Simply replaying the old first two
+commits would therefore not meet the requested separation. The reconstructed
+first commit must keep the agreed Lua scripts unchanged and provide the adapters
+outside `Scripts/`. The current SDK has named script calls, dynamic Lua unit-script
+callin registration, and numeric unit rules-parameter reads; these are available
+for that intermediate version. Its runtime behavior still needs verification.
 
 Lua is not yet declared Platinum. No existing history or FX work has been dropped.
