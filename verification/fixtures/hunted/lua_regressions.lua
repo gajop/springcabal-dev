@@ -298,5 +298,34 @@ for _, initiallyEnabled in ipairs({false, true}) do
   end
 end
 
+check("long hunts keep wave growth within the rabbit limit", function()
+    local waves = {}
+    local noop = function() end
+    local env = setmetatable({
+        gadget = {}, gadgetHandler = {IsSyncedCode = function() return true end},
+        UnitDefNames = {rabbit = {id = 1}, lighthouse = {id = 2}, mine = {id = 3}},
+        Spring = {
+            GetAllUnits = function() return {} end,
+            GetGameFrame = function() return 0 end,
+            CreateUnit = function() return 1 end, SetUnitRotation = noop,
+            SetGameRulesParam = noop, GetTeamUnitDefCount = function() return 0 end,
+        },
+        GG = {SpawnField = noop, SpawnBurrow = noop,
+            SetRabbitPanicResist = noop, SetRabbitSpeedMult = noop,
+            SpawnWaveWithAttributes = function(burrows, rabbits)
+                assert(burrows <= 600 and rabbits <= 600, "unbounded wave growth")
+                waves[#waves + 1] = {burrows, rabbits}
+            end},
+    }, {__index = _G})
+    local chunk = assert(loadfile(root .. "/LuaRules/Gadgets/wave_handler.lua"))
+    setfenv(chunk, env)()
+    env.gadget:Initialize()
+    for wave = 1, 1000 do env.gadget:GameFrame(5 + (wave - 1)*550) end
+    assert(waves[1][1] == 5 and waves[1][2] == 25)
+    assert(waves[2][1] == 6 and waves[2][2] == 30)
+    assert(waves[3][1] == 8 and waves[3][2] == 36)
+    assert(waves[1000][1] == 600 and waves[1000][2] == 600)
+end)
+
 print(string.format("Hunted Lua regressions: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

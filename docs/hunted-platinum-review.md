@@ -7,7 +7,7 @@ never edits `TODO.md`; ratings remain the user's decision.
 
 ## Current history
 
-Lua is checked out on `master` at `38e57c0`, exactly eight
+Lua is checked out on `master` at `096bae3`, exactly nine
 commits above `origin/master` (`14f5bc9`):
 
 | Commit | Reviewed scope |
@@ -20,23 +20,46 @@ commits above `origin/master` (`14f5bc9`):
 | `f0de6da` | Correct lighthouse beam registration coordinates and remove destroyed lights from their update index. |
 | `2b5fb8d` | Let reload finish during aiming and return shotgun recoil to neutral. |
 | `38e57c0` | Restore the rabbit resting pose and pass the idle tail speed correctly. |
+| `096bae3` | Bound wave-size and burrow-pick growth by the existing 600-rabbit limit. This shared bug was fixed in Lua before Rust. |
 
-WASM is checked out on `rust` at `d58cae2`, exactly two
+WASM is checked out on `rust` at `a7ac9a1`, exactly two
 commits directly above that Lua tip:
 
-1. `f3f59d3` — gameplay/UI port. `Scripts/` is unchanged from reviewed Lua.
+1. `919daca` — gameplay/UI port, including all five approved Rust review fixes.
+   `Scripts/` is unchanged from reviewed Lua.
    The temporary named-call bridge registers the existing environment functions;
    the redundant `script.Fire`/`script.SetPitch` aliases are unnecessary.
-2. `d58cae2` — CUS unit scripts and their lifecycle wiring, replacing Lua scripts
+2. `a7ac9a1` — CUS unit scripts and their lifecycle wiring, replacing Lua scripts
    and removing the temporary bridge.
 
 The earlier `codex/hunted-platinum-lua` and `codex/hunted-platinum-wasm` review
 refs remain as aliases of these tips.
 
-The final WASM tree is byte-for-byte identical to the previously verified
-`88668b0`. The first port tree differs from `3b768e4` only by removal of the two
-redundant shotgun aliases inherited from Lua. The RmlUI port already retired the
-leaderboard, and replaces the removed Lua widgets and rendering helpers.
+The final WASM tree includes the five fixes below; the second port's patch is
+unchanged. The RmlUI port already retired the leaderboard, and replaces the
+removed Lua widgets and rendering helpers.
+
+## Approved Rust review fixes
+
+All five findings were approved for implementation and folded into the first
+port commit:
+
+1. Restart retains the cursor target along with the surviving gun. A stationary
+   mouse sends no duplicate MOVE, so clearing that target used to disable the
+   synced flashlight's effect on rabbits until the mouse moved.
+2. Lua and Rust cap both nominal wave size and burrow picks at 600. Early waves
+   retain their existing growth. Rust stops recomputing growth once both caps
+   are reached, preventing excessive work and integer overflow in long hunts.
+3. A wave finishes after all scheduled spawn attempts, even if CreateUnit
+   fails. This matches Lua's policy; failures remain logged. The redundant
+   successful-creation counter and callbacks were removed.
+4. HUD initialization requires all data bindings. Bind/load/show failure removes
+   the partial context before retrying; stale documents also remove their old
+   context. The nonexistent direct-update fallback was removed.
+5. End-screen markup is cached by visibility and displayed score/time/kills.
+   Gameplay status messages no longer clear the hidden panel, and identical
+   end-screen statuses preserve its existing elements. Rebuilt documents
+   invalidate the cache.
 
 ## Approved cleanup
 
@@ -94,16 +117,21 @@ All old histories remain reachable in the Hunted repository:
   `codex-work/hunted-osd-before-platinum.patch` also remain.
 - `codex/hunted-platinum-wasm-before-lua-ui-fix`: preceding draft pair ending
   at `14de903`.
+- `codex/hunted-before-rust-review-lua`: approved eight-commit Lua tip `38e57c0`.
+- `codex/hunted-before-rust-review-fixes`: previous two-commit WASM tip `d58cae2`.
+- `codex/hunted-rust-review-fixes-checkpoint`: tested five-fix checkpoint
+  `95806ea`, with exactly the current final WASM tree before history folding.
 
 The older regrouping checkpoint `ba28432` has the exact original Lua tree of
 `d71d869`. All FX refs retain their original hashes. Nothing was pushed.
 
 ## Verification
 
-- Twelve focused Lua regression cases pass: carrot theft and ownership,
+- Thirteen focused Lua regression cases pass: carrot theft and ownership,
   lighthouse lifetime/registration, streak reset, aiming/reload, rabbit idle,
   and victory/loss restart with both initial cheat states. The end-screen
-  tests reject any retired analytics call or leaderboard control.
+  tests reject any retired analytics call or leaderboard control. A 1,000-wave
+  check verifies bounded Lua growth and unchanged first three waves.
 - All 159 other tracked Lua files parse. The original, unused
   `LuaRules/Configs/jump_defs.lua` retains its pre-existing nested-long-comment
   parse failure, as explicitly proposed; no active loader references it.
@@ -114,12 +142,19 @@ The older regrouping checkpoint `ba28432` has the exact original Lua tree of
   screenshots were inspected. The initial run inherited stale user widget
   registrations and warned about removed widgets; the probe now isolates these
   settings without changing the player's profile.
-- The new first WASM commit passes all 33 integration assertions, with zero
-  errors or warnings. Logs are preserved under
-  `codex-work/hunted-approved-stages/evidence/lua-unitscripts/`.
-- The unchanged final WASM tree previously passed all 33 integration assertions,
-  the visual suite and 28 AI unit tests. Its release modules remain installed.
-  Rewriting ancestry alone does not require repeating those checks.
+- Both updated WASM stages pass all 34 integration assertions, including the
+  new stationary-target restart check, with zero errors or warnings. The first
+  stage's latest logs are preserved under
+  `codex-work/hunted-approved-stages/evidence/lua-unitscripts-review-fixes/`.
+- The final WASM tree passes all eight visual golden comparisons (five full
+  frames and three HUD/end-screen crops); the HUD and loss screenshot were
+  inspected. Logs are preserved under
+  `codex-work/hunted-approved-stages/evidence/cus-review-fixes-visual/`.
+  Thirty AI unit tests, native test Clippy, release WASM Clippy and the release
+  build pass. New unit tests exercise very large wave numbers and exhausted
+  attempts without successful creations. Default release modules are installed.
+  HUD failure cleanup and DOM caching were reviewed in source; no engine fault
+  injection was added for those paths.
 - With shared runtime fix `spring-bar` `ca1985b144`, all nine Lua/CUS gallery
   unit types match exactly. All 15 Hunted pose/image goldens pass after the
   targeted rabbit move-f30 correction; other tiles and tolerances are unchanged.
