@@ -12,7 +12,6 @@ FIXTURES="$FIXTURES_DIR/flove"
 START_FILE="$(vf_launch_script flove)"
 MODULES=(
     flove_rules_wasm:LuaRules/wasm/flove-rules.wasm
-    flove_rules_unsynced_wasm:LuaRules/wasm/flove-rules-unsynced.wasm
     flove_ui_wasm:LuaUI/wasm/flove-ui.wasm
 )
 
@@ -97,10 +96,15 @@ flove_outline() {
     # take over a minute on llvmpipe.
     local seconds=${1:-240} staged out="$VERIFICATION_ROOT/out/flove-outline"
 
-    vf_build "$SOURCE_ROOT" headless-integration
-
     vf_note 'Rendering the Lua gadget baseline'
     vf_workspace flove-outline stable
+    # Compile a private UI copy with the moved Rust outline omitted, so the
+    # retained Lua outline fixture remains the only outline renderer here.
+    rm -rf -- "$VF_TEST_ROOT/wasm-src" "$VF_TEST_ROOT/ModelMaterials"
+    cp -a "$SOURCE_ROOT" "$VF_TEST_ROOT/wasm-src"
+    cp -a "$GAME_DIR/ModelMaterials" "$VF_TEST_ROOT/ModelMaterials"
+    sed -i '/gfx_outline::GfxOutlineWidget::new()/d' "$VF_TEST_ROOT/wasm-src/ui/src/widgets/mod.rs"
+    vf_build "$VF_TEST_ROOT/wasm-src" headless-integration "$BUILD_CACHE/flove-outline-lua"
     staged=$(flove_stage)
     cp "$FIXTURES/gadget_gfx_outline.lua" "$staged/LuaRules/Gadgets/gfx_outline.lua"
     cat >"$staged/LuaRules/wasm/manifest.txt" <<'MANIFEST'
@@ -109,6 +113,7 @@ MANIFEST
     flove_outline_shot lua_baseline "$seconds"
 
     vf_note 'Rendering the Rust WASM port'
+    vf_build "$SOURCE_ROOT" headless-integration
     vf_workspace flove-outline stable
     flove_stage >/dev/null
     flove_outline_shot rust_wasm "$seconds"

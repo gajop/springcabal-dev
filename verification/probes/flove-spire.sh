@@ -9,7 +9,6 @@ vf_workspace "flove-spire-${1:-probe}"
 staged=$(vf_stage_game "$GAMES_DIR/Flove-wasm.sdd")
 if [[ -n ${SPIRE_PROBE_MODULE_DIR:-} ]]; then
     cp "$SPIRE_PROBE_MODULE_DIR/flove_rules_wasm.wasm" "$staged/LuaRules/wasm/flove-rules.wasm"
-    cp "$SPIRE_PROBE_MODULE_DIR/flove_rules_unsynced_wasm.wasm" "$staged/LuaRules/wasm/flove-rules-unsynced.wasm"
     cp "$SPIRE_PROBE_MODULE_DIR/flove_ui_wasm.wasm" "$staged/LuaUI/wasm/flove-ui.wasm"
 fi
 cp "$FIXTURES_DIR/flove/spire_world_probe.lua" "$staged/LuaRules/Gadgets/spire_world_probe.lua"

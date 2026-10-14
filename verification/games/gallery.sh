@@ -49,7 +49,7 @@ gallery_game() {
 # widgets always (the WASM games ship none; the Lua originals' whole UI is
 # Lua), and the WASM UI module with GALLERY_UI=0.  CEG runs also drop the rules
 # gadgets and synced rules modules, as CEGs are pure game data; draw-only
-# rules-unsynced modules (Flove's outlines, TTLD's unit scaling) stay unless
+# rules-unsynced modules (TTLD's unit scaling) stay unless
 # GALLERY_UI=0.
 gallery_strip() {
     local staged=$1 kind=$2 rules="$1/LuaRules/wasm/manifest.txt"

@@ -5,7 +5,7 @@ VF_RENDERER=software
 vf_workspace flove-input-platinum stable
 vf_build "$GAMES_DIR/Flove-wasm.sdd/wasm-src" ""
 staged=$(vf_stage_game "$GAMES_DIR/Flove-wasm.sdd")
-vf_install_modules "$staged" flove_rules_wasm:LuaRules/wasm/flove-rules.wasm flove_rules_unsynced_wasm:LuaRules/wasm/flove-rules-unsynced.wasm flove_ui_wasm:LuaUI/wasm/flove-ui.wasm
+vf_install_modules "$staged" flove_rules_wasm:LuaRules/wasm/flove-rules.wasm flove_ui_wasm:LuaUI/wasm/flove-ui.wasm
 cat > "$staged/LuaRules/Gadgets/zz_input_probe.lua" <<'LUA'
 function gadget:GetInfo() return {name='FloveInputProbe',layer=100000,enabled=true} end
 if gadgetHandler:IsSyncedCode() then

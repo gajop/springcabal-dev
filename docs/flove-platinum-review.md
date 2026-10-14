@@ -11,19 +11,19 @@ was pushed.
   hover highlighting and animated outlines. The earlier consolidation preserved
   the 38-commit final tree exactly; the subsequent additions are described below.
 - WASM: `spring-linux/games/Flove-wasm.sdd`, `rust`,
-  `3f08377`. Its parent history contains that exact Lua tip, followed by exactly
+  `ce018fc`. Its parent history contains that exact Lua tip, followed by exactly
   two commits:
-  1. `399d38c`: gameplay, input, UI, graphics, assets and existing port improvements.
+  1. `dc7ded7`: gameplay, input, UI, graphics, assets and existing port improvements.
      `Scripts/` and the Lua unit-script dispatcher are unchanged from the Lua tip.
      A temporary gadget bridges spire branch targets and creation-frame state.
-  2. `3f08377`: CUS unit scripts, their lifecycle wiring, removal of the Lua scripts
+  2. `ce018fc`: CUS unit scripts, their lifecycle wiring, removal of the Lua scripts
      and temporary adapter, and replacement of Lua's eye flare with the rules flare.
 
 Both game repositories have matching local `main` and `rust` refs. The Lua folder
 is checked out on `main`, and the WASM folder on `rust`; both are clean. The
 `codex/flove-platinum-*` aliases and historical backup branches remain available.
 
-The three installed WASM modules were rebuilt without test features after the
+The two installed WASM modules were rebuilt without test features after the
 checks. The first commit is a runnable intermediate version, not just a source split.
 
 ## Preserved originals and changes
@@ -46,8 +46,11 @@ In the WASM repository, `flove-wasm-port` and `codex/flove-pre-platinum-wasm` pr
 branch-count repairs before reconstructing the two-commit history.
 `codex/flove-before-lua-consolidation-wasm` preserves `bb7a302` and its previous
 Lua prefix. `codex/flove-before-outline-wasm` preserves `e2af26a`.
-The latest WASM commits change only their README relative to the corresponding
-previous port trees; all implementation, assets and installed binaries are identical.
+The Lua-outline follow-up changed only port README files relative to the previous
+port trees. The subsequent Rust cleanup is described below. Both repositories
+now preserve the pre-cleanup `3f08377` on `codex/flove-before-rust-cleanup`.
+The previous three production modules are preserved under
+`codex-work/flove-before-rust-cleanup.modules/`.
 
 The Lua preservation checkpoint (`378529e`, after the first 29 regrouped commits)
 has exactly the same Git tree as `4f13821`. This includes the revised mushroom,
@@ -56,7 +59,7 @@ exclusions, disabled analytics placeholder, command policy and menu edits.
 The historical Cannon rewrite and its later MissileLauncher restoration remain
 in the preserved history; the regrouped tree keeps the final working definition.
 
-The final WASM tree differs from the original port in only seven paths:
+Before the Rust cleanup, the WASM tree differed from the original port in only seven paths:
 
 - The UI encodes nested held commands correctly.
 - The shared branch formula and its Lua comparison reflect the Lua fix.
@@ -66,9 +69,9 @@ The final WASM tree differs from the original port in only seven paths:
 - The test scenario excludes dead units still playing Lua death animations.
 - The README explains the corrected behavior and updated Lua restart behavior.
 
-All other original port files, including assets, diagnostics, animated outlines,
-hover highlighting, UI features, model revisions and unit-script implementation,
-are preserved. The existing poison kill-credit behavior is preserved.
+The original assets, diagnostics, animated outlines, hover highlighting, UI
+features and model revisions are preserved. The outline source is moved unchanged;
+the unit-script state representation is simplified without changing behavior. The existing poison kill-credit behavior is preserved.
 
 ## Necessity and consolidation review
 
@@ -112,9 +115,9 @@ The changes do not all represent necessary gameplay repairs:
 No change was removed in the consolidation or this follow-up. The latest Lua
 comparison against `21c1bed` changes exactly four paths: the one-line spire-loss
 check in `grove_spawner.lua`, the outline widget, the tree material shader, and a
-shared deformation helper. WASM's original `rules-unsynced` implementation is
-byte-for-byte unchanged. Its RmlUi UI, shortcuts, grass detail, animated outlines,
-hover rim and unit scripts remain preserved.
+shared deformation helper. WASM's outline implementation is moved byte-for-byte
+from `rules-unsynced` into `ui`; its RmlUi UI, shortcuts, grass detail, animated
+outlines and hover rim remain preserved.
 
 | Commit | Scope |
 | --- | --- |
@@ -135,8 +138,9 @@ hover rim and unit scripts remain preserved.
 | `e93965f` | Highlight upgradeable trees and keep outlines aligned with sway and growth |
 
 The earlier consolidation proved byte-for-byte equality of the Lua final tree and
-both WASM trees. This follow-up verifies the explicit four-path Lua delta and
-README-only port deltas instead. The first port leaves `Scripts/` and the Lua
+both WASM trees. The Lua outline follow-up verified the explicit four-path Lua
+delta and README-only port deltas. The Rust cleanup preserves the Lua tree and
+keeps all gameplay/UI fixes in the first port commit, and CUS changes in the second. The first port leaves `Scripts/` and the Lua
 unit-script dispatcher unchanged from the new Lua tip; WASM still has exactly
 two commits above Lua.
 
@@ -209,7 +213,7 @@ It does not inject shot messages or call the input widget directly.
   identical GPU scenes and produce four screenshots each. Current: zero errors,
   zero warnings. Upstream models: zero errors, five unsupported-scaling warnings.
   The level 1/2/3 hover images and the model comparison were visually inspected.
-- Both WASM commits pass the 66 rules, nine UI and eight scenario assertions,
+- Both updated WASM commits pass the 66 rules, ten UI and eight scenario assertions,
   with no engine/runtime errors in the headless check.
 - Physical LMB/RMB pass in both WASM versions. The final repeat uses
   `./verification/verify probe flove-mouse-input`.
@@ -224,10 +228,62 @@ The software-rendered runs still log the engine's existing llvmpipe grass shader
 validation error; there were no Lua errors or WASM failures. This was a focused
 Linux review, not a full ten-minute playthrough or Windows check. No rating was changed.
 
-The unchanged WASM implementation was not rebuilt or retested solely for the
-new Lua ancestry and README. Its recorded runtime, physical input and animation
-results continue to apply.
+The Lua outline follow-up did not repeat WASM checks solely for changed ancestry.
+The Rust cleanup did rerun the affected checks listed below.
+
+## Rust review fixes and cleanup
+
+The UI recovery fix stays small: invalid document handles are treated as lost,
+and loading first unloads leftover documents and removes the old data model in
+the existing context. Removing that model releases retained callbacks. There is
+no additional recovery state machine. An engine integration assertion unloads
+the document and verifies that it is recreated successfully in the same context.
+A focused host probe also verifies retry after a transient document-load failure.
+
+Restart replaces the story state and resumes the game before opening the intro.
+The UI suite now restarts while a story owns the pause, covering the failure path.
+
+Flower and upgrade gadgets track their projectiles within the current round.
+Old-round destruction callbacks cannot bloom flowers or upgrade new trees; new
+shots work normally. This matches the boundary provided by Lua's watched-projectile
+lists being discarded during its rules reload. The regression probe uses actual
+engine projectiles on both sides of a restart. It counts flower definitions rather
+than `customParams.flower`, because Grass1 inherits that flag.
+
+Unit scripts now store a state variant for their kind. Only mushrooms allocate
+movement and aiming state; grass, flowers, trees, the spire and invisible markers
+no longer allocate dummy mushroom state. The script dispatch and animation logic
+are unchanged; 19,760 sampled poses still match Lua within `0.002` (maximum `0.000008`).
+
+The outline code moves unchanged into the UI module, including gallery mode.
+The separate `rules-unsynced` crate, empty global, setup and module manifest entry
+are removed. Both commit versions build and ship two modules. The install and
+verification recipes are updated accordingly. Three filtered GPU tree captures
+are pixel-for-pixel identical against the preserved pre-cleanup production build.
+The filtered run itself does not pass the complete gallery's golden comparison
+(it omits the other units and uses different scene placements); the preserved
+build has exactly the same comparison failures. Goldens were not rewritten.
+
+Focused results:
+
+- Both port commits: 66 rules, 10 UI and 8 scenario assertions, no runtime errors.
+- Final port: physical SDL LMB and RMB still spawn their projectiles.
+- `flove-restart-projectiles`: old-round flower/upgrade impacts are ignored;
+  current-round flower and upgrade impacts work.
+- GPU tree captures: all three before/after images have zero pixel difference.
+- Production formatting and release clippy pass with warnings denied.
+- Source and manifests now ship only rules-synced and UI modules; the installed
+  modules were rebuilt without test features. The old binaries remain backed up.
+
+The first commit retains all Lua unit scripts and the Lua dispatcher exactly.
+The second contains the CUS port and the state cleanup. `main` remains `e93965f`;
+`rust` is exactly two commits above it, and both repositories agree on these refs.
 
 Evidence is under `verification/out/flove-presentation-{current,upstream-models}/`,
 `flove-presentation-review/`, `flove-lua-platinum/`, `flove-port-first/`,
 `flove-port-final/`, `flove-input-platinum/`, and `flove-animation-{lua,rust}/`.
+
+Rust-cleanup evidence is under `verification/out/flove-first-cleanup/`,
+`flove-restart-projectiles/`, `flove-input-platinum/` and `flove-headless/`.
+The paired GPU capture directories are `codex-work/flove-render-after-cleanup/`
+and `verification/out/gallery-anim-flove-wasm/captures/` (preserved build).
