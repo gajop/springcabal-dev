@@ -47,7 +47,7 @@ in `docs/open-problems.md`. Ratings in `TODO.md` remain for the user to manage.
 ## WASM: deferred
 
 The user explicitly requested Lua completion before further WASM work.
-`Area17-wasm.sdd` remains on `area17-wasm-port`; its files and installed modules were left unchanged during this
+`Area17-wasm.sdd` remains on `rust`; its files and installed modules were left unchanged during this
 five-commit regrouping. The existing WASM commits were previously verified,
 but still sit above the earlier Lua history. When the user resumes WASM work,
 review them and rebuild exactly two commits directly above the finalized Lua
@@ -56,7 +56,7 @@ Original WASM `2ce7c7e` remains at `refs/backups/area17/pre-platinum-wasm`; old 
 modules remain in `codex-work/area17-pre-platinum-installed/`.
 
 Branch-name correction: the approved Lua tip is on `master`, and the current
-WASM tip is on `area17-wasm-port`. No file contents changed during this
+WASM tip is on `rust`. No file contents changed during this
 correction. All added review branch names were removed; their commit references
 remain under `refs/backups/area17/`. Further work stays on the user's existing
 branches unless the user explicitly requests another branch.
