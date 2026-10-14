@@ -467,6 +467,116 @@ vf_run_visual() {
     return 0
 }
 
+# vf_run_driven SECONDS DRIVER [SCREEN]
+# A visual run played through real input: the engine renders on its own Xvfb
+# display (software GL) in a window at 0,0, and DRIVER, a shell function, runs
+# alongside it with DISPLAY set and presses keys and buttons with xdotool
+# (vf_x_* below), usually waiting for markers the game logs.  When the driver
+# returns, the engine is stopped if it is still running.  The run's status is
+# the driver's; VF_ENGINE_STATUS is the engine's (124 when stopped).
+vf_run_driven() {
+    local seconds=${1:?seconds} driver=${2:?driver} screen=${3:-1280x720x24}
+    local engine width height display='' n xvfb_pid engine_pid status
+    command -v xdotool >/dev/null || vf_die 'driven runs need xdotool'
+    engine=$(vf_engine_bin visual)
+    width=${screen%%x*}
+    height=${screen#*x}; height=${height%%x*}
+    vf_default_speed 1
+    rm -f -- "$VF_WRITE_DIR/infolog.txt"
+    vf_sanitizer_env
+    vf_config_set Fullscreen 0
+    vf_config_set XResolutionWindowed "$width"
+    vf_config_set YResolutionWindowed "$height"
+    vf_config_set WindowPosX 0
+    vf_config_set WindowPosY 0
+
+    for n in $(seq 90 189); do
+        [[ -e /tmp/.X11-unix/X$n || -e /tmp/.X$n-lock ]] || { display=:$n; break; }
+    done
+    [[ -n $display ]] || vf_die 'no free X display between :90 and :189'
+    Xvfb "$display" -screen 0 "$screen" +extension GLX >/dev/null 2>&1 &
+    xvfb_pid=$!
+    # An interrupted suite still takes its display down (and keeps the
+    # cleanup an EXIT trap set before).
+    local previous_exit
+    previous_exit=$(trap -p EXIT | sed -E "s/^trap -- '(.*)' EXIT$/\1/")
+    # shellcheck disable=SC2064
+    trap "kill $xvfb_pid 2>/dev/null || true; ${previous_exit:-:}" EXIT
+    for n in $(seq 1 50); do
+        [[ -e /tmp/.X11-unix/X${display#:} ]] && break
+        sleep 0.1
+    done
+
+    LIBGL_ALWAYS_SOFTWARE=1 SDL_VIDEODRIVER=x11 WAYLAND_DISPLAY= DISPLAY=$display \
+        timeout --signal=TERM "${seconds}s" "$engine" --window \
+        --write-dir "$VF_WRITE_DIR" --isolation --isolation-dir "$VF_ISOLATION" \
+        --config "$VF_CONFIG_FILE" "$VF_START_FILE" >"$VF_WRITE_DIR/stdout.txt" 2>&1 &
+    engine_pid=$!
+
+    set +e
+    DISPLAY=$display VF_X_LOG="$VF_WRITE_DIR/stdout.txt" "$driver"
+    status=$?
+    if kill -0 "$engine_pid" 2>/dev/null; then
+        pkill -TERM -P "$engine_pid" 2>/dev/null
+        kill -TERM "$engine_pid" 2>/dev/null
+    fi
+    wait "$engine_pid"
+    VF_ENGINE_STATUS=$?
+    kill "$xvfb_pid" 2>/dev/null
+    wait "$xvfb_pid" 2>/dev/null
+    set -e
+    vf_check_leaks
+    return "$status"
+}
+
+# Input for vf_run_driven drivers.  Keyboard input reaches the window under
+# the pointer: there is no window manager, and xdotool's windowfocus leaves
+# the engine deaf to keys, so never call it.
+#
+# vf_x_wait PATTERN [SECONDS]: wait for a log line matching PATTERN (ERE)
+# after the line the previous wait matched, and put it in VF_X_MATCH.  Fails
+# after SECONDS (default 60).  Call it directly, not in $( ): it remembers
+# where it is in the log.
+VF_X_LINE=0
+VF_X_MATCH=''
+vf_x_wait() {
+    local pattern=${1:?pattern} seconds=${2:-60} match deadline
+    deadline=$((SECONDS + seconds))
+    while ((SECONDS < deadline)); do
+        match=$(grep -a -n -E -- "$pattern" "$VF_X_LOG" 2>/dev/null |
+            awk -F: -v from="$VF_X_LINE" '$1 > from { print; exit }')
+        if [[ -n $match ]]; then
+            VF_X_LINE=${match%%:*}
+            VF_X_MATCH=${match#*:}
+            return 0
+        fi
+        sleep 0.2
+    done
+    return 1
+}
+
+# vf_x_hold KEY SECONDS / vf_x_tap KEY: a key held down, or a short press
+# (the game polls input once per frame, so a press needs a few frames).
+vf_x_hold() {
+    xdotool keydown "${1:?key}"
+    sleep "${2:?seconds}"
+    xdotool keyup "$1"
+}
+
+vf_x_tap() {
+    vf_x_hold "${1:?key}" 0.15
+}
+
+# vf_x_button X Y BUTTON SECONDS: move the pointer to X,Y and hold a mouse
+# button there.
+vf_x_button() {
+    xdotool mousemove "${1:?x}" "${2:?y}"
+    sleep 0.2
+    xdotool mousedown "${3:?button}"
+    sleep "${4:?seconds}"
+    xdotool mouseup "$3"
+}
+
 # vf_build SOURCE_ROOT [FEATURES] [TARGET_DIR]
 # fmt + clippy + build into verification/cache/target/<game> (or TARGET_DIR),
 # never into the checkout's own target/ (whose output `just copy` installs).
