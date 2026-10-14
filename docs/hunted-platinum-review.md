@@ -7,7 +7,7 @@ never edits `TODO.md`; ratings remain the user's decision.
 
 ## Current history
 
-Lua is checked out on `codex/hunted-platinum-lua` at `38e57c0`, exactly eight
+Lua is checked out on `master` at `38e57c0`, exactly eight
 commits above `origin/master` (`14f5bc9`):
 
 | Commit | Reviewed scope |
@@ -21,7 +21,7 @@ commits above `origin/master` (`14f5bc9`):
 | `2b5fb8d` | Let reload finish during aiming and return shotgun recoil to neutral. |
 | `38e57c0` | Restore the rabbit resting pose and pass the idle tail speed correctly. |
 
-WASM is checked out on `codex/hunted-platinum-wasm` at `d58cae2`, exactly two
+WASM is checked out on `rust` at `d58cae2`, exactly two
 commits directly above that Lua tip:
 
 1. `f3f59d3` — gameplay/UI port. `Scripts/` is unchanged from reviewed Lua.
@@ -29,6 +29,9 @@ commits directly above that Lua tip:
    the redundant `script.Fire`/`script.SetPitch` aliases are unnecessary.
 2. `d58cae2` — CUS unit scripts and their lifecycle wiring, replacing Lua scripts
    and removing the temporary bridge.
+
+The earlier `codex/hunted-platinum-lua` and `codex/hunted-platinum-wasm` review
+refs remain as aliases of these tips.
 
 The final WASM tree is byte-for-byte identical to the previously verified
 `88668b0`. The first port tree differs from `3b768e4` only by removal of the two
@@ -80,7 +83,8 @@ claim that lighthouse fear was previously absent or wholly broken.
 
 All old histories remain reachable in the Hunted repository:
 
-- `master`: original Lua `d71d869`, unchanged.
+- `codex/hunted-original-lua-master`: original Lua master `d71d869`, preserved
+  before moving `master` to the approved eight-commit history.
 - `codex/hunted-32-commit-lua`: complete prior Lua review at `fcb7ab7`.
 - `codex/hunted-before-approved-cleanup-wasm`: prior port at `88668b0`.
 - `hunted-wasm-port` and `codex/hunted-pre-platinum-wasm`: original WASM
