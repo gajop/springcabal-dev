@@ -136,7 +136,7 @@ check('RTS commands are blocked while development orders remain usable', functio
     assert(e.widget:UnitCommandNotify(1, 10, {}, {}) == false)
 end)
 check('alien callbacks tolerate failed creation and missing scripts', function()
-    local e = {gadget = {}, GG = {}, CMD = {IDLEMODE = 0}, UnitDefNames = {ufo = {id = 1}, alien = {id = 2}},
+    local e = {gadget = {}, GG = {Tech = {GetAbilities = function() return {} end}}, CMD = {IDLEMODE = 0}, UnitDefNames = {ufo = {id = 1}, alien = {id = 2}},
         gadgetHandler = {IsSyncedCode = function() return true end},
         Spring = {Utilities = {Vector = {}}, GiveOrderToUnit = function() end, SetGameRulesParam = function() end,
             GetUnitPosition = function() return 0,0,0 end, GetGameFrame = function() return 0 end,
@@ -147,6 +147,31 @@ check('alien callbacks tolerate failed creation and missing scripts', function()
     e.Spring.CreateUnit = function() return 2 end
     e.gadget:UnitCreated(3,1); e.gadget:UnitDestroyed(3,1)
     e.gadget:GameFrame(10); e.gadget:GameFrame(20)
+end)
+check('UFO death cancels active abilities while preserving cooldowns', function()
+    local abilities = {'haste', 'cloak', 'independenceDayGun', 'teleport'}
+    local params = {ufo_scare_radius = 0}
+    for _, name in ipairs(abilities) do
+        params[name .. 'Duration'] = 120
+        params[name .. 'CD'] = 900
+    end
+    local e = {gadget = {}, GG = {Tech = {GetAbilities = function() return abilities end}},
+        CMD = {IDLEMODE = 0}, UnitDefNames = {ufo = {id = 1}, alien = {id = 2}},
+        gadgetHandler = {IsSyncedCode = function() return true end},
+        Spring = {Utilities = {Vector = {}}, GiveOrderToUnit = function() end,
+            SetGameRulesParam = function(key, value) params[key] = value end,
+            GetUnitPosition = function() return 0,0,0 end, GetGameFrame = function() return 0 end}}
+    load('LuaRules/Gadgets/unit_ufo_controller.lua', e)
+    e.gadget:UnitCreated(1,1)
+    params.ufo_scare_radius = 0
+    e.gadget:UnitDestroyed(2,2)
+    assert(params.cloakDuration == 120, 'another unit death cancelled UFO abilities')
+    e.gadget:UnitDestroyed(1,1)
+    for _, name in ipairs(abilities) do
+        assert(params[name .. 'Duration'] == 0, name .. ' remained active after death')
+        assert(params[name .. 'CD'] == 900, name .. ' cooldown was lost')
+    end
+    assert(params.ufo_scare_radius == 500, 'cloak still suppressed civilian fear')
 end)
 check('rejected purchases do not apply gameplay effects', function()
     local e = {gadget = {}, UnitDefNames = {ufo = {id = 1}, alien = {id = 2}},

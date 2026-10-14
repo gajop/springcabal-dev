@@ -7,8 +7,8 @@ The user approved all five Lua groups. `master` is active in
 1. `1895b7f` — Current-engine API/library compatibility, definitions, sounds and archive metadata.
 2. `291de73` — Direct controls, UFO camera, RTS-order blocking, menu return, command-color restoration and end-screen lifecycle.
 3. `2b95cc8` — Projectile lighting, shadows, transparent beam rendering and beam lifetime safeguards.
-4. `d077e08` — One scream per lift, repeatable human floating, missing-script guards and the tank turret's correct aim wait axis.
-5. `aa6b8d7` — Slope projection/rebound, point-defense reload formula, haste preserving upgrades and effects after successful purchases.
+4. `91c81f0` — One scream per lift, repeatable human floating, missing-script guards and the tank turret's correct aim wait axis, and clearing active abilities on UFO death while retaining cooldowns.
+5. `e9d9410` — Slope projection/rebound, point-defense reload formula, haste preserving upgrades and effects after successful purchases.
 
 The final Lua files match the preceding reviewed version except for three
 explicit `buildTime = 100` declarations. The engine already defaults to build
@@ -34,7 +34,7 @@ The intermediate version without the ambient asset is preserved at
 ## Validation
 
 - 125 game-owned Lua files pass `luac -p`.
-- All 11 callback regression cases pass. The starting working tree fails each case.
+- All 12 callback regression cases pass, including ability cancellation on UFO death.
 - The focused engine probe covers upgrades, movement, RTS-order blocking,
   death/respawn, queen capture and the victory UI. Tests stage their added
   scripts outside the game checkout. The latest run passed with zero errors
@@ -47,16 +47,16 @@ in `docs/open-problems.md`. Ratings in `TODO.md` remain for the user to manage.
 ## WASM history aligned
 
 The user resumed WASM work after approving Lua. In `Area17-wasm.sdd`, `master`
-is now the exact approved Lua tip `aa6b8d7`; the active `rust` branch adds exactly
+is now the exact approved Lua tip `e9d9410`; the active `rust` branch adds exactly
 two commits:
 
-1. `599eee6` — Gameplay/UI, keeping `Scripts/` byte-for-byte identical to Lua.
-2. `f1ea9ca` — Core-CUS unit scripts.
+1. `004b4a9` — Gameplay/UI, keeping `Scripts/` byte-for-byte identical to Lua.
+2. `c390826` — Core-CUS unit scripts.
 
 `rust` therefore has five Lua commits plus two WASM commits above upstream.
-It no longer inherits the obsolete 11-commit Lua grouping. The only content
-changes from the preceding WASM tip are the same three redundant build-time
-declarations removed from Lua. No Lua fixes were omitted by the regrouping.
+It no longer inherits the obsolete 11-commit Lua grouping. The initial regrouping removed the same three redundant build-time declarations
+as Lua. The subsequently approved Rust review fixes are included in the
+gameplay/UI commit. No Lua fixes were omitted.
 
 Release modules were rebuilt against the current local SDK. The headless
 suite passes with 22 Rust checks and six Lua observer checks, zero errors and
@@ -73,3 +73,21 @@ WASM tip is on `rust`. No file contents changed during this
 correction. All added review branch names were removed; their commit references
 remain under `refs/backups/area17/`. Further work stays on the user's existing
 branches unless the user explicitly requests another branch.
+
+## Approved Rust review fixes
+
+The user approved all four review findings. The existing lifecycle commit now
+cancels Lua ability durations and restores civilian fear on UFO death, keeping
+cooldowns. Rust applies the same fix and floors its signed timers at zero.
+Movement, teleport, drone/civilian destinations and off-map damage use actual
+map dimensions. Replacing a technology panel invalidates its tooltip handle;
+missing element lookups retry. A single cache skips unchanged HUD markup and
+records only successful writes, replacing the three separate technology caches.
+
+Validation: 12 Lua regressions; 22 Rust and six Lua headless checks; the visual
+suite, including actual-engine tooltip reopening and unchanged-markup checks.
+All three existing goldens pass (0.7%, 4.6%, 3.8%). Release modules were rebuilt.
+The unit-script port diff is unchanged, and the first port still retains the
+exact Lua Scripts tree. Both repositories remain on their original branches.
+The preceding tips are retained in both repositories at
+`refs/backups/area17/before-rust-review-fixes-20261015`.
