@@ -100,13 +100,12 @@ It does not inject shot messages or call the input widget directly.
 - Mushroom animation comparison passes: 19,760 pose samples, maximum difference
   `0.000008`, tolerance `0.002`.
 - WASM builds pass formatting and release clippy with warnings denied.
+- Flove animation reference images were recorded twice on the GPU, visually reviewed,
+  and checked against a fresh run after correcting the spire branch count.
 
 The software-rendered runs still log the engine's existing llvmpipe grass shader
 validation error; there were no Lua errors or WASM failures. This was a focused
-Linux review, not a full ten-minute playthrough or Windows check. Existing visual
-references have not been regenerated for the deliberately corrected spire branch
-count; a spire image/pose comparison against the old reference can consequently
-need a new reference. No rating was changed.
+Linux review, not a full ten-minute playthrough or Windows check. No rating was changed.
 
 Evidence is under `verification/out/flove-lua-platinum/`, `flove-port-first/`,
 `flove-port-final/`, `flove-input-platinum/`, and `flove-animation-{lua,rust}/`.
