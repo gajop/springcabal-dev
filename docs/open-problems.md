@@ -22,6 +22,9 @@ These are filed in `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`:
 - **Gravitas: the player can jump only once.** `verify gravitas play` passes walking and the first
   jump, then fails every later jump and every gravity-gun step (0 hits). The Lua game passes the
   same steps (`gravitas lua-play`). `gravitas play` stays out of `verify all` until this is fixed.
+- **Gravitas: collisions and the boss differ from Lua.** `verify gravitas rules`: a robot thrown
+  into a crate takes the engine's 7 damage, not the game's ~266 (`lua-rules`); the boss fires no
+  shot in 11 s where Lua fires two bursts of five. Out of `verify all` until fixed.
 
 ## Parity gallery (report only)
 

@@ -8,7 +8,7 @@ VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 declare -A MODES=(
     [area17]='headless visual static all'
     [flove]='headless visual animation-trace outline wisps original'
-    [gravitas]='e2e shots headless play lua-play'
+    [gravitas]='e2e shots headless play lua-play rules lua-rules'
     [hunted]='headless visual'
     [mycube]='headless visual lua-headless'
     [partsneeded]='headless visual'
@@ -25,7 +25,7 @@ declare -A MODES=(
 # come from the real engine; the play run needs real input).
 ALL_RUNS=(
     'host tests' 'installed all' 'area17 static' 'area17 headless' 'flove headless'
-    'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'gravitas lua-play' 'hunted headless' 'mycube headless'
+    'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'gravitas lua-rules' 'gravitas lua-play' 'hunted headless' 'mycube headless'
     'mycube lua-headless' 'partsneeded headless' 'ttld headless' 'ttld pose-parity'
     'unit-scripts partsneeded'
 )

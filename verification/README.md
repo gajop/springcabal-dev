@@ -18,7 +18,7 @@ just probe gravitas-fire lua     # a debugging probe
 | --- | --- |
 | `area17` | `headless` \| `visual` \| `static` \| `all` |
 | `flove` | `headless` \| `visual` \| `animation-trace` \| `outline` \| `wisps [stage]` \| `original` |
-| `gravitas` | `e2e` \| `shots` \| `headless` \| `play` \| `lua-play` |
+| `gravitas` | `e2e` \| `shots` \| `headless` \| `play` \| `lua-play` \| `rules` \| `lua-rules` |
 | `hunted` | `headless` \| `visual` |
 | `mycube` | `headless` \| `visual` \| `lua-headless` |
 | `partsneeded` | `headless` \| `visual` |
@@ -38,6 +38,9 @@ just probe gravitas-fire lua     # a debugging probe
   real input (see "Playing through real input" below): walking, jumping
   with Space, E and the middle button, pushing and pulling with the gravity
   gun, and Ctrl+Q back to the menu.  The same steps and checks run on both.
+- `gravitas rules` and `lua-rules` check game rules headless on either
+  version, with the same cases: a crate presses a plate down, a robot thrown
+  into a crate takes the game's collision damage, the boss fires in bursts.
 - `pose-parity`, `animation-trace` and `unit-scripts` compare Lua and Rust
   unit-script animation traces numerically.
 - `host tests` runs the host unit tests: `springcabal-rs` and every game's

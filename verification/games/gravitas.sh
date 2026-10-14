@@ -260,6 +260,49 @@ LUA
     echo ">>> Gravitas $variant play passed <<<"
 }
 
+# rules / lua-rules: game rules headless, on the WASM port or the Lua game:
+# a crate presses a plate down, a thrown robot takes the game's collision
+# damage, the boss fires in bursts (fixtures/gravitas/rules_observer.lua).
+# Plus a log with no def, effect or texture warning.
+RULES_CASES=3
+
+gravitas_rules() {
+    local variant=$1 seconds=${2:-120} staged log
+    vf_cleanup_on_exit
+    if [[ $variant == lua ]]; then
+        vf_workspace gravitas-lua-rules
+        staged=$(vf_stage_game "$GAMES_DIR/Gravitas.sdd")
+        vf_link_game "$GAMES_DIR/Scenario-Editor-Gravitas.sdd"
+        vf_link_game "$GAMES_DIR/Scenario-Editor-Core.sdd"
+        ln -sfn "$PROJECT_ROOT/spring-linux/projects" "$VF_ISOLATION/projects"
+    else
+        vf_workspace gravitas-rules
+        staged=$(vf_stage_game "$GAME_DIR")
+    fi
+    cp "$FIXTURES/rules_observer.lua" "$staged/LuaRules/Gadgets/zz_verify_rules.lua"
+    vf_link_map "$MAP_DIR"
+    vf_start_file "$(vf_launch_script gravitas "$variant")"
+    vf_quit_when '[vf-rules] summary'
+    vf_config
+    vf_run_headless "$seconds"
+    vf_save_logs
+    vf_require_clean_exit
+    log=$(vf_count_log)
+
+    echo 'cases:'
+    grep -a -oE '\[vf-rules\] (PASS|FAIL) .*' "$log" | sed 's/^\[vf-rules\] /  /' || true
+    echo 'checks:'
+    gravitas_check "every case passed" grep -aqE "\[vf-rules\] summary passed=$RULES_CASES failed=0" "$log"
+    gravitas_check "no unit or weapon def warning" gravitas_absent 'Warning: (Unit|Weapon)Defs:|has really low power'
+    gravitas_check "no undefined CEG" gravitas_absent 'CCEG::Load'
+    gravitas_check "every model has a primary texture" gravitas_absent 'could not load primary texture'
+    gravitas_check "no wasm trap, callin error, panic or crash" gravitas_absent "$RUNTIME_FAILURE_PATTERN"
+
+    echo
+    [[ $GRAVITAS_FAILURES -eq 0 ]] || { echo "gravitas $variant rules: $GRAVITAS_FAILURES check(s) failed"; return 1; }
+    echo ">>> Gravitas $variant rules passed <<<"
+}
+
 # Waits for each "[vf-play] go STEP key=KEY x=X y=Y" and plays it.  The
 # pointer stays over the window, so key presses reach the game.
 gravitas_play_driver() {
@@ -350,5 +393,7 @@ case "${1:-}" in
     shots) gravitas_shots "${2:-}" ;;
     play) gravitas_play wasm "${2:-}" ;;
     lua-play) gravitas_play lua "${2:-}" ;;
-    *) vf_die 'usage: gravitas.sh [e2e|shots|headless|play|lua-play] [seconds]' ;;
+    rules) gravitas_rules wasm "${2:-}" ;;
+    lua-rules) gravitas_rules lua "${2:-}" ;;
+    *) vf_die 'usage: gravitas.sh [e2e|shots|headless|play|lua-play|rules|lua-rules] [seconds]' ;;
 esac
