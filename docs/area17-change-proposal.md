@@ -13,5 +13,5 @@ defaults are excluded. The cricket recording is retained: the bundled Ambient
 Player requires it, as the engine smoke check confirmed.
 All other final files are unchanged from the preceding review.
 
-WASM is deferred until the user resumes that review. See
+WASM now has exactly two commits above this approved Lua history. See
 `area17-platinum-review.md` for exact commits, preservation and verification.

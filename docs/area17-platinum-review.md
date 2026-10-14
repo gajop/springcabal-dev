@@ -44,16 +44,29 @@ The intermediate version without the ambient asset is preserved at
 This is a focused Linux review, with the known gallery-fixture issues remaining
 in `docs/open-problems.md`. Ratings in `TODO.md` remain for the user to manage.
 
-## WASM: deferred
+## WASM history aligned
 
-The user explicitly requested Lua completion before further WASM work.
-`Area17-wasm.sdd` remains on `rust`; its files and installed modules were left unchanged during this
-five-commit regrouping. The existing WASM commits were previously verified,
-but still sit above the earlier Lua history. When the user resumes WASM work,
-review them and rebuild exactly two commits directly above the finalized Lua
-history: gameplay/UI with unchanged Lua scripts, then Core-CUS unit scripts.
-Original WASM `2ce7c7e` remains at `refs/backups/area17/pre-platinum-wasm`; old installed
-modules remain in `codex-work/area17-pre-platinum-installed/`.
+The user resumed WASM work after approving Lua. In `Area17-wasm.sdd`, `master`
+is now the exact approved Lua tip `aa6b8d7`; the active `rust` branch adds exactly
+two commits:
+
+1. `599eee6` — Gameplay/UI, keeping `Scripts/` byte-for-byte identical to Lua.
+2. `f1ea9ca` — Core-CUS unit scripts.
+
+`rust` therefore has five Lua commits plus two WASM commits above upstream.
+It no longer inherits the obsolete 11-commit Lua grouping. The only content
+changes from the preceding WASM tip are the same three redundant build-time
+declarations removed from Lua. No Lua fixes were omitted by the regrouping.
+
+Release modules were rebuilt against the current local SDK. The headless
+suite passes with 22 Rust checks and six Lua observer checks, zero errors and
+the existing four headless RmlUi texture warnings.
+
+The previous WASM history is preserved at
+`refs/backups/area17/rust-before-approved-lua-base`; its old local `master` is at
+`refs/backups/area17/master-before-approved-lua-base`. Original WASM `2ce7c7e`
+remains at `refs/backups/area17/pre-platinum-wasm`; old installed modules remain
+in `codex-work/area17-pre-platinum-installed/`.
 
 Branch-name correction: the approved Lua tip is on `master`, and the current
 WASM tip is on `rust`. No file contents changed during this
