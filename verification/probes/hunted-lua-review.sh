@@ -2,7 +2,12 @@
 # Short Lua review run: source checks, weapons, loss, and a restart with cheats on.
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 lua "$FIXTURES_DIR/hunted/lua_regressions.lua" "$GAMES_DIR/Hunted.sdd"
-vf_workspace hunted-lua-platinum stable
+vf_workspace "hunted-lua-platinum${HUNTED_LUA_SHADOWS:+-shadows-$HUNTED_LUA_SHADOWS}" stable
+# Start with test-owned UI settings, rather than old widget names from the
+# player's profile. Removing the isolation symlink never changes that profile.
+[[ ! -L $VF_ISOLATION/LuaUI ]] || rm -- "$VF_ISOLATION/LuaUI"
+mkdir -p "$VF_ISOLATION/LuaUI"
+rm -rf -- "$VF_WRITE_DIR/LuaUI"
 staged=$(vf_stage_game "$GAMES_DIR/Hunted.sdd")
 cat > "$staged/LuaUI/Widgets/zz_platinum_probe.lua" <<'LUA'
 function widget:GetInfo()
@@ -65,7 +70,8 @@ vf_link_map "$MAPS_DIR/HuntedMap.sdd" 'Hunted - v04.sdd'
 vf_start_file "$(vf_launch_script hunted lua)"
 vf_config
 vf_graphics hunted
-vf_run_visual 35
+[[ -z ${HUNTED_LUA_SHADOWS:-} ]] || vf_config_set Shadows "$HUNTED_LUA_SHADOWS"
+vf_run_visual 35 1024x720x24
 vf_save_logs
 vf_require_clean_exit
 vf_require 'HUNTED LUA PLATINUM SMOKE PASSED' 'Lua smoke did not finish'

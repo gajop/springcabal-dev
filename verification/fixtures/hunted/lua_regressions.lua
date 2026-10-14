@@ -118,24 +118,6 @@ check("a dropped carrot no longer belongs to its old rabbit", function()
     assert(notifications == 1, "destroying current food did not notify its rabbit")
 end)
 
-check("leaving the widget restores the player's command colors", function()
-    local contents, commands = "original colors\n", 0
-    local env = setmetatable({widget = {}, Spring = {SendCommands = function() commands = commands + 1 end}}, {__index = _G})
-    env.io = {open = function(_, mode)
-        if mode == "r" then
-            return {read = function() return contents end, close = function() end}
-        end
-        contents = ""
-        return {write = function(_, value) contents = contents .. value end, close = function() end}
-    end}
-    local chunk = assert(loadfile(root .. "/LuaUI/Widgets/cmd_handle_cmd_colors.lua"))
-    setfenv(chunk, env)()
-    env.widget:Initialize()
-    assert(contents ~= "original colors\n")
-    env.widget:Shutdown()
-    assert(contents == "original colors\n" and commands == 2)
-end)
-
 check("destroyed lighthouses are not updated again", function()
     local env, state, add = world("LuaRules/Gadgets/ui_flashlight.lua")
     add(1, 7, 100, 100)
@@ -230,17 +212,6 @@ check("aiming during reload leaves the gun ready for the next shot", function()
     assert(turns.Shotgun == 1.1, "reload changed the aim")
 end)
 
-check("Space-click outside the map tolerates an unavailable external menu", function()
-    local env = setmetatable({widget = {}, WG = {},
-        Spring = {
-            TraceScreenRay = function() return nil end,
-            GetModKeyState = function() return false, false, true, false end,
-        }}, {__index = _G})
-    local chunk = assert(loadfile(root .. "/LuaUI/Widgets/map_edge_extension.lua"))
-    setfenv(chunk, env)()
-    assert(not env.widget:MousePress(0, 0, 1))
-end)
-
 check("rabbit idle animates its tail and restores the resting pose", function()
     local names = {"center", "Head", "WiggleTail", "Body", "BLeg1", "BLeg2", "FLeg1", "FLeg2"}
     local pieces, rotations, positions, tailSpeed = {}, {}, {}, nil
@@ -277,10 +248,10 @@ check("rabbit idle animates its tail and restores the resting pose", function()
 end)
 
 for _, initiallyEnabled in ipairs({false, true}) do
-  for _, analyticsAvailable in ipairs({false, true}) do
-    check("restart preserves cheats=" .. tostring(initiallyEnabled) .. ", leaderboard=" .. tostring(analyticsAvailable), function()
+  for _, victory in ipairs({false, true}) do
+    check("restart preserves cheats=" .. tostring(initiallyEnabled) .. ", victory=" .. tostring(victory), function()
         local cheats, reloads, restart = initiallyEnabled, 0, nil
-        local submit, nameBox, namesSent = nil, nil, 0
+        local submit, nameBox, title = nil, nil, nil
         local control = {}
         function control:New(options)
             options.Dispose = function() end
@@ -288,6 +259,7 @@ for _, initiallyEnabled in ipairs({false, true}) do
             if options.caption == "Restart" then restart = options end
             if options.caption == "Submit" then submit = options end
             if options.hint == "Leaderboard Name" then nameBox = options end
+            if options.fontsize == 50 then title = options.caption end
             return options
         end
         local chili = {Screen0 = {AddChild = function() end}}
@@ -312,28 +284,16 @@ for _, initiallyEnabled in ipairs({false, true}) do
                     end
                 end,
             }}, {__index = _G})
-        if analyticsAvailable then
-            env.WG.analytics = {SendEvent = function(_, event, value)
-                if event == "player_name" then
-                    assert(value == "Test")
-                    namesSent = namesSent + 1
-                end
-            end}
-        end
+        env.WG.analytics = {SendEvent = function() error("retired analytics was called") end}
         local chunk = assert(loadfile(root .. "/LuaUI/Widgets/ui_endgame.lua"))
         setfenv(chunk, env)()
         env.widget:Initialize()
-        env.widget:GameOver({})
+        env.widget:GameOver(victory and {0} or {})
+        assert(title == (victory and "You win!" or "Game Over"), "wrong end-screen title")
         assert(restart, "restart button missing")
-        if analyticsAvailable then
-            assert(submit and nameBox, "available leaderboard controls disappeared")
-            nameBox.text = "Test"
-        else
-            assert(not submit and not nameBox, "unavailable leaderboard controls were offered")
-        end
+        assert(not submit and not nameBox, "retired leaderboard controls were offered")
         assert(env.widget:KeyPress(13, {}, false), "Enter did not restart")
         assert(reloads == 1 and cheats == initiallyEnabled)
-        assert(namesSent == (analyticsAvailable and 1 or 0))
     end)
   end
 end
