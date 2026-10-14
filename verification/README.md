@@ -18,7 +18,7 @@ just probe gravitas-fire lua     # a debugging probe
 | --- | --- |
 | `area17` | `headless` \| `visual` \| `static` \| `all` |
 | `flove` | `headless` \| `visual` \| `animation-trace` \| `outline` \| `wisps [stage]` \| `original` |
-| `gravitas` | `e2e` \| `shots` \| `headless` |
+| `gravitas` | `e2e` \| `shots` \| `headless` \| `play` \| `lua-play` |
 | `hunted` | `headless` \| `visual` |
 | `mycube` | `headless` \| `visual` \| `lua-headless` |
 | `partsneeded` | `headless` \| `visual` |
@@ -34,6 +34,10 @@ just probe gravitas-fire lua     # a debugging probe
   scripted scenario and compares its screenshots with goldens.
 - `static` is build hygiene only (fmt, clippy, installed artifacts match source).
 - `lua-*` modes check the original Lua game on this engine.
+- `gravitas play` and `lua-play` play the WASM port or the Lua game through
+  real input (see "Playing through real input" below): walking, jumping
+  with Space, E and the middle button, pushing and pulling with the gravity
+  gun, and Ctrl+Q back to the menu.  The same steps and checks run on both.
 - `pose-parity`, `animation-trace` and `unit-scripts` compare Lua and Rust
   unit-script animation traces numerically.
 - `host tests` runs the host unit tests: `springcabal-rs` and every game's
@@ -47,7 +51,8 @@ just probe gravitas-fire lua     # a debugging probe
 comparisons, the host tests and the static checks (installed modules, Area
 17's source checks).  They run headless, at 100x (MyCube's and Gravitas'
 e2e at 1x, see their scripts), except the unit-script comparison, which renders the Lua and
-WASM games under xvfb.  `verify visual` runs every golden comparison.
+WASM games under xvfb, and Gravitas' `lua-play`, which plays the Lua game on
+its own X display.  `verify visual` runs every golden comparison.
 Both take their run lists from the tables in `verify`, and that table's first
 mode per suite is the only place a default mode is defined.
 
@@ -406,6 +411,23 @@ Other helpers: `vf_config_set`, `vf_run_visual`, `vf_require_screenshots`,
 `vf_collect_screenshots`, `vf_rmse`, `vf_within`, `vf_percent`, `vf_count`,
 `vf_count_log`, `vf_summary`, `vf_renderer_info`, `vf_renderer_matches`.
 
+### Playing through real input
+
+`vf_run_driven SECONDS DRIVER` runs the game in a window on its own Xvfb
+display (software GL) and, alongside it, `DRIVER`: a shell function that
+presses keys and buttons with xdotool (`vf_x_hold`, `vf_x_tap`,
+`vf_x_button`) and waits for the game's log lines with `vf_x_wait PATTERN`
+(it keeps its place in the log, so call it directly, not in `$( )`).  The
+game tells the driver what to do: Gravitas' `fixtures/gravitas/play_observer.lua`
+is a gadget, staged into either version, that sets each step up, logs
+`[vf-play] go STEP key=KEY x=X y=Y` with the point to aim at in window
+coordinates, and checks the result in the game.
+
+There is no window manager: keys go to the window under the pointer, so
+keep the pointer over the window and never call `xdotool windowfocus`,
+which leaves the engine deaf to keys.  A key press has to last a few frames
+(`vf_x_tap` holds it 0.15 s), since games read the keyboard once per frame.
+
 A map alias is often needed, because a start script names the map by its
 display name, which rarely matches the archive name.
 
@@ -449,7 +471,8 @@ path, so visual suites use a stable workspace under `out/<suite>/run`.
   frame 250. A wisp needs 165 frames per stage, so nothing in a default run ever
   leaves wisp stage 1. Any test that depends on later game state has to move
   that frame or drive the state directly.
-- Visual suites need `xvfb-run` and ImageMagick (`convert`, `compare`).
+- Visual suites need `xvfb-run` and ImageMagick (`convert`, `compare`); the
+  play suites also need `Xvfb` and `xdotool`.
 - The Lua Gravitas archive can wait at the pre-game boundary under the
   headless engine, and several games start paused or stop logging once
   running. Don't infer progress from the last logged frame number.

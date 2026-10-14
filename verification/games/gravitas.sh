@@ -200,6 +200,112 @@ gravitas_shots() {
     echo '>>> Gravitas shots match golden <<<'
 }
 
+# play / lua-play: the player's controls through real input, on the WASM port
+# or the Lua game: walk, jump with Space, E and the middle button (twice with
+# Space), push and pull a crate, push one beyond the gun's range, and leave
+# with Ctrl+Q.  fixtures/gravitas/play_observer.lua sets each step up and
+# checks it; gravitas_play_driver presses the keys.
+PLAY_STEPS=8
+
+gravitas_play() {
+    local variant=$1 seconds=${2:-240} staged draw log
+    vf_cleanup_on_exit
+    if [[ $variant == lua ]]; then
+        vf_workspace gravitas-lua-play
+        staged=$(vf_stage_game "$GAMES_DIR/Gravitas.sdd")
+        # The menu starts the Lua game through the scenario editor.
+        vf_link_game "$GAMES_DIR/Scenario-Editor-Gravitas.sdd"
+        vf_link_game "$GAMES_DIR/Scenario-Editor-Core.sdd"
+        ln -sfn "$PROJECT_ROOT/spring-linux/projects" "$VF_ISOLATION/projects"
+    else
+        vf_workspace gravitas-play
+        staged=$(vf_stage_game "$GAME_DIR")
+    fi
+    cp "$FIXTURES/play_observer.lua" "$staged/LuaRules/Gadgets/zz_verify_play.lua"
+    # The port runs no unsynced gadgets (draw.lua is `return true`); give the
+    # observer's unsynced half an entry point of its own.
+    draw="$staged/LuaRules/draw.lua"
+    if [[ $variant != lua ]]; then
+        grep -vE '^[[:space:]]*(--.*)?$' "$draw" | grep -qvE '^[[:space:]]*return true[[:space:]]*$' &&
+            vf_die "$draw runs its own unsynced code; add the play observer there"
+        cat >"$draw" <<'LUA'
+-- Verification entry point: the port runs no unsynced gadgets, so run only
+-- the play observer's unsynced half.
+gadget = {}
+gadgetHandler = { IsSyncedCode = function() return false end }
+VFS.Include("LuaRules/Gadgets/zz_verify_play.lua", nil, VFS.ZIP_FIRST)
+function GameFrame(n) gadget:GameFrame(n) end
+LUA
+    fi
+    vf_link_map "$MAP_DIR"
+    vf_start_file "$(vf_launch_script gravitas "$variant")"
+    vf_config "$VISUAL_CONFIG"
+    vf_graphics gravitas
+
+    local status=0
+    vf_run_driven "$seconds" gravitas_play_driver || status=$?
+    vf_save_logs
+    log="$VF_OUT_DIR/last.stdout.txt"
+
+    echo 'steps:'
+    grep -a -oE '\[vf-play\] (PASS|FAIL) .*' "$log" | sed 's/^\[vf-play\] /  /' || true
+    echo 'checks:'
+    gravitas_check "every step passed" grep -aqE "\[vf-play\] summary passed=$PLAY_STEPS failed=0" "$log"
+    gravitas_check "Ctrl+Q went back to the menu" grep -aq 'user exited to menu' "$log"
+    gravitas_check "no wasm trap, callin error, panic or crash" gravitas_absent "$RUNTIME_FAILURE_PATTERN"
+    [[ $status -eq 0 ]] || echo "  (the driver stopped early: status $status)"
+
+    echo
+    [[ $GRAVITAS_FAILURES -eq 0 ]] || { echo "gravitas $variant play: $GRAVITAS_FAILURES check(s) failed"; return 1; }
+    echo ">>> Gravitas $variant play passed <<<"
+}
+
+# Waits for each "[vf-play] go STEP key=KEY x=X y=Y" and plays it.  The
+# pointer stays over the window, so key presses reach the game.
+gravitas_play_driver() {
+    local line step key x y
+    xdotool mousemove 640 360
+    while vf_x_wait '\[vf-play\] go ' 180; do
+        line=$VF_X_MATCH
+        step=$(sed -E 's/.*go ([^ ]+) .*/\1/' <<<"$line")
+        key=$(sed -E 's/.* key=([^ ]+) .*/\1/' <<<"$line")
+        x=$(sed -E 's/.* x=([^ ]+) .*/\1/' <<<"$line")
+        y=$(sed -E 's/.* y=([^ ]+)$/\1/' <<<"$line" | tr -d '\r')
+        echo "driver: $step ($key at $x,$y)"
+        case $key in
+            mouse1 | mouse3)
+                xdotool mousemove "$x" "$y"
+                sleep 0.2
+                xdotool mousedown "${key#mouse}"
+                sleep 0.7
+                # A picture of the shot, for when the step fails.
+                import -window root "$VF_OUT_DIR/step-$step.png" 2>/dev/null || true
+                sleep 0.8
+                xdotool mouseup "${key#mouse}"
+                ;;
+            mouse2) vf_x_button "$x" "$y" 2 0.15 ;;
+            ctrl+q)
+                xdotool mousemove 640 360
+                vf_x_tap ctrl+q
+                vf_x_wait 'user exited to menu' 30
+                return
+                ;;
+            *)
+                if [[ $x != - ]]; then
+                    xdotool mousemove "$x" "$y"
+                    sleep 0.2
+                    vf_x_tap "$key"
+                else
+                    xdotool mousemove 640 360
+                    vf_x_hold "$key" 1.5
+                fi
+                ;;
+        esac
+    done
+    echo 'driver: no next step from the game'
+    return 1
+}
+
 gravitas_hud_and_fire() {
     local golden=$1 current=$2 hud hud_percent now want floor
     [[ -f $golden && -f $current ]] || return 0
@@ -242,5 +348,7 @@ case "${1:-}" in
     headless) gravitas_headless "${2:-}" ;;
     e2e) gravitas_e2e "${2:-}" ;;
     shots) gravitas_shots "${2:-}" ;;
-    *) vf_die 'usage: gravitas.sh [e2e|shots|headless] [seconds]' ;;
+    play) gravitas_play wasm "${2:-}" ;;
+    lua-play) gravitas_play lua "${2:-}" ;;
+    *) vf_die 'usage: gravitas.sh [e2e|shots|headless|play|lua-play] [seconds]' ;;
 esac

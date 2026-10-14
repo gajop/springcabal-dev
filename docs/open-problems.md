@@ -17,6 +17,12 @@ These are filed in `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`:
 - **§8: there is no typed getter for a game rules param.** So MyCube's test handshake and Flove's
   status ride on a carrier unit.
 
+## Gameplay
+
+- **Gravitas: the player can jump only once.** `verify gravitas play` passes walking and the first
+  jump, then fails every later jump and every gravity-gun step (0 hits). The Lua game passes the
+  same steps (`gravitas lua-play`). `gravitas play` stays out of `verify all` until this is fixed.
+
 ## Parity gallery (report only)
 
 - **Area17's parity run loses its UFO in the Lua capture.** Lua's `unit_spawner.lua` respawns the

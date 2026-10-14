@@ -37,6 +37,7 @@ suite ran at 1x.
 | flove headless | rules **66**, UI input **9**, scenario **8**; log 1 error, 9 warnings |
 | flove animation-trace | skeletons and 19,760 pose samples match Lua within 2e-3 |
 | gravitas e2e / headless | **19/19** cases, plus the build and log checks / pass |
+| gravitas lua-play | **8/8** steps through real input, Ctrl+Q back to the menu (the Lua game; xvfb) |
 | hunted headless | **33** assertions, `ALL HUNTED INTEGRATION TESTS PASSED`; log 1 error |
 | mycube headless / lua-headless | **32** assertions / pass |
 | partsneeded headless | **58** + **4** ending + **4** restart + **5** same-pass |
