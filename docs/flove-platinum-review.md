@@ -5,12 +5,12 @@ was pushed.
 
 ## Checked-out results
 
-- Lua: `spring-linux/games/Flove.sdd`, `codex/flove-platinum-lua`, `e93965f`.
+- Lua: `spring-linux/games/Flove.sdd`, `main`, `e93965f`.
   There are 15 cohesive commits above upstream `0e6e705`: the consolidated 14,
   with the spire-loss growth guard folded into unit lifetimes, plus one commit for
   hover highlighting and animated outlines. The earlier consolidation preserved
   the 38-commit final tree exactly; the subsequent additions are described below.
-- WASM: `spring-linux/games/Flove-wasm.sdd`, `codex/flove-platinum-wasm`,
+- WASM: `spring-linux/games/Flove-wasm.sdd`, `rust`,
   `3f08377`. Its parent history contains that exact Lua tip, followed by exactly
   two commits:
   1. `399d38c`: gameplay, input, UI, graphics, assets and existing port improvements.
@@ -18,6 +18,10 @@ was pushed.
      A temporary gadget bridges spire branch targets and creation-frame state.
   2. `3f08377`: CUS unit scripts, their lifecycle wiring, removal of the Lua scripts
      and temporary adapter, and replacement of Lua's eye flare with the rules flare.
+
+Both game repositories have matching local `main` and `rust` refs. The Lua folder
+is checked out on `main`, and the WASM folder on `rust`; both are clean. The
+`codex/flove-platinum-*` aliases and historical backup branches remain available.
 
 The three installed WASM modules were rebuilt without test features after the
 checks. The first commit is a runnable intermediate version, not just a source split.
