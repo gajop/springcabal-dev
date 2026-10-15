@@ -1,106 +1,104 @@
-// Embed the archive so the menu and saved original text have one source of truth.
-extern crate alloc;
-use alloc::{format, string::String};
+use alloc::{format, string::String, vec::Vec};
 
-const ENTRIES: [&str; 7] = [
-    include_str!("../../../../game-info/gravitas/README.md"),
-    include_str!("../../../../game-info/zeus-vs-bunnies/README.md"),
-    include_str!("../../../../game-info/area-17/README.md"),
-    include_str!("../../../../game-info/flove/README.md"),
-    include_str!("../../../../game-info/parts-needed/README.md"),
-    include_str!("../../../../game-info/my-cube/README.md"),
-    include_str!("../../../../game-info/to-the-last-drop/README.md"),
-];
-
-fn section<'a>(entry: &'a str, heading: &str) -> &'a str {
-    entry
+fn section<'a>(article: &'a str, heading: &str) -> &'a str {
+    article
         .split_once(&format!("## {heading}\n"))
         .map(|(_, rest)| rest.split("\n## ").next().unwrap_or_default().trim())
         .unwrap_or_default()
 }
 
-fn escape(text: &str) -> String {
-    text.replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
+pub fn introduction(article: &str) -> Vec<&str> {
+    let description = section(article, "Description");
+    let text = if description.is_empty() {
+        section(article, "About game")
+    } else {
+        description
+    };
+    text.split("\n\n")
+        .map(str::trim)
+        .filter(|paragraph| !paragraph.is_empty())
+        .collect()
 }
 
-pub fn introduction(index: usize) -> String {
-    let entry = ENTRIES[index];
-    let text = section(
-        entry,
-        if index == 0 {
-            "About game"
-        } else {
-            "Description"
-        },
-    );
-    let mut markup = String::new();
-    for paragraph in text.split("\n\n").filter(|p| !p.is_empty()) {
-        markup.push_str(&format!("<p>{}</p>", escape(paragraph)));
-    }
-    markup
+#[derive(Debug, PartialEq, Eq)]
+pub struct Rating {
+    pub label: String,
+    pub value: String,
+    pub image: Option<String>,
 }
 
-pub fn ratings(index: usize) -> String {
-    let mut markup = String::new();
-    for line in section(ENTRIES[index], "Ratings").lines() {
+pub fn ratings(article: &str) -> Vec<Rating> {
+    let mut ratings = Vec::new();
+    for line in section(article, "Ratings").lines() {
         let mut cells = line.split('|').skip(1).map(str::trim);
         let (Some(label), Some(score)) = (cells.next(), cells.next()) else {
             continue;
         };
         if score.ends_with('%') {
-            markup.push_str(&format!("<div class='rating'><span class='rating-label'>{}</span><span class='rating-value'>{}</span></div>", escape(label), escape(score)));
-            continue;
+            ratings.push(Rating {
+                label: String::from(label),
+                value: String::from(score),
+                image: None,
+            });
+        } else if score.parse::<f32>().is_ok() {
+            ratings.push(Rating {
+                label: String::from(label),
+                value: format!("{score} / 5"),
+                image: Some(format!("images/score-{score}.png")),
+            });
         }
-        let Ok(_) = score.parse::<f32>() else {
-            continue;
-        };
-        markup.push_str(&format!(
-            "<div class='rating'><span class='rating-label'>{}</span><span class='stars'>",
-            escape(label)
-        ));
-        markup.push_str(&format!("<img src='images/score-{}.png'/>", escape(score)));
-        markup.push_str(&format!(
-            "</span><span class='rating-value'>{} / 5</span></div>",
-            escape(score)
-        ));
     }
-    if !markup.is_empty() {
-        markup.insert_str(0, "<div class='rating-heading'>Ludum Dare scores</div>");
-    }
-    markup
+    ratings
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::catalog::GAMES;
 
     #[test]
     fn original_paragraphs_are_preserved() {
-        for index in [0, 2, 3, 4, 5, 6] {
+        for (index, game) in GAMES.iter().enumerate() {
             let heading = if index == 0 {
                 "About game"
             } else {
                 "Description"
             };
-            for paragraph in section(ENTRIES[index], heading).split("\n\n") {
-                assert!(introduction(index).contains(&format!("<p>{}</p>", escape(paragraph))));
+            let expected: Vec<&str> = section(game.article, heading).split("\n\n").collect();
+            assert_eq!(introduction(game.article), expected);
+            if index != 1 {
+                assert!(
+                    ratings(game.article)
+                        .iter()
+                        .any(|rating| rating.label == "Overall")
+                );
             }
-            assert!(ratings(index).contains("Overall"));
         }
-        assert!(introduction(1).contains("Zeus vs Bunnies (Hunted theme)"));
-        assert!(introduction(1).contains("&quot;Hunted.exe&quot;. Shoot stuff."));
-        assert!(ratings(1).is_empty());
+        let hunted = introduction(GAMES[1].article);
+        assert!(hunted.contains(&"Zeus vs Bunnies (Hunted theme)"));
+        assert!(
+            hunted.contains(
+                &"Extract the archive and run \"Hunted\" or \"Hunted.exe\". Shoot stuff."
+            )
+        );
+        assert!(ratings(GAMES[1].article).is_empty());
     }
 
     #[test]
     fn scores_use_exact_fractional_stars_and_keep_percentages() {
-        let cube = ratings(5);
-        assert!(cube.contains("images/score-3.42.png"));
-        assert!(cube.contains("3.42 / 5"));
-        assert!(ratings(4).contains("54%"));
-        assert!(!ratings(4).contains("54% / 5"));
+        let cube = ratings(GAMES[5].article);
+        let overall = cube
+            .iter()
+            .find(|rating| rating.label == "Overall")
+            .unwrap();
+        assert_eq!(overall.image.as_deref(), Some("images/score-3.42.png"));
+        assert_eq!(overall.value, "3.42 / 5");
+        let parts = ratings(GAMES[4].article);
+        let coolness = parts
+            .iter()
+            .find(|rating| rating.label == "Coolness")
+            .unwrap();
+        assert_eq!(coolness.value, "54%");
+        assert_eq!(coolness.image, None);
     }
 }

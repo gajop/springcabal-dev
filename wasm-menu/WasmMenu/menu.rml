@@ -4,24 +4,27 @@
     <link type="text/rcss" href="menu.rcss"/>
     <link type="text/rcss" href="gallery.rcss"/>
 </head>
-<body>
+<body data-model="menu">
     <header><h1>SPRING CABAL GAMES<span class="title-dot">.</span></h1></header>
     <main>
         <aside id="spotlight">
-            <div class="hero-art"><img id="hero-image" src="images/flove.png"/></div>
+            <div class="hero-art"><img id="hero-image" data-attr-src="image"/></div>
             <div class="hero-copy">
-                <h2 id="hero-name">Flove</h2>
-                <p id="hero-built"/>
-                <div id="hero-introduction"/>
-                <div id="hero-ratings"/>
+                <h2 id="hero-name">{{name}}</h2>
+                <p id="hero-built">{{built}}</p>
+                <div id="hero-introduction"><p data-for="paragraph : introduction">{{paragraph.text}}</p></div>
+                <div id="hero-ratings" data-if="has_ratings">
+                    <div class="rating-heading">Ludum Dare scores</div>
+                    <div class="rating" data-for="rating : ratings"><span class="rating-label">{{rating.label}}</span><span class="stars" data-if="rating.has_image"><img data-attr-src="rating.image"/></span><span class="rating-value">{{rating.value}}</span></div>
+                </div>
                 <div class="rule"/>
                 <div class="credit-label">Credits</div>
-                <p id="hero-authors"/>
+                <p id="hero-authors">{{authors}}</p>
             </div>
         </aside>
         <div class="library"><div class="games" id="games"/></div>
     </main>
-    <footer><p>↑ ↓ Game · ← → Version · Enter Play</p><button id="quit">Quit <span>Esc</span></button></footer>
-    <div id="error"/>
+    <footer><p>↑ ↓ Game · ← → Version · Enter Play</p><button id="quit" data-class-selected="selected_action == quit_action" data-event-click="launch(quit_action)" data-event-focus="select(quit_action)">Quit <span>Esc</span></button></footer>
+    <div id="error" data-class-visible="has_error">{{error}}</div>
 </body>
 </rml>

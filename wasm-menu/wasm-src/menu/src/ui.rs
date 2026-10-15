@@ -1,11 +1,14 @@
-use super::{
-    GAME_DETAILS, LUA_GAMES, WASM_GAMES, apply_game_graphics, make_editor_start_script,
-    make_start_script,
-};
-use alloc::{format, string::String};
+use alloc::format;
+use alloc::string::String;
+use alloc::vec::Vec;
 use core::cell::{Cell, RefCell};
+
 use spring::callback::RetainedCallback;
-use spring::{gfx, rml_ui as rml, system_control};
+use spring::{ResultExt, gfx, rml_ui as rml, system_control};
+
+use crate::catalog::{self, Action, GAMES};
+use crate::model::{Bindings, require};
+use crate::navigation::{self, Direction};
 
 spring::export_callin_scratch!(4096);
 spring::export_environment_mask!(spring::menu::ENVIRONMENT_MASK);
@@ -14,368 +17,348 @@ spring::export_update!(update);
 spring::export_draw_screen!(draw_screen);
 spring::export_key_press!(key_press);
 
-const CLICK: u32 = 1;
-const HOVER: u32 = 2;
-const KEY: u32 = 3;
-const MOUSE: u32 = 4;
-const COUNT: usize = WASM_GAMES.len();
-const EDIT_GRAVITAS: usize = COUNT * 2;
-const QUIT: usize = EDIT_GRAVITAS + 1;
-const BUTTON_COUNT: usize = QUIT + 1;
+const LAUNCH: u32 = 1;
+const PREVIEW: u32 = 2;
+const SELECT: u32 = 3;
+const POINTER: u32 = 4;
+const KEY: u32 = 5;
+
+mod key {
+    pub const SPACE: i32 = 1;
+    pub const RETURN: i32 = 72;
+    pub const ESCAPE: i32 = 81;
+    pub const LEFT: i32 = 90;
+    pub const UP: i32 = 91;
+    pub const RIGHT: i32 = 92;
+    pub const DOWN: i32 = 93;
+}
+
+struct Button {
+    action: Action,
+    element: Cell<u64>,
+}
+
+struct Menu {
+    buttons: Vec<Button>,
+    context: Cell<u64>,
+    document: Cell<u64>,
+    bindings: Cell<Option<Bindings>>,
+    selected: Cell<usize>,
+    previewed: Cell<Option<usize>>,
+    hovered: Cell<usize>,
+    mouse_active: Cell<bool>,
+    pending: Cell<Option<Action>>,
+    error: RefCell<Option<String>>,
+}
 
 thread_local! {
-    static CONTEXT: Cell<u64> = const { Cell::new(0) };
-    static DOCUMENT: Cell<u64> = const { Cell::new(0) };
-    static BUTTONS: Cell<[u64; BUTTON_COUNT]> = const { Cell::new([0; BUTTON_COUNT]) };
-    static SELECTED: Cell<usize> = const { Cell::new(0) };
-    static PREVIEW: Cell<Option<usize>> = const { Cell::new(None) };
-    static HOVERED: Cell<usize> = const { Cell::new(0) };
-    static MOUSE_ACTIVE: Cell<bool> = const { Cell::new(false) };
-    static PENDING: Cell<Option<usize>> = const { Cell::new(None) };
-    static INIT_ATTEMPTED: Cell<bool> = const { Cell::new(false) };
-    static ERROR: RefCell<Option<String>> = const { RefCell::new(None) };
+    static MENU: Menu = Menu::new();
 }
 
-fn menu_active() -> bool {
-    system_control::get_game_name(0).is_ok_and(|name| name.is_empty())
-}
+impl Menu {
+    fn new() -> Self {
+        Self {
+            buttons: catalog::actions()
+                .into_iter()
+                .map(|action| Button {
+                    action,
+                    element: Cell::new(0),
+                })
+                .collect(),
+            context: Cell::new(0),
+            document: Cell::new(0),
+            bindings: Cell::new(None),
+            selected: Cell::new(0),
+            previewed: Cell::new(None),
+            hovered: Cell::new(0),
+            mouse_active: Cell::new(false),
+            pending: Cell::new(None),
+            error: RefCell::new(None),
+        }
+    }
 
-fn require(success: bool) -> spring::Result<()> {
-    if success {
+    fn initialize(&self) -> spring::Result<()> {
+        let context = rml::create_rml_context("springcabal-menu")?;
+        require(context.success && context.context_handle != 0)?;
+        self.context.set(context.context_handle);
+        let actions = self
+            .buttons
+            .iter()
+            .map(|button| button.action)
+            .collect::<Vec<_>>();
+        let bindings = Bindings::create(context.context_handle, &actions)?;
+        for (name, id) in [("launch", LAUNCH), ("preview", PREVIEW), ("select", SELECT)] {
+            bindings.bind_event(name, id)?;
+        }
+        let loaded = rml::load_rml_document(context.context_handle, "WasmMenu/menu.rml")?;
+        require(loaded.success && loaded.document_handle != 0)?;
+        let document = loaded.document_handle;
+        let games = element(document, "games")?;
+        require(rml::element_set_inner_rml(
+            games,
+            include_str!("../../../WasmMenu/game-row.rml"),
+        )?)?;
+        require(rml::show_rml_document(document)?)?;
+        require(rml::context_update(context.context_handle)?)?;
+        for (index, button) in self.buttons.iter().enumerate() {
+            let id = if button.action == Action::Quit {
+                String::from("quit")
+            } else {
+                format!("action-{index}")
+            };
+            button.element.set(element(document, &id)?);
+        }
+        for (name, id) in [
+            ("mousemove", POINTER),
+            ("mousescroll", POINTER),
+            ("keydown", KEY),
+        ] {
+            let listener = rml::context_add_event_listener(
+                context.context_handle,
+                name,
+                true,
+                RetainedCallback::new(id, 0, 0),
+            )?;
+            require(listener.success)?;
+        }
+        self.document.set(document);
+        self.bindings.set(Some(bindings));
+        self.select(0, true);
+        spring::log_info!("menu", "SpringCabal menu initialized");
         Ok(())
-    } else {
-        Err(spring::ApiError::new(1))
+    }
+
+    fn select(&self, index: usize, focus: bool) {
+        let Some(button) = self.buttons.get(index) else {
+            return;
+        };
+        self.selected.set(index);
+        let game = match button.action {
+            Action::Launch { game, .. } => Some(game),
+            Action::Quit => None,
+        };
+        if let Some(bindings) = self.bindings.get() {
+            bindings
+                .select(index, game)
+                .log_err_once("selecting a menu action");
+        }
+        if let Some(game) = game {
+            self.preview(game);
+        }
+        if focus && button.element.get() != 0 {
+            let _ = rml::element_focus(button.element.get());
+            let _ = rml::element_scroll_into_view(button.element.get(), false);
+        }
+    }
+
+    fn preview(&self, index: usize) {
+        let Some(game) = GAMES.get(index) else {
+            return;
+        };
+        if self.previewed.get() == Some(index) {
+            return;
+        }
+        let Some(bindings) = self.bindings.get() else {
+            return;
+        };
+        match bindings.preview(game) {
+            Ok(()) => {
+                self.previewed.set(Some(index));
+            }
+            Err(error) => {
+                self.show_error(format!(
+                    "Could not show {} (error {}).",
+                    game.name, error.code
+                ));
+            }
+        }
+        if let Ok(spotlight) = element(self.document.get(), "spotlight") {
+            let _ = rml::element_set_scroll_top(spotlight, 0);
+        }
+    }
+
+    fn dispatch(&self, id: u32) {
+        match id {
+            LAUNCH => {
+                if let Some(index) = event_index()
+                    && let Some(button) = self.buttons.get(index)
+                {
+                    self.pending.set(Some(button.action));
+                }
+            }
+            PREVIEW => {
+                if let Some(index) = event_index() {
+                    self.hovered.set(index);
+                    if self.mouse_active.get() {
+                        self.preview(index);
+                    }
+                }
+            }
+            SELECT => {
+                if let Some(index) = event_index() {
+                    self.select(index, false);
+                }
+            }
+            POINTER => {
+                self.mouse_active.set(true);
+                self.preview(self.hovered.get());
+            }
+            KEY => self.navigate(),
+            _ => {}
+        }
+    }
+
+    fn navigate(&self) {
+        let Ok(event) = rml::event_get_current(0) else {
+            return;
+        };
+        if !event.exists {
+            return;
+        }
+        let Ok(key) = rml::event_get_parameter_int(event.event_handle, "key_identifier") else {
+            return;
+        };
+        let direction = match key.value {
+            key::LEFT => Some(Direction::Left),
+            key::RIGHT => Some(Direction::Right),
+            key::UP => Some(Direction::Up),
+            key::DOWN => Some(Direction::Down),
+            key::SPACE | key::RETURN => {
+                if let Some(button) = self.buttons.get(self.selected.get()) {
+                    self.pending.set(Some(button.action));
+                }
+                None
+            }
+            key::ESCAPE => {
+                self.pending.set(Some(Action::Quit));
+                None
+            }
+            _ => return,
+        };
+        if let Some(direction) = direction {
+            let actions = self
+                .buttons
+                .iter()
+                .map(|button| button.action)
+                .collect::<Vec<_>>();
+            let next = navigation::next(&actions, self.selected.get(), direction);
+            self.mouse_active.set(false);
+            self.select(next, true);
+        }
+        let _ = rml::event_stop_propagation(event.event_handle);
+    }
+
+    fn show_error(&self, message: String) {
+        *self.error.borrow_mut() = Some(message.clone());
+        if let Some(bindings) = self.bindings.get() {
+            bindings
+                .show_error(&message)
+                .log_err_once("showing a menu error");
+        }
+    }
+
+    fn update(&self) {
+        let failed = self.error.borrow().is_some();
+        if self.document.get() == 0
+            && !failed
+            && rml::is_ready(0) == Ok(true)
+            && let Err(error) = self.initialize()
+        {
+            let context = self.context.replace(0);
+            if context != 0 {
+                let _ = rml::remove_context(context);
+            }
+            self.document.set(0);
+            self.bindings.set(None);
+            for button in &self.buttons {
+                button.element.set(0);
+            }
+            self.show_error(format!(
+                "Menu UI could not load (error {}). Escape to quit.",
+                error.code
+            ));
+        }
+        // Reload only after the RmlUi event callback has returned.
+        match self.pending.take() {
+            Some(Action::Quit) => {
+                let _ = system_control::quit(0);
+            }
+            Some(Action::Launch { game, variant }) => {
+                let Some(game) = GAMES.get(game) else {
+                    return;
+                };
+                let Some(script) = game.script(variant) else {
+                    return;
+                };
+                for line in game.graphics.lines().map(str::trim) {
+                    if !line.starts_with('#')
+                        && let Some((key, value)) = line.split_once('=')
+                    {
+                        let _ = spring::config::set_config_string(key.trim(), value.trim(), true);
+                    }
+                }
+                if system_control::reload(script) != Ok(true) {
+                    self.show_error(format!("Failed to launch {} ({variant:?}).", game.name));
+                }
+            }
+            None => {}
+        }
+    }
+
+    fn draw_error(&self, width: i32, height: i32) {
+        if self.document.get() != 0 {
+            return;
+        }
+        let message = self.error.borrow().clone();
+        let Some(message) = message else {
+            return;
+        };
+        let _ = gfx::color(0.04, 0.06, 0.08, 1.0);
+        let _ = gfx::rect(0.0, 0.0, width as f32, height as f32);
+        let _ = gfx::begin_text(false);
+        let _ = gfx::color(1.0, 0.7, 0.7, 1.0);
+        let _ = gfx::text(
+            &message,
+            width as f32 / 2.0,
+            height as f32 / 2.0,
+            18.0,
+            "con",
+        );
+        let _ = gfx::end_text(0);
     }
 }
 
 fn element(document: u64, id: &str) -> spring::Result<u64> {
     let found = rml::element_get_element_by_id(document, id)?;
-    require(found.exists)?;
+    require(found.exists && found.element_handle != 0)?;
     Ok(found.element_handle)
 }
 
-fn escape(value: &str) -> String {
-    value
-        .replace('&', "&amp;")
-        .replace('<', "&lt;")
-        .replace('>', "&gt;")
-        .replace('"', "&quot;")
-}
-
-fn initialize() -> spring::Result<()> {
-    let created = rml::create_rml_context("springcabal-menu")?;
-    require(created.success)?;
-    CONTEXT.set(created.context_handle);
-    let loaded = rml::load_rml_document(created.context_handle, "WasmMenu/menu.rml")?;
-    require(loaded.success)?;
-    DOCUMENT.set(loaded.document_handle);
-    let mut markup = String::new();
-    for (i, game) in WASM_GAMES.iter().enumerate() {
-        let details = &GAME_DETAILS[i];
-        let image = details
-            .image
-            .strip_prefix("WasmMenu/")
-            .unwrap_or(details.image);
-        if i == 0 {
-            markup.push_str(&format!(
-                "<div class='game' id='row-{i}'><img class='thumbnail' src='{}'/><div class='details'><div class='name'>{}</div><div class='built'>{}</div></div><button class='launch wasm' id='game-{i}'><img src='images/webassembly-logo.png'/><span>WASM</span></button><button class='launch lua' id='game-{}'><img src='images/lua-logo.gif'/><span>Lua</span></button><button class='launch lua editor' id='game-{EDIT_GRAVITAS}'><img src='images/lua-logo.gif'/><span>Editor</span></button></div>",
-                escape(image), escape(game.name.trim_end_matches(" (WASM)")), escape(details.built), i + COUNT
-            ));
-        } else {
-            markup.push_str(&format!(
-                "<div class='game' id='row-{i}'><img class='thumbnail' src='{}'/><div class='details'><div class='name'>{}</div><div class='built'>{}</div></div><button class='launch wasm' id='game-{i}'><img src='images/webassembly-logo.png'/><span>WASM</span></button><button class='launch lua' id='game-{}'><img src='images/lua-logo.gif'/><span>Lua</span></button></div>",
-                escape(image), escape(game.name.trim_end_matches(" (WASM)")), escape(details.built), i + COUNT
-            ));
-        }
-    }
-    require(rml::element_set_inner_rml(
-        element(loaded.document_handle, "games")?,
-        &markup,
-    )?)?;
-    for i in 0..COUNT {
-        require(
-            rml::element_add_event_listener(
-                element(loaded.document_handle, &format!("row-{i}"))?,
-                "mouseover",
-                false,
-                RetainedCallback::new(HOVER, i as u32, 0),
-            )?
-            .success,
-        )?;
-    }
-    let mut buttons = [0; BUTTON_COUNT];
-    for (i, handle) in buttons.iter_mut().enumerate() {
-        let id = if i == QUIT {
-            String::from("quit")
-        } else {
-            format!("game-{i}")
-        };
-        *handle = element(loaded.document_handle, &id)?;
-        require(
-            rml::element_add_event_listener(
-                *handle,
-                "click",
-                false,
-                RetainedCallback::new(CLICK, i as u32, 0),
-            )?
-            .success,
-        )?;
-    }
-    BUTTONS.set(buttons);
-    for event in ["mousemove", "mousescroll"] {
-        require(
-            rml::context_add_event_listener(
-                created.context_handle,
-                event,
-                true,
-                RetainedCallback::new(MOUSE, 0, 0),
-            )?
-            .success,
-        )?;
-    }
-    require(
-        rml::context_add_event_listener(
-            created.context_handle,
-            "keydown",
-            true,
-            RetainedCallback::new(KEY, 0, 0),
-        )?
-        .success,
-    )?;
-    require(rml::show_rml_document(loaded.document_handle)?)?;
-    select(0, true);
-    Ok(())
-}
-
-fn select(index: usize, focus: bool) {
-    if index >= BUTTON_COUNT {
-        return;
-    }
-    let previous = SELECTED.replace(index);
-    let buttons = BUTTONS.get();
-    if buttons[index] == 0 {
-        return;
-    }
-    if previous != index {
-        let _ = rml::element_set_class(buttons[previous], "selected", false);
-    }
-    let _ = rml::element_set_class(buttons[index], "selected", true);
-    for row in [previous, index] {
-        if row < QUIT
-            && let Ok(handle) = element(DOCUMENT.get(), &format!("row-{}", row % COUNT))
-        {
-            let _ = rml::element_set_class(
-                handle,
-                "keyboard",
-                index < QUIT && row % COUNT == index % COUNT,
-            );
-        }
-    }
-    preview(index);
-    if focus {
-        let _ = rml::element_focus(buttons[index]);
-        let _ = rml::element_scroll_into_view(buttons[index], false);
+fn event_index() -> Option<usize> {
+    match rml::data_model_current_value(0, &mut []).ok()? {
+        spring::DataEventValue::Int(index) => usize::try_from(index).ok(),
+        _ => None,
     }
 }
 
-// Mouse hover only changes the artwork preview. Never overwrite SELECTED:
-// RmlUi also sends mouseover when scrolling moves a row under a stationary mouse.
-fn preview(index: usize) {
-    let index = if index < QUIT { index % COUNT } else { index };
-    if index < QUIT && PREVIEW.replace(Some(index)) != Some(index) {
-        if let Ok(handle) = element(DOCUMENT.get(), "spotlight") {
-            let _ = rml::element_set_scroll_top(handle, 0);
-        }
-        let game = if index < COUNT {
-            &WASM_GAMES[index]
-        } else {
-            &LUA_GAMES[index - COUNT]
-        };
-        let details = &GAME_DETAILS[index % COUNT];
-        for (id, markup) in [
-            (
-                "hero-introduction",
-                super::entry::introduction(index % COUNT),
-            ),
-            ("hero-ratings", super::entry::ratings(index % COUNT)),
-        ] {
-            if let Ok(handle) = element(DOCUMENT.get(), id) {
-                let _ = rml::element_set_inner_rml(handle, &markup);
-            }
-        }
-        for (id, text) in [
-            ("hero-name", game.name.trim_end_matches(" (WASM)")),
-            ("hero-built", details.built),
-            ("hero-authors", game.authors),
-        ] {
-            if let Ok(handle) = element(DOCUMENT.get(), id) {
-                let _ = rml::element_set_inner_rml(handle, &escape(text));
-            }
-        }
-        if let Ok(handle) = element(DOCUMENT.get(), "hero-image") {
-            let _ = rml::element_set_attribute(
-                handle,
-                "src",
-                details
-                    .image
-                    .strip_prefix("WasmMenu/")
-                    .unwrap_or(details.image),
-            );
-        }
+fn menu_active() -> bool {
+    system_control::get_game_name(0).is_ok_and(|name| name.is_empty())
+}
+fn dispatch(id: u32, _data: u32) {
+    if menu_active() {
+        MENU.with(|menu| menu.dispatch(id));
     }
 }
-
-fn dispatch(id: u32, data: u32) {
-    if !menu_active() {
-        return;
-    }
-    match id {
-        CLICK if (data as usize) < BUTTON_COUNT => {
-            PENDING.set(Some(data as usize));
-        }
-        HOVER => {
-            HOVERED.set(data as usize);
-            if MOUSE_ACTIVE.get() {
-                preview(data as usize);
-            }
-        }
-        MOUSE => {
-            MOUSE_ACTIVE.set(true);
-            preview(HOVERED.get());
-        }
-        KEY => {
-            let Ok(event) = rml::event_get_current(0) else {
-                return;
-            };
-            if !event.exists {
-                return;
-            }
-            let Ok(key) = rml::event_get_parameter_int(event.event_handle, "key_identifier") else {
-                return;
-            };
-            let current = SELECTED.get();
-            // RmlUi key identifiers, not SDL codes.
-            let next = match key.value {
-                90 if current == EDIT_GRAVITAS => Some(COUNT),
-                90 if (COUNT..QUIT).contains(&current) => Some(current - COUNT),
-                92 if current == COUNT => Some(EDIT_GRAVITAS),
-                92 if current < COUNT => Some(current + COUNT),
-                90 | 92 if current == QUIT => {
-                    Some(if key.value == 90 { COUNT - 1 } else { QUIT - 1 })
-                }
-                91 if current == QUIT => Some(COUNT - 1),
-                91 if current == 0 || current == COUNT || current == EDIT_GRAVITAS => Some(QUIT),
-                91 => Some(current - 1),
-                93 if current == QUIT => Some(0),
-                93 if current == EDIT_GRAVITAS => Some(COUNT + 1),
-                93 if current == COUNT - 1 || current == QUIT - 1 => Some(QUIT),
-                93 => Some(current + 1),
-                70 => {
-                    let backward = rml::event_get_parameter_int(event.event_handle, "shift_key")
-                        .is_ok_and(|value| value.value != 0);
-                    let slot = if current == QUIT {
-                        QUIT
-                    } else if current == EDIT_GRAVITAS {
-                        EDIT_GRAVITAS
-                    } else {
-                        (current % COUNT) * 2 + usize::from(current >= COUNT)
-                    };
-                    let slot = if backward {
-                        (slot + BUTTON_COUNT - 1) % BUTTON_COUNT
-                    } else {
-                        (slot + 1) % BUTTON_COUNT
-                    };
-                    Some(if slot == QUIT {
-                        QUIT
-                    } else if slot == EDIT_GRAVITAS {
-                        EDIT_GRAVITAS
-                    } else {
-                        slot / 2 + (slot % 2) * COUNT
-                    })
-                }
-                1 | 72 => {
-                    PENDING.set(Some(current));
-                    None
-                }
-                81 => {
-                    PENDING.set(Some(QUIT));
-                    None
-                }
-                _ => return,
-            };
-            if let Some(index) = next {
-                MOUSE_ACTIVE.set(false);
-                select(index, true);
-            }
-            let _ = rml::event_stop_propagation(event.event_handle);
-        }
-        _ => {}
-    }
-}
-
-fn show_error(message: String) {
-    ERROR.with(|error| *error.borrow_mut() = Some(message.clone()));
-    if DOCUMENT.get() != 0
-        && let Ok(banner) = element(DOCUMENT.get(), "error")
-    {
-        let _ = rml::element_set_inner_rml(banner, &escape(&message));
-        let _ = rml::element_set_class(banner, "visible", true);
-    }
-}
-
 fn update(_delta: f32) {
-    if !menu_active() {
-        return;
-    }
-    if !INIT_ATTEMPTED.replace(true)
-        && let Err(error) = initialize()
-    {
-        let context = CONTEXT.replace(0);
-        if context != 0 {
-            let _ = rml::remove_context(context);
-        }
-        DOCUMENT.set(0);
-        BUTTONS.set([0; BUTTON_COUNT]);
-        show_error(format!(
-            "Menu UI could not load (error {}). Escape to quit.",
-            error.code
-        ));
-    }
-    // Reload after the RmlUi callback stack has unwound.
-    if let Some(index) = PENDING.take() {
-        if index == QUIT {
-            let _ = system_control::quit(0);
-        } else if index == EDIT_GRAVITAS {
-            let game = &LUA_GAMES[0];
-            apply_game_graphics(game);
-            match system_control::reload(&make_editor_start_script(game)) {
-                Ok(true) => {}
-                Ok(false) => show_error(format!("Failed to launch {} Editor.", game.name)),
-                Err(error) => show_error(format!(
-                    "Failed to launch {} Editor (error {}).",
-                    game.name, error.code
-                )),
-            }
-        } else {
-            let game = if index < COUNT {
-                &WASM_GAMES[index]
-            } else {
-                &LUA_GAMES[index - COUNT]
-            };
-            apply_game_graphics(game);
-            match system_control::reload(&make_start_script(game)) {
-                Ok(true) => {}
-                Ok(false) => show_error(format!("Failed to launch {}.", game.name)),
-                Err(error) => show_error(format!(
-                    "Failed to launch {} (error {}).",
-                    game.name, error.code
-                )),
-            }
-        }
+    if menu_active() {
+        MENU.with(Menu::update);
     }
 }
-
-// Escape remains available even if the RML document fails to load.
+fn draw_screen(width: i32, height: i32) {
+    if menu_active() {
+        MENU.with(|menu| menu.draw_error(width, height));
+    }
+}
 fn key_press(
     key: i32,
     _alt: bool,
@@ -389,30 +372,9 @@ fn key_press(
     _actions: impl Iterator<Item = (&'static [u8], &'static [u8], &'static [u8])>,
 ) -> bool {
     if menu_active() && key == 27 {
-        PENDING.set(Some(QUIT));
-        return true;
+        MENU.with(|menu| menu.pending.set(Some(Action::Quit)));
+        true
+    } else {
+        false
     }
-    false
-}
-
-fn draw_screen(width: i32, height: i32) {
-    if !menu_active() || DOCUMENT.get() != 0 {
-        return;
-    }
-    ERROR.with(|error| {
-        if let Some(message) = error.borrow().as_ref() {
-            let _ = gfx::color(0.04, 0.06, 0.08, 1.0);
-            let _ = gfx::rect(0.0, 0.0, width as f32, height as f32);
-            let _ = gfx::begin_text(false);
-            let _ = gfx::color(1.0, 0.7, 0.7, 1.0);
-            let _ = gfx::text(
-                message,
-                width as f32 / 2.0,
-                height as f32 / 2.0,
-                18.0,
-                "con",
-            );
-            let _ = gfx::end_text(0);
-        }
-    });
 }

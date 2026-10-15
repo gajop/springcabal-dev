@@ -1,0 +1,7 @@
+<div class="game" data-for="game : games" data-attr-id="'row-' + game.index" data-class-keyboard="selected_game == game.index" data-event-mouseover="preview(game.index)">
+    <img class="thumbnail" data-attr-src="game.image"/>
+    <div class="details"><div class="name">{{game.name}}</div><div class="built">{{game.built}}</div></div>
+    <button class="launch wasm" data-attr-id="'action-' + game.wasm_action" data-class-selected="selected_action == game.wasm_action" data-event-click="launch(game.wasm_action)" data-event-focus="select(game.wasm_action)"><img src="images/webassembly-logo.png"/><span>WASM</span></button>
+    <button class="launch lua" data-attr-id="'action-' + game.lua_action" data-class-selected="selected_action == game.lua_action" data-event-click="launch(game.lua_action)" data-event-focus="select(game.lua_action)"><img src="images/lua-logo.gif"/><span>Lua</span></button>
+    <button class="launch lua editor" data-if="game.has_editor" data-attr-id="'action-' + game.editor_action" data-class-selected="selected_action == game.editor_action" data-event-click="launch(game.editor_action)" data-event-focus="select(game.editor_action)"><img src="images/lua-logo.gif"/><span>Editor</span></button>
+</div>

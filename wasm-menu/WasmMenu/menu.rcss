@@ -18,7 +18,7 @@ h2 { font-size: 21px; margin: 0; text-align: center; }
 .lua h2 { color: #ffc06a; }
 .subtitle { text-align: center; margin: 6px 0 14px; }
 .games { flex: 1; min-height: 0; overflow-y: auto; }
-button { display: block; box-sizing: border-box; color: #e9eef5; font-family: FreeSans; font-weight: bold; cursor: pointer; }
+button { tab-index: auto; display: block; box-sizing: border-box; color: #e9eef5; font-family: FreeSans; font-weight: bold; cursor: pointer; }
 .game { display: flex; align-items: center; width: 100%; min-height: 70px; padding: 7px; margin-bottom: 6px; border: 1px #283745; background-color: #151f2a; text-align: left; }
 .game img { width: 82px; height: 50px; margin-right: 12px; }
 .details { flex: 1; }
