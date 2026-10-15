@@ -42,6 +42,10 @@ gravitas_headless() {
     vf_link_map "$MAP_DIR"
     vf_start_file "$START_FILE"
     vf_quit_when --frame 900
+    cat >> "$VF_ISOLATION/games/$(basename "$GAME_DIR")/LuaRules/draw.lua" <<'LUA'
+Spring.SetLogSectionFilterLevel("gravitas-wasm", "info")
+Spring.SetLogSectionFilterLevel("gravitas-ui", "info")
+LUA
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
