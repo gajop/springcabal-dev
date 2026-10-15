@@ -76,11 +76,9 @@ What the packager does:
 just smoke-test release/out/SpringCabal-<ver>-linux
 ```
 
-The smoke test starts every menu entry under `spring-headless`, with the same
-start script the menu uses. Each one must load and still be running at the
-timeout; the frame count is informational. It also boots the menu under xvfb, and prints a per-game error count
-from the infolog. After that, play at least one WASM and one Lua game from the
-menu on each platform, and return to the menu from inside a game.
+The smoke test starts every menu entry and the menu with the bundle's `spring` binary through `SDL_VIDEODRIVER=offscreen`, using the real GPU without opening desktop windows or falling back to Xvfb. It uses the shipped settings and per-game graphics overrides, with a 1280×720 window at origin (0, 0) and muted sound, and checks the engine's logged drawable size. Every game must load and remain running until the timeout; the frame count is informational. The menu must load its manifest and either exit cleanly or remain running at the timeout. Both Lua and WASM runs fail on any `Error:` or `Warning:`, runtime failure, missing renderer identity or software renderer. Full logs are kept in the printed temporary directory.
+
+After that, play at least one WASM and one Lua game from the menu on each platform, and return to the menu from inside a game.
 
 ## 5. Publish
 

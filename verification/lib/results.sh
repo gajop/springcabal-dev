@@ -27,6 +27,17 @@ vf_save_logs() {
     cp -f "$VF_WRITE_DIR/infolog.txt" "$VF_OUT_DIR/last.infolog.txt" 2>/dev/null || true
     vf_log >"$VF_OUT_DIR/last.combined.txt" 2>/dev/null || true
     printf 'logs: %s\n' "$VF_OUT_DIR/last.combined.txt"
+    vf_forbid '\b(Error|Warning):' 'the engine reported an error or warning'
+    if [[ ${VF_RUN_RENDERER:-} == gpu ]]; then
+        local renderer size
+        renderer=$(grep -m1 -oE 'GL renderer : .*' "$VF_OUT_DIR/last.combined.txt" | sed 's/GL renderer : //' || true)
+        [[ -n $renderer ]] || vf_die 'offscreen GPU rendering did not initialize'
+        if grep -qiE 'llvmpipe|softpipe|swrast|SwiftShader|Software Rasterizer' <<<"$renderer"; then
+            vf_die "offscreen GPU rendering selected a software renderer: $renderer"
+        fi
+        size=$(sed -nE 's/.*display-mode set to ([0-9]+x[0-9]+)x.*/\1/p' "$VF_OUT_DIR/last.combined.txt" | head -1)
+        [[ $size == "$VF_RUN_SIZE" ]] || vf_die "offscreen drawable is $size; requested $VF_RUN_SIZE (update the engine's offscreen sizing support)"
+    fi
 }
 
 # vf_count_log: the one log to count or list lines in.  last.combined.txt is
@@ -168,7 +179,7 @@ vf_engine_version() {
 # driver; a different one skips the pixel checks with a message.
 vf_renderer_info() {
     local log="$VF_WRITE_DIR/stdout.txt"
-    printf 'backend %s\n' "$(vf_renderer)"
+    printf 'backend %s\n' "${VF_RUN_RENDERER:-$(vf_renderer)}"
     printf 'gl_renderer %s\n' "$(grep -m1 -oE 'GL renderer : .*' "$log" 2>/dev/null | sed 's/GL renderer : //')"
     printf 'gl_version %s\n' "$(grep -m1 -oE 'GL version  : .*' "$log" 2>/dev/null | sed 's/GL version  : //')"
 }
@@ -244,7 +255,7 @@ vf_provenance() {
         printf '%-10s %s  %s\n' "engine" "${ENGINE_INSTALL#"$PROJECT_ROOT"/}" "$(vf_engine_version)"
         [[ -d $ENGINE_ROOT/.git ]] && vf_source_line "engine src" "$ENGINE_ROOT"
         printf '%-10s %s\n' "version" "$(grep -m1 -oE 'Spring Engine Version: .*|Recoil .*version.*' "$log" | head -1)"
-        printf '%-10s %s\n' "renderer" "$(vf_renderer)"
+        printf '%-10s %s\n' "renderer" "${VF_RUN_RENDERER:-$(vf_renderer)}"
         printf '%-10s %s\n' "gpu" "$(grep -m1 -oE 'GL renderer : .*' "$log" | sed 's/GL renderer : //')"
         printf '%-10s %s\n' "gl" "$(grep -m1 -oE 'GL version  : .*' "$log" | sed 's/GL version  : //')"
         printf '%-10s %s\n' "settings" "launch/springsettings.cfg sha1 $(sha1sum "$LAUNCH_DIR/springsettings.cfg" | cut -c1-12)"

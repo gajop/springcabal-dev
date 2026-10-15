@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
-# Smoke-test an assembled Linux bundle: every menu entry must load into a
-# game under spring-headless and still be running at the timeout (no crash;
-# the WASM games also no Wasm trap, panic or callin error, see
-# verification/lib/failures.sh), and the menu must boot under xvfb.  Every run
-# uses the graphics profile the bundle ships (its springsettings.cfg), plus
-# the game's launch/games/<game>/graphics.cfg as the menu applies it.  Frame
-# counts are informational: several games start paused or log nothing once
-# running.
+# Smoke-test every menu entry and the menu on the real GPU through SDL's
+# offscreen driver, with no desktop window. Runs use the shipped graphics
+# profile and per-game overrides. Any warning, error or runtime failure fails.
+# Games must load and remain running until the timeout; frame counts are
+# informational because some games start paused or stop logging frames.
 #
 # Usage: release/smoke-test.sh release/out/SpringCabal-<ver>-linux [seconds]
 set -uo pipefail
@@ -16,11 +13,13 @@ seconds="${2:-45}"
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 work="$(mktemp -d "${TMPDIR:-/tmp}/springcabal-smoke.XXXXXX")"
 
-[[ -x "$bundle/spring-headless" ]] || { echo "no spring-headless in $bundle" >&2; exit 1; }
+[[ -x "$bundle/spring" ]] || { echo "no spring in $bundle" >&2; exit 1; }
 [[ -f "$bundle/springsettings.cfg" ]] || { echo "no springsettings.cfg in $bundle" >&2; exit 1; }
 # shellcheck source=../verification/lib/failures.sh
 source "$project_root/verification/lib/failures.sh"
 crash_pattern='Segmentation fault|\[Fatal\]|wasm trap|panicked at|AddressSanitizer'
+diagnostic_pattern='\b(Error|Warning):'
+software_pattern='llvmpipe|softpipe|swrast|SwiftShader|software|lavapipe|GDI Generic|Microsoft Basic Render'
 
 # config OUT [GRAPHICS]: the shipped profile, the game's overrides, no sound.
 config() {
@@ -38,13 +37,41 @@ config() {
         done <"$graphics"
     fi
     set_key snd_volmaster 0
+    set_key Fullscreen 0
+    set_key WindowBorderless 1
+    set_key WindowPosX 0
+    set_key WindowPosY 0
+    set_key XResolutionWindowed 1280
+    set_key YResolutionWindowed 720
+}
+
+# Check both Lua and WASM runs, including a renderer identity from startup.
+clean_log() {
+    local log=$1 renderer size
+    if grep -iE "$diagnostic_pattern|$crash_pattern|$RUNTIME_FAILURE_PATTERN" "$log"; then
+        return 1
+    fi
+    renderer=$(sed -nE 's/.*GL renderer[[:space:]]*:[[:space:]]*//p' "$log" | head -1)
+    if [[ -z $renderer ]]; then
+        echo 'missing GL renderer identity' >&2
+        return 1
+    fi
+    if grep -qiE "$software_pattern" <<<"$renderer"; then
+        printf 'software renderer: %s\n' "$renderer" >&2
+        return 1
+    fi
+    size=$(sed -nE 's/.*\[GR::LogDisplayMode\] display-mode set to ([0-9]+x[0-9]+)x[0-9]+bpp.*/\1/p' "$log" | tail -1)
+    if [[ $size != 1280x720 ]]; then
+        printf 'unexpected drawable size: %s (expected 1280x720)\n' "${size:-missing}" >&2
+        return 1
+    fi
 }
 
 # The exact start scripts the menu launches (it compiles these files in).
 mapfile -t scripts < <(ls "$project_root"/launch/games/*/{wasm,lua}.txt)
 
 failures=0
-printf '%-36s %-10s %-8s %s\n' GAME RESULT FRAMES ERRORS
+printf '%-36s %-10s %-8s %-8s %s\n' GAME RESULT FRAMES ERRORS WARNINGS
 for script in "${scripts[@]}"; do
     game=$(basename "$(dirname "$script")")
     game_type="$game/$(basename "$script" .txt)"
@@ -53,45 +80,48 @@ for script in "${scripts[@]}"; do
     sed -E "s/([Hh]ost[Pp]ort)=[0-9]+;/\1=$(shuf -i 20000-60000 -n 1);/" "$script" > "$run/start.txt"
     config "$run/spring.conf" "$project_root/launch/games/$game/graphics.cfg"
 
-    timeout --signal=TERM "${seconds}s" "$bundle/spring-headless" \
-        --isolation --isolation-dir "$bundle" --write-dir "$run" \
+    env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
+        timeout --signal=TERM "${seconds}s" "$bundle/spring" \
+        --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
         --config "$run/spring.conf" "$run/start.txt" > "$run/stdout.txt" 2>&1
     status=$?
 
     # infolog.txt is only flushed on a clean exit; stdout has the same log.
     log="$run/stdout.txt"
     last_frame="$(grep -oE '\[f=[0-9]+\]' "$log" | tail -1 | tr -dc '0-9' | sed 's/^0*//')"
-    errors="$(grep -cE '\bError:' "$log")"
-    # The Lua originals keep their own Lua errors; only crashes fail them.
-    failure_pattern=$crash_pattern
-    [[ $(basename "$script") == wasm.txt ]] && failure_pattern="$crash_pattern|$RUNTIME_FAILURE_PATTERN"
+    errors="$(grep -ciE '\bError:' "$log")"
+    warnings="$(grep -ciE '\bWarning:' "$log")"
+    log_ok=0
+    clean_log "$log" || log_ok=1
     if grep -q "finished loading and is now ingame" "$log" && (( status == 124 )) \
-        && ! grep -qE "$failure_pattern" "$log"; then
+        && (( log_ok == 0 )); then
         result=ok
     else
         result="FAIL($status)"
         failures=$((failures + 1))
     fi
-    printf '%-36s %-10s %-8s %s\n' "$game_type" "$result" "${last_frame:-0}" "${errors:-0}"
+    printf '%-36s %-10s %-8s %-8s %s\n' "$game_type" "$result" "${last_frame:-0}" "${errors:-0}" "${warnings:-0}"
 done
 
-# Menu boot under a virtual display (software GL).
-if command -v xvfb-run >/dev/null; then
-    run="$work/menu"
-    mkdir -p "$run"
-    config "$run/spring.conf"
-    LIBGL_ALWAYS_SOFTWARE=1 SDL_VIDEODRIVER=x11 WAYLAND_DISPLAY= \
-        timeout --signal=TERM 90s xvfb-run -a -s '-screen 0 1280x900x24 +extension GLX' \
-        "$bundle/spring" --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
-        --config "$run/spring.conf" -menu "WasmMenu 1.0" > "$run/stdout.txt" 2>&1
-    errors="$(grep -cE '\bError:' "$run/stdout.txt")"
-    if grep -q 'Wasm manifest loaded from WasmMenu/manifest.json' "$run/stdout.txt" \
-        && ! grep -qE "$crash_pattern|$RUNTIME_FAILURE_PATTERN" "$run/stdout.txt"; then
-        printf '%-36s %-10s %-8s %s\n' "WasmMenu (xvfb)" ok - "${errors:-0}"
-    else
-        printf '%-36s %-10s %-8s %s\n' "WasmMenu (xvfb)" FAIL - "${errors:-0}"
-        failures=$((failures + 1))
-    fi
+run="$work/menu"
+mkdir -p "$run"
+config "$run/spring.conf"
+env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
+    timeout --signal=TERM 90s "$bundle/spring" \
+    --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
+    --config "$run/spring.conf" -menu "WasmMenu 1.0" > "$run/stdout.txt" 2>&1
+status=$?
+log="$run/stdout.txt"
+errors="$(grep -ciE '\bError:' "$log")"
+warnings="$(grep -ciE '\bWarning:' "$log")"
+log_ok=0
+clean_log "$log" || log_ok=1
+if grep -q 'Wasm manifest loaded from WasmMenu/manifest.json' "$log" \
+    && (( status == 0 || status == 124 )) && (( log_ok == 0 )); then
+    printf '%-36s %-10s %-8s %-8s %s\n' 'WasmMenu (offscreen)' ok - "${errors:-0}" "${warnings:-0}"
+else
+    printf '%-36s %-10s %-8s %-8s %s\n' 'WasmMenu (offscreen)' "FAIL($status)" - "${errors:-0}" "${warnings:-0}"
+    failures=$((failures + 1))
 fi
 
 echo ""

@@ -76,7 +76,7 @@ run GAME="":
 package ENGINE_TAG *ARGS:
     ./release/package.sh --engine-tag {{ENGINE_TAG}} {{ARGS}}
 
-# Smoke-test an assembled Linux bundle (every menu entry + menu boot)
+# Smoke-test every bundle entry and menu offscreen on the real GPU; fail on warnings/errors
 [group('release')]
 smoke-test BUNDLE:
     ./release/smoke-test.sh {{BUNDLE}}

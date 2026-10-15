@@ -167,7 +167,11 @@ def run(a):
      log=(directory/'engine.log').read_text(errors='replace')
      frame_rows=rows(directory/'frames.csv') if (directory/'frames.csv').exists() else []
      frames=[int(r['frame']) for r in frame_rows if r['kind']=='sim']
-     errors=re.findall(r'(?im)^.*(?:Error:|Lua.*(?:error|Error)|Core Wasm callin.*failed).*$' ,log)
+     errors=re.findall(r'(?im)^.*(?:Error:|Warning:|Lua.*(?:error|Error)|Core Wasm callin.*failed).*$' ,log)
+     if a.mode!='headless':
+      renderer=re.search(r'GL renderer : ([^\n]+)',log)
+      if not renderer:errors.append('Offscreen GPU rendering did not initialize')
+      elif re.search(r'llvmpipe|softpipe|swrast|SwiftShader|Software Rasterizer',renderer[1],re.I):errors.append('Offscreen GPU rendering selected a software renderer: '+renderer[1])
      ok=process.returncode==0 and frames==list(range(a.frames+1)) and not errors
      if not ok and frames!=list(range(a.frames+1)):errors.append('Required frame window was not completed; timeout or early exit')
      contended=any(pressure(s)>5 for s in samples)
@@ -197,7 +201,7 @@ def run(a):
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('game',choices=['all',*GAMES]);p.add_argument('scenario',choices=['autonomous','scripted'],default='autonomous',nargs='?')
  p.add_argument('--engine',type=Path,default=ENGINE/'build-amd64-linux/install');p.add_argument('--output',type=Path,required=True)
- p.add_argument('--mode',choices=['headless','realtime'],default='headless');p.add_argument('--frames',type=int,default=900);p.add_argument('--warmup',type=int,default=300)
+ p.add_argument('--mode',choices=['headless','realtime'],default='realtime');p.add_argument('--frames',type=int,default=900);p.add_argument('--warmup',type=int,default=300)
  p.add_argument('--repeats',type=int,default=5);p.add_argument('--timeout',type=float,default=120);p.add_argument('--max-minutes',type=float,default=20);p.add_argument('--input',type=Path)
  a=p.parse_args()
  if a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')

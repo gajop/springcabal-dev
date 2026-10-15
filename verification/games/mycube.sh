@@ -93,7 +93,7 @@ mycube_visual() {
 # The original Lua game must boot on this engine without any Lua errors.
 mycube_lua_headless() {
     # Frame 450 comes about 18 s in, and the exit takes another second or two.
-    local seconds=${1:-45} asset unexpected_errors
+    local seconds=${1:-45} asset
     vf_cleanup_on_exit
 
     for asset in \
@@ -119,15 +119,6 @@ mycube_lua_headless() {
     vf_require_clean_exit
     vf_summary
 
-    # The headless renderer has no usable GL texture limit, so the engine
-    # reports the groundFX atlas allocation once during startup. Ignore only
-    # that renderer limitation; every other engine error is a game failure.
-    unexpected_errors=$(grep -E 'Error:' "$(vf_count_log)" |
-        grep -vF 'Could not finalize groundFX texture atlas' || true)
-    if [[ -n $unexpected_errors ]]; then
-        printf '%s\n' "$unexpected_errors" >&2
-        vf_die 'the My Cube Lua archive still has an unexpected engine error'
-    fi
     vf_forbid 'Fatal:|Bad return table|Unknown tag "(new|clone|append)"|really low power|table for CEG .* invalid|Failed to load:|attempt to (call|compare|concatenate)|RunCallInTraceback|Removed widget' \
         'the My Cube Lua archive still has a startup or runtime failure'
     echo '>>> My Cube Lua headless verification passed <<<'

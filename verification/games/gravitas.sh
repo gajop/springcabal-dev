@@ -56,8 +56,6 @@ LUA
     gravitas_check "the whole level spawns" gravitas_present 'level spawned: ([0-9]+) of \1 units'
     gravitas_check "the HUD loads" gravitas_present 'Gravitas RmlUi HUD initialized'
     gravitas_check "no wasm trap, callin error, panic or crash" gravitas_absent "$RUNTIME_FAILURE_PATTERN"
-    # Headless loads no textures, so the HUD's heart image is the one warning.
-    gravitas_check "no warning but the headless HUD image" gravitas_only_known_warnings
 
     echo
     [[ $GRAVITAS_FAILURES -eq 0 ]] || { echo "gravitas headless: $GRAVITAS_FAILURES check(s) failed"; return 1; }
@@ -66,11 +64,6 @@ LUA
 
 gravitas_present() {
     grep -qE "$1" "$VF_OUT_DIR/last.combined.txt"
-}
-
-gravitas_only_known_warnings() {
-    ! grep -E 'Warning:' "$VF_OUT_DIR/last.combined.txt" |
-        grep -vqE 'Warning: \[RmlUi\] Could not load texture: LuaUI/Images/heart.png'
 }
 
 gravitas_e2e() {
@@ -168,7 +161,6 @@ gravitas_shots() {
     local seconds=${1:-40} shot previous='' checksum
     local -a taken
 
-    command -v xvfb-run >/dev/null 2>&1 || vf_die 'xvfb-run not found'
     vf_workspace gravitas-shots stable
     gravitas_stage e2e
     vf_quit_when 'E2E summary passed='

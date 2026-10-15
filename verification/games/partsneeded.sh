@@ -67,6 +67,8 @@ partsneeded_headless() {
     partsneeded_stage headless-integration
     vf_quit_when "$TEST_MARKER" "$ENDING_TEST_MARKER" "$RESTART_TEST_MARKER" "$SAME_PASS_TEST_MARKER"
     vf_config
+    # The UI handshake check needs rendered updates between simulation frames.
+    vf_speed 1
     vf_run_headless "$seconds"
     vf_save_logs
     vf_require_clean_exit

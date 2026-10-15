@@ -21,9 +21,8 @@ declare -A MODES=(
 )
 # What `verify all` runs: every in-game assertion suite, the Lua/Rust pose
 # comparisons, host unit tests and the static checks; no golden screenshots.
-# All engine runs are headless, except the Parts Needed unit-script
-# comparison and Gravitas' Lua play run, which render under xvfb (the traces
-# come from the real engine; the play run needs real input).
+# Engine runs use offscreen GPU rendering. Real-input checks use a private
+# virtual display; no verification run opens a window on the desktop.
 ALL_RUNS=(
     'host tests' 'installed all' 'area17 static' 'area17 headless' 'flove headless'
     'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'gravitas lua-rules' 'gravitas lua-play' 'hunted headless' 'mycube headless'
@@ -44,7 +43,7 @@ usage: verify <suite> [mode] [seconds]    run one suite (default mode: first lis
        verify list                       suites and their modes
        verify all                        every assertion suite, pose comparison,
                                          host test and static check
-                                         (headless, except unit-scripts: xvfb)
+                                         (offscreen GPU; real-input checks: private X display)
        verify visual                     every screenshot suite, compared to goldens
        verify update-goldens [suite]     re-record goldens from fresh renders
        verify probe <name> [args]        run a debugging probe (verification/probes)
@@ -54,7 +53,8 @@ Environment:
                         then engine/current from setup.sh)
   SPRING_BAR_DIR        engine checkout (default ../spring-bar next to this repo)
   SPRING_ENGINE_BIN     override the rendering engine binary
-  SPRING_HEADLESS_BIN   override the headless engine binary
+  SPRING_HEADLESS_BIN   CPU-only engine override (VF_RENDERER=headless)
+  VF_RENDERER          gpu (default), software, screen, or headless (integration)
   GOLDEN_TOLERANCE      override the RMSE % limit against goldens (set per suite)
   KEEP_TEST_ARTIFACTS=1 keep temporary workspaces
   VF_LOCK_FILE          lock that serializes verify runs

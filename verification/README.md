@@ -28,10 +28,8 @@ just probe gravitas-fire lua     # a debugging probe
 | `host` | `tests` |
 | `installed` | `all` \| `<game>` |
 
-- `headless` runs the in-game assertions (modules built with the
-  `headless-integration` feature) under `spring-headless`.
-- `visual` renders under xvfb with software GL, runs the `e2e` feature's
-  scripted scenario and compares its screenshots with goldens.
+- `headless` runs the in-game assertions (`headless-integration`) with invisible GPU rendering by default.
+- `visual` renders through SDL offscreen on the real GPU, runs the `e2e` scenario and compares screenshots with goldens.
 - `static` is build hygiene only (fmt, clippy, installed artifacts match source).
 - `lua-*` modes check the original Lua game on this engine.
 - `gravitas play` and `lua-play` play the WASM port or the Lua game through
@@ -50,14 +48,9 @@ just probe gravitas-fire lua     # a debugging probe
 - `flove outline`, `wisps` and `original` render images for manual A/B
   inspection and do not fail on pixels.
 
-`verify all` runs every in-game assertion suite, the Lua/Rust pose
-comparisons, the host tests and the static checks (installed modules, Area
-17's source checks).  They run headless, at 100x (MyCube's and Gravitas'
-e2e at 1x, see their scripts), except the unit-script comparison, which renders the Lua and
-WASM games under xvfb, and Gravitas' `lua-play`, which plays the Lua game on
-its own X display.  `verify visual` runs every golden comparison.
-Both take their run lists from the tables in `verify`, and that table's first
-mode per suite is the only place a default mode is defined.
+`verify all` runs every in-game assertion suite, Lua/Rust pose comparison, host test and static check. Engine runs use the real GPU through SDL offscreen without opening desktop windows. Most integration runs simulate at 100x; scenarios that require real-time input retain their timing. Input-driven checks use a private X display because SDL offscreen has no OS input window. `verify visual` runs every golden comparison. Both take their run lists from `verify`; the first mode per suite is its default.
+
+Every engine log is checked for errors and warnings. Either fails verification, and GPU runs also fail if the driver silently selects a software renderer. Logs are saved before these checks fail.
 
 Only one `verify` runs at a time: it takes a `flock` on
 `/tmp/springcabal-verify.lock` (`VF_LOCK_FILE`) and waits for any other run.
@@ -80,22 +73,14 @@ the start of every run (`[Gallery] graphics ...`).
 
 | renderer | what | visible | limits |
 | --- | --- | --- | --- |
-| `gpu` | the real GPU and driver via SDL's `offscreen` video driver (EGL, no window) | no | window at most 1024x736: SDL's offscreen display is 1024x768 and the engine clamps to it |
-| `software` | Xvfb + Mesa llvmpipe | no | not the driver players use |
-| `screen` | a normal window on `$DISPLAY` | **yes**, takes over the screen | none |
+| `gpu` | the real GPU and driver via SDL's `offscreen` video driver (EGL, no window) | no | requires an engine with offscreen window sizing support |
+| `software` | Xvfb + Mesa llvmpipe | no | explicit software-renderer diagnostics |
+| `screen` | a normal window on `$DISPLAY` | **yes** | explicit interactive use only |
+| `headless` | CPU-only engine, for integration diagnostics | no | graphics limitations can produce warnings, which still fail checks |
 
-Galleries default to `gpu` (720x720).  The scenario suites capture at
-1280x720, which doesn't fit the offscreen display, so they default to
-`software`; run them with `VF_RENDERER=screen` when fidelity matters.  Goldens
-store the renderer they were recorded with: the backend, the GL renderer
-string (the GPU, or llvmpipe with its LLVM version) and the GL version string
-(the driver), in `renderer.txt` next to them (older scenario goldens: the
-`renderer`/`gpu`/`gl` lines of their `PROVENANCE.txt`).  A run on a different
-renderer still checks poses, markers and presence, but fails: it can't compare
-pixels, and a driver or Mesa update would otherwise switch every pixel check
-off unnoticed.  `VF_ALLOW_RENDERER_MISMATCH=1` skips the pixel comparisons
-instead, with a message.  `lib/common.sh` has the shared helpers: `vf_renderer_info`
-writes the record, `vf_renderer_matches DIR` compares a run with it.
+All rendering and integration suites default to `gpu`; ordinary captures retain their 1280x720 resolution and galleries use 720x720. The engine must allow SDL offscreen drawables larger than its synthetic 1024x768 display. Input-driven checks continue to use their own private X display. No automatic fallback to software or a visible window occurs.
+
+Goldens record the backend, GL renderer and driver in `renderer.txt` or older `PROVENANCE.txt` files. A mismatch fails pixel verification; `VF_ALLOW_RENDERER_MISMATCH=1` explicitly runs the other assertions while skipping pixels. The existing scenario goldens were recorded with software rendering and require a separate reviewed GPU baseline migration; changing the default does not replace them. Use `just update-goldens <suite>` after reviewing a renderer change. Shared renderer/provenance helpers live in `lib/results.sh`.
 
 ## Shared shell helpers
 

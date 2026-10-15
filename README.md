@@ -154,9 +154,9 @@ Games return to the menu in-process (`reloadforce`, e.g. Ctrl+Q). A game
 launched directly (`./run-wasm.sh --game ...`) is started with the WASM menu
 named as the engine's menu, so quitting it lands in the WASM menu as well.
 
-To try the menu on a separate X display without touching your runtime files:
+To try the menu with invisible GPU rendering and separate runtime files:
 ```bash
-xvfb-run -a -s '-screen 0 1280x900x24' env SPRING_RUN_DIR=/tmp/springcabal-menu-check ./run-wasm.sh
+SDL_VIDEODRIVER=offscreen SPRING_RUN_DIR=/tmp/springcabal-menu-check ./run-wasm.sh
 ```
 `SPRING_RUN_DIR` (default `wasm-test/`, gitignored) contains stable isolation views and separate `<game-or-menu>/write` directories for configuration, logs and caches. Different launch modes can run together; a lock prevents two sessions from sharing the same mode's files. Use another `SPRING_RUN_DIR` for a second copy of the same game.
 

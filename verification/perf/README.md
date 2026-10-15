@@ -6,6 +6,8 @@ and runs alternating Lua/Wasm pairs. Five repeats are the default. Source game
 checkouts are never changed. `all` selects all seven game pairs. Run one campaign
 at a time through `verify`, which owns the existing verification lock.
 
+The default is real-time rendering on the GPU through SDL offscreen, with no desktop window. `--mode headless` selects CPU-only diagnostics. Errors and warnings make a run fail.
+
 Options include `--frames 900 --warmup 300 --repeats 5`, `--mode headless|realtime`,
 `--engine /path/to/install`, `--timeout 120`, and `--max-minutes 20`. Only the
 runner's own engine process is terminated on a timeout. Completed results survive

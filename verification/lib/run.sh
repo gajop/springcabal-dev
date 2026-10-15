@@ -190,6 +190,12 @@ vf_check_leaks() {
 
 vf_run_headless() {
     local seconds=${1:?seconds} engine
+    if [[ $(vf_renderer) != headless ]]; then
+        vf_default_speed 100
+        vf_run_visual "$seconds"
+        return
+    fi
+    VF_RUN_RENDERER=headless
     engine=$(vf_engine_bin headless)
     vf_sanitizer_env
     vf_default_speed 100
@@ -237,21 +243,22 @@ vf_config_set() {
 
 # Rendering backend for visual runs (VF_RENDERER, or the suite's default):
 #   software  Xvfb + Mesa llvmpipe: invisible, any size, not the real driver
-#   gpu       the real GPU through SDL's offscreen video driver (EGL, no
-#             window): invisible, but SDL's offscreen display is 1024x768 and
-#             the engine clamps its window to it, so at most 1024x736
+#   gpu       the real GPU through SDL's offscreen video driver (EGL, no window)
 #   screen    a real window on $DISPLAY: any size, takes over the screen
+#   headless  CPU-only diagnostics, available for integration runs
 # Goldens record the renderer they were made with (see lib/gallery.py).
 vf_renderer() {
-    printf '%s\n' "${VF_RENDERER:-${VF_DEFAULT_RENDERER:-software}}"
+    printf '%s\n' "${VF_RENDERER:-${VF_DEFAULT_RENDERER:-gpu}}"
 }
 
 vf_run_visual() {
     local seconds=${1:?seconds} screen=${2:-1280x720x24} engine renderer width height
     engine=$(vf_engine_bin visual)
     renderer=$(vf_renderer)
+    VF_RUN_RENDERER=$renderer
     width=${screen%%x*}
     height=${screen#*x}; height=${height%%x*}
+    VF_RUN_SIZE="${width}x${height}"
     # Scenarios and captures run in real time.
     vf_default_speed 1
     rm -f -- "$VF_WRITE_DIR/infolog.txt"
@@ -269,11 +276,10 @@ vf_run_visual() {
                 "$engine" "${args[@]}" >"$VF_WRITE_DIR/stdout.txt" 2>&1
             ;;
         gpu)
-            if (( width > 1024 || height > 736 )); then
-                vf_die "the gpu renderer is limited to 1024x736 (SDL offscreen display); this run needs ${width}x${height}. Use VF_RENDERER=screen or software."
-            fi
             vf_config_set Fullscreen 0
             vf_config_set WindowBorderless 1
+            vf_config_set WindowPosX 0
+            vf_config_set WindowPosY 0
             vf_config_set XResolutionWindowed "$width"
             vf_config_set YResolutionWindowed "$height"
             SDL_VIDEODRIVER=offscreen \
@@ -311,6 +317,7 @@ vf_run_driven() {
     local engine width height display='' n xvfb_pid engine_pid status
     command -v xdotool >/dev/null || vf_die 'driven runs need xdotool'
     engine=$(vf_engine_bin visual)
+    VF_RUN_RENDERER=software
     width=${screen%%x*}
     height=${screen#*x}; height=${height%%x*}
     vf_default_speed 1
