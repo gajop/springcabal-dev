@@ -187,7 +187,7 @@ Shared `springcabal-rs` changes rename the verification-only `Gallery` builder t
 | Hunted | `0c5f25f` | Two commits above Lua `096bae3`; gameplay/UI first `6be9846`. |
 | Flove | `dc12a0f` | Two commits above Lua `e93965f`; gameplay/UI first `c553b9c`. |
 | Area17 | `6333d3e` | Two commits above Lua `e9d9410`; gameplay/UI first `5110211`. |
-| Gravitas | `922f75c` | One cohesive cleanup commit above the prior history. |
+| Gravitas | `47a5280` | Cohesive cleanup `922f75c` plus the repeated-jump/middle-button input fix. |
 | MyCube | `a4250c1` | One cohesive cleanup commit above the prior history. |
 | PartsNeeded | `73bb0e4` | One cohesive cleanup commit above the prior history. |
 | ToTheLastDrop | `b082f1a` | One cohesive cleanup commit above the prior history. |

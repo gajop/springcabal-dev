@@ -19,15 +19,7 @@ Hunted now reads pellet count and spread through the SDK query added in `spring-
 
 ## Gameplay
 
-- **Gravitas: the player can jump only once, and a middle click breaks aiming.** On
-  `gravitas-wasm-port`, `verify gravitas play` fails every jump after the first and every shot after
-  a middle-click jump (the engine's mouse-look pins the cursor to the screen centre). Both are fixed
-  on the branch `fix-jump-once` (two commits on `6fd2d55`, in the worktree
-  `verification/cache/worktrees/games/Gravitas-wasm.sdd`), not merged yet: the main checkout has
-  another session's uncommitted edits. With them, only `push-beyond-range` fails: the port clamps
-  a target beyond the gun's range in 2D, to the ground, and refuses a crate just out of range,
-  where the Lua game aims at the furthest point in range towards it. `gravitas play` stays out of
-  `verify all` until both land.
+- **Gravitas: aiming beyond the gun's range differs from Lua.** The port clamps a target beyond the gun's range in 2D, to the ground, and refuses a crate just out of range, where the Lua game aims at the furthest point in range towards it. This is the remaining failure in `verify gravitas play`, which stays out of `verify all` until fixed. Repeated Space jumps, E, middle-button jumping and subsequent push/pull now pass on the current checkout.
 - **Gravitas: collisions and the boss differ from Lua.** `verify gravitas rules`: a robot thrown
   into a crate takes the engine's 7 damage, not the game's ~266 (`lua-rules`); the boss fires no
   shot in 11 s where Lua fires two bursts of five. Out of `verify all` until fixed.
