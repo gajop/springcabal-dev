@@ -65,15 +65,15 @@ partsneeded_headless() {
 
     vf_workspace partsneeded-headless
     partsneeded_stage headless-integration
-    vf_quit_when "$TEST_MARKER" "$ENDING_TEST_MARKER" "$RESTART_TEST_MARKER" "$SAME_PASS_TEST_MARKER"
+    vf_quit_when "$TEST_MARKER" "$ENDING_TEST_MARKER" "$RESTART_TEST_MARKER" "$SAME_PASS_TEST_MARKER" \
+        "PARTS NEEDED UI HANDSHAKE PASSED"
     vf_config
-    # The UI handshake check needs rendered updates between simulation frames.
-    vf_speed 1
     vf_run_headless "$seconds"
     vf_save_logs
     vf_require_clean_exit
 
     vf_require "$TEST_MARKER" 'the headless integration assertions did not pass'
+    vf_require 'PARTS NEEDED UI HANDSHAKE PASSED' 'the UI hello never reached the rules'
     vf_require "$ENDING_TEST_MARKER" 'the type-1 ending integration assertions did not pass'
     vf_require "$RESTART_TEST_MARKER" 'the restart integration assertions did not pass'
     vf_require "$SAME_PASS_TEST_MARKER" \

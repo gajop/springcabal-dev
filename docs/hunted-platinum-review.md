@@ -189,7 +189,7 @@ Shared `springcabal-rs` changes rename the verification-only `Gallery` builder t
 | Area17 | `6333d3e` | Two commits above Lua `e9d9410`; gameplay/UI first `5110211`. |
 | Gravitas | `922f75c` | One cohesive cleanup commit above the prior history. |
 | MyCube | `a4250c1` | One cohesive cleanup commit above the prior history. |
-| PartsNeeded | `d0a74e0` | One cohesive cleanup commit above the prior history. |
+| PartsNeeded | `73bb0e4` | One cohesive cleanup commit above the prior history. |
 | ToTheLastDrop | `b082f1a` | One cohesive cleanup commit above the prior history. |
 
 Every pre-cleanup tip is preserved as `codex/before-wasm-structure-cleanup` (Hunted: `codex/hunted-before-structural-review`). The completed source snapshots remain at `codex/wasm-structure-cleanup-checkpoint`; the public dependency pin checkpoints also remain reachable. The current cleanup checkpoints include the follow-up Sol review, and the reconstructed final trees match those checkpoints. All three first-stage ports pass independently with their original Lua scripts unchanged.

@@ -6,12 +6,12 @@ and runs alternating Lua/Wasm pairs. Five repeats are the default. Source game
 checkouts are never changed. `all` selects all seven game pairs. Run one campaign
 at a time through `verify`, which owns the existing verification lock.
 
-The default is real-time rendering on the GPU through SDL offscreen, with no desktop window. `--mode headless` selects CPU-only diagnostics. Errors and warnings make a run fail.
+The default is GPU rendering through SDL offscreen at 100× simulation speed, with no desktop window. `--speed` controls simulation speed independently of the renderer. `--mode headless` selects CPU-only diagnostics. Errors and warnings make a run fail.
 
-Options include `--frames 900 --warmup 300 --repeats 5`, `--mode headless|realtime`,
+Options include `--frames 900 --warmup 300 --repeats 5`, `--mode headless|gpu`,
 `--engine /path/to/install`, `--timeout 120`, and `--max-minutes 20`. Only the
 runner's own engine process is terminated on a timeout. Completed results survive
-an interruption. Real-time rendering uses SDL offscreen GPU rendering. The runner
+an interruption. GPU rendering uses SDL offscreen without limiting simulation to real time. The runner
 records host pressure and does not change CPU governors or stop other programs.
 
 `scripted --input /path/to/actions.txt` gives both versions the same engine-side

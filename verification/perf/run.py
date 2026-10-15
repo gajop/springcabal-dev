@@ -130,7 +130,7 @@ def run(a):
     text=(PROJECT/f'launch/games/{game}/{backend}.txt').read_text()
     text=set_key(set_key(text,'FixedRNGSeed',424242),'MapName',map_name)
     text=set_key(text,'FixedUnsyncedRNGSeed',424242)
-    scripts[backend]=speed(text,100 if a.mode=='headless' else 1)
+    scripts[backend]=speed(text,a.speed)
    save(output/f'{game}-content.json',content)
    for repeat in range(a.repeats):
     for backend in ('lua','wasm'):
@@ -201,10 +201,11 @@ def run(a):
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('game',choices=['all',*GAMES]);p.add_argument('scenario',choices=['autonomous','scripted'],default='autonomous',nargs='?')
  p.add_argument('--engine',type=Path,default=ENGINE/'build-amd64-linux/install');p.add_argument('--output',type=Path,required=True)
- p.add_argument('--mode',choices=['headless','realtime'],default='realtime');p.add_argument('--frames',type=int,default=900);p.add_argument('--warmup',type=int,default=300)
+ p.add_argument('--mode',choices=['headless','gpu','realtime'],default='gpu',help='renderer backend; realtime is a legacy GPU alias');p.add_argument('--frames',type=int,default=900);p.add_argument('--warmup',type=int,default=300)
+ p.add_argument('--speed',type=float,default=100,help='simulation speed multiplier (default: 100)')
  p.add_argument('--repeats',type=int,default=5);p.add_argument('--timeout',type=float,default=120);p.add_argument('--max-minutes',type=float,default=20);p.add_argument('--input',type=Path)
  a=p.parse_args()
- if a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
+ if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
  if a.scenario=='scripted' and not a.input:p.error('scripted requires --input')
  try:return run(a)
  except (ValueError,TimeoutError,KeyboardInterrupt) as e:print(str(e),file=sys.stderr);return 1
