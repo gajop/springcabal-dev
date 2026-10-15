@@ -17,6 +17,7 @@ declare -A MODES=(
     [gallery]='ceg anim parity'
     [host]='tests'
     [installed]='all area17 flove gravitas hunted mycube partsneeded ttld'
+    [perf]='all mycube ttld hunted area17 gravitas flove partsneeded'
 )
 # What `verify all` runs: every in-game assertion suite, the Lua/Rust pose
 # comparisons, host unit tests and the static checks; no golden screenshots.
