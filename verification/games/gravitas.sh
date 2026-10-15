@@ -31,6 +31,13 @@ gravitas_stage() {
     vf_start_file "$START_FILE"
 }
 
+gravitas_enable_logs() {
+    cat >> "$VF_ISOLATION/games/$(basename "$GAME_DIR")/LuaRules/draw.lua" <<'LUA'
+Spring.SetLogSectionFilterLevel("gravitas-wasm", "info")
+Spring.SetLogSectionFilterLevel("gravitas-ui", "info")
+LUA
+}
+
 # The shipped modules in the checkout, on the launch script players get, with
 # no input for 900 frames.
 gravitas_headless() {
@@ -42,10 +49,7 @@ gravitas_headless() {
     vf_link_map "$MAP_DIR"
     vf_start_file "$START_FILE"
     vf_quit_when --frame 900
-    cat >> "$VF_ISOLATION/games/$(basename "$GAME_DIR")/LuaRules/draw.lua" <<'LUA'
-Spring.SetLogSectionFilterLevel("gravitas-wasm", "info")
-Spring.SetLogSectionFilterLevel("gravitas-ui", "info")
-LUA
+    gravitas_enable_logs
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -73,6 +77,7 @@ gravitas_e2e() {
     vf_cleanup_on_exit
     gravitas_stage headless-integration
     vf_quit_when 'E2E summary passed='
+    gravitas_enable_logs
     vf_config
     vf_run_headless "$seconds"
     vf_save_logs
@@ -164,6 +169,7 @@ gravitas_shots() {
     vf_workspace gravitas-shots stable
     gravitas_stage e2e
     vf_quit_when 'E2E summary passed='
+    gravitas_enable_logs
     vf_config "$VISUAL_CONFIG"
     vf_run_visual "$seconds"
     vf_save_logs

@@ -22,7 +22,7 @@ game	ToTheLastDrop-wasm.sdd	https://github.com/SpringCabal/LD43.git	ttld-wasm-po
 game	Gravitas.sdd	https://github.com/SpringCabal/Gravitas.git	master	yes
 game	Hunted.sdd	https://github.com/SpringCabal/Hunted.git	master	yes
 game	Area-17.sdd	https://github.com/SpringCabal/Area-17.git	master	yes
-game	Flove.sdd	https://github.com/SpringCabal/Flove.git	master	yes
+game	Flove.sdd	https://github.com/SpringCabal/Flove.git	main	yes
 game	PartsNeeded.sdd	https://github.com/SpringCabal/LD35.git	master	yes
 game	MyCube.sdd	https://github.com/SpringCabal/LD42.git	master	yes
 game	ToTheLastDrop.sdd	https://github.com/SpringCabal/LD43.git	master	yes
