@@ -23,5 +23,13 @@ dependencies = [
 ]
 
 [[patch.unused]]
+name = "springcabal"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "springcabal-control"
+version = "0.1.0"
+
+[[patch.unused]]
 name = "spring-addons"
 version = "0.1.0"

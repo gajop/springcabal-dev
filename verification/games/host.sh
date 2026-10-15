@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Host unit tests: the shared springcabal crates and every game's host-built
-# crates (`shared`, Hunted's `ai`).  The game modules themselves build only
+# crates (`shared`, Hunted's `common`).  The game modules themselves build only
 # for wasm32, so logic worth testing on the host lives in those crates.
 source "$(dirname -- "${BASH_SOURCE[0]}")/../lib/common.sh"
 
 HOST_TARGET=$(rustc -vV | sed -n 's/^host: //p')
-HOST_CRATES=(shared ai)
+HOST_CRATES=(shared common)
 FAILURES=0
 PASSED=0
 

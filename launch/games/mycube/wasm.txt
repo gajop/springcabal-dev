@@ -2,7 +2,7 @@
 {
     MapName=MyCube v1 WASM;
     GameMode=0;
-    GameType=MyCube WASM 0.1.0-wasm;
+    GameType=MyCube WASM Git;
 
     NumTeams=2;
     NumUsers=2;

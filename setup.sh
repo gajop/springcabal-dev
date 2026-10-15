@@ -2,7 +2,7 @@
 # Set up a SpringCabal development checkout.
 #
 #   ./setup.sh                      clone the game/map repos listed in content.tsv
-#                                   and the private springcabal-rs crate, and write
+#                                   and the shared springcabal-rs crate, and write
 #                                   .cargo/config.toml if there is none yet
 #   ./setup.sh --engine-tag TAG     also download that Linux engine release into
 #                                   engine/TAG and point engine/current at it
@@ -16,7 +16,7 @@ set -euo pipefail
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 content_root="$project_root/spring-linux"
 engine_repo="gajop/spring-rust"
-springcabal_url="ssh://git@github.com/gajop/springcabal-rs.git"
+springcabal_url="https://github.com/gajop/springcabal-rs"
 springcabal_dir="$project_root/springcabal-rs"
 engine_tag=""
 cargo_config=""      # "", engine or no-engine
@@ -51,8 +51,6 @@ cargo_packages() {
 # - With ENGINE_DIR, the spring and spring-addons crates come from its
 #   rust/crates/ (engine co-development).
 # - The springcabal crates come from springcabal-rs/ when it is checked out.
-# - Cargo fetches git dependencies with the git CLI, so the private
-#   springcabal-rs repository is fetched with your SSH setup.
 # Paths are relative to this directory (the parent of .cargo/), as Cargo
 # resolves them.  An existing file that differs is shown as a diff and kept
 # as config.toml.bak.
@@ -86,8 +84,6 @@ write_cargo_config() {
             done < <(cargo_packages "$springcabal_dir")
         fi
         echo
-        echo "# springcabal-rs is a private repository: fetch git dependencies with the"
-        echo "# git CLI, which uses your SSH key and ~/.ssh/config."
         echo "[net]"
         echo "git-fetch-with-cli = true"
     } >"$tmp"
@@ -158,12 +154,11 @@ while IFS=$'\t' read -r kind path source branch ship; do
     esac
 done < <(grep -v -E '^\s*(#|$)' "$project_root/content.tsv")
 
-# The shared crate every WASM game depends on.  It is private: cloning needs
-# SSH access to github.com/gajop/springcabal-rs.
+# The shared crate every WASM game depends on, fetched over anonymous HTTPS.
 if [[ ! -e $springcabal_dir ]]; then
     echo "==> Cloning springcabal-rs"
     if ! git clone "$springcabal_url" "$springcabal_dir"; then
-        missing+=("springcabal-rs (needs SSH access to $springcabal_url)")
+        missing+=("springcabal-rs (could not fetch $springcabal_url)")
     fi
 fi
 

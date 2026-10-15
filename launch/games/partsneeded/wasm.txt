@@ -2,7 +2,7 @@
 {
     MapName=LD35 map 0.1;
     GameMode=0;
-    GameType=Parts Needed WASM 0.1.0-wasm;
+    GameType=Parts Needed WASM $VERSION;
 
     NumTeams=2;
     NumUsers=2;

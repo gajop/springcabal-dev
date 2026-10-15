@@ -2,7 +2,7 @@
 {
     MapName=Gravitas Enterprise;
     GameMode=0;
-    GameType=Gravitas WASM 0.1.0-wasm;
+    GameType=Gravitas WASM $VERSION;
 
     NumTeams=2;
     NumUsers=2;

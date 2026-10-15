@@ -8,14 +8,14 @@
 #   branch  branch to check out ("-" for non-git sources)
 #   ship    yes/no: whether release/package.sh puts it in the bundle
 #
-# The *-wasm-port branches are not published yet: setup.sh skips what it
+# The WASM branches are not published yet: setup.sh skips what it
 # cannot clone, and packaging always uses whatever is checked out locally.
 
 # kind	path	source	branch	ship
 game	Gravitas-wasm.sdd	https://github.com/SpringCabal/Gravitas.git	gravitas-wasm-port	yes
-game	Hunted-wasm.sdd	https://github.com/SpringCabal/Hunted.git	hunted-wasm-port	yes
-game	Area17-wasm.sdd	https://github.com/SpringCabal/Area-17.git	area17-wasm-port	yes
-game	Flove-wasm.sdd	https://github.com/SpringCabal/Flove.git	flove-wasm-port	yes
+game	Hunted-wasm.sdd	https://github.com/SpringCabal/Hunted.git	rust	yes
+game	Area17-wasm.sdd	https://github.com/SpringCabal/Area-17.git	rust	yes
+game	Flove-wasm.sdd	https://github.com/SpringCabal/Flove.git	rust	yes
 game	PartsNeeded-wasm.sdd	https://github.com/SpringCabal/LD35.git	partsneeded-wasm-port	yes
 game	MyCube-wasm.sdd	https://github.com/SpringCabal/LD42.git	mycube-wasm-port	yes
 game	ToTheLastDrop-wasm.sdd	https://github.com/SpringCabal/LD43.git	ttld-wasm-port	yes

@@ -22,21 +22,20 @@ commits above `origin/master` (`14f5bc9`):
 | `38e57c0` | Restore the rabbit resting pose and pass the idle tail speed correctly. |
 | `096bae3` | Bound wave-size and burrow-pick growth by the existing 600-rabbit limit. This shared bug was fixed in Lua before Rust. |
 
-WASM is checked out on `rust` at `a7ac9a1`, exactly two
+WASM is checked out on `rust` at `3dccea1`, exactly two
 commits directly above that Lua tip:
 
-1. `919daca` — gameplay/UI port, including all five approved Rust review fixes.
+1. `7e31533` — gameplay/UI port, including all five approved Rust review fixes.
    `Scripts/` is unchanged from reviewed Lua.
    The temporary named-call bridge registers the existing environment functions;
    the redundant `script.Fire`/`script.SetPitch` aliases are unnecessary.
-2. `a7ac9a1` — CUS unit scripts and their lifecycle wiring, replacing Lua scripts
+2. `3dccea1` — CUS unit scripts and their lifecycle wiring, replacing Lua scripts
    and removing the temporary bridge.
 
 The earlier `codex/hunted-platinum-lua` and `codex/hunted-platinum-wasm` review
 refs remain as aliases of these tips.
 
-The final WASM tree includes the five fixes below; the second port's patch is
-unchanged. The RmlUI port already retired the leaderboard, and replaces the
+The final WASM tree includes the five fixes below and the subsequent structural review. Unit-script cleanup remains in the second port commit. The RmlUI port already retired the leaderboard, and replaces the
 removed Lua widgets and rendering helpers.
 
 ## Approved Rust review fixes
@@ -56,10 +55,7 @@ port commit:
 4. HUD initialization requires all data bindings. Bind/load/show failure removes
    the partial context before retrying; stale documents also remove their old
    context. The nonexistent direct-update fallback was removed.
-5. End-screen markup is cached by visibility and displayed score/time/kills.
-   Gameplay status messages no longer clear the hidden panel, and identical
-   end-screen statuses preserve its existing elements. Rebuilt documents
-   invalidate the cache.
+5. End-screen content remains in the document and updates through bindings. The structural review replaced the initial cache with static RML templates and native data events; status packets no longer rebuild its elements.
 
 ## Approved cleanup
 
@@ -123,7 +119,7 @@ All old histories remain reachable in the Hunted repository:
   `95806ea`, with exactly the current final WASM tree before history folding.
 
 The older regrouping checkpoint `ba28432` has the exact original Lua tree of
-`d71d869`. All FX refs retain their original hashes. Nothing was pushed.
+`d71d869`. All FX refs retain their original hashes. No game branches or SpringCabal organization repositories were pushed.
 
 ## Verification
 
@@ -142,26 +138,25 @@ The older regrouping checkpoint `ba28432` has the exact original Lua tree of
   screenshots were inspected. The initial run inherited stale user widget
   registrations and warned about removed widgets; the probe now isolates these
   settings without changing the player's profile.
-- Both updated WASM stages pass all 34 integration assertions, including the
+- Both updated WASM stages pass all 35 integration assertions, including the
   new stationary-target restart check, with zero errors or warnings. The first
   stage's latest logs are preserved under
-  `codex-work/hunted-approved-stages/evidence/lua-unitscripts-review-fixes/`.
+  `codex-work/wasm-structure-evidence/`.
 - The final WASM tree passes all eight visual golden comparisons (five full
   frames and three HUD/end-screen crops); the HUD and loss screenshot were
   inspected. Logs are preserved under
-  `codex-work/hunted-approved-stages/evidence/cus-review-fixes-visual/`.
+  `codex-work/wasm-structure-evidence/hunted-visual/`.
   Thirty AI unit tests, native test Clippy, release WASM Clippy and the release
   build pass. New unit tests exercise very large wave numbers and exhausted
   attempts without successful creations. Default release modules are installed.
-  HUD failure cleanup and DOM caching were reviewed in source; no engine fault
-  injection was added for those paths.
+  HUD initialization cleanup was reviewed in source. The visual scenario now checks multi-field rows, rejection of an incomplete row, row expiry, the native restart button event and the new round's HUD. That test also caught and fixed retention of the previous survival time after the first restart status.
 - With shared runtime fix `spring-bar` `ca1985b144`, all nine Lua/CUS gallery
   unit types match exactly. All 15 Hunted pose/image goldens pass after the
   targeted rabbit move-f30 correction; other tiles and tolerances are unchanged.
 
 ## Shared CUS correction and limits
 
-The local shared `spring` crate resumes animation waiters during AnimFinished
+The shared `spring` crate resumes animation waiters during AnimFinished
 completion dispatch, after releasing the typed state borrow. Ordinary timers
 and wakers retain their once-per-frame guard. All 25 crate tests pass, including
 new completion, timer isolation, task order, state access, following-sleep and
@@ -174,5 +169,44 @@ modules. Six pass; Area17's 51 poses pass but 17 image failures reproduce with
 its previously installed modules. Its unrelated goldens were not changed.
 
 This is a focused Linux source/history and runtime review, not exhaustive
-playtesting or Windows certification. The shared engine commit is local and
-selected through the workspace's generated Cargo patch. No ratings were edited.
+playtesting or Windows certification. The engine changes are available in the public personal SDK repository and are pinned by the games. Local development also uses the generated Cargo patch. No ratings were edited.
+
+## Structural review
+
+The user's second Rust review is addressed in the two port commits. The inherited sound entries and loader attribution are restored. `modinfo.lua` keeps Lua's version and description; only the game names/short names differ. The top README uses unwrapped prose, a small module table and a link to the public development repository. The redundant `wasm-src/README.md` is removed.
+
+`ai` is now `common` (`hunted-common`): message keys live in `protocol.rs`, ammunition defaults in `weapons.rs`, and rabbit calculations in `rabbit.rs` and `movement.rs`. `RabbitData`, movement vectors and named coefficients replace the port's `Mood`, `heeds_goal` and `Pull` terminology without rebalancing Lua's formulas. The engine movement setters accept Lua's zero speed; only the negative-power calculation guards a zero input to keep the turn value finite.
+
+Game-specific implementations now live with the owning gadgets/widgets, including rabbit AI, weapons, waves, input, restart, visibility and HUD handling. Code-bearing `mod.rs` files use named module files. Port-authored Rust narration is removed. Hunted's external `endgame.rml` and `events.rml` are included once; normal updates use scalar/row bindings and native data-event callbacks. There is no manual click-target traversal or generated floating-message markup.
+
+The port reads lighthouse rules params as Lua/UI do, removes the redundant carried-carrot movement, restores shotgun playback in rules, and uses the engine's weapon definition for pellet count/spread. The initial flashlight source matches Lua's map-corner source. The README retains only the actual HUD and restart/input presentation differences.
+
+Shared `springcabal-rs` changes rename the verification-only `Gallery` builder to `WorldWidgets` and move the existing ground-volume renderer into `springcabal::volumes`. All seven games use the new API, public HTTPS dependencies, concise top-level documentation, named module files and the comment cleanup. Unshared controller implementations were moved under their respective owners where applicable; shared protocol/state/helpers remain shared. No additional Lua cleanup was applied to the games without an earlier Lua pass.
+
+| Game | Current WASM tip | History |
+| --- | --- | --- |
+| Hunted | `3dccea1` | Two commits above Lua `096bae3`; gameplay/UI first `7e31533`. |
+| Flove | `19a913d` | Two commits above Lua `e93965f`; gameplay/UI first `be3ac11`. |
+| Area17 | `5f8e8a0` | Two commits above Lua `e9d9410`; gameplay/UI first `9a030b6`. |
+| Gravitas | `c9a7220` | One cohesive cleanup commit above the prior history. |
+| MyCube | `951149f` | One cohesive cleanup commit above the prior history. |
+| PartsNeeded | `e5193ee` | One cohesive cleanup commit above the prior history. |
+| ToTheLastDrop | `2a3017f` | One cohesive cleanup commit above the prior history. |
+
+Every pre-cleanup tip is preserved as `codex/before-wasm-structure-cleanup` (Hunted: `codex/hunted-before-structural-review`). The completed source snapshots remain at `codex/wasm-structure-cleanup-checkpoint`; the public dependency pin checkpoints also remain reachable. The current cleanup checkpoints include the follow-up Sol review, and the reconstructed final trees match those checkpoints. All three first-stage ports pass independently with their original Lua scripts unchanged.
+
+The RML row test exposed an SDK memory-safety bug: the generated call supplied a flattened value count as a row count. `spring-bar` `c77a8b7054` changes the native query to a value count, checks divisibility by the schema width and derives the row count. Native Rust wrappers and generated bindings are updated. The same engine commit exposes weapon projectile parameters. The engine builds, its native RML test and codegen reproducibility check pass; Hunted exercises the new weapon query and the multi-field/shrinking/invalid row paths.
+
+`gajop/springcabal-rs` and `gajop/springcabal-dev` are public, verified anonymously. The shared code is published on `gajop/springcabal-rs` branch `main` at `a8755627eb8451cad1010f4d3ce012e1b1367a51`; the SDK is published on `gajop/spring-rust` branch `main` at `c77a8b7054`. The temporary personal review branches have been deleted. All seven games pin the same public SDK/shared revisions. An extracted Hunted archive builds outside the development workspace, fetching all four dependencies from public Git revisions without local Cargo patches. No SpringCabal organization repository was pushed.
+
+All seven release workspaces pass Clippy/build, all seven headless suites pass, and 114 shared/game host tests pass. Hunted's five frames and three HUD crops pass unchanged goldens with zero errors/warnings. Its interaction checks cover the bound event list and restart. Area17 retains headless texture warnings, and Flove's screenshot scenario logs nine capture-quality warnings; their suites pass. The broader visual galleries and Windows playtesting were not repeated for this structural pass. Evidence is under `codex-work/wasm-structure-evidence/`.
+
+## Sol follow-up review
+
+Three Sol agents checked the other six WASM games against the same structural review. Their changes restore original versions/descriptions, move the remaining unshared implementations under owning gadgets/widgets, and name MyCube constants without changing their values. Launcher and verification game names follow the restored versions. Existing project chat links are preserved. No additional Lua mechanics cleanup was introduced.
+
+All six games pass their headless suites after these changes; the reconstructed first Flove and Area17 commits also pass with Lua unit scripts. The existing headless texture/capture warnings remain; Area17 now also instantiates the hidden technology template at startup, producing one additional headless wireframe texture warning. The rendered run has no RML texture warnings. Area17 also replaces generated loadout/technology markup, coordinate hover fallback, descendant traversal and markup caches with external templates, native typed rows, indexed click/hover/leave callbacks and engine pointer ownership. Its regression test verifies rendered tooltip text, hover, close/reopen and leave behavior.
+
+Area17's three visual goldens pass unchanged (0.4%, 4.6% and 3.8% RMSE). Its native tooltip/reopen regression and technology toggle/weapon/ability callbacks pass. No game or SpringCabal organization branches were pushed. The shared and SDK personal repositories publish these revisions on `main`.
+
+The Area17 screenshots show only the world, including in the existing goldens, despite the expected open technology panel and passing native UI checks. This is not an intentional test setting. Accordingly those screenshots validate world rendering, not HUD pixel parity; the unresolved rendering issue is recorded in `docs/open-problems.md`.

@@ -2,7 +2,7 @@
 {
     MapName=Eyam;
     GameMode=0;
-    GameType=To the Last Drop WASM 0.1.0-wasm;
+    GameType=To the Last Drop WASM $VERSION;
 
     NumTeams=2;
     NumUsers=2;

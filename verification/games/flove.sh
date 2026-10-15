@@ -227,7 +227,7 @@ flove_animation_trace() {
     vf_cleanup_on_exit
     vf_build "$SOURCE_ROOT" animation-trace
     flove_animation_run lua "$GAMES_DIR/Flove.sdd" 'Flove $VERSION' "$seconds"
-    flove_animation_run rust "$GAME_DIR" 'Flove WASM 0.1.0-wasm' "$seconds"
+    flove_animation_run rust "$GAME_DIR" 'Flove WASM $VERSION' "$seconds"
     python3 "$VERIFICATION_ROOT/unit-scripts/compare_flove_animation.py" \
         "$VERIFICATION_ROOT/out/flove-animation-lua/trace.log" \
         "$VERIFICATION_ROOT/out/flove-animation-rust/trace.log"

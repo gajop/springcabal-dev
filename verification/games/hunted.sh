@@ -80,6 +80,7 @@ hunted_visual() {
     # under a real renderer.
     vf_require 'HUNTED VISUAL SHOTS TAKEN' 'the visual run did not take its screenshots'
     vf_forbid_runtime_failures 'the Hunted visual run'
+    vf_require 'HUNTED HUD BINDINGS PASSED' 'the bound event rows and restart button were not verified'
 
     vf_note 'Hunted goldens'
     vf_goldens_by_index hunted shot_1 shot_2 shot_3 shot_4 shot_5

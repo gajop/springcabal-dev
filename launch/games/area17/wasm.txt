@@ -2,7 +2,7 @@
 {
     MapName=Area 17 - v01;
     GameMode=0;
-    GameType=Area 17 WASM 0.1.0-wasm;
+    GameType=Area 17 WASM $VERSION;
 
     NumTeams=2;
     NumUsers=2;

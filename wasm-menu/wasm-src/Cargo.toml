@@ -10,4 +10,4 @@ all = { level = "deny", priority = -1 }
 too_many_arguments = "allow"
 
 [workspace.dependencies]
-spring = { git = "https://github.com/gajop/spring-rust", branch = "rust-wip", features = ["alloc"] }
+spring = { git = "https://github.com/gajop/spring-rust", rev = "c77a8b7054394507716f15e580f7d05f11876e44", features = ["alloc"] }

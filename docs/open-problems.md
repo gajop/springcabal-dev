@@ -11,11 +11,11 @@ Paths are relative to `spring-linux/games/<Game>-wasm.sdd/wasm-src/` unless stat
 ## Waiting on the engine
 
 These are filed in `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`:
-- **§4: Hunted's pellet count and spray are hard-coded.** `WeaponDefInfo` has no `projectiles` or
-  `sprayAngle`.
 - **§5: the unit-script attach gadget is copied 7×.** It belongs in `spring-addons`.
 - **§8: there is no typed getter for a game rules param.** So MyCube's test handshake and Flove's
   status ride on a carrier unit.
+
+Hunted now reads pellet count and spread through the SDK query added in `spring-bar` `c77a8b7054`; the old §4 gap is resolved.
 
 ## Gameplay
 
@@ -47,3 +47,9 @@ These are filed in `spring-bar/WASM_GAME_API_TODO_2026-09-25.md`:
   BASELINE.md lists the captures seen failing.
 - **Parts Needed's visual shots 3–4 can fail "camera not settled" on a heavily loaded machine**
   (load average about 45). A rerun passes.
+
+## Area17 HUD rendering
+
+Reproduce with `./verification/verify area17 visual`. The e2e scenario opens the technology panel at frame 30; frame 80 should show it together with the resources, health/shield and loadout HUD. The captured frames 20, 80 and 450 instead show only the world. The existing goldens also lack the HUD, so their passing comparisons do not verify HUD pixels.
+
+The run uses normal UI setup: no gallery option, hide-interface command or scenario-owned HUD suppression. Logs confirm HUD initialization and its render callback; the native bindings test checks visible tooltip text, indexed hover, close/reopen and mouse-leave, and the technology toggle/weapon/ability callbacks pass. There are no RML texture errors in the rendered run. The cause of the missing pixels is not established; rendering state and the RML draw path need inspection. Evidence: `codex-work/wasm-structure-evidence/area17-final-visual/`.

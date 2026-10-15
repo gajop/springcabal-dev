@@ -2,7 +2,7 @@
 {
     MapName=The Grove 0.3;
     GameMode=0;
-    GameType=Flove WASM 0.1.0-wasm;
+    GameType=Flove WASM $VERSION;
 
     NumTeams=2;
     NumUsers=2;

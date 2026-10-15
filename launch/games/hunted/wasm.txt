@@ -2,7 +2,7 @@
 {
     MapName=Hunted - v04;
     GameMode=0;
-    GameType=Hunted WASM 0.1.0-wasm;
+    GameType=Hunted WASM $VERSION;
 
     NumTeams=2;
     NumUsers=2;
