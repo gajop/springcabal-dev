@@ -148,11 +148,7 @@ hover/scroll previews games independently of keyboard selection: Up/Down selects
 a game, Left/Right its version, Enter launches, Tab/Shift+Tab walks the buttons.
 Logo sources and attribution are in `wasm-menu/WasmMenu/images/LOGOS.md`.
 
-`wasm-menu/wasm-src/menu/src/ui.rs` handles RmlUi events and queues launches
-until callbacks return; game metadata and launch settings (start scripts,
-graphics overrides) live in `lib.rs`. Rebuild after Rust changes with
-`just --justfile wasm-menu/wasm-src/justfile copy`, and restart the engine after
-editing RML/RCSS (styles may be cached across reloads).
+`wasm-menu/wasm-src/menu/src/catalog.rs` contains each game's metadata, articles and launch scripts. `navigation.rs` handles arrow navigation; RmlUi handles Tab order, focus and button events. `model.rs` supplies data to the external RML templates, and `ui.rs` queues launches until callbacks return. Rebuild the menu after changing Rust or an embedded template with `just --justfile wasm-menu/wasm-src/justfile copy`; restart the engine after editing styles, which may be cached across reloads.
 
 Games return to the menu in-process (`reloadforce`, e.g. Ctrl+Q). A game
 launched directly (`./run-wasm.sh --game ...`) is started with the WASM menu
@@ -162,8 +158,7 @@ To try the menu on a separate X display without touching your runtime files:
 ```bash
 xvfb-run -a -s '-screen 0 1280x900x24' env SPRING_RUN_DIR=/tmp/springcabal-menu-check ./run-wasm.sh
 ```
-`SPRING_RUN_DIR` (default `wasm-test/`, gitignored) holds the launcher's write
-dir, logs and isolation views.
+`SPRING_RUN_DIR` (default `wasm-test/`, gitignored) contains stable isolation views and separate `<game-or-menu>/write` directories for configuration, logs and caches. Different launch modes can run together; a lock prevents two sessions from sharing the same mode's files. Use another `SPRING_RUN_DIR` for a second copy of the same game.
 
 ## Verification
 

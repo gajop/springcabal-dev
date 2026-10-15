@@ -97,6 +97,10 @@ off unnoticed.  `VF_ALLOW_RENDERER_MISMATCH=1` skips the pixel comparisons
 instead, with a message.  `lib/common.sh` has the shared helpers: `vf_renderer_info`
 writes the record, `vf_renderer_matches DIR` compares a run with it.
 
+## Shared shell helpers
+
+Suites source `lib/common.sh`, which sets shared paths and loads three helper files: `build.sh` handles isolated workspaces, staging, module installation and Rust builds; `run.sh` handles start scripts, engine settings, launches and driven input; `results.sh` handles logs, assertions, screenshots, provenance and goldens. Keep using `common.sh` as the entry point.
+
 ## Suites never touch the game checkouts
 
 Everything under `spring-linux/` is what `release/package.sh` ships, so suites

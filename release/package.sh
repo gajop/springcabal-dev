@@ -55,7 +55,7 @@ done
 log() { echo "==> $*"; }
 die() { echo "error: $*" >&2; exit 1; }
 
-for tool in 7z zip rsync tar strings; do
+for tool in 7z zip rsync tar strings cargo python3; do
     command -v "$tool" >/dev/null || die "missing tool: $tool"
 done
 
@@ -96,21 +96,17 @@ test_markers='ASSERTION (PASSED|FAILED)|INTEGRATION TESTS? PASSED|VISUAL E2E|E2E
 
 check_wasm_modules() {
     local dir="$1" module hits
+    local modules=()
     local found
     found="$(find "$dir/LuaRules/wasm" "$dir/LuaUI/wasm" -maxdepth 1 -name '*.wasm' 2>/dev/null | head -1)"
     [[ -n "$found" ]] || die "$(basename "$dir") has no built .wasm modules (run with --build)"
     for module in "$dir"/LuaRules/wasm/*.wasm "$dir"/LuaUI/wasm/*.wasm; do
         [[ -f $module ]] || continue
+        modules+=("$module")
         hits="$(strings "$module" | grep -oE "$test_markers" | sort -u | tr '\n' ' ' || true)"
         [[ -z $hits ]] || die "${module#"$content_root"/} is a test build (contains: $hits); rebuild with 'just copy' in its wasm-src"
     done
-    # Warn when sources are newer than the shipped modules.
-    local newest_src newest_mod
-    newest_src="$(find "$dir/wasm-src" -name '*.rs' -printf '%T@\n' 2>/dev/null | sort -n | tail -1)"
-    newest_mod="$(find "$dir/LuaRules/wasm" "$dir/LuaUI/wasm" -name '*.wasm' -printf '%T@\n' 2>/dev/null | sort -n | head -1)"
-    if [[ -n "$newest_src" && -n "$newest_mod" ]] && (( ${newest_src%.*} > ${newest_mod%.*} )); then
-        echo "warning: $(basename "$dir"): wasm-src is newer than the built modules" >&2
-    fi
+    python3 "$project_root/release/wasm-info.py" "$dir/wasm-src" "${modules[@]}" >> "$build_info"
 }
 
 # ---------------------------------------------------------------------------
@@ -160,37 +156,14 @@ pack_sd7() {
     rm -rf -- "$tmp"
 }
 
-# Records exactly what went into the bundle.
+# Record shipped checkouts and the current Cargo dependency resolution.
 build_info="$content_dir/BUILDINFO.txt"
 {
     echo "SpringCabal $version"
     echo "engine: ${engine_tag:-local} ($engine_repo)"
+    echo "Cargo provenance describes current inputs; use --build to rebuild the shipped modules."
     echo "dev repo: $(git -C "$project_root" rev-parse --short HEAD)$(git -C "$project_root" diff --quiet HEAD -- wasm-menu || echo ' +local changes in wasm-menu')"
 } > "$build_info"
-
-# Where the modules' crates came from.  The [patch] in .cargo/config.toml
-# (setup.sh) builds against local checkouts; without it, cargo uses each
-# game's pinned springcabal-rs rev and the spring-rust branch in Cargo.lock.
-checkout_rev() {
-    local dir=$1 dirty=""
-    [[ -n "$(git -C "$dir" status --porcelain --untracked-files=no 2>/dev/null)" ]] && dirty=" +uncommitted changes"
-    printf '%s %s%s' "$(git -C "$dir" rev-parse --abbrev-ref HEAD)" "$(git -C "$dir" rev-parse --short HEAD)" "$dirty"
-}
-{
-    cargo_config="$project_root/.cargo/config.toml"
-    if grep -qs 'springcabal-rs/crates' "$cargo_config"; then
-        echo "springcabal crates: local [patch] springcabal-rs $(checkout_rev "$project_root/springcabal-rs")"
-    else
-        echo "springcabal crates: each game's pinned rev (below)"
-    fi
-    spring_dir="$(dirname "$project_root")/spring-bar"
-    if grep -qs 'spring-bar/rust/crates' "$cargo_config"; then
-        echo "spring crates: local [patch] spring-bar $(checkout_rev "$spring_dir")"
-    else
-        echo "spring crates: each game's Cargo.lock (below)"
-    fi
-    echo ""
-} >> "$build_info"
 
 record_source() {
     local label="$1" src="$2"
@@ -211,12 +184,6 @@ log "Packing games"
 while IFS=$'\t' read -r kind path source branch ship; do
     [[ "$ship" == yes ]] || continue
     record_source "$kind/$path" "$content_root/${kind}s/$path"
-    if [[ $kind == game && -f "$content_root/games/$path/wasm-src/Cargo.toml" ]]; then
-        printf '%-32s springcabal rev %s, spring %s\n' "  crates" \
-            "$(grep -m1 -oE 'springcabal-rs\.git", rev = "[0-9a-f]{7}' "$content_root/games/$path/wasm-src/Cargo.toml" | tail -c 8 || echo '?')" \
-            "$(grep -m1 -oE 'spring-rust\?branch=[^#"]+#[0-9a-f]{10}' "$content_root/games/$path/wasm-src/Cargo.lock" | sed 's/.*branch=//' || echo 'path (local [patch])')" \
-            >> "$build_info"
-    fi
     case "$kind" in
         game)
             src="$content_root/games/$path"
@@ -250,6 +217,8 @@ done < <(manifest)
 log "Packing WasmMenu"
 menu_wasm="$project_root/wasm-menu/WasmMenu/wasm-menu.wasm"
 [[ -f "$menu_wasm" ]] || die "wasm-menu.wasm missing (run with --build)"
+record_source "WasmMenu" "$project_root/wasm-menu"
+python3 "$project_root/release/wasm-info.py" "$project_root/wasm-menu/wasm-src" "$menu_wasm" >> "$build_info"
 # The menu compiles in launch/games/ (start scripts, per-game graphics) and
 # game-info/*/README.md (the games' descriptions).
 if [[ -n "$(find "$project_root/launch/games" "$project_root/game-info" -newer "$menu_wasm" -print -quit)" ]]; then

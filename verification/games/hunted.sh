@@ -38,6 +38,7 @@ hunted_headless() {
     vf_install_modules "$staged" "${MODULES[@]}"
     vf_link_map "$MAP_DIR" 'Hunted - v04.sdd'
     vf_start_file "$START_FILE"
+    vf_start_set FixedRNGSeed 1
     vf_quit_when "$TEST_MARKER"
     vf_config
     vf_run_headless "$seconds"

@@ -22,18 +22,17 @@ commits above `origin/master` (`14f5bc9`):
 | `38e57c0` | Restore the rabbit resting pose and pass the idle tail speed correctly. |
 | `096bae3` | Bound wave-size and burrow-pick growth by the existing 600-rabbit limit. This shared bug was fixed in Lua before Rust. |
 
-WASM is checked out on `rust` at `3dccea1`, exactly two
+WASM is checked out on `rust` at `0c5f25f`, exactly two
 commits directly above that Lua tip:
 
-1. `7e31533` — gameplay/UI port, including all five approved Rust review fixes.
+1. `6be9846` — gameplay/UI port, including all five approved Rust review fixes.
    `Scripts/` is unchanged from reviewed Lua.
    The temporary named-call bridge registers the existing environment functions;
    the redundant `script.Fire`/`script.SetPitch` aliases are unnecessary.
-2. `3dccea1` — CUS unit scripts and their lifecycle wiring, replacing Lua scripts
+2. `0c5f25f` — CUS unit scripts and their lifecycle wiring, replacing Lua scripts
    and removing the temporary bridge.
 
-The earlier `codex/hunted-platinum-lua` and `codex/hunted-platinum-wasm` review
-refs remain as aliases of these tips.
+The earlier `codex/hunted-platinum-lua` and `codex/hunted-platinum-wasm` review refs are preserved as checkpoints of the earlier reviewed trees.
 
 The final WASM tree includes the five fixes below and the subsequent structural review. Unit-script cleanup remains in the second port commit. The RmlUI port already retired the leaderboard, and replaces the
 removed Lua widgets and rendering helpers.
@@ -185,19 +184,19 @@ Shared `springcabal-rs` changes rename the verification-only `Gallery` builder t
 
 | Game | Current WASM tip | History |
 | --- | --- | --- |
-| Hunted | `3dccea1` | Two commits above Lua `096bae3`; gameplay/UI first `7e31533`. |
-| Flove | `19a913d` | Two commits above Lua `e93965f`; gameplay/UI first `be3ac11`. |
-| Area17 | `5f8e8a0` | Two commits above Lua `e9d9410`; gameplay/UI first `9a030b6`. |
-| Gravitas | `c9a7220` | One cohesive cleanup commit above the prior history. |
-| MyCube | `951149f` | One cohesive cleanup commit above the prior history. |
-| PartsNeeded | `e5193ee` | One cohesive cleanup commit above the prior history. |
-| ToTheLastDrop | `2a3017f` | One cohesive cleanup commit above the prior history. |
+| Hunted | `0c5f25f` | Two commits above Lua `096bae3`; gameplay/UI first `6be9846`. |
+| Flove | `dc12a0f` | Two commits above Lua `e93965f`; gameplay/UI first `c553b9c`. |
+| Area17 | `6333d3e` | Two commits above Lua `e9d9410`; gameplay/UI first `5110211`. |
+| Gravitas | `922f75c` | One cohesive cleanup commit above the prior history. |
+| MyCube | `a4250c1` | One cohesive cleanup commit above the prior history. |
+| PartsNeeded | `d0a74e0` | One cohesive cleanup commit above the prior history. |
+| ToTheLastDrop | `b082f1a` | One cohesive cleanup commit above the prior history. |
 
 Every pre-cleanup tip is preserved as `codex/before-wasm-structure-cleanup` (Hunted: `codex/hunted-before-structural-review`). The completed source snapshots remain at `codex/wasm-structure-cleanup-checkpoint`; the public dependency pin checkpoints also remain reachable. The current cleanup checkpoints include the follow-up Sol review, and the reconstructed final trees match those checkpoints. All three first-stage ports pass independently with their original Lua scripts unchanged.
 
 The RML row test exposed an SDK memory-safety bug: the generated call supplied a flattened value count as a row count. `spring-bar` `c77a8b7054` changes the native query to a value count, checks divisibility by the schema width and derives the row count. Native Rust wrappers and generated bindings are updated. The same engine commit exposes weapon projectile parameters. The engine builds, its native RML test and codegen reproducibility check pass; Hunted exercises the new weapon query and the multi-field/shrinking/invalid row paths.
 
-`gajop/springcabal-rs` and `gajop/springcabal-dev` are public, verified anonymously. The shared code is published on `gajop/springcabal-rs` branch `main` at `a8755627eb8451cad1010f4d3ce012e1b1367a51`; the SDK is published on `gajop/spring-rust` branch `main` at `c77a8b7054`. The temporary personal review branches have been deleted. All seven games pin the same public SDK/shared revisions. An extracted Hunted archive builds outside the development workspace, fetching all four dependencies from public Git revisions without local Cargo patches. No SpringCabal organization repository was pushed.
+`gajop/springcabal-rs` and `gajop/springcabal-dev` are public, verified anonymously. The shared code was published on `gajop/springcabal-rs` branch `main` at `a8755627eb8451cad1010f4d3ce012e1b1367a51`; the latest helper cleanup is committed locally at `a83ec8e5fde35d9143f7c080ad456c9a8a7baf3d` and is not pushed. All seven game manifests now pin this new revision. The SDK is published on `gajop/spring-rust` branch `main` at `c77a8b7054`. The temporary personal review branches have been deleted. The earlier published dependency pins were verified by building an extracted Hunted archive outside the development workspace, fetching all four dependencies from public Git revisions without local Cargo patches. Repeating that check for the new helper pin requires publishing that commit first; the local development setup uses its path patch. No SpringCabal organization repository was pushed.
 
 All seven release workspaces pass Clippy/build, all seven headless suites pass, and 114 shared/game host tests pass. Hunted's five frames and three HUD crops pass unchanged goldens with zero errors/warnings. Its interaction checks cover the bound event list and restart. Area17 retains headless texture warnings, and Flove's screenshot scenario logs nine capture-quality warnings; their suites pass. The broader visual galleries and Windows playtesting were not repeated for this structural pass. Evidence is under `codex-work/wasm-structure-evidence/`.
 
@@ -210,3 +209,7 @@ All six games pass their headless suites after these changes; the reconstructed 
 Area17's three visual goldens pass unchanged (0.4%, 4.6% and 3.8% RMSE). Its native tooltip/reopen regression and technology toggle/weapon/ability callbacks pass. No game or SpringCabal organization branches were pushed. The shared and SDK personal repositories publish these revisions on `main`.
 
 The Area17 screenshots show only the world, including in the existing goldens, despite the expected open technology panel and passing native UI checks. This is not an intentional test setting. Accordingly those screenshots validate world rendering, not HUD pixel parity; the unresolved rendering issue is recorded in `docs/open-problems.md`.
+
+## Final readability pass
+
+The additional WASM cleanup is folded into the existing commits above. Hunted, Flove and Area17 retain exactly two port commits, with the unit-script delta unchanged. The other four games retain one cohesive cleanup commit above their earlier history. The shared helpers keep movement key aliases independent, remove unused APIs and release message state before engine calls. All seven games and the menu build, 115 host tests pass, Hunted passes 35 seeded assertions, and TTLD passes 54 assertions. The menu uses one typed catalogue and external RML data bindings; native Tab navigation and a Hunted launch were checked in-engine with no errors or warnings. Launcher and release checks pass fixture tests. These changes are committed locally and remain unpushed.

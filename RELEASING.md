@@ -29,6 +29,7 @@ The games have to build against the same engine revision, so check that the
 2. Rebuild the WASM modules: pass `--build` to the packager, or run
    `just build-all`. The packager refuses modules that contain test markers
    (a leftover `e2e`/`headless-integration` build).
+   It also warns when source inputs, embedded templates/shaders, manifests or local dependency sources are newer than the installed modules. Dependency inspection uses `cargo metadata --offline --locked`, so the dependencies must already be cached; it does not fetch or build them. `BUILDINFO.txt` records this current dependency resolution, including commit and dirty state for local patches. Use `--build` to ensure those inputs match the shipped modules.
 3. If you add a game or map, add it to `content.tsv`, give it
    `launch/games/<game>/{wasm,lua}.txt`, and add it to the menu.
 4. The packager refuses a menu built before the latest change to

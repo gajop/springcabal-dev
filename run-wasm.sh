@@ -19,8 +19,6 @@ fi
 engine_bin="$engine_install/spring"
 wasm_menu_dir="$project_root/wasm-menu"
 run_dir="${SPRING_RUN_DIR:-$project_root/wasm-test}"
-write_dir="$run_dir/write"
-log_dir="$write_dir/logs"
 games="$(ls "$launch_dir/games" | tr '\n' ' ')"
 
 usage() {
@@ -64,13 +62,16 @@ if [[ -f "$menu_wasm" ]] && [[ -n "$(find "$launch_dir/games" -newer "$menu_wasm
     echo "  just --justfile wasm-menu/wasm-src/justfile copy" >&2
 fi
 
-# The isolation view has to keep the same path between runs.  The engine's
-# archive cache in the write dir records each archive's info-file path, and a
-# fresh mktemp directory every launch meant every cached entry pointed at a
-# deleted /tmp path, so startup logged one
-# "[FSA::GetFileModificationTime] error 'No such file or directory'" per
-# archive and then rescanned all of them.  One stable directory per launch
-# mode.
+# Stable per-mode directories preserve archive caches without sharing logs or settings.
+session_dir="$run_dir/${game:-menu}"
+write_dir="$session_dir/write"
+log_dir="$write_dir/logs"
+mkdir -p "$session_dir"
+exec {session_lock}>"$session_dir/launch.lock"
+if ! flock -n "$session_lock"; then
+    echo "${game:-menu} is already running in $run_dir; use another SPRING_RUN_DIR for a second session." >&2
+    exit 1
+fi
 isolation_dir="$run_dir/isolation-${game:-menu}"
 rm -rf -- "$isolation_dir/games" "$isolation_dir/maps"
 mkdir -p "$isolation_dir/games" "$isolation_dir/maps" "$write_dir" "$log_dir"
@@ -121,14 +122,21 @@ if [[ -d "$project_root/spring-linux/projects" ]]; then
     ln -sfn "$project_root/spring-linux/projects" "$isolation_dir/projects"
 fi
 for g in "$project_root/spring-linux/games/"*.sdd; do
+    [[ -d $g ]] || continue
     ln -sf "$g" "$isolation_dir/games/$(basename "$g")"
 done
 for m in "$project_root/spring-linux/maps/"*; do
+    [[ -e $m ]] || continue
     # Area 17 always runs on the patched copy of its map.
     [[ $(basename "$m") == Area17.sd7 ]] && continue
     ln -sf "$m" "$isolation_dir/maps/$(basename "$m")"
 done
-ln -sfn "$("$project_root/scripts/area17-map.sh" --dir)" "$isolation_dir/maps/Area17.sdd"
+if [[ -f "$project_root/spring-linux/maps/Area17.sd7" ]]; then
+    ln -sfn "$("$project_root/scripts/area17-map.sh" --dir)" "$isolation_dir/maps/Area17.sdd"
+elif [[ $game == area17 ]]; then
+    echo "Area17.sd7 is missing; place it in spring-linux/maps/ (see content.tsv)." >&2
+    exit 1
+fi
 if [[ ! -f "$menu_wasm" ]]; then
     echo "Wasm menu module not found. Build it first:" >&2
     echo "  cd '$wasm_menu_dir/wasm-src' && just copy" >&2
@@ -138,7 +146,7 @@ ln -sfn "$wasm_menu_dir" "$isolation_dir/games/WasmMenu.sdd"
 
 # Settings: the release profile, then personal window settings (launch/local.cfg),
 # then, for a direct launch, the game's overrides (the menu applies those itself).
-config="$run_dir/springsettings.cfg"
+config="$session_dir/springsettings.cfg"
 {
     cat "$launch_dir/springsettings.cfg"
     [[ -f "$launch_dir/local.cfg" ]] && printf '\n' && cat "$launch_dir/local.cfg"
