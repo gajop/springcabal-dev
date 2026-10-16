@@ -259,3 +259,11 @@ Game changes are committed locally and remain unpushed. The Lua controls are one
 | Hunted | `a6ec920` | `dc04367` | `b41b2c5` |
 | Flove | `d81143a` | `4ce79d0` | `4432d91` |
 | Area17 | `4fd1469` | `5e58bc2` | `65012b0` |
+
+## October 16: remove rectangular bunny-explosion particles
+
+The screenshot's hard rectangles came from the `unitpoofs` component of the four `genericbunnyexplosion-*-red` effects. Its `randomdots` texture contains bright RGB at nearly transparent border pixels; the engine's additive particle color path displays that RGB, exposing the square sprite boundary. Lua and WASM use identical definitions and source textures, so the issue affects both. Lua `6e85f05` changes only the four poof texture references to the existing `explofade` sprite, whose RGB fades to black at its edges. Particle counts, motion, timing and the other components remain unchanged. No texture assets or FX branches were edited.
+
+Before/after offscreen GPU CEG captures confirm the rectangular burst boundaries are gone. Lua and WASM captures of the corrected small explosion finish in about three seconds each at 100× with no errors or warnings. Captures are preserved locally in `codex-work/hunted-burst-fix/`; existing goldens were not overwritten. The targeted run also corrected two harness false alarms: `fault` no longer matches the word `Default` in a module's widget list, and a gallery with fewer than eight requested jobs no longer reports the requested spot count as an error. The runtime pattern still matches actual traps, errors, faults and borrow failures.
+
+The current Hunted Lua tip is `6e85f05`; Rust has first port `22b95c9` and unit-script port `e11bea0` above it. The unit-script delta is byte-for-byte unchanged; the previous Rust tip is preserved at `refs/codex/before-bunny-effect-fix`. Game changes remain local and unpushed.

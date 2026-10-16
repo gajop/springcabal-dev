@@ -8,4 +8,4 @@
 #     ("... already borrowed", logged before the panic)
 #   - a Lua error in a callin, a crash, or a sanitizer report
 # shellcheck disable=SC2034
-RUNTIME_FAILURE_PATTERN='[Ww]asm.*(trap|error|Error|fault)|Core Wasm callin .* skipped|Core Wasm module .* made more than|panic|already borrowed|CallIn.*(error|Error)|RunCallInTraceback|Error: \[Lua|\[Lua(Rules|UI|Gaia)\] Error|Segmentation fault|\[Fatal\]|Fatal:|AddressSanitizer'
+RUNTIME_FAILURE_PATTERN='[Ww]asm.*(trap|error|Error|\bfault\b)|Core Wasm callin .* skipped|Core Wasm module .* made more than|panic|already borrowed|CallIn.*(error|Error)|RunCallInTraceback|Error: \[Lua|\[Lua(Rules|UI|Gaia)\] Error|Segmentation fault|\[Fatal\]|Fatal:|AddressSanitizer'

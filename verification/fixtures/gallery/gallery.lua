@@ -489,7 +489,7 @@ function gadget:Initialize()
 	Spring.SetVideoCapturingTimeOffset(0)
 	parkCursor()
 	log("start mode=%s items=%d frames=%d-%d out=%s", MODE, #JOBS, FIRST_FRAME, END_FRAME, OUT)
-	if SPOTS < 8 then
+	if SPOTS < math.min(8, #JOBS) then
 		log("ERROR only %d land spots on this map", SPOTS)
 	end
 	-- Record what this run actually rendered with.
