@@ -8,7 +8,7 @@ VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 declare -A MODES=(
     [area17]='headless visual static all'
     [flove]='headless visual animation-trace outline wisps original'
-    [gravitas]='e2e shots headless play lua-play rules lua-rules'
+    [gravitas]='e2e shots headless play lua-play rules lua-rules bob lua-bob'
     [hunted]='headless visual'
     [mycube]='headless visual lua-headless'
     [partsneeded]='headless visual'
@@ -16,6 +16,7 @@ declare -A MODES=(
     [unit-scripts]='partsneeded source'
     [gallery]='ceg anim parity'
     [host]='tests'
+    [controls]='all area17 flove gravitas hunted mycube partsneeded ttld'
     [installed]='all area17 flove gravitas hunted mycube partsneeded ttld'
     [perf]='all mycube ttld hunted area17 gravitas flove partsneeded'
 )
@@ -27,7 +28,7 @@ ALL_RUNS=(
     'host tests' 'installed all' 'area17 static' 'area17 headless' 'flove headless'
     'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'gravitas lua-rules' 'gravitas lua-play' 'hunted headless' 'mycube headless'
     'mycube lua-headless' 'partsneeded headless' 'ttld headless' 'ttld pose-parity'
-    'unit-scripts partsneeded'
+    'unit-scripts partsneeded' 'controls all' 'gravitas bob' 'gravitas lua-bob'
 )
 # What `verify visual` and `verify update-goldens` run: the golden comparisons.
 VISUAL_RUNS=(
@@ -40,6 +41,7 @@ usage() {
     cat >&2 <<'EOS'
 usage: verify <suite> [mode] [seconds]    run one suite (default mode: first listed)
        verify gallery ceg|anim|parity [game|all] [--only name,...]
+       verify controls [all|game] [both|wasm|lua] [seconds]
        verify list                       suites and their modes
        verify all                        every assertion suite, pose comparison,
                                          host test and static check

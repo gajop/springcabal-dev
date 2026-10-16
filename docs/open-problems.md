@@ -20,9 +20,7 @@ Hunted now reads pellet count and spread through the SDK query added in `spring-
 ## Gameplay
 
 - **Gravitas: aiming beyond the gun's range differs from Lua.** The port clamps a target beyond the gun's range in 2D, to the ground, and refuses a crate just out of range, where the Lua game aims at the furthest point in range towards it. This is the remaining failure in `verify gravitas play`, which stays out of `verify all` until fixed. Repeated Space jumps, E, middle-button jumping and subsequent push/pull now pass on the current checkout.
-- **Gravitas: collisions and the boss differ from Lua.** `verify gravitas rules`: a robot thrown
-  into a crate takes the engine's 7 damage, not the game's ~266 (`lua-rules`); the boss fires no
-  shot in 11 s where Lua fires two bursts of five. Out of `verify all` until fixed.
+- **Gravitas: the combined rules scenario still fails collision damage and existing B.O.B firing.** `verify gravitas rules` reports 7 collision damage where Lua reports 266, and zero B.O.B shots where Lua now reports 107 in 11 seconds. The focused `bob` / `lua-bob` checks both pass at 100 shots in each 10-second window with a maximum three-frame gap. Lua’s artificial five-second B.O.B cooldown is fixed; the combined WASM scenario remains unresolved and stays outside `verify all`.
 
 ## Parity gallery (report only)
 

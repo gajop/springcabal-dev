@@ -9,7 +9,7 @@
 function gadget:GetInfo()
 	return {
 		name = "Verification rules observer",
-		desc = "Checks plates, collisions and the boss for the rules suite",
+		desc = "Checks plates, collisions and B.O.B for the rules suite",
 		author = "springcabal verification",
 		license = "GPL v2 or later",
 		layer = 1000001,
@@ -89,11 +89,11 @@ end
 
 -- The robots the cases use; the others are stunned at the start, so none
 -- wanders into a scene.
-local thrown, boss
+local thrown, bob
 
 local function stunOtherRobots()
 	for _, u in ipairs(Spring.GetAllUnits()) do
-		if UnitDefs[Spring.GetUnitDefID(u)].customParams.robot and u ~= thrown and u ~= boss then
+		if UnitDefs[Spring.GetUnitDefID(u)].customParams.robot and u ~= thrown and u ~= bob then
 			Spring.AddUnitDamage(u, 100000, 3600)
 		end
 	end
@@ -101,7 +101,7 @@ end
 
 local CASES = {}
 local damage = {}             -- unit -> collision damage taken this case
-local shots = 0               -- boss shots this case
+local shots = 0               -- B.O.B shots this case
 
 -- A crate put on a plate presses its button down; taken off, it comes back.
 CASES[#CASES + 1] = {
@@ -167,30 +167,29 @@ CASES[#CASES + 1] = {
 	end,
 }
 
--- The boss's machine gun fires bursts of five, about one every five
--- seconds (projector.lua reloads it for 5 s after each burst).
+-- B.O.B keeps firing while its target remains in range.
 CASES[#CASES + 1] = {
-	name = "boss-bursts",
+	name = "bob-continuous",
 	frames = 330,
 	start = function(s)
-		s.boss = boss
+		s.bob = bob
 		local u = player()
 		local x, _, z = Spring.GetUnitPosition(u)
 		local spot = clearSpot(x, z, 200)
-		if not (s.boss and spot) then
-			return "no boss or clear floor"
+		if not (s.bob and spot) then
+			return "no B.O.B or clear floor"
 		end
 		place(u, spot.x - 100, spot.z)
-		place(s.boss, spot.x + 100, spot.z)
-		Spring.GiveOrderToUnit(s.boss, CMD.STOP, {}, {})
+		place(s.bob, spot.x + 100, spot.z)
+		Spring.GiveOrderToUnit(s.bob, CMD.STOP, {}, {})
 		shots = 0
 	end,
 	check = function(s, elapsed, last)
 		if not last then
 			return nil
 		end
-		return shots >= 5 and shots <= 20,
-			string.format("%d shots in 11 s, expected 5 to 20 (bursts of 5 every 5 s)", shots)
+		return shots >= 50,
+			string.format("%d shots in 11 s, expected at least 50", shots)
 	end,
 }
 
@@ -235,7 +234,7 @@ function gadget:GameFrame(frame)
 	if frame == START_FRAME then
 		Spring.SetUnitRulesParam(u, "invulnerable", 1)
 		Spring.SetUnitRulesParam(u, "nonparalyzable", 1)
-		thrown, boss = unitsOf("projector")[1], unitsOf("bob")[1]
+		thrown, bob = unitsOf("projector")[1], unitsOf("bob")[1]
 		stunOtherRobots()
 	end
 	if not case then

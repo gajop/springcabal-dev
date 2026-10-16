@@ -1,0 +1,65 @@
+diff --git a/spring-linux/LuaUI/Config/HHH_order.lua b/spring-linux/LuaUI/Config/HHH_order.lua
+--- a/spring-linux/LuaUI/Config/HHH_order.lua
++++ b/spring-linux/LuaUI/Config/HHH_order.lua
+@@ -6,7 +6,6 @@
+ 	["Chili Framework"] = 3,
+ 	ChiliInspector = 0,
+ 	ChiliProfiler = 0,
+-	["Command Colours"] = 11,
+ 	CustomFormations2 = 25,
+ 	["Disable camera control"] = 4,
+ 	["Flaoting text"] = 12,
+diff --git a/spring-linux/LuaUI/Config/LD43_order.lua b/spring-linux/LuaUI/Config/LD43_order.lua
+--- a/spring-linux/LuaUI/Config/LD43_order.lua
++++ b/spring-linux/LuaUI/Config/LD43_order.lua
+@@ -30,7 +30,6 @@
+ 	["RPG Control"] = 24,
+ 	["Remove Engine Menu"] = 9,
+ 	["Start Force"] = 25,
+-	["Temporary movement probe"] = 34,
+ 	["Unit Health Bars"] = 14,
+ 	["Units on Fire"] = 29,
+ 	UserWidgetBlocker = 2,
+diff --git a/spring-linux/LuaUI/Config/SE_GRR_order.lua b/spring-linux/LuaUI/Config/SE_GRR_order.lua
+--- a/spring-linux/LuaUI/Config/SE_GRR_order.lua
++++ b/spring-linux/LuaUI/Config/SE_GRR_order.lua
+@@ -4,7 +4,6 @@
+   ["Chili EndGame Window"] = 10,
+   ["Chili Framework"] = 3,
+   ["Chili Selections & CursorTip"] = 10,
+-  ["Command Colours"] = 11,
+   CustomFormations2 = 25,
+   ["Disable camera control"] = 4,
+   ["External Grid"] = 12,
+@@ -20,7 +19,6 @@
+   ["Quit Button"] = 16,
+   ["Remove Engine Menu"] = 6,
+   ["Scenario Editor"] = 24,
+-  ["Screenshot Taker"] = 21,
+   ["Set target & attack by default"] = 7,
+   ["Smoke Signal"] = 0,
+   ["State & Command Menus"] = 17,
+diff --git a/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/dbg_scenario_editor.lua b/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/dbg_scenario_editor.lua
+--- a/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/dbg_scenario_editor.lua
++++ b/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/dbg_scenario_editor.lua
+@@ -12,7 +12,7 @@
+   }
+ end
+ 
+-include("keysym.h.lua")
++require("keysym.lua")
+ VFS.Include("savetable.lua")
+ 
+ SCEN_EDIT = {}
+diff --git a/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/gui_chili_selections_and_cursortip.lua b/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/gui_chili_selections_and_cursortip.lua
+--- a/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/gui_chili_selections_and_cursortip.lua
++++ b/spring-linux/games/Scenario-Editor-Core.sdd/LuaUI/widgets/gui_chili_selections_and_cursortip.lua
+@@ -56,7 +56,7 @@
+ local abs						= math.abs
+ local strFormat 				= string.format
+ 
+-include("keysym.h.lua")
++require("keysym.lua")
+ VFS.Include("LuaRules/Configs/customcmds.h.lua")
+ 
+ --------------------------------------------------------------------------------

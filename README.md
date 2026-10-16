@@ -63,6 +63,8 @@ with `$SPRING_BAR_DIR`), then `engine/current` from setup.
 
 ### 2. Running
 
+Every Lua and WASM game reserves Pause for pausing, F12 for screenshots and Ctrl+Q for returning to the menu. Default RTS keyboard orders are disabled. The shared controls live in the engine’s `LuaHandler/Utilities/game_controls.lua` for Lua and `springcabal::controls::GameControls` for WASM. These local review branches require the current development engine, including its rebuilt `springcontent.sdz`.
+
 ```bash
 ./run-wasm.sh                        # the WASM menu; every game has WASM and Lua buttons
 ./run-wasm.sh --game flove           # one game directly (every game in launch/games/)
