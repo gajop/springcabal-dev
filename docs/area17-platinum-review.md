@@ -91,3 +91,17 @@ The unit-script port diff is unchanged, and the first port still retains the
 exact Lua Scripts tree. Both repositories remain on their original branches.
 The preceding tips are retained in both repositories at
 `refs/backups/area17/before-rust-review-fixes-20261015`.
+
+## Technology panel and chat corrections (2026-10-16)
+
+The two stray `0/5` labels belonged to other cards: their stacking order placed them above the old tooltip. RmlUi also needed explicit block layout for the tooltip rows. The panel now separates the tree from its inspection area, distinguishes affordable, unaffordable, prerequisite-locked and completed cards, and displays the current level, total effect, next cost and available resources. Its footer button reads `Close (T)`. Purchase requests use the same affordability predicate as the card display.
+
+The dedicated `verify area17 tech-ui` GPU fixture checks Armor 3/10 at +120%, Pulse 2/5 at +200%, native hover callbacks and exact-budget, insufficient-budget, locked and completed purchase gates. It produces a visible screenshot and exits with zero errors and warnings. The existing headless suite still passes 22 Rust and six Lua assertions with clean logs. The older visual scenario that omits HUD pixels remains documented separately; its goldens were not replaced.
+
+Area17 also maintained an independent `engine_console_open` flag, toggled by Enter even when engine chat was disabled. That flag is removed. Shared controls now restore real chat and editing bindings; shared movement reads the engine's actual writing state. Native tests exercise movement before and after chat submission/cancellation, including chat while the technology panel is open. The engine consumes chat typing before native or RmlUi shortcuts and draws its prompt above game overlays.
+
+These changes are folded into the gameplay/UI port. `rust` still contains exactly two commits above Lua `master`; the CUS commit's delta is byte-for-byte unchanged, and the first port's unit scripts still match Lua. Prior tips remain under `refs/codex/before-chat-speed-controls` and `refs/codex/before-modal-enter-fix`. No game repository was pushed, and `TODO.md` was not edited.
+
+Final control checks cover all seven games in both Lua and WASM: Alt +/−, physical Pause freeze/resume, F12, visible chat, editing/submission and Escape cancellation. All fourteen runs exit cleanly without runtime errors or warnings. Lua games with Chonsole keep that console and its existing command syntax. The fixture observes its actual text focus; it accepts public, ally and spectator chat output. UI typing checks run paused so accelerated simulation cannot end a round during the check. Native MyCube checks additionally assign a control group with Ctrl+1 and activate Move with M in both versions.
+
+The Lua follow-up fixes held-key polling during Chonsole input in Area17 and Parts Needed, using the shared `controls.IsWriting()` utility. Focused checks verify moving → typing stops movement → closing chat permits movement again. The obsolete TTLD `No Enter` widget was removed because it swallowed chat; its stale local widget-order entry is removed by the recorded compatibility patch. Intro/restart Enter shortcuts remain available before ordinary chat handling. Existing MyCube and Parts Needed script whitespace edits remain untouched.

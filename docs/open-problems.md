@@ -38,8 +38,10 @@ Hunted now reads pellet count and spread through the SDK query added in `spring-
 - **Parts Needed's visual shots 3–4 can fail "camera not settled" on a heavily loaded machine**
   (load average about 45). A rerun passes.
 
-## Area17 HUD rendering
+## Area17 legacy visual captures omit the HUD
 
 Reproduce with `./verification/verify area17 visual`. The e2e scenario opens the technology panel at frame 30; frame 80 should show it together with the resources, health/shield and loadout HUD. The captured frames 20, 80 and 450 instead show only the world. The existing goldens also lack the HUD, so their passing comparisons do not verify HUD pixels.
 
 The run uses normal UI setup: no gallery option, hide-interface command or scenario-owned HUD suppression. Logs confirm HUD initialization and its render callback; the native bindings test checks visible tooltip text, indexed hover, close/reopen and mouse-leave, and the technology toggle/weapon/ability callbacks pass. There are no RML texture errors in the rendered run. The cause of the missing pixels is not established; rendering state and the RML draw path need inspection. Evidence: `codex-work/wasm-structure-evidence/area17-final-visual/`.
+
+The dedicated `verify area17 tech-ui` fixture renders the HUD and technology panel visibly on the real GPU and checks its current values and purchase gates. This confirms the panel renders in that scenario; the older visual scenario remains unresolved.

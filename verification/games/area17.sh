@@ -120,10 +120,35 @@ area17_visual() {
     echo '>>> Area 17 visual verification passed <<<'
 }
 
+area17_tech_ui() {
+    local seconds=${1:-45} shots
+    vf_workspace area17-tech-ui
+    area17_stage e2e
+    vf_start_file "$START_FILE"
+    vf_modoption tech_ui_test 1
+    vf_speed 100
+    vf_config "$VISUAL_CONFIG"
+    vf_graphics area17
+    vf_run_visual "$seconds"
+    vf_save_logs
+    vf_require_clean_exit
+    vf_require 'Area 17 technology fixture passed: Armor 3/10' \
+        'the technology values, native hover or purchase gates failed'
+    vf_require 'Area 17 technology fixture screenshot captured' \
+        'the technology screenshot was not requested'
+    vf_forbid_runtime_failures
+    vf_forbid 'Warning:|Error:|technology fixture failed|ASSERTION FAILED' \
+        'the technology fixture contains warnings or errors'
+    shots=$(vf_require_screenshots 1)
+    printf 'captured %s technology screenshot(s) in %s\n' "$shots" "$(vf_collect_screenshots)"
+    echo '>>> Area 17 technology UI verification passed <<<'
+}
+
 case "${1:-}" in
     static) area17_static ;;
     headless) area17_headless "${2:-}" ;;
     visual) area17_visual "${2:-}" ;;
-    all) area17_static; area17_headless; area17_visual ;;
-    *) vf_die 'usage: area17.sh [static|headless|visual|all] [seconds]' ;;
+    tech-ui) area17_tech_ui "${2:-}" ;;
+    all) area17_static; area17_headless; area17_visual; area17_tech_ui ;;
+    *) vf_die 'usage: area17.sh [static|headless|visual|tech-ui|all] [seconds]' ;;
 esac

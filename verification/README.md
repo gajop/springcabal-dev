@@ -16,7 +16,7 @@ just probe gravitas-fire lua     # a debugging probe
 
 | suite | modes (first = default) |
 | --- | --- |
-| `area17` | `headless` \| `visual` \| `static` \| `all` |
+| `area17` | `headless` \| `visual` \| `tech-ui` \| `static` \| `all` |
 | `flove` | `headless` \| `visual` \| `animation-trace` \| `outline` \| `wisps [stage]` \| `original` |
 | `gravitas` | `e2e` \| `shots` \| `headless` \| `play` \| `lua-play` \| `rules` \| `lua-rules` |
 | `hunted` | `headless` \| `visual` |
@@ -26,11 +26,14 @@ just probe gravitas-fire lua     # a debugging probe
 | `unit-scripts` | `partsneeded` \| `source` |
 | `gallery` | `ceg [game]` \| `anim [game]` \| `parity [game]` (game defaults to `all`) |
 | `host` | `tests` |
+| `controls` | `all` \| `<game>` (then `both`, `wasm` or `lua`) |
 | `installed` | `all` \| `<game>` |
 
 - `headless` runs the in-game assertions (`headless-integration`) with invisible GPU rendering by default.
 - `visual` renders through SDL offscreen on the real GPU, runs the `e2e` scenario and compares screenshots with goldens.
 - `static` is build hygiene only (fmt, clippy, installed artifacts match source).
+- `area17 tech-ui` checks the rendered technology panel, native hover callbacks, levels, total effects, costs and purchase gates without replacing goldens.
+- `controls` drives real Alt +/−, Pause, F12 and chat input on both versions of every game. It checks restricted action-game bindings, preserved MyCube RTS bindings and Area17 ship movement after chat closes. Runs use a private X display and a speed range of 50–200×.
 - `lua-*` modes check the original Lua game on this engine.
 - `gravitas play` and `lua-play` play the WASM port or the Lua game through
   real input (see "Playing through real input" below): walking, jumping

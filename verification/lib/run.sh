@@ -353,7 +353,7 @@ vf_run_driven() {
     engine_pid=$!
 
     set +e
-    DISPLAY=$display VF_X_LOG="$VF_WRITE_DIR/stdout.txt" "$driver"
+    DISPLAY=$display VF_X_LOG="$VF_WRITE_DIR/stdout.txt" VF_X_ENGINE_PID=$engine_pid "$driver"
     status=$?
     if kill -0 "$engine_pid" 2>/dev/null; then
         pkill -TERM -P "$engine_pid" 2>/dev/null

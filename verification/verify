@@ -6,7 +6,7 @@ VERIFICATION_ROOT=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 # suite: modes.  The first is the default: this table is the only place that
 # says so, and verify always passes a mode to games/<suite>.sh.
 declare -A MODES=(
-    [area17]='headless visual static all'
+    [area17]='headless visual tech-ui static all'
     [flove]='headless visual animation-trace outline wisps original'
     [gravitas]='e2e shots headless play lua-play rules lua-rules bob lua-bob'
     [hunted]='headless visual'
@@ -25,7 +25,7 @@ declare -A MODES=(
 # Engine runs use offscreen GPU rendering. Real-input checks use a private
 # virtual display; no verification run opens a window on the desktop.
 ALL_RUNS=(
-    'host tests' 'installed all' 'area17 static' 'area17 headless' 'flove headless'
+    'host tests' 'installed all' 'area17 static' 'area17 headless' 'area17 tech-ui' 'flove headless'
     'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'gravitas lua-rules' 'gravitas lua-play' 'hunted headless' 'mycube headless'
     'mycube lua-headless' 'partsneeded headless' 'ttld headless' 'ttld pose-parity'
     'unit-scripts partsneeded' 'controls all' 'gravitas bob' 'gravitas lua-bob'

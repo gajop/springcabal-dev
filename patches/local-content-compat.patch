@@ -12,7 +12,12 @@ diff --git a/spring-linux/LuaUI/Config/HHH_order.lua b/spring-linux/LuaUI/Config
 diff --git a/spring-linux/LuaUI/Config/LD43_order.lua b/spring-linux/LuaUI/Config/LD43_order.lua
 --- a/spring-linux/LuaUI/Config/LD43_order.lua
 +++ b/spring-linux/LuaUI/Config/LD43_order.lua
-@@ -30,7 +30,6 @@
+@@ -25,12 +25,10 @@
+ 	["Minimap Viewport"] = 11,
+ 	["Mouse lights"] = 22,
+ 	["Music for dummies"] = 32,
+-	["No Enter"] = 33,
+ 	["Projectile Lights"] = 23,
  	["RPG Control"] = 24,
  	["Remove Engine Menu"] = 9,
  	["Start Force"] = 25,
