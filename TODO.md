@@ -1,7 +1,6 @@
 ## Wasm
 
 1. Gravitas: GOLD+
-   reported: in gravitas wasm, i can only jump once..
    (reviewing code..)
 3. Zeus vs Bunnies: GOLD+
    substantial review
