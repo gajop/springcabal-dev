@@ -22,23 +22,49 @@ def capture(window, path):
         return hashlib.sha256(image.convert("RGB").tobytes()).hexdigest()
 
 
+def keys(args, *values):
+    if args.wine:
+        codes = {"Down": 40, "Right": 39, "Up": 38, "Return": 13, "Escape": 27}
+        subprocess.run([str(args.wine), "Z:" + str(args.output.resolve() / "wine-input.exe").replace("/", chr(92)), *[str(codes[value]) for value in values]], check=True)
+        return
+    for value in values:
+        subprocess.run(["xdotool", "keydown", value], check=True)
+        time.sleep(0.1)
+        subprocess.run(["xdotool", "keyup", value], check=True)
+        time.sleep(0.1)
+
+
+def window_for(process, wine):
+    command = ["xdotool", "search", "--onlyvisible"]
+    command += ["--name", ".*"] if wine else ["--pid", str(process.pid)]
+    found = subprocess.run(command, capture_output=True, text=True)
+    for window in reversed(found.stdout.splitlines()):
+        geometry = subprocess.run(["xdotool", "getwindowgeometry", "--shell", window], capture_output=True, text=True).stdout
+        if "WIDTH=1280\n" in geometry and "HEIGHT=720\n" in geometry:
+            return window
+    return None
+
+
 def worker(args):
     run = args.output.resolve()
     env = os.environ.copy()
-    env.update(LIBGL_ALWAYS_SOFTWARE="1", LP_NUM_THREADS="2", RAYON_NUM_THREADS="2", FONTCONFIG_FILE=str(run / "fonts.conf"))
-    command = [str(args.engine.resolve()), "--window", "--isolation", f"--isolation-dir={run}",
-               f"--write-dir={run / 'write'}", "--config", str(run / "write/springsettings.cfg"),
+    def path_arg(path):
+        return "Z:" + str(path).replace("/", chr(92)) if args.wine else str(path)
+    env.update(LIBGL_ALWAYS_SOFTWARE="1", LP_NUM_THREADS="2", RAYON_NUM_THREADS="2", FONTCONFIG_FILE="fonts.conf")
+    command = [*([str(args.wine)] if args.wine else []), path_arg(args.engine.resolve()), "--window", "--isolation", f"--isolation-dir={path_arg(run)}",
+               f"--write-dir={path_arg(run / 'write')}", "--config", path_arg(run / "write/springsettings.cfg"),
                "--menu=WasmMenu 1.0"]
     with (run / "stdout.log").open("w") as log:
-        process = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        process = subprocess.Popen(command, cwd=run, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         try:
             deadline = time.monotonic() + 60
             window = None
             while time.monotonic() < deadline and process.poll() is None:
-                found = subprocess.run(["xdotool", "search", "--pid", str(process.pid)], capture_output=True, text=True)
-                lines = found.stdout.splitlines()
-                if lines and any(marker in (run / "stdout.log").read_text(errors="replace") for marker in ["Native module initialized successfully", "Wasm manifest loaded from WasmMenu/manifest.json"]):
-                    window = lines[-1]
+                candidate = window_for(process, args.wine)
+                library = "NativeMenu.dll" if args.wine else "libNativeMenu.so"
+                marker = f"Successfully loaded native module WasmMenu/{library}" if args.backend == "native" else "Wasm manifest loaded from WasmMenu/manifest.json"
+                if candidate and marker in (run / "stdout.log").read_text(errors="replace"):
+                    window = candidate
                     break
                 time.sleep(0.1)
             if window is None:
@@ -47,14 +73,14 @@ def worker(args):
             subprocess.run(["xdotool", "mousemove", "--window", window, "1279", "719"], check=True)
             time.sleep(2)
             initial = capture(window, run / "initial.png")
-            subprocess.run(["xdotool", "key", "--window", window, "Down", "Right"], check=True)
+            keys(args, "Down", "Right")
             time.sleep(0.5)
             selected = capture(window, run / "selected.png")
             if initial == selected:
                 raise RuntimeError("keyboard navigation did not change the rendered menu")
             returned = None
             if args.content_root:
-                subprocess.run(["xdotool", "key", "--window", window, "Up", "Return"], check=True)
+                keys(args, "Up", "Return")
                 deadline = time.monotonic() + 90
                 while time.monotonic() < deadline and process.poll() is None:
                     if "finished loading and is now ingame" in (run / "stdout.log").read_text(errors="replace"):
@@ -63,10 +89,11 @@ def worker(args):
                 else:
                     raise RuntimeError("menu launch did not reach the real game")
                 time.sleep(1)
-                window = subprocess.check_output(["xdotool", "search", "--pid", str(process.pid)], text=True).splitlines()[-1]
+                window = window_for(process, args.wine)
+                subprocess.run(["xdotool", "windowfocus", window], check=True)
                 capture(window, run / "game.png")
                 before = (run / "stdout.log").read_text(errors="replace").count("[LuaMenuController::Activate(msg=")
-                subprocess.run(["xdotool", "key", "--window", window, "Escape"], check=True)
+                keys(args, "Escape")
                 deadline = time.monotonic() + 45
                 while time.monotonic() < deadline and process.poll() is None:
                     if (run / "stdout.log").read_text(errors="replace").count("[LuaMenuController::Activate(msg=") > before:
@@ -75,13 +102,13 @@ def worker(args):
                 else:
                     raise RuntimeError("game did not return to the menu")
                 time.sleep(2)
-                window = subprocess.check_output(["xdotool", "search", "--pid", str(process.pid)], text=True).splitlines()[-1]
+                window = window_for(process, args.wine)
                 subprocess.run(["xdotool", "mousemove", "--window", window, "1279", "719"], check=True)
                 time.sleep(0.2)
                 returned = capture(window, run / "returned.png")
                 if returned != initial:
                     raise RuntimeError("returned menu differs from initial menu")
-            subprocess.run(["xdotool", "key", "--window", window, "Escape"], check=True)
+            keys(args, "Escape")
             code = process.wait(timeout=15)
             if code:
                 raise RuntimeError(f"menu exited with {code}")
@@ -108,6 +135,8 @@ def main():
     parser.add_argument("--target-dir", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--content-root", type=Path, help="existing Cabal spring-linux directory; copies Lua Gravitas and its dependencies for a launch/return test")
+    parser.add_argument("--wine", type=Path, help="Wine loader for a Windows engine; use a dedicated prefix")
+    parser.add_argument("--backend", choices=["native", "wasm"], help=argparse.SUPPRESS)
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
     if args.worker:
@@ -119,14 +148,18 @@ def main():
     for transport in ["native", "wasm"]:
         run = args.output.resolve() / transport
         menu = run / "games/WasmMenu.sdd"
-        shutil.copytree(ROOT / "wasm-menu", menu, ignore=shutil.ignore_patterns("wasm-src"))
+        shutil.copytree(ROOT / "wasm-menu", menu, ignore=shutil.ignore_patterns("wasm-src", "*.wasm", "*.so", "*.dll", "*.dylib"))
         if transport == "native":
-            shutil.copy2(args.target_dir / "release/libwasm_menu.so", menu / "WasmMenu/libNativeMenu.so")
+            source = "x86_64-pc-windows-gnu/release/wasm_menu.dll" if args.wine else "release/libwasm_menu.so"
+            library = "NativeMenu.dll" if args.wine else "libNativeMenu.so"
+            shutil.copy2(args.target_dir / source, menu / "WasmMenu" / library)
         else:
             shutil.copy2(args.target_dir / "wasm32-unknown-unknown/release/wasm_menu.wasm", menu / "WasmMenu/wasm-menu.wasm")
-        for name in ["base", "fonts", "AI"]:
+        for name in ["base", "fonts"]:
             shutil.copytree(args.engine.parent / name, run / name)
         if args.content_root:
+            for name in ["Interfaces", "Skirmish/NullAI"]:
+                shutil.copytree(args.engine.parent / "AI" / name, run / "AI" / name, ignore=shutil.ignore_patterns("*.dbg", "*.a", "*.lib"))
             for name in ["Gravitas.sdd", "Scenario-Editor-Core.sdd", "Scenario-Editor-Gravitas.sdd"]:
                 shutil.copytree(args.content_root / "games" / name, run / "games" / name, ignore=shutil.ignore_patterns(".git", "target", "wasm-src"))
             shutil.copytree(args.content_root / "maps/Gravitas-map.sdd", run / "maps/Gravitas-map.sdd", ignore=shutil.ignore_patterns(".git"))
@@ -134,8 +167,10 @@ def main():
         (run / "fonts.conf").write_text('<fontconfig><dir prefix="relative">fonts</dir><cachedir prefix="relative">fontcache</cachedir></fontconfig>')
         write = run / "write"
         write.mkdir()
+        if args.wine:
+            subprocess.run(["x86_64-w64-mingw32-gcc", "-Wall", "-Wextra", "-Werror", "-O2", str(ROOT / "verification/sdk-menu/wine-input.c"), "-o", str(run / "wine-input.exe")], check=True)
         (write / "springsettings.cfg").write_text("Sound = 0\nFullscreen = 0\nWindowBorderless = 1\nXResolutionWindowed = 1280\nYResolutionWindowed = 720\nVSync = 0\n")
-        subprocess.run(["xvfb-run", "-a", sys.executable, str(Path(__file__).resolve()), "--worker", "--engine", str(args.engine.resolve()), "--target-dir", str(args.target_dir.resolve()), "--output", str(run), *(["--content-root", str(args.content_root.resolve())] if args.content_root else [])], check=True)
+        subprocess.run(["xvfb-run", "-a", sys.executable, str(Path(__file__).resolve()), "--worker", "--engine", str(args.engine.resolve()), "--target-dir", str(args.target_dir.resolve()), "--output", str(run), "--backend", transport, *(["--wine", str(args.wine.resolve())] if args.wine else []), *(["--content-root", str(args.content_root.resolve())] if args.content_root else [])], check=True)
         results[transport] = json.loads((run / "result.json").read_text())
     if results["native"] != results["wasm"]:
         raise RuntimeError(f"native and Wasm menu rendering differs: {results}")

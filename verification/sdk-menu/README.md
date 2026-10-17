@@ -21,5 +21,16 @@ seven Wasm game implementations have been ported.
 Passed on 2026-10-17 against SDK commit `81cfe66192`: both backends launched and
 returned from Gravitas, rendered identical initial/navigation/return screenshots,
 and exited with zero status and no engine warnings or errors. Eight existing
-menu tests and native/Wasm Clippy also pass. Native Windows remains to be tested
-under Wine.
+menu tests and native/Wasm Clippy also pass.
+
+Passed on 2026-10-18 under Wine with the Windows SDK engine: both backends
+launched Lua Gravitas, returned to the menu, and quit with exit status zero.
+Initial, navigation and return images match between backends. The logs contain
+no warnings or errors. Native Windows hardware remains untested.
+
+For Windows, build the menu for `x86_64-pc-windows-gnu` and pass `--wine` with
+the loader path. Set `WINEPREFIX` to a dedicated test prefix and supply the
+runtime's `WINELOADER`/`WINEDLLPATH` if it is not installed system-wide.
+The harness compiles `wine-input.c` with `x86_64-w64-mingw32-gcc` and uses
+Windows `SendInput` for real keyboard events, including scan codes and extended
+arrow keys. X11 injection alone did not deliver reliable Wine keyboard input.
