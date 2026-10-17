@@ -120,9 +120,11 @@ vf_build() {
     [[ -n $features ]] && feature_args=(--features "$features")
     (
         cd "$source_root"
-        cargo fmt --all -- --check
+        # The enclosing || disables Bash's errexit inside this subshell.
+        # Stop explicitly so a later successful build cannot hide failed checks.
+        cargo fmt --all -- --check || exit
         cargo clippy --workspace "${feature_args[@]}" --target wasm32-unknown-unknown \
-            --release --target-dir "$target" -- -D warnings
+            --release --target-dir "$target" -- -D warnings || exit
         cargo build --workspace "${feature_args[@]}" --target wasm32-unknown-unknown \
             --release --target-dir "$target"
     ) || vf_die "build failed: $source_root ${features:+(features: $features)}"

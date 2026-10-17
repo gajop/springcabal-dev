@@ -103,7 +103,22 @@ flove_outline() {
     rm -rf -- "$VF_TEST_ROOT/wasm-src" "$VF_TEST_ROOT/ModelMaterials"
     cp -a "$SOURCE_ROOT" "$VF_TEST_ROOT/wasm-src"
     cp -a "$GAME_DIR/ModelMaterials" "$VF_TEST_ROOT/ModelMaterials"
-    sed -i '/gfx_outline::GfxOutlineWidget::new()/d' "$VF_TEST_ROOT/wasm-src/ui/src/widgets/mod.rs"
+    # Preserve external path dependencies when relocating this test-only copy.
+    python3 - "$SOURCE_ROOT" "$VF_TEST_ROOT/wasm-src" <<'PY'
+from pathlib import Path
+import re
+import sys
+
+source, staged = (Path(value).resolve() for value in sys.argv[1:])
+manifest = staged / "Cargo.toml"
+def relocate(match):
+    dependency = (source / match[1]).resolve()
+    if dependency.is_relative_to(source):
+        return match[0]
+    return 'path = "' + dependency.as_posix() + '"'
+manifest.write_text(re.sub(r'path\s*=\s*"([^"]+)"', relocate, manifest.read_text()))
+PY
+    sed -i '/gfx_outline::GfxOutlineWidget::new()/d' "$VF_TEST_ROOT/wasm-src/ui/src/widgets.rs"
     vf_build "$VF_TEST_ROOT/wasm-src" headless-integration "$BUILD_CACHE/flove-outline-lua"
     staged=$(flove_stage)
     cp "$FIXTURES/gadget_gfx_outline.lua" "$staged/LuaRules/Gadgets/gfx_outline.lua"
