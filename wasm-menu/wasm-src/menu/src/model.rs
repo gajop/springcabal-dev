@@ -1,16 +1,17 @@
-use alloc::vec::Vec;
+use alloc::{string::String, vec::Vec};
 
-use spring::owned::rml_ui::{RmlDataFieldDef, RmlDataValue};
-use spring::{ApiError, ErrorCode, Result, rml_ui as rml};
+use crate::ui::MenuEnvironment;
+use spring::rml::{DataModel, Rows, Value, ValueType, Variable};
+use spring::{ApiError, ErrorCode, Result, Spring};
 
 use crate::catalog::{Action, GAMES, Game, Variant};
 use crate::entry;
 
-pub const INT: u8 = 1;
-const BOOL: u8 = 0;
-const STRING: u8 = 3;
+const INT: ValueType = ValueType::Int;
+const BOOL: ValueType = ValueType::Bool;
+const STRING: ValueType = ValueType::String;
 
-const GAME_FIELDS: [(&str, u8); 8] = [
+const GAME_FIELDS: [(&str, ValueType); 8] = [
     ("index", INT),
     ("name", STRING),
     ("built", STRING),
@@ -20,54 +21,56 @@ const GAME_FIELDS: [(&str, u8); 8] = [
     ("editor_action", INT),
     ("has_editor", BOOL),
 ];
-const PARAGRAPH_FIELDS: [(&str, u8); 1] = [("text", STRING)];
-const RATING_FIELDS: [(&str, u8); 4] = [
+const PARAGRAPH_FIELDS: [(&str, ValueType); 1] = [("text", STRING)];
+const RATING_FIELDS: [(&str, ValueType); 4] = [
     ("label", STRING),
     ("value", STRING),
     ("image", STRING),
     ("has_image", BOOL),
 ];
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub struct Bindings {
-    model: u64,
-    selected_action: u64,
-    selected_game: u64,
-    name: u64,
-    authors: u64,
-    built: u64,
-    image: u64,
-    introduction: u64,
-    ratings: u64,
-    has_ratings: u64,
-    error: u64,
-    has_error: u64,
+    model: DataModel,
+    selected_action: Variable<i32>,
+    selected_game: Variable<i32>,
+    name: Variable<String>,
+    authors: Variable<String>,
+    built: Variable<String>,
+    image: Variable<String>,
+    introduction: Rows,
+    ratings: Rows,
+    has_ratings: Variable<bool>,
+    error: Variable<String>,
+    has_error: Variable<bool>,
 }
 
 impl Bindings {
-    pub fn create(context: u64, actions: &[Action]) -> Result<Self> {
-        let created = rml::context_create_data_model(context, "menu")?;
-        require(created.success)?;
-        let model = created.data_model_handle;
-        let games = bind_rows(model, "games", &GAME_FIELDS)?;
+    pub fn create(
+        spring: &mut Spring<'_, MenuEnvironment>,
+        context: u64,
+        actions: &[Action],
+    ) -> Result<Self> {
+        let model = DataModel::create(spring, context, "menu")?;
+        let games = model.rows(spring, "games", &GAME_FIELDS)?;
         let quit = actions
             .iter()
             .position(|action| *action == Action::Quit)
             .ok_or(ApiError::new(ErrorCode::InvalidArgument as i32))?;
-        bind_int(model, "quit_action", quit as i32)?;
+        model.bind(spring, "quit_action", quit as i32)?;
         let bindings = Self {
+            selected_action: model.bind(spring, "selected_action", 0i32)?,
+            selected_game: model.bind(spring, "selected_game", 0i32)?,
+            name: model.bind(spring, "name", String::new())?,
+            authors: model.bind(spring, "authors", String::new())?,
+            built: model.bind(spring, "built", String::new())?,
+            image: model.bind(spring, "image", String::new())?,
+            introduction: model.rows(spring, "introduction", &PARAGRAPH_FIELDS)?,
+            ratings: model.rows(spring, "ratings", &RATING_FIELDS)?,
+            has_ratings: model.bind(spring, "has_ratings", false)?,
+            error: model.bind(spring, "error", String::new())?,
+            has_error: model.bind(spring, "has_error", false)?,
             model,
-            selected_action: bind_int(model, "selected_action", 0)?,
-            selected_game: bind_int(model, "selected_game", 0)?,
-            name: bind_string(model, "name")?,
-            authors: bind_string(model, "authors")?,
-            built: bind_string(model, "built")?,
-            image: bind_string(model, "image")?,
-            introduction: bind_rows(model, "introduction", &PARAGRAPH_FIELDS)?,
-            ratings: bind_rows(model, "ratings", &RATING_FIELDS)?,
-            has_ratings: bind_bool(model, "has_ratings")?,
-            error: bind_string(model, "error")?,
-            has_error: bind_bool(model, "has_error")?,
         };
         let mut values = Vec::with_capacity(GAMES.len() * GAME_FIELDS.len());
         for (index, game) in GAMES.iter().enumerate() {
@@ -94,50 +97,50 @@ impl Bindings {
                 boolean(game.editor.is_some()),
             ]);
         }
-        require(rml::data_model_set_rows(games, &values)?)?;
+        games.set(spring, values)?;
         Ok(bindings)
     }
 
-    pub fn bind_event(self, name: &str, id: u32) -> Result<()> {
-        let event = rml::data_model_bind_event(
-            self.model,
-            name,
-            spring::callback::RetainedCallback::new(id, 0, 0),
-            &[INT],
-        )?;
-        require(event.success && event.handle != 0)
+    pub fn bind_event(
+        &self,
+        spring: &mut Spring<'_, MenuEnvironment>,
+        name: &str,
+        id: u32,
+    ) -> Result<()> {
+        self.model
+            .event(spring, name, &[INT], move |spring, event| {
+                crate::ui::dispatch(spring, id, event)
+            })?;
+        Ok(())
     }
 
-    pub fn select(self, action: usize, game: Option<usize>) -> Result<()> {
-        require(rml::data_model_set_int(
-            self.selected_action,
-            action as i32,
-        )?)?;
-        require(rml::data_model_set_int(
-            self.selected_game,
-            game.map_or(-1, |i| i as i32),
-        )?)
+    pub fn select(
+        &self,
+        spring: &mut Spring<'_, MenuEnvironment>,
+        action: usize,
+        game: Option<usize>,
+    ) -> Result<()> {
+        self.selected_action.set(spring, action as i32)?;
+        self.selected_game
+            .set(spring, game.map_or(-1, |i| i as i32))
     }
 
-    pub fn preview(self, game: &Game) -> Result<()> {
+    pub fn preview(&self, spring: &mut Spring<'_, MenuEnvironment>, game: &Game) -> Result<()> {
         for (handle, value) in [
-            (self.name, game.name),
-            (self.authors, game.authors),
-            (self.built, game.built),
-            (self.image, game.image),
+            (&self.name, game.name),
+            (&self.authors, game.authors),
+            (&self.built, game.built),
+            (&self.image, game.image),
         ] {
-            require(rml::data_model_set_string(handle, value)?)?;
+            handle.set(spring, value.into())?;
         }
         let paragraphs = entry::introduction(game.article)
             .into_iter()
             .map(text)
             .collect::<Vec<_>>();
-        require(rml::data_model_set_rows(self.introduction, &paragraphs)?)?;
+        self.introduction.set(spring, paragraphs)?;
         let ratings = entry::ratings(game.article);
-        require(rml::data_model_set_bool(
-            self.has_ratings,
-            !ratings.is_empty(),
-        )?)?;
+        self.has_ratings.set(spring, !ratings.is_empty())?;
         let mut values = Vec::with_capacity(ratings.len() * RATING_FIELDS.len());
         for rating in ratings {
             values.extend([
@@ -147,12 +150,19 @@ impl Bindings {
                 boolean(rating.image.is_some()),
             ]);
         }
-        require(rml::data_model_set_rows(self.ratings, &values)?)
+        self.ratings.set(spring, values)
     }
 
-    pub fn show_error(self, message: &str) -> Result<()> {
-        require(rml::data_model_set_string(self.error, message)?)?;
-        require(rml::data_model_set_bool(self.has_error, true)?)
+    pub fn show_error(
+        &self,
+        spring: &mut Spring<'_, MenuEnvironment>,
+        message: &str,
+    ) -> Result<()> {
+        self.error.set(spring, message.into())?;
+        self.has_error.set(spring, true)
+    }
+    pub fn close(&self, spring: &mut Spring<'_, MenuEnvironment>) -> Result<()> {
+        self.model.close(spring)
     }
 }
 
@@ -164,57 +174,12 @@ pub fn require(success: bool) -> Result<()> {
     }
 }
 
-fn bind_int(model: u64, name: &str, value: i32) -> Result<u64> {
-    let binding = rml::data_model_bind_int(model, name, value)?;
-    require(binding.success && binding.variable_handle != 0)?;
-    Ok(binding.variable_handle)
+fn text(value: &str) -> Value {
+    Value::String(value.into())
 }
-
-fn bind_string(model: u64, name: &str) -> Result<u64> {
-    let binding = rml::data_model_bind_string(model, name, "")?;
-    require(binding.success && binding.variable_handle != 0)?;
-    Ok(binding.variable_handle)
+fn int(value: i32) -> Value {
+    Value::Int(value)
 }
-
-fn bind_bool(model: u64, name: &str) -> Result<u64> {
-    let binding = rml::data_model_bind_bool(model, name, false)?;
-    require(binding.success && binding.variable_handle != 0)?;
-    Ok(binding.variable_handle)
-}
-
-fn bind_rows(model: u64, name: &str, fields: &[(&str, u8)]) -> Result<u64> {
-    let fields = fields
-        .iter()
-        .map(|(name, type_)| RmlDataFieldDef {
-            name: (*name).into(),
-            type_: *type_,
-        })
-        .collect::<Vec<_>>();
-    let binding = rml::data_model_bind_rows(model, name, &fields)?;
-    require(binding.success && binding.rows_handle != 0)?;
-    Ok(binding.rows_handle)
-}
-
-fn text(value: &str) -> RmlDataValue {
-    RmlDataValue {
-        type_: STRING,
-        string_value: value.into(),
-        ..Default::default()
-    }
-}
-
-fn int(value: i32) -> RmlDataValue {
-    RmlDataValue {
-        type_: INT,
-        int_value: value,
-        ..Default::default()
-    }
-}
-
-fn boolean(value: bool) -> RmlDataValue {
-    RmlDataValue {
-        type_: BOOL,
-        bool_value: value,
-        ..Default::default()
-    }
+fn boolean(value: bool) -> Value {
+    Value::Bool(value)
 }

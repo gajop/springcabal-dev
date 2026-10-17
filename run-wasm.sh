@@ -57,6 +57,7 @@ fi
 
 # The menu compiles launch/games/ in; warn when it predates an edit there.
 menu_wasm="$wasm_menu_dir/WasmMenu/wasm-menu.wasm"
+menu_native="$wasm_menu_dir/WasmMenu/libNativeMenu.so"
 if [[ -f "$menu_wasm" ]] && [[ -n "$(find "$launch_dir/games" -newer "$menu_wasm" -print -quit)" ]]; then
     echo "warning: launch/games/ changed after the menu was built; rebuild it with" >&2
     echo "  just --justfile wasm-menu/wasm-src/justfile copy" >&2
@@ -137,8 +138,8 @@ elif [[ $game == area17 ]]; then
     echo "Area17.sd7 is missing; place it in spring-linux/maps/ (see content.tsv)." >&2
     exit 1
 fi
-if [[ ! -f "$menu_wasm" ]]; then
-    echo "Wasm menu module not found. Build it first:" >&2
+if [[ ! -f "$menu_wasm" && ! -f "$menu_native" ]]; then
+    echo "Menu module not found. Build it first:" >&2
     echo "  cd '$wasm_menu_dir/wasm-src' && just copy" >&2
     exit 1
 fi
@@ -157,7 +158,7 @@ config="$session_dir/springsettings.cfg"
 } >"$config"
 
 if [[ -z "$game" ]]; then
-    echo "Launching WASM Menu with experimental engine: $engine_bin"
+    echo "Launching Rust menu with experimental engine: $engine_bin"
     echo "Live log: $write_dir/infolog.txt"
     "$engine_bin" --window --write-dir "$write_dir" \
         --isolation --isolation-dir "$isolation_dir" --config "$config" \

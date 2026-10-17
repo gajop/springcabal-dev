@@ -11,3 +11,13 @@ build: fmt clippy
 
 copy: build
     cp target/wasm32-unknown-unknown/release/wasm_menu.wasm ../WasmMenu/wasm-menu.wasm
+
+# Same Rust menu and RML, loaded through the native menu interface.
+clippy-native:
+    cargo clippy --workspace --release -- -D warnings
+
+build-native: fmt clippy-native
+    cargo build --workspace --release
+
+copy-native: build-native
+    cp target/release/libwasm_menu.so ../WasmMenu/libNativeMenu.so
