@@ -50,7 +50,8 @@ def worker(args):
     env = os.environ.copy()
     def path_arg(path):
         return "Z:" + str(path).replace("/", chr(92)) if args.wine else str(path)
-    env.update(LIBGL_ALWAYS_SOFTWARE="1", LP_NUM_THREADS="2", RAYON_NUM_THREADS="2", FONTCONFIG_FILE="fonts.conf")
+    # Absolute POSIX paths also reach Wine's host-side Fontconfig.
+    env.update(LIBGL_ALWAYS_SOFTWARE="1", LP_NUM_THREADS="2", RAYON_NUM_THREADS="2", FONTCONFIG_FILE=str(run / "fonts.conf"))
     command = [*([str(args.wine)] if args.wine else []), path_arg(args.engine.resolve()), "--window", "--isolation", f"--isolation-dir={path_arg(run)}",
                f"--write-dir={path_arg(run / 'write')}", "--config", path_arg(run / "write/springsettings.cfg"),
                "--menu=WasmMenu 1.0"]

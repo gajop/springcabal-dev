@@ -63,3 +63,8 @@ launch/local.cfg
 springcabal-rs/
 
 /perf-runs/
+
+# Locally built native menu backends
+/wasm-menu/WasmMenu/libNativeMenu.so
+/wasm-menu/WasmMenu/NativeMenu.dll
+/wasm-menu/WasmMenu/libNativeMenu.dylib

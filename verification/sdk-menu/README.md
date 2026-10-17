@@ -16,7 +16,8 @@ Add `--content-root /path/to/spring-linux` to copy Lua Gravitas, its dependencie
 map and project into that test directory. The test launches through the menu,
 waits for the real game, returns with Escape and compares the restored menu to
 the first screenshot. Source content is read only. This does not assert that the
-seven Wasm game implementations have been ported.
+seven Wasm game implementations behave correctly; their own suites cover that.
+All seven game-code ports are now committed in their dedicated worktrees.
 
 Passed on 2026-10-17 against SDK commit `81cfe66192`: both backends launched and
 returned from Gravitas, rendered identical initial/navigation/return screenshots,
