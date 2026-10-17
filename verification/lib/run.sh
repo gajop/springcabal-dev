@@ -307,7 +307,7 @@ vf_run_visual() {
 
 # vf_run_driven SECONDS DRIVER [SCREEN]
 # A visual run played through real input: the engine renders on its own Xvfb
-# display (software GL) in a window at 0,0, and DRIVER, a shell function, runs
+# display (software GL by default) in a window at 0,0. DRIVER runs
 # alongside it with DISPLAY set and presses keys and buttons with xdotool
 # (vf_x_* below), usually waiting for markers the game logs.  When the driver
 # returns, the engine is stopped if it is still running.  The run's status is
@@ -317,7 +317,14 @@ vf_run_driven() {
     local engine width height display='' n xvfb_pid engine_pid status
     command -v xdotool >/dev/null || vf_die 'driven runs need xdotool'
     engine=$(vf_engine_bin visual)
-    VF_RUN_RENDERER=software
+    local renderer=${VF_RENDERER:-software}
+    local -a graphics_env=()
+    case "$renderer" in
+        software) graphics_env+=(LIBGL_ALWAYS_SOFTWARE=1) ;;
+        gpu|screen) ;;
+        *) vf_die "driven runs need software, gpu or screen rendering: $renderer" ;;
+    esac
+    VF_RUN_RENDERER=$renderer
     width=${screen%%x*}
     height=${screen#*x}; height=${height%%x*}
     vf_default_speed 1
@@ -346,8 +353,8 @@ vf_run_driven() {
         sleep 0.1
     done
 
-    LIBGL_ALWAYS_SOFTWARE=1 SDL_VIDEODRIVER=x11 WAYLAND_DISPLAY= DISPLAY=$display \
-        timeout --signal=TERM "${seconds}s" "$engine" --window \
+    env -u LIBGL_ALWAYS_SOFTWARE "${graphics_env[@]}" SDL_VIDEODRIVER=x11 WAYLAND_DISPLAY= DISPLAY=$display \
+        timeout --kill-after=5s --signal=TERM "${seconds}s" "$engine" --window \
         --write-dir "$VF_WRITE_DIR" --isolation --isolation-dir "$VF_ISOLATION" \
         --config "$VF_CONFIG_FILE" "$VF_START_FILE" >"$VF_WRITE_DIR/stdout.txt" 2>&1 &
     engine_pid=$!
@@ -388,6 +395,9 @@ vf_x_wait() {
             VF_X_LINE=${match%%:*}
             VF_X_MATCH=${match#*:}
             return 0
+        fi
+        if [[ -n ${VF_X_ENGINE_PID:-} ]] && ! kill -0 "$VF_X_ENGINE_PID" 2>/dev/null; then
+            return 1
         fi
         sleep 0.2
     done
