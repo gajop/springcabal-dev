@@ -159,6 +159,7 @@ controls_case() (
         *) vf_die "unknown controls game: $game" ;;
     esac
     [[ $variant == wasm ]] || directory=${directory/-wasm.sdd/.sdd}
+    [[ -d $GAMES_DIR/$directory ]] || vf_die "missing controls game checkout: $GAMES_DIR/$directory"
     vf_note "Controls: $game/$variant"
     vf_workspace "controls-$game-$variant"
     vf_cleanup_on_exit

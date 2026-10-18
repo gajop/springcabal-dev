@@ -79,6 +79,10 @@ gravitas_e2e() {
     vf_quit_when 'E2E summary passed='
     gravitas_enable_logs
     vf_config
+    # The input case releases and re-presses jump through UI Update. At the
+    # usual 100x test speed both edges can fall between UI polls. Use normal
+    # gameplay speed so this end-to-end test observes each input transition.
+    vf_default_speed 1
     vf_run_headless "$seconds"
     vf_save_logs
     [[ -s "$VF_OUT_DIR/last.combined.txt" ]] || vf_die 'engine produced no output'
