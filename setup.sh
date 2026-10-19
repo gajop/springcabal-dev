@@ -73,6 +73,7 @@ write_cargo_config() {
             echo '[patch."https://github.com/gajop/spring-rust"]'
             echo "spring = { path = \"$rel/spring\" }"
             echo "spring-addons = { path = \"$rel/spring-addons\" }"
+            echo "spring-sdk = { path = \"$rel/spring-sdk\" }"
         fi
         if [[ -d $springcabal_dir ]]; then
             echo
