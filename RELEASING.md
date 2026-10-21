@@ -112,6 +112,6 @@ crate, games, maps and local support content when individual game branches have
 not been pushed. Record those revisions and the engine tag in the snapshot.
 The source snapshot excludes Git history, local caches and generated binaries.
 
-Release notes should state the engine tag, launch instructions, validation
-results and known limitations. Windows checks run under Wine should be described
-as Wine checks; native Windows hardware validation is separate.
+Release notes describe player-visible changes, the engine tag and launch
+instructions. Keep validation reports in development logs; do not add
+validation or known-limitations sections to release notes.
