@@ -120,7 +120,7 @@ just smoke-test release/out/SpringCabal-1.0.2-linux
 python3 verification/sdk-menu/run.py --packaged \
     --engine release/out/SpringCabal-1.0.2-linux/SpringCabal \
     --output verification/out/packaged-menu-1.0.2-linux
-python3 verification/sdk-menu/run.py --packaged --wine \
+python3 verification/sdk-menu/run.py --packaged --wine wine \
     --engine release/out/SpringCabal-1.0.2-windows/SpringCabal.exe \
     --output verification/out/packaged-menu-1.0.2-windows
 ```
@@ -129,8 +129,9 @@ The smoke test runs all fourteen game entries and the menu offscreen on the
 real GPU with the shipped settings. Errors, warnings, missing renderer identity
 or software rendering fail it. The packaged-menu harness launches the actual
 executable with no arguments from outside the bundle directory and checks
-isolation, navigation, Lua Gravitas launch/return and clean exit. Windows needs
-a working Wine installation or a native Windows play check. Check freshly
+isolation, navigation, Lua Gravitas launch/return and clean exit. `--wine` takes
+the Wine loader command or path; set `WINEPREFIX` for a dedicated prefix.
+Windows needs a working Wine installation or a native Windows play check. Check freshly
 extracted archives too, and play at least one WASM and one Lua game on each
 platform. See `verification/README.md` for the existing game-specific suites.
 
