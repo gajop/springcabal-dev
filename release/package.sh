@@ -225,7 +225,10 @@ if [[ -n "$(find "$project_root/launch/games" "$project_root/game-info" -newer "
     die "launch/games/ or game-info/ changed after wasm-menu.wasm was built (run with --build)"
 fi
 menu_tmp="$(mktemp -d)"
+# Native menu libraries are local development builds. Both release platforms
+# use the portable Wasm module rather than a library built for this host.
 rsync -a --exclude=/wasm-src --exclude=/generate-rating-stars.sh \
+    --exclude='/WasmMenu/libNativeMenu.*' --exclude=/WasmMenu/NativeMenu.dll \
     "$project_root/wasm-menu/" "$menu_tmp/root/"
 (cd "$menu_tmp/root" && zip -q -r -X "$content_dir/games/WasmMenu.sdz" .)
 rm -rf -- "$menu_tmp"

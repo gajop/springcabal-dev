@@ -19,7 +19,7 @@ gh release view 2026.09.23 -R gajop/spring-rust
 ```
 
 The games have to build against the same engine revision, so check that the
-`spring`/`spring-addons` crates the games compile against match that tag.
+`spring-sdk`/`spring-addons` crates the games compile against match that tag.
 
 ## 2. Prepare the content
 
@@ -65,7 +65,8 @@ What the packager does:
   `verification/`, `.git`, `target/`).
 - Map `.sdd` folders become `.sd7`. `Area17.sd7` gets the patched dual-fog gadget
   from `patches/area17-map/` (`scripts/area17-map.sh`).
-- `wasm-menu/` becomes `WasmMenu.sdz`.
+- `wasm-menu/` becomes `WasmMenu.sdz`. Both platforms use the locally built
+  Wasm menu; native menu libraries from development builds are excluded.
 - It adds `springsettings.cfg` (portable mode, `launch/springsettings.cfg`),
   the launcher, `README.txt`
   (from `release/README.txt.in`) and `BUILDINFO.txt`.
