@@ -83,5 +83,21 @@ After that, play at least one WASM and one Lua game from the menu on each platfo
 
 ## 5. Publish
 
-Not automated yet. When the repository goes public, upload the `.tar.gz` and
-`.zip` to a GitHub release of this repo.
+Releases are published manually to
+[gajop/springcabal-dev](https://github.com/gajop/springcabal-dev/releases).
+For a numbered release, pass the version to the existing packager:
+
+```bash
+./release/package.sh --engine-tag 2026.10.21 --platform all --version 1.0.0 --build
+```
+
+Commit and push the framework/menu revision and tag it `v<version>` (for example,
+`v1.0.0`). Attach both platform bundles and their SHA-256 checksums to that tag's
+GitHub release. Include a source snapshot of the committed framework, shared
+crate, games, maps and local support content when individual game branches have
+not been pushed. Record those revisions and the engine tag in the snapshot.
+The source snapshot excludes Git history, local caches and generated binaries.
+
+Release notes should state the engine tag, launch instructions, validation
+results and known limitations. Windows checks run under Wine should be described
+as Wine checks; native Windows hardware validation is separate.

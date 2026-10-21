@@ -2,6 +2,12 @@
 
 A unified development environment, test harness, and build framework for SpringCabal WebAssembly games on the Spring / Recoil engine.
 
+## Play the games
+
+Download the Linux or Windows bundle from [Releases](https://github.com/gajop/springcabal-dev/releases).
+Each includes all seven games in both WASM and Lua, the menu, engine and maps.
+Extract it and run `springcabal.sh` on Linux or `SpringCabal.bat` on Windows.
+
 ## Overview
 
 This repository provides:
@@ -55,7 +61,7 @@ rustup target add wasm32-unknown-unknown
 ./setup.sh --engine-tag 2026.09.23   # or: just setup 2026.09.23
 ```
 
-This clones every repository listed in `content.tsv` into `spring-linux/` (existing checkouts are left alone) and downloads that Linux engine release from `gajop/spring-rust` into `engine/`. Entries marked `local` or `download`, and any game branches that have not been published, have to be copied in by hand; setup lists whatever it could not fetch. Local Lua review commits and WASM ports remain unpublished until approved; a fresh clone cannot include those changes yet.
+This clones every repository listed in `content.tsv` into `spring-linux/` (existing checkouts are left alone) and downloads that Linux engine release from `gajop/spring-rust` into `engine/`. Entries marked `local` or `download`, and any game branches that have not been published, have to be copied in by hand; setup lists whatever it could not fetch. Release source snapshots include the local game and shared-crate revisions, which may not yet be available on their individual repositories' branches.
 
 `run-wasm.sh` picks the engine in this order: `$SPRING_ENGINE_DIR`, a local
 engine build at `../spring-bar/build-amd64-linux/install` (override the checkout
