@@ -19,6 +19,13 @@ the first screenshot. Source content is read only. This does not assert that the
 seven Wasm game implementations behave correctly; their own suites cover that.
 All seven game-code ports are now committed in their dedicated worktrees.
 
+Use `--packaged --engine /path/to/bundle/SpringCabal --output NEW_DIRECTORY`
+to test the released bundle itself. This copies the bundle, adds only the usual
+test window/sound settings, then runs its executable with no arguments from a
+different working directory. Menu selection, Lua Gravitas launch/return and
+Escape-to-quit are checked using the packaged WASM menu and content. This mode
+does not need `--target-dir`. Add `--wine` for a Windows `SpringCabal.exe` bundle.
+
 Passed on 2026-10-17 against SDK commit `81cfe66192`: both backends launched and
 returned from Gravitas, rendered identical initial/navigation/return screenshots,
 and exited with zero status and no engine warnings or errors. Eight existing

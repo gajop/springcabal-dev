@@ -15,7 +15,7 @@ comes in two versions: a WebAssembly port and the original Lua release.
 Running
 -------
 
-Start @LAUNCHER@
+Run @LAUNCHER@ directly. It opens the game menu without command-line options.
 
 The menu shows the credits for each game. Up/Down picks a game, Left/Right
 picks a version, and Enter launches it.

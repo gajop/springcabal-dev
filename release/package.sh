@@ -265,33 +265,36 @@ write_settings() {
         echo ""
         echo "# SpringCabal defaults"
         grep -v -E '^\s*(#|$)' "$project_root/launch/springsettings.cfg"
+        grep -v -E '^\s*(#|$)' "$project_root/launch/menu.cfg"
     } >> "$cfg"
 }
 
-write_launchers() {
+prepare_engine() {
     local plat="$1" dst="$2"
-    if [[ "$plat" == linux ]]; then
-        cat > "$dst/springcabal.sh" <<'EOF'
-#!/bin/sh
-# Launch the SpringCabal game menu.
-cd "$(dirname "$0")" || exit 1
-exec ./spring --isolation --isolation-dir "$PWD" --write-dir "$PWD" -menu "WasmMenu 1.0" "$@"
-EOF
-        chmod +x "$dst/springcabal.sh"
-    else
-        printf '%s\r\n' \
-            '@echo off' \
-            'rem Launch the SpringCabal game menu.' \
-            'cd /d "%~dp0"' \
-            'start "" spring.exe --isolation --isolation-dir "%~dp0." --write-dir "%~dp0." -menu "WasmMenu 1.0" %*' \
-            > "$dst/SpringCabal.bat"
-    fi
+    local suffix="" entry
+    [[ "$plat" != windows ]] || suffix=".exe"
+    mv -- "$dst/spring$suffix" "$dst/SpringCabal$suffix"
+    rm -f -- "$dst/spring-dedicated$suffix" "$dst/spring-headless$suffix" \
+        "$dst/pr-downloader$suffix" "$dst/libunitsync.so" "$dst/unitsync.dll" \
+        "$dst/files.md5.gz" "$dst"/*.a "$dst"/*.lib "$dst"/*.dbg
+    rm -rf -- "$dst/examples"
+    # Every launch script uses NullAI for the other team. Keep its C interface,
+    # but discard the unrelated RTS skirmish AIs and their interfaces.
+    for entry in "$dst"/AI/Skirmish/*; do
+        [[ "${entry##*/}" == NullAI ]] || rm -rf -- "$entry"
+    done
+    for entry in "$dst"/AI/Interfaces/*; do
+        [[ "${entry##*/}" == C ]] || rm -rf -- "$entry"
+    done
+    # The engine resolves this marker relative to its executable, including
+    # when launched from a file manager or another working directory.
+    touch "$dst/isolated.txt"
 }
 
 write_readme() {
     local plat="$1" dst="$2"
-    local launcher="./springcabal.sh"
-    [[ "$plat" == windows ]] && launcher="SpringCabal.bat"
+    local launcher="./SpringCabal"
+    [[ "$plat" == windows ]] && launcher="SpringCabal.exe"
     local engine_desc="${engine_tag:-local build}"
     sed -e "s|@VERSION@|$version|g" -e "s|@ENGINE@|$engine_desc|g" -e "s|@LAUNCHER@|$launcher|g" \
         "$project_root/release/README.txt.in" > "$dst/README.txt"
@@ -306,6 +309,7 @@ for plat in "${platforms[@]}"; do
     rm -rf -- "$dst"
     mkdir -p "$dst"
     fetch_engine "$plat" "$dst"
+    prepare_engine "$plat" "$dst"
     # Hard links keep the per-platform copies cheap.
     cp -al "$content_dir/games/." "$dst/games/"
     cp -al "$content_dir/maps/." "$dst/maps/"
@@ -313,7 +317,6 @@ for plat in "${platforms[@]}"; do
     cp -al "$content_dir/projects/." "$dst/projects/"
     touch "$dst/springsettings.cfg"
     write_settings "$dst/springsettings.cfg"
-    write_launchers "$plat" "$dst"
     write_readme "$plat" "$dst"
     cp -- "$build_info" "$dst/BUILDINFO.txt"
 

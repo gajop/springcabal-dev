@@ -48,15 +48,20 @@ def window_for(process, wine):
 def worker(args):
     run = args.output.resolve()
     env = os.environ.copy()
+    if args.packaged:
+        for name in ["SPRING_ISOLATED", "SPRING_WRITEDIR", "SPRING_DATADIR"]:
+            env.pop(name, None)
     def path_arg(path):
         return "Z:" + str(path).replace("/", chr(92)) if args.wine else str(path)
     # Absolute POSIX paths also reach Wine's host-side Fontconfig.
     env.update(LIBGL_ALWAYS_SOFTWARE="1", LP_NUM_THREADS="2", RAYON_NUM_THREADS="2", FONTCONFIG_FILE=str(run / "fonts.conf"))
-    command = [*([str(args.wine)] if args.wine else []), path_arg(args.engine.resolve()), "--window", "--isolation", f"--isolation-dir={path_arg(run)}",
-               f"--write-dir={path_arg(run / 'write')}", "--config", path_arg(run / "write/springsettings.cfg"),
-               "--menu=WasmMenu 1.0"]
+    command = [*([str(args.wine)] if args.wine else []), path_arg(args.engine.resolve())]
+    if not args.packaged:
+        command += ["--window", "--isolation", f"--isolation-dir={path_arg(run)}",
+                    f"--write-dir={path_arg(run / 'write')}", "--config", path_arg(run / "write/springsettings.cfg"),
+                    "--menu=WasmMenu 1.0"]
     with (run / "stdout.log").open("w") as log:
-        process = subprocess.Popen(command, cwd=run, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        process = subprocess.Popen(command, cwd=run.parent if args.packaged else run, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         try:
             deadline = time.monotonic() + 60
             window = None
@@ -80,7 +85,7 @@ def worker(args):
             if initial == selected:
                 raise RuntimeError("keyboard navigation did not change the rendered menu")
             returned = None
-            if args.content_root:
+            if args.content_root or args.packaged:
                 keys(args, "Up", "Return")
                 deadline = time.monotonic() + 90
                 while time.monotonic() < deadline and process.poll() is None:
@@ -117,7 +122,11 @@ def worker(args):
             failures = [line for line in text.splitlines() if any(word in line.lower() for word in ["panicked", "trap:", "callin failed", "module fault", "could not load", "warning:", "error:"])]
             if failures:
                 raise RuntimeError("\n".join(failures))
+            if args.packaged and "[DataDirLocater::Check] Isolation Mode!" not in text:
+                raise RuntimeError("packaged launch did not enable isolation")
             result = {"ok": True, "initial": initial, "selected": selected, "returned": returned, "exit": code}
+            if args.packaged:
+                result.update(command=command, cwd=str(run.parent), isolation=True)
             (run / "result.json").write_text(json.dumps(result, indent=2) + "\n")
             return result
         finally:
@@ -133,51 +142,68 @@ def worker(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--engine", type=Path, required=True)
-    parser.add_argument("--target-dir", type=Path, required=True)
+    parser.add_argument("--target-dir", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--content-root", type=Path, help="existing Cabal spring-linux directory; copies Lua Gravitas and its dependencies for a launch/return test")
     parser.add_argument("--wine", type=Path, help="Wine loader for a Windows engine; use a dedicated prefix")
+    parser.add_argument("--packaged", action="store_true", help="test the actual bundle executable with no arguments, from outside its directory")
     parser.add_argument("--backend", choices=["native", "wasm"], help=argparse.SUPPRESS)
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args()
+    if not args.packaged and args.target_dir is None:
+        parser.error("--target-dir is required unless --packaged is used")
     if args.worker:
         worker(args)
         return 0
     if args.output.exists():
         raise RuntimeError("output must be a new directory")
     results = {}
-    for transport in ["native", "wasm"]:
+    for transport in (["wasm"] if args.packaged else ["native", "wasm"]):
         run = args.output.resolve() / transport
-        menu = run / "games/WasmMenu.sdd"
-        shutil.copytree(ROOT / "wasm-menu", menu, ignore=shutil.ignore_patterns("wasm-src", "*.wasm", "*.so", "*.dll", "*.dylib"))
-        if transport == "native":
-            source = "x86_64-pc-windows-gnu/release/wasm_menu.dll" if args.wine else "release/libwasm_menu.so"
-            library = "NativeMenu.dll" if args.wine else "libNativeMenu.so"
-            shutil.copy2(args.target_dir / source, menu / "WasmMenu" / library)
+        if args.packaged:
+            shutil.copytree(args.engine.resolve().parent, run, symlinks=True)
+            engine = run / args.engine.name
         else:
-            shutil.copy2(args.target_dir / "wasm32-unknown-unknown/release/wasm_menu.wasm", menu / "WasmMenu/wasm-menu.wasm")
-        for name in ["base", "fonts"]:
-            shutil.copytree(args.engine.parent / name, run / name)
-        if args.content_root:
-            for name in ["Interfaces", "Skirmish/NullAI"]:
-                shutil.copytree(args.engine.parent / "AI" / name, run / "AI" / name, ignore=shutil.ignore_patterns("*.dbg", "*.a", "*.lib"))
-            for name in ["Gravitas.sdd", "Scenario-Editor-Core.sdd", "Scenario-Editor-Gravitas.sdd"]:
-                shutil.copytree(args.content_root / "games" / name, run / "games" / name, ignore=shutil.ignore_patterns(".git", "target", "wasm-src"))
-            shutil.copytree(args.content_root / "maps/Gravitas-map.sdd", run / "maps/Gravitas-map.sdd", ignore=shutil.ignore_patterns(".git"))
-            shutil.copytree(args.content_root / "projects/Gravity-Enterprise", run / "projects/Gravity-Enterprise", ignore=shutil.ignore_patterns(".git"))
+            stage_development(args, run, transport)
+            engine = args.engine.resolve()
         (run / "fonts.conf").write_text('<fontconfig><dir prefix="relative">fonts</dir><cachedir prefix="relative">fontcache</cachedir></fontconfig>')
-        write = run / "write"
-        write.mkdir()
+        write = run if args.packaged else run / "write"
+        write.mkdir(exist_ok=True)
         if args.wine:
             subprocess.run(["x86_64-w64-mingw32-gcc", "-Wall", "-Wextra", "-Werror", "-O2", str(ROOT / "verification/sdk-menu/wine-input.c"), "-o", str(run / "wine-input.exe")], check=True)
-        (write / "springsettings.cfg").write_text("Sound = 0\nFullscreen = 0\nWindowBorderless = 1\nXResolutionWindowed = 1280\nYResolutionWindowed = 720\nVSync = 0\n")
-        subprocess.run(["xvfb-run", "-a", sys.executable, str(Path(__file__).resolve()), "--worker", "--engine", str(args.engine.resolve()), "--target-dir", str(args.target_dir.resolve()), "--output", str(run), "--backend", transport, *(["--wine", str(args.wine.resolve())] if args.wine else []), *(["--content-root", str(args.content_root.resolve())] if args.content_root else [])], check=True)
+        with (write / "springsettings.cfg").open("a" if args.packaged else "w") as config:
+            config.write("\nSound = 0\nFullscreen = 0\nWindowBorderless = 1\nXResolutionWindowed = 1280\nYResolutionWindowed = 720\nVSync = 0\n")
+        subprocess.run(["xvfb-run", "-a", sys.executable, str(Path(__file__).resolve()), "--worker", "--engine", str(engine), "--output", str(run), "--backend", transport,
+                        *(["--target-dir", str(args.target_dir.resolve())] if args.target_dir else []),
+                        *(["--packaged"] if args.packaged else []),
+                        *(["--wine", str(args.wine.resolve())] if args.wine else []),
+                        *(["--content-root", str(args.content_root.resolve())] if args.content_root else [])], check=True)
         results[transport] = json.loads((run / "result.json").read_text())
-    if results["native"] != results["wasm"]:
+    if not args.packaged and results["native"] != results["wasm"]:
         raise RuntimeError(f"native and Wasm menu rendering differs: {results}")
     (args.output / "results.json").write_text(json.dumps(results, indent=2) + "\n")
     print(json.dumps(results, indent=2))
     return 0
+
+
+def stage_development(args, run, transport):
+    menu = run / "games/WasmMenu.sdd"
+    shutil.copytree(ROOT / "wasm-menu", menu, ignore=shutil.ignore_patterns("wasm-src", "*.wasm", "*.so", "*.dll", "*.dylib"))
+    if transport == "native":
+        source = "x86_64-pc-windows-gnu/release/wasm_menu.dll" if args.wine else "release/libwasm_menu.so"
+        library = "NativeMenu.dll" if args.wine else "libNativeMenu.so"
+        shutil.copy2(args.target_dir / source, menu / "WasmMenu" / library)
+    else:
+        shutil.copy2(args.target_dir / "wasm32-unknown-unknown/release/wasm_menu.wasm", menu / "WasmMenu/wasm-menu.wasm")
+    for name in ["base", "fonts"]:
+        shutil.copytree(args.engine.parent / name, run / name)
+    if args.content_root:
+        for name in ["Interfaces", "Skirmish/NullAI"]:
+            shutil.copytree(args.engine.parent / "AI" / name, run / "AI" / name, ignore=shutil.ignore_patterns("*.dbg", "*.a", "*.lib"))
+        for name in ["Gravitas.sdd", "Scenario-Editor-Core.sdd", "Scenario-Editor-Gravitas.sdd"]:
+            shutil.copytree(args.content_root / "games" / name, run / "games" / name, ignore=shutil.ignore_patterns(".git", "target", "wasm-src"))
+        shutil.copytree(args.content_root / "maps/Gravitas-map.sdd", run / "maps/Gravitas-map.sdd", ignore=shutil.ignore_patterns(".git"))
+        shutil.copytree(args.content_root / "projects/Gravity-Enterprise", run / "projects/Gravity-Enterprise", ignore=shutil.ignore_patterns(".git"))
 
 
 if __name__ == "__main__":

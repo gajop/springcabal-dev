@@ -13,7 +13,8 @@ seconds="${2:-45}"
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 work="$(mktemp -d "${TMPDIR:-/tmp}/springcabal-smoke.XXXXXX")"
 
-[[ -x "$bundle/spring" ]] || { echo "no spring in $bundle" >&2; exit 1; }
+engine="$bundle/SpringCabal"
+[[ -x "$engine" ]] || { echo "no SpringCabal in $bundle" >&2; exit 1; }
 [[ -f "$bundle/springsettings.cfg" ]] || { echo "no springsettings.cfg in $bundle" >&2; exit 1; }
 # Use the bundled fonts, as verification/sdk-menu/run.py does. The engine's
 # bundled Fontconfig can predate the host configuration syntax; each fresh
@@ -95,7 +96,7 @@ for script in "${scripts[@]}"; do
     config "$run/spring.conf" "$project_root/launch/games/$game/graphics.cfg"
 
     env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
-        timeout --signal=TERM "${seconds}s" "$bundle/spring" \
+        timeout --signal=TERM "${seconds}s" "$engine" \
         --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
         --config "$run/spring.conf" "$run/start.txt" > "$run/stdout.txt" 2>&1
     status=$?
@@ -121,9 +122,9 @@ run="$work/menu"
 mkdir -p "$run"
 config "$run/spring.conf"
 env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
-    timeout --signal=TERM 90s "$bundle/spring" \
+    timeout --signal=TERM 90s "$engine" \
     --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
-    --config "$run/spring.conf" -menu "WasmMenu 1.0" > "$run/stdout.txt" 2>&1
+    --config "$run/spring.conf" > "$run/stdout.txt" 2>&1
 status=$?
 log="$run/stdout.txt"
 errors="$(grep -ciE '\bError:' "$log")"

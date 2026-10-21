@@ -2,7 +2,7 @@
 
 A release is one self-contained folder per platform: the engine, the WASM menu,
 every game (WASM port and original Lua version) and their maps. The player
-extracts it and runs `springcabal.sh` (Linux) or `SpringCabal.bat` (Windows).
+extracts it and runs `SpringCabal` (Linux) or `SpringCabal.exe` (Windows).
 
 Releases are built locally, from whatever is checked out under `spring-linux/`.
 Nothing is pushed or uploaded by these scripts.
@@ -67,19 +67,33 @@ What the packager does:
   from `patches/area17-map/` (`scripts/area17-map.sh`).
 - `wasm-menu/` becomes `WasmMenu.sdz`. Both platforms use the locally built
   Wasm menu; native menu libraries from development builds are excluded.
-- It adds `springsettings.cfg` (portable mode, `launch/springsettings.cfg`),
-  the launcher, `README.txt`
+- It renames the graphical engine to `SpringCabal` / `SpringCabal.exe` and
+  removes the dedicated/headless engines, downloader, unitsync, import/debug
+  libraries, examples and unused skirmish AIs. NullAI and its C interface are
+  retained because the games use them.
+- It adds `isolated.txt` and `springsettings.cfg` (`launch/springsettings.cfg`
+  plus `launch/menu.cfg`). `DefaultLuaMenu` opens the WASM menu directly;
+  a separate start script or launcher wrapper is unnecessary.
+- It adds `README.txt`
   (from `release/README.txt.in`) and `BUILDINFO.txt`.
 
 ## 4. Test
 
 ```bash
 just smoke-test release/out/SpringCabal-<ver>-linux
+python3 verification/sdk-menu/run.py --packaged \
+    --engine release/out/SpringCabal-<ver>-linux/SpringCabal \
+    --output verification/out/packaged-menu-<ver>-linux
 ```
 
-The smoke test starts every menu entry and the menu with the bundle's `spring` binary through `SDL_VIDEODRIVER=offscreen`, using the real GPU without opening desktop windows or falling back to Xvfb. It uses the shipped settings and per-game graphics overrides, with a 1280×720 window at origin (0, 0) and muted sound, and checks the engine's logged drawable size. Every game must load and remain running until the timeout; the frame count is informational. The menu must load its manifest and either exit cleanly or remain running at the timeout. Both Lua and WASM runs fail on any `Error:` or `Warning:`, runtime failure, missing renderer identity or software renderer. Full logs are kept in the printed temporary directory.
+The smoke test starts every menu entry and the menu with the bundle's `SpringCabal` binary through `SDL_VIDEODRIVER=offscreen`, using the real GPU without opening desktop windows or falling back to Xvfb. It uses the shipped settings and per-game graphics overrides, with a 1280×720 window at origin (0, 0) and muted sound, and checks the engine's logged drawable size. Every game must load and remain running until the timeout; the frame count is informational. The menu must load its manifest and either exit cleanly or remain running at the timeout. Both Lua and WASM runs fail on any `Error:` or `Warning:`, runtime failure, missing renderer identity or software renderer. Full logs are kept in the printed temporary directory.
 
 After that, play at least one WASM and one Lua game from the menu on each platform, and return to the menu from inside a game.
+
+The SDK menu harness's `--packaged` mode copies the actual bundle and launches
+its executable with no arguments from outside the bundle directory. It checks
+menu navigation, Lua Gravitas launch/return and a clean exit. Pass `--wine` for
+the corresponding `SpringCabal.exe` check.
 
 ## 5. Publish
 

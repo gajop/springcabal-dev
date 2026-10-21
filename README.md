@@ -6,7 +6,7 @@ A unified development environment, test harness, and build framework for SpringC
 
 Download the Linux or Windows bundle from [Releases](https://github.com/gajop/springcabal-dev/releases).
 Each includes all seven games in both WASM and Lua, the menu, engine and maps.
-Extract it and run `springcabal.sh` on Linux or `SpringCabal.bat` on Windows.
+Extract it and run `SpringCabal` on Linux or `SpringCabal.exe` on Windows.
 
 ## Overview
 
@@ -86,6 +86,7 @@ verification, the smoke test and the release all read from it:
 | file | what |
 | --- | --- |
 | `launch/springsettings.cfg` | graphics/UI profile; shipped as the release's `springsettings.cfg` |
+| `launch/menu.cfg` | default menu for direct executable startup in portable bundles |
 | `launch/games/<game>/wasm.txt`, `lua.txt` (`gravitas/editor.txt`) | the start script for each menu button |
 | `launch/games/<game>/graphics.cfg` | per-game overrides applied on top when that game starts |
 | `launch/local.cfg` (gitignored) | your window size/position, for `run-wasm.sh` only |
