@@ -212,7 +212,7 @@ HUD or camera into the captures; its `setup` needs the same
 | game | kept in gallery mode | shows | left out, and why |
 | --- | --- | --- | --- |
 | Area 17 | ApiSync, GfxVolumes | the UFO's abduction cone | full view (the gallery grants LOS itself) |
-| Flove | GfxGrass, GfxHideTriggers | full grass detail, hidden trigger markers | (the outlines are the rules-unsynced module, kept in both kinds) |
+| Flove | GfxHideTriggers | hidden trigger markers; grass uses the configured detail | (the outlines are the rules-unsynced module, kept in both kinds) |
 | Gravitas | GameClock, GfxRulesEffects, GfxFire, GfxMapEdge | fire, sparks, arcs and smoke the rules report, heat distortion, map edge | health bars (HUD) |
 | Hunted | none | | the flashlight follows the cursor, and rabbit visibility hides every rabbit outside it |
 | MyCube | none | | the game draws no world effects; health bars and texts are HUD |
