@@ -118,7 +118,7 @@ mkdir -p "$content_dir/games" "$content_dir/maps" "$content_dir/projects"
 
 # Always stripped, on top of each archive's own springignore.txt.
 base_excludes=(
-    --exclude=/.git --exclude=/.gitmodules --exclude=/.gitignore
+    --exclude=.git --exclude=.gitmodules --exclude=.gitignore
     --exclude=/.vscode --exclude=/.idea
     --exclude=/wasm-src --exclude=/wasm-test
     --exclude=/verification --exclude=/springignore.txt
