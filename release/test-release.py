@@ -211,6 +211,24 @@ class ReleaseTests(unittest.TestCase):
                                 env=self.env, capture_output=True, text=True)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_submodule_sources_are_archived(self):
+        library = self.base / "library"
+        library.mkdir()
+        (library / "library.txt").write_text("pinned library source")
+        self.init_repo(library)
+        game = self.root / "spring-linux/games/Test.sdd"
+        self.run_command("git", "-c", "protocol.file.allow=always", "submodule", "add",
+                         str(library), "libs/library", cwd=game)
+        self.run_command("git", "commit", "-qam", "pin library", cwd=game)
+        self.prepare()
+        with tarfile.open(self.root / "release/out/SpringCabal-1.2.3-source.tar.gz") as archive:
+            self.assertIn("SpringCabal-1.2.3-source/spring-linux/games/Test.sdd/libs/library/library.txt",
+                          archive.getnames())
+        record = json.loads((self.root / "release/out/SOURCES-1.2.3.json").read_text())
+        self.assertTrue(any(item['path'].endswith('libs/library') for item in record['sources']))
+        (game / "libs/library/library.txt").write_text("dirty library")
+        self.prepare(success=False)
+
 
 if __name__ == "__main__":
     unittest.main()

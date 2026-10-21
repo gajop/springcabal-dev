@@ -63,8 +63,11 @@ The five upload assets are written to `release/out/`:
 | `BUILDINFO-<version>.txt` | content revisions, Cargo dependency provenance and the released engine commit |
 | `SHA256SUMS-<version>.txt` | SHA-256 checksums for the other four files |
 
-The source archive includes `SOURCEINFO.json` with full revisions and hashes of
-local support content, and `BUILDING-RELEASE.txt` with rebuild instructions.
+The source archive includes `SOURCEINFO.json` with full revisions (including
+recursive submodules) and hashes of local support content, and
+`BUILDING-RELEASE.txt` with rebuild instructions. Initialize any submodules at
+their pinned commits before packaging (`git submodule update --init --recursive`
+in the affected checkout).
 Git history and ignored build outputs are excluded. The engine source is
 available at the public tag recorded in those files.
 

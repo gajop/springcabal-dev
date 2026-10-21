@@ -54,10 +54,21 @@ def inventory(args):
     for repo in repos:
         if Path(git(repo, "rev-parse", "--show-toplevel")).resolve() != repo.resolve():
             raise ValueError(f"not a separate Git checkout: {repo}")
-        if git(repo, "status", "--porcelain"):
+        if git(repo, "status", "--porcelain", "--ignore-submodules=none"):
             raise ValueError(f"commit all changes before preparing a release: {repo}")
         sources.append({"path": str(repo.relative_to(ROOT)), "commit": git(repo, "rev-parse", "HEAD"),
                         "branch": git(repo, "branch", "--show-current")})
+        # git archive leaves submodule directories empty. Include each pinned
+        # checkout separately, including any nested submodules.
+        for entry in git(repo, "ls-files", "--stage", "-z").split("\0"):
+            if not entry.startswith("160000 "):
+                continue
+            header, name = entry.split("\t", 1)
+            child = repo / name
+            expected = header.split()[1]
+            if not (child / ".git").exists() or git(child, "rev-parse", "HEAD") != expected:
+                raise ValueError(f"initialize the pinned submodule before packaging: {child}")
+            repos.append(child)
 
     # Local/download entries have no commit: record every copied file's hash.
     files = {}
