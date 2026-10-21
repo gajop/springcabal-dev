@@ -12,7 +12,7 @@ game has a Rust/WASM port (`*-wasm.sdd`) and its original Lua version (`*.sdd`).
 The games and maps themselves live under `spring-linux/` in their own git
 repositories (listed in `content.tsv`). They are gitignored here and must never
 be pushed from here; only this repository is pushed
-(`gajop/springcabal-dev`, private).
+(`gajop/springcabal-dev`, public).
 
 ## Everyday commands
 

@@ -1,117 +1,173 @@
 # Releasing
 
-A release is one self-contained folder per platform: the engine, the WASM menu,
-every game (WASM port and original Lua version) and their maps. The player
-extracts it and runs `SpringCabal` (Linux) or `SpringCabal.exe` (Windows).
+A release contains the published engine binaries, locally built WASM menu and
+games, all seven original Lua games and their maps. Players extract a bundle
+and run `SpringCabal` (Linux) or `SpringCabal.exe` (Windows) to open the menu.
 
-Releases are built locally, from whatever is checked out under `spring-linux/`.
-Nothing is pushed or uploaded by these scripts.
+`release/release.sh` automates the process used for 1.0.1: prepare all assets
+locally, run the existing checks, then explicitly publish them. Preparation
+does not push or upload anything. Publication pushes only this framework
+repository; game, map and shared-crate repositories stay local. Their committed
+sources are included in the source archive even when their branches are not
+available on GitHub.
 
-## 1. Pick the engine
+## Prerequisites
 
-Bundles use a published engine release from
-[gajop/spring-rust](https://github.com/gajop/spring-rust/releases). Both the
-`recoil_<TAG>_amd64-linux.7z` and `recoil_<TAG>_amd64-windows.7z` assets have
-to exist:
+Use Linux with Bash, Python 3.11+, Git, `just`, `7z`, `rsync`, `zip`, `tar`,
+`strings`, `sha256sum`, the Rust toolchain and an authenticated GitHub CLI
+(`gh auth status`). Install the `wasm32-unknown-unknown` Rust target and populate
+the checkouts and local/download entries listed in `content.tsv` (see README.md).
+Cargo dependencies must be cached: provenance inspection uses
+`cargo metadata --offline --locked`.
+
+Choose a published release from
+[gajop/spring-rust](https://github.com/gajop/spring-rust/releases) containing both
+`recoil_<TAG>_amd64-linux.7z` and `recoil_<TAG>_amd64-windows.7z`. The SDK crates
+used to build the games must match that engine release. For example, use an
+engine checkout at `2026.10.21` and point Cargo at it:
 
 ```bash
-gh release view 2026.09.23 -R gajop/spring-rust
+gh release view 2026.10.21 -R gajop/spring-rust
+just setup-dev-engine ../spring-bar
 ```
 
-The games have to build against the same engine revision, so check that the
-`spring-sdk`/`spring-addons` crates the games compile against match that tag.
+Commit the framework/menu, shared crate, games and maps before preparing a
+release. Preparation refuses dirty source checkouts, including untracked files.
+The engine's released tag is resolved to its full commit; the source snapshot
+links that public engine revision instead of copying a development engine tree.
+When adding content, update `content.tsv`, `launch/games/` and the menu first.
 
-## 2. Prepare the content
+## Prepare all five assets
 
-1. Commit the work in each game and map checkout. The packager records every
-   checkout's branch and commit in `BUILDINFO.txt` and warns about uncommitted
-   changes. It ships them anyway, but then the bundle can't be reproduced.
-2. Rebuild the WASM modules: pass `--build` to the packager, or run
-   `just build-all`. The packager refuses modules that contain test markers
-   (a leftover `e2e`/`headless-integration` build).
-   It also warns when source inputs, embedded templates/shaders, manifests or local dependency sources are newer than the installed modules. Dependency inspection uses `cargo metadata --offline --locked`, so the dependencies must already be cached; it does not fetch or build them. `BUILDINFO.txt` records this current dependency resolution, including commit and dirty state for local patches. Use `--build` to ensure those inputs match the shipped modules.
-3. If you add a game or map, add it to `content.tsv`, give it
-   `launch/games/<game>/{wasm,lua}.txt`, and add it to the menu.
-4. The packager refuses a menu built before the latest change to
-   `launch/games/`, because the menu compiles those files in.
-
-## 3. Package
+Use a new version for each public release; the examples below use `1.0.2`:
 
 ```bash
-just package 2026.09.23                      # Linux + Windows
-./release/package.sh --engine-tag 2026.09.23 --platform linux --version 2026.09.23-rc1
+just release-prepare 1.0.2 2026.10.21
+# Equivalent:
+./release/release.sh prepare 1.0.2 --engine-tag 2026.10.21
 ```
 
-Output, in `release/out/`:
+This runs `just build-all` through the existing packager (fmt, Clippy, release
+build and install for all WASM games and the menu), downloads the selected
+engine binaries, assembles both platforms, archives the committed sources and
+writes checksums. It checks that the sources have not changed during packaging.
+Engine downloads are cached in `release/cache/`.
 
-| Path | Contents |
-|------|----------|
-| `content-<ver>/` | the shared `.sdz` game and `.sd7` map archives |
-| `SpringCabal-<ver>-linux/`, `.tar.gz` | the Linux bundle |
-| `SpringCabal-<ver>-windows/`, `.zip` | the Windows bundle |
+The five upload assets are written to `release/out/`:
 
-Engine downloads are cached in `release/cache/`. To test a bundle before an
-engine release exists, point the packager at a local install instead:
+| File | Contents |
+| --- | --- |
+| `SpringCabal-<version>-linux.tar.gz` | portable Linux bundle |
+| `SpringCabal-<version>-windows.zip` | portable Windows bundle |
+| `SpringCabal-<version>-source.tar.gz` | committed framework, shared crate, game and map sources, plus local support content |
+| `BUILDINFO-<version>.txt` | content revisions, Cargo dependency provenance and the released engine commit |
+| `SHA256SUMS-<version>.txt` | SHA-256 checksums for the other four files |
+
+The source archive includes `SOURCEINFO.json` with full revisions and hashes of
+local support content, and `BUILDING-RELEASE.txt` with rebuild instructions.
+Git history and ignored build outputs are excluded. The engine source is
+available at the public tag recorded in those files.
+
+Unarchived bundles and `content-<version>/` remain in `release/out/` for testing.
+`SOURCES-<version>.json` is a local preparation record used by the publish
+command; keep it alongside the assets. It is not an additional upload. After
+changing a source checkout or rebuilding an asset, prepare again. Never run two
+packagers for the same version at once.
+
+## Portable bundle layout
+
+`release/package.sh` owns the bundle layout for both platforms:
+
+- Each game `.sdd` becomes a `.sdz`. Its `springignore.txt` patterns and
+  development files (`wasm-src/`, `port-reference/`, `verification/`, `.git`,
+  `target/`) are excluded. Original Lua games are packaged from their local
+  checkouts; they do not need a Rust build.
+- Map `.sdd` folders become `.sd7`; existing archives are copied. Area 17 gets
+  the dual-fog patch from `patches/area17-map/` via `scripts/area17-map.sh`.
+- `WasmMenu.sdz` contains the locally built WASM menu on both platforms.
+  Development native-menu libraries are excluded.
+- The graphical engine is renamed to `SpringCabal` / `SpringCabal.exe`.
+  Dedicated/headless engines, downloader, unitsync, import/debug libraries,
+  examples and unused skirmish AIs are removed. NullAI and its C interface stay
+  because the games use them.
+- `isolated.txt` makes the executable use its own directory for settings,
+  caches and logs, including when started from another working directory.
+- `springsettings.cfg` combines `launch/springsettings.cfg` and
+  `launch/menu.cfg`. `DefaultLuaMenu = WasmMenu 1.0` opens the menu with no
+  command-line arguments. No `script.txt` or wrapper launcher is needed.
+  Keep the menu default out of the shared graphics profile, because isolated
+  game verification does not stage a menu archive.
+- `README.txt` comes from `release/README.txt.in`; `BUILDINFO.txt` records the
+  shipped sources and resolved SDK/shared-crate dependencies.
+
+The packager rejects WASM modules containing test markers and a menu older than
+the embedded launch scripts. It warns about source inputs newer than installed
+modules; release preparation always rebuilds them.
+
+For a local development package without source archives or publishing, the
+lower-level command remains available:
 
 ```bash
+just package 2026.10.21 --version test --platform linux
 ./release/package.sh --platform linux --no-archive --version test \
     --engine-dir linux=../spring-bar/build-amd64-linux/install
 ```
 
-What the packager does:
-
-- Each game `.sdd` becomes a `.sdz`. It drops the archive's own `springignore.txt`
-  patterns plus dev-only content (`wasm-src/`, `port-reference/`,
-  `verification/`, `.git`, `target/`).
-- Map `.sdd` folders become `.sd7`. `Area17.sd7` gets the patched dual-fog gadget
-  from `patches/area17-map/` (`scripts/area17-map.sh`).
-- `wasm-menu/` becomes `WasmMenu.sdz`. Both platforms use the locally built
-  Wasm menu; native menu libraries from development builds are excluded.
-- It renames the graphical engine to `SpringCabal` / `SpringCabal.exe` and
-  removes the dedicated/headless engines, downloader, unitsync, import/debug
-  libraries, examples and unused skirmish AIs. NullAI and its C interface are
-  retained because the games use them.
-- It adds `isolated.txt` and `springsettings.cfg` (`launch/springsettings.cfg`
-  plus `launch/menu.cfg`). `DefaultLuaMenu` opens the WASM menu directly;
-  a separate start script or launcher wrapper is unnecessary.
-- It adds `README.txt`
-  (from `release/README.txt.in`) and `BUILDINFO.txt`.
-
-## 4. Test
+## Use the existing checks
 
 ```bash
-just smoke-test release/out/SpringCabal-<ver>-linux
+just smoke-test release/out/SpringCabal-1.0.2-linux
 python3 verification/sdk-menu/run.py --packaged \
-    --engine release/out/SpringCabal-<ver>-linux/SpringCabal \
-    --output verification/out/packaged-menu-<ver>-linux
+    --engine release/out/SpringCabal-1.0.2-linux/SpringCabal \
+    --output verification/out/packaged-menu-1.0.2-linux
+python3 verification/sdk-menu/run.py --packaged --wine \
+    --engine release/out/SpringCabal-1.0.2-windows/SpringCabal.exe \
+    --output verification/out/packaged-menu-1.0.2-windows
 ```
 
-The smoke test starts every menu entry and the menu with the bundle's `SpringCabal` binary through `SDL_VIDEODRIVER=offscreen`, using the real GPU without opening desktop windows or falling back to Xvfb. It uses the shipped settings and per-game graphics overrides, with a 1280×720 window at origin (0, 0) and muted sound, and checks the engine's logged drawable size. Every game must load and remain running until the timeout; the frame count is informational. The menu must load its manifest and either exit cleanly or remain running at the timeout. Both Lua and WASM runs fail on any `Error:` or `Warning:`, runtime failure, missing renderer identity or software renderer. Full logs are kept in the printed temporary directory.
+The smoke test runs all fourteen game entries and the menu offscreen on the
+real GPU with the shipped settings. Errors, warnings, missing renderer identity
+or software rendering fail it. The packaged-menu harness launches the actual
+executable with no arguments from outside the bundle directory and checks
+isolation, navigation, Lua Gravitas launch/return and clean exit. Windows needs
+a working Wine installation or a native Windows play check. Check freshly
+extracted archives too, and play at least one WASM and one Lua game on each
+platform. See `verification/README.md` for the existing game-specific suites.
 
-After that, play at least one WASM and one Lua game from the menu on each platform, and return to the menu from inside a game.
+## Publish
 
-The SDK menu harness's `--packaged` mode copies the actual bundle and launches
-its executable with no arguments from outside the bundle directory. It checks
-menu navigation, Lua Gravitas launch/return and a clean exit. Pass `--wine` for
-the corresponding `SpringCabal.exe` check.
+Write player-facing notes to a file outside the source tree (or commit them
+before preparation). Release notes describe player-visible changes, the engine
+tag and launch instructions. Keep validation reports in development logs; do
+not add validation or known-limitations sections to release notes.
 
-## 5. Publish
-
-Releases are published manually to
-[gajop/springcabal-dev](https://github.com/gajop/springcabal-dev/releases).
-For a numbered release, pass the version to the existing packager:
+From the framework's clean `main` branch:
 
 ```bash
-./release/package.sh --engine-tag 2026.10.21 --platform all --version 1.0.0 --build
+# Check assets/revisions and preview publication without changing Git or GitHub:
+just release-publish 1.0.2 /tmp/springcabal-1.0.2-notes.md --dry-run
+
+# Push framework main + v1.0.2, upload, verify checksums, and publish:
+just release-publish 1.0.2 /tmp/springcabal-1.0.2-notes.md
+
+# Or upload and keep a draft for review:
+./release/release.sh publish 1.0.2 --notes /tmp/springcabal-1.0.2-notes.md --draft
 ```
 
-Commit and push the framework/menu revision and tag it `v<version>` (for example,
-`v1.0.0`). Attach both platform bundles and their SHA-256 checksums to that tag's
-GitHub release. Include a source snapshot of the committed framework, shared
-crate, games, maps and local support content when individual game branches have
-not been pushed. Record those revisions and the engine tag in the snapshot.
-The source snapshot excludes Git history, local caches and generated binaries.
+The default title is `SpringCabal <version>`; pass `--title "..."` to change it.
+Publication checks the exact prepared sources and asset checksums, creates an
+annotated `v<version>` tag, and atomically pushes framework `main` and the tag
+to `origin` (`gajop/springcabal-dev`). It uploads all five assets to a draft,
+compares GitHub's SHA-256 digests with local files, then makes it the latest
+stable release. `--draft` stops after the digest check. The command can resume
+an interrupted draft upload with the same prepared files. A checksum failure
+leaves the release in draft form.
 
-Release notes describe player-visible changes, the engine tag and launch
-instructions. Keep validation reports in development logs; do not add
-validation or known-limitations sections to release notes.
+Already public releases and tags pointing at another commit are refused; use
+a new version rather than replacing them. The scripts never build/push the
+engine, trigger engine CI, or push individual content repositories. Publish
+the engine binaries first when a new engine revision is needed.
+
+To check changes to the release scripts themselves, run
+`python3 release/test-release.py`. These tests use tiny temporary Git repositories
+and a fake GitHub CLI; they do not build games or contact GitHub.

@@ -76,6 +76,16 @@ run GAME="":
 package ENGINE_TAG *ARGS:
     ./release/package.sh --engine-tag {{ENGINE_TAG}} {{ARGS}}
 
+# Prepare all five release assets locally: binaries, sources, BUILDINFO and checksums
+[group('release')]
+release-prepare VERSION ENGINE_TAG:
+    ./release/release.sh prepare {{VERSION}} --engine-tag {{ENGINE_TAG}}
+
+# Push framework main + tag and publish prepared assets (use --dry-run to preview)
+[group('release')]
+release-publish VERSION NOTES *ARGS:
+    ./release/release.sh publish {{VERSION}} --notes {{quote(NOTES)}} {{ARGS}}
+
 # Smoke-test every bundle entry and menu offscreen on the real GPU; fail on warnings/errors
 [group('release')]
 smoke-test BUNDLE:

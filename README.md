@@ -8,6 +8,10 @@ Download the Linux or Windows bundle from [Releases](https://github.com/gajop/sp
 Each includes all seven games in both WASM and Lua, the menu, engine and maps.
 Extract it and run `SpringCabal` on Linux or `SpringCabal.exe` on Windows.
 
+To build the release assets locally, run `just release-prepare VERSION ENGINE_TAG`.
+The [release guide](RELEASING.md) covers packaging, the existing checks and
+`just release-publish`.
+
 ## Overview
 
 This repository provides:
@@ -27,7 +31,7 @@ are archived in [game-info/](game-info/README.md).
 │                            #   optionally fetches an engine
 ├── run-wasm.sh              # Launches the WASM menu or a single game
 ├── wasm-menu/               # The game-selection menu (RmlUi + Rust/WASM)
-├── release/                 # Release packaging and smoke test
+├── release/                 # Release preparation, source snapshots, publishing and smoke test
 ├── RELEASING.md             # How releases are built and published
 ├── verification/            # Automated test suite (headless, visual, static)
 ├── BASELINE.md              # The last verified state: suite results and counts
