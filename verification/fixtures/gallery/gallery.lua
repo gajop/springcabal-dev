@@ -279,7 +279,8 @@ if SYNCED then
 	end
 
 	function gadget:GameFrame(frame)
-		if MODE == "anim" then
+		-- Let first-frame deferred unit-script links finish before isolation.
+		if MODE == "anim" and frame >= 2 then
 			clearWorld()
 		end
 		local job, t, index = jobAt(frame)

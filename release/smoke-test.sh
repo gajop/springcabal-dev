@@ -15,6 +15,20 @@ work="$(mktemp -d "${TMPDIR:-/tmp}/springcabal-smoke.XXXXXX")"
 
 [[ -x "$bundle/spring" ]] || { echo "no spring in $bundle" >&2; exit 1; }
 [[ -f "$bundle/springsettings.cfg" ]] || { echo "no springsettings.cfg in $bundle" >&2; exit 1; }
+# Use the bundled fonts, as verification/sdk-menu/run.py does. The engine's
+# bundled Fontconfig can predate the host configuration syntax; each fresh
+# write directory otherwise scans the host fonts and reports parser warnings.
+python3 - "$bundle/fonts" "$work" <<'PY'
+from pathlib import Path
+import sys
+from xml.sax.saxutils import escape
+fonts, work = map(Path, sys.argv[1:])
+(work / "fonts.conf").write_text(
+    f'<fontconfig><dir>{escape(str(fonts))}</dir>'
+    f'<cachedir>{escape(str(work / "fontcache"))}</cachedir></fontconfig>\n'
+)
+PY
+export FONTCONFIG_FILE="$work/fonts.conf"
 # shellcheck source=../verification/lib/failures.sh
 source "$project_root/verification/lib/failures.sh"
 crash_pattern='Segmentation fault|\[Fatal\]|wasm trap|panicked at|AddressSanitizer'
@@ -116,7 +130,8 @@ errors="$(grep -ciE '\bError:' "$log")"
 warnings="$(grep -ciE '\bWarning:' "$log")"
 log_ok=0
 clean_log "$log" || log_ok=1
-if grep -q 'Wasm manifest loaded from WasmMenu/manifest.json' "$log" \
+# The engine prefers the native SDK menu when the bundle contains both backends.
+if grep -Eq 'Wasm manifest loaded from WasmMenu/manifest.json|Successfully loaded native module WasmMenu/libNativeMenu.so' "$log" \
     && (( status == 0 || status == 124 )) && (( log_ok == 0 )); then
     printf '%-36s %-10s %-8s %-8s %s\n' 'WasmMenu (offscreen)' ok - "${errors:-0}" "${warnings:-0}"
 else

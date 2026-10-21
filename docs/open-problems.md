@@ -33,6 +33,25 @@ Hunted now reads pellet count and spread through the SDK query added in `spring-
 
 ## Checks
 
+- **Area17's gallery baselines need review after the October port.**
+  `verify gallery ceg area17` reports the new empty `nothing` CEG and changed
+  `ufoblast` images; both effects changed in game commit `1895b7f`, after the
+  September 25 goldens. `verify gallery anim area17` also reports image drift
+  and five UFO muzzle pose differences. The focused existing comparison,
+  `verify gallery parity area17 --only ufo`, confirms a WASM/Lua difference of
+  up to 0.475 elmos / 0.0574 rotation, so that pose mismatch is not just an old
+  golden. Gameplay, technology-panel and control assertions pass.
+- **Gravitas's animation gallery has two remaining effect-image mismatches.**
+  With first-frame level links allowed to finish before gallery isolation,
+  all 52 poses match and startup has no warnings, but `electrafi/idle-f30`
+  and `fire/idle-f30` differ from their image goldens. Reproduce with
+  `verify gallery anim gravitas`; review the captures before replacing goldens.
+- **Scenario screenshot goldens use an older software renderer.** Their
+  recorded Mesa version is `25.2.8-0ubuntu0.24.04.2`; this machine now has
+  `25.2.8-0ubuntu0.24.04.4`.
+  `VF_ALLOW_RENDERER_MISMATCH=1 ./verification/verify visual`
+  runs the scenarios on the default GPU while skipping incompatible scenario
+  pixels. Compatible GPU gallery goldens are still compared.
 - **CEG gallery captures sometimes flake on engine particle noise.** Rerun once before concluding.
   BASELINE.md lists the captures seen failing.
 - **Parts Needed's visual shots 3–4 can fail "camera not settled" on a heavily loaded machine**

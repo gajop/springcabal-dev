@@ -77,9 +77,9 @@ Rebuild one game's modules with `just copy` in its `wasm-src/`.
   suite's exact check count, `gallery` for gallery mode and `defs::DefCache`
   for defs resolved once. Warnings go through the SDK (`spring::log_warning!`,
   `log_once!`, `ResultExt::log_err` / `log_err_once`), not game helpers.
-- The games pin the crate with `rev = "..."` in `wasm-src/Cargo.toml`; the
-  `[patch]` in `.cargo/config.toml` builds against the local checkout. After
-  pushing `springcabal-rs`, bump the rev in all seven games.
+- The games use local path dependencies for `springcabal-rs`. The generated
+  `.cargo/config.toml` overrides only the engine's `spring-sdk` and
+  `spring-addons`; obsolete Git patches can destabilize `--locked` checks.
 
 ## Logs
 
