@@ -8,21 +8,21 @@
 #   branch  branch to check out ("-" for non-git sources)
 #   ship    yes/no: whether release/package.sh puts it in the bundle
 #
-# The WASM branches are not published yet: setup.sh skips what it
-# cannot clone, and packaging always uses whatever is checked out locally.
+# Public game branches: master for Lua, rust for WASM.
+# Packaging always uses whatever is checked out locally.
 
 # kind	path	source	branch	ship
-game	Gravitas-wasm.sdd	https://github.com/SpringCabal/Gravitas.git	gravitas-wasm-port	yes
+game	Gravitas-wasm.sdd	https://github.com/SpringCabal/Gravitas.git	rust	yes
 game	Hunted-wasm.sdd	https://github.com/SpringCabal/Hunted.git	rust	yes
 game	Area17-wasm.sdd	https://github.com/SpringCabal/Area-17.git	rust	yes
 game	Flove-wasm.sdd	https://github.com/SpringCabal/Flove.git	rust	yes
-game	PartsNeeded-wasm.sdd	https://github.com/SpringCabal/LD35.git	partsneeded-wasm-port	yes
-game	MyCube-wasm.sdd	https://github.com/SpringCabal/LD42.git	mycube-wasm-port	yes
-game	ToTheLastDrop-wasm.sdd	https://github.com/SpringCabal/LD43.git	ttld-wasm-port	yes
+game	PartsNeeded-wasm.sdd	https://github.com/SpringCabal/LD35.git	rust	yes
+game	MyCube-wasm.sdd	https://github.com/SpringCabal/LD42.git	rust	yes
+game	ToTheLastDrop-wasm.sdd	https://github.com/SpringCabal/LD43.git	rust	yes
 game	Gravitas.sdd	https://github.com/SpringCabal/Gravitas.git	master	yes
 game	Hunted.sdd	https://github.com/SpringCabal/Hunted.git	master	yes
 game	Area-17.sdd	https://github.com/SpringCabal/Area-17.git	master	yes
-game	Flove.sdd	https://github.com/SpringCabal/Flove.git	main	yes
+game	Flove.sdd	https://github.com/SpringCabal/Flove.git	master	yes
 game	PartsNeeded.sdd	https://github.com/SpringCabal/LD35.git	master	yes
 game	MyCube.sdd	https://github.com/SpringCabal/LD42.git	master	yes
 game	ToTheLastDrop.sdd	https://github.com/SpringCabal/LD43.git	master	yes

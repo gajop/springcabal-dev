@@ -48,6 +48,8 @@ are archived in [game-info/](game-info/README.md).
 
 Game and map sources stay in their own repositories (mostly under
 github.com/SpringCabal); this repository only holds the tooling around them.
+Each game's public `master` branch contains Lua, and its `rust` branch contains
+the Rust/WASM port.
 
 ## Getting Started
 
@@ -62,10 +64,15 @@ rustup target add wasm32-unknown-unknown
 ### 1. Content and engine
 
 ```bash
-./setup.sh --engine-tag 2026.09.23   # or: just setup 2026.09.23
+./setup.sh --engine-tag 2026.10.21   # or: just setup 2026.10.21
 ```
 
-This clones every repository listed in `content.tsv` into `spring-linux/` (existing checkouts are left alone) and downloads that Linux engine release from `gajop/spring-rust` into `engine/`. Entries marked `local` or `download`, and any game branches that have not been published, have to be copied in by hand; setup lists whatever it could not fetch. Release source snapshots include the local game and shared-crate revisions, which may not yet be available on their individual repositories' branches.
+This clones the public game and map branches listed in `content.tsv` into
+`spring-linux/` (existing checkouts are left alone) and downloads that Linux
+engine release from `gajop/spring-rust` into `engine/`. Entries marked `local` or
+`download` still have to be copied in; setup lists whatever it could not fetch.
+Release source snapshots also include that support content and record the
+exact game, map and shared-crate revisions used for each release.
 
 `run-wasm.sh` picks the engine in this order: `$SPRING_ENGINE_DIR`, a local
 engine build at `../spring-bar/build-amd64-linux/install` (override the checkout
@@ -73,7 +80,7 @@ with `$SPRING_BAR_DIR`), then `engine/current` from setup.
 
 ### 2. Running
 
-Every Lua and WASM game reserves Pause for pausing, F12 for screenshots and Ctrl+Q for returning to the menu. Default RTS keyboard orders are disabled. The shared controls live in the engine’s `LuaHandler/Utilities/game_controls.lua` for Lua and `springcabal::controls::GameControls` for WASM. These local review branches require the current development engine, including its rebuilt `springcontent.sdz`.
+Every Lua and WASM game reserves Pause for pausing, F12 for screenshots and Ctrl+Q for returning to the menu. Default RTS keyboard orders are disabled. The shared controls live in the engine’s `LuaHandler/Utilities/game_controls.lua` for Lua and `springcabal::controls::GameControls` for WASM. Use the matching engine release or a current development engine, including its rebuilt `springcontent.sdz`.
 
 ```bash
 ./run-wasm.sh                        # the WASM menu; every game has WASM and Lua buttons

@@ -10,9 +10,10 @@ Dare games on the Recoil `rust-wip` engine (built from `../spring-bar`). Each
 game has a Rust/WASM port (`*-wasm.sdd`) and its original Lua version (`*.sdd`).
 
 The games and maps themselves live under `spring-linux/` in their own git
-repositories (listed in `content.tsv`). They are gitignored here and must never
-be pushed from here; only this repository is pushed
-(`gajop/springcabal-dev`, public).
+repositories (listed in `content.tsv`) and are gitignored here. Normal framework
+and release work pushes only this repository (`gajop/springcabal-dev`, public).
+Push game or map repositories only when explicitly requested. Public game
+branches are `master` for Lua and `rust` for Rust/WASM.
 
 ## Everyday commands
 
