@@ -1,0 +1,70 @@
+<div id="springcabal-comparison">
+  <style>
+    #springcabal-comparison .plot text{fill:var(--foreground);font-size:12px}
+    #springcabal-comparison .plot{width:100%;display:block}
+    #springcabal-comparison .sub{color:var(--muted-foreground)}
+  </style>
+  <h3>GPU-rendered frame time</h3>
+  <div class="viz-controls">
+    <label class="form-label">Scene
+      <select class="form-select" id="springcabal-scene">
+        <option value="hunted">Hunted · normal</option>
+        <option value="hunted10">Hunted · 10×</option>
+        <option value="flove">Flove · 350 mushrooms</option>
+        <option value="flove10">Flove · 3,500 mushrooms</option>
+        <option value="ttld">To the Last Drop · normal</option>
+        <option value="ttld10">To the Last Drop · 10×</option>
+        <option value="area17">Area 17 · normal</option>
+        <option value="area172">Area 17 · 2×</option>
+        <option value="fire1">Gravitas fire · 1 emitter pair</option>
+        <option value="fire10">Gravitas fire · 10 emitter pairs</option>
+      </select>
+    </label>
+    <label class="form-label">Comparison
+      <select class="form-select" id="springcabal-mode">
+        <option value="language">Lua / Rust · pool 4</option>
+        <option value="jobs4">Rust jobs off / on · pool 4</option>
+        <option value="jobs1">Rust jobs off / on · pool 1</option>
+      </select>
+    </label>
+  </div>
+  <svg class="plot" id="springcabal-plot" role="img" aria-label="Complete-window milliseconds per rendered frame"></svg>
+  <div id="springcabal-value" class="tabular-nums" aria-live="polite"></div>
+  <div class="text-small sub">NVIDIA GTX 1660 Ti · five alternating pairs · median of window means · lower is faster</div>
+  <script>
+    (()=>{
+      const root=document.getElementById('springcabal-comparison'),scene=root.querySelector('#springcabal-scene'),mode=root.querySelector('#springcabal-mode'),svg=root.querySelector('#springcabal-plot'),ns='http://www.w3.org/2000/svg';
+      const data={
+        hunted:{language:[1.143,1.054,-8.3],jobs4:[1.066,1.177,10.1],jobs1:[1.026,1.137,11.2]},
+        hunted10:{language:[7.211,3.427,-53.5],jobs4:[3.459,3.560,3.1],jobs1:[3.708,3.979,6.6]},
+        flove:{language:[5.359,4.385,-18.2],jobs4:[4.483,4.541,1.3],jobs1:[4.924,4.858,-1.2]},
+        flove10:{language:[80.688,70.275,-12.9],jobs4:[70.568,70.697,0.0],jobs1:[85.345,85.429,-0.1]},
+        ttld:{language:[5.428,6.410,15.6]},ttld10:{language:[33.560,43.835,30.8]},
+        area17:{language:[2.639,2.272,-13.5]},area172:{language:[6.510,5.837,-11.6]},
+        fire1:{language:[.609,.592,-2.4],jobs4:[.582,.766,31.0],jobs1:[.557,.831,48.6]},
+        fire10:{language:[3.425,1.712,-48.7],jobs4:[1.691,1.707,1.2],jobs1:[1.689,2.544,42.3]}
+      };
+      function el(tag,attrs,text){const e=document.createElementNS(ns,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
+      function draw(){
+        for(const o of mode.options)o.disabled=!data[scene.value][o.value];
+        if(mode.selectedOptions[0].disabled)mode.value='language';
+        const v=data[scene.value][mode.value],names=mode.value==='language'?['Lua','Rust']:['Jobs off','Jobs on'],width=root.clientWidth,left=84,right=78,top=30,bottom=150,max=Math.max(v[0],v[1])*1.08,x=n=>left+(width-left-right)*n/max;
+        svg.replaceChildren();svg.setAttribute('viewBox',`0 0 ${width} 200`);svg.setAttribute('height','200');
+        svg.append(el('rect',{'data-chart-frame':'',x:left,y:top,width:width-left-right,height:bottom-top,fill:'none',stroke:'var(--border)'}));
+        for(let i=0;i<=3;i++){const value=max*i/3,px=x(value);svg.append(el('line',{x1:px,y1:top,x2:px,y2:bottom,stroke:'var(--border)'}));svg.append(el('text',{x:px,y:bottom+20,'text-anchor':'middle'},value.toFixed(max<3?2:1)));}
+        for(let i=0;i<2;i++){
+          const y=50+i*58;svg.append(el('text',{x:left-9,y:y+17,'text-anchor':'end'},names[i]));
+          const bar=el('rect',{x:left,y,width:x(v[i])-left,height:27,fill:`var(--viz-series-${i+1})`});bar.append(el('title',{},`${names[i]}: ${v[i].toFixed(3)} ms/frame`));svg.append(bar);
+          svg.append(el('text',{x:width-3,y:y+17,'text-anchor':'end'},v[i].toFixed(3)+' ms'));
+        }
+        svg.append(el('text',{x:(left+width-right)/2,y:197,'text-anchor':'middle',class:'axis-title','data-axis':'x'},'Elapsed time (ms/frame)'));
+        svg.append(el('text',{x:4,y:18,class:'axis-title','data-axis':'y'},'Version'));
+        root.querySelector('#springcabal-value').textContent=`Median paired time change: ${v[2]>0?'+':''}${v[2].toFixed(1)}%`+(scene.value==='flove10'&&mode.value==='jobs1'?' · four accepted pairs':'');
+      }
+      function saved(value){const s=value?.privateContent??value;if(data[s?.scene])scene.value=s.scene;if(s?.mode&&[...mode.options].some(o=>o.value===s.mode))mode.value=s.mode;draw();}
+      function changed(){draw();window.openai?.setWidgetState?.({modelContent:{scene:scene.selectedOptions[0].text,comparison:mode.selectedOptions[0].text},privateContent:{scene:scene.value,mode:mode.value}})?.catch(()=>{});}
+      saved(window.openai?.widgetState);scene.addEventListener('change',changed);mode.addEventListener('change',changed);new ResizeObserver(draw).observe(root);
+      window.addEventListener('openai:set_globals',e=>{if(e.detail?.globals?.widgetState)saved(e.detail.globals.widgetState);});
+    })();
+  </script>
+</div>
