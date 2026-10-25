@@ -4,9 +4,19 @@ from pathlib import Path
 import tempfile
 import run
 import report
+import dashboard
+import profile_export
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_gpu_guard_distinguishes_desktop_own_and_foreign_clients(self):
+        sample = ('# gpu pid type sm command\n'
+                  '0 10 G - Xorg\n0 20 G - spring\n'
+                  '0 30 C+G 99 spring\n0 40 C 80 python\n')
+        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample)], [20, 30, 40])
+        groups = {20: 123, 30: 321, 40: 321}
+        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample, 123, groups.__getitem__)], [30, 40])
+
     def test_pressure_guard_uses_selected_scope_and_fails_closed(self):
         sample = {'cpu_pressure': 'some avg10=40.00 avg60=20.00'}
         self.assertEqual(run.pressure(sample), 40)
@@ -104,6 +114,11 @@ class EquivalenceTests(unittest.TestCase):
 
 
 class ReportTests(unittest.TestCase):
+    def test_recording_and_sampling_runs_do_not_supply_timings(self):
+        self.assertFalse(report.is_timing({'instrumented': True, 'rust_jobs': 'off'}))
+        self.assertTrue(report.is_timing({'instrumented': False, 'rust_jobs': 'off'}))
+        self.assertFalse(report.is_timing({'rust_jobs': 'check'}))
+
     def test_check_mode_completes_but_does_not_supply_timing_results(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -179,6 +194,42 @@ class ReportTests(unittest.TestCase):
             self.assertEqual(summary['completed'], 2)
             self.assertEqual(summary['sim_p50_ms'], 2)
             self.assertIsNone(summary['sampled_peak_rss_mib'])
+
+
+class ProfileAndRecordingTests(unittest.TestCase):
+    def test_profile_parsing_preserves_cpp_parentheses_and_sample_weights(self):
+        raw = ('recoil-main 10/10 123.456: 2000000\n'
+               '   1234 std::_Function_handler<void (int), (anonymous namespace)::Task>::run() (/tmp/spring)\n'
+               '   2345 CGame::Draw() (/tmp/spring)\n\n'
+               'recoil-main 10/10 123.458: 3000000\n'
+               '   1235 luaH_get(Table*, lua_TValue const*) (/tmp/spring)\n')
+        samples = profile_export.parse(raw)
+        self.assertEqual(len(samples), 2)
+        self.assertEqual(samples[0]['frames'][0][1], '/tmp/spring')
+        self.assertIn('(anonymous namespace)', samples[0]['frames'][0][0])
+        tree = profile_export.export(samples)
+        self.assertEqual(tree['threads'][0]['weight'], 5000000)
+        self.assertEqual(sum(n['weight'] for n in tree['leaves']), 5000000)
+        self.assertEqual(profile_export.category('[unknown]', 'libnvidia-eglcore.so'), 'Graphics driver (CPU)')
+
+    def test_recording_delta_encoding_preserves_moves_removals_and_id_reuse(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary)/'world.jsonl'
+            rows = [{'type': 'header', 'format': 'springcabal-world'},
+                    {'type': 'sample', 'frame': 0, 'units': [[4, 1, 0, 10.12, 20.34, 99.5, 100]], 'projectiles': []},
+                    {'type': 'sample', 'frame': 6, 'units': [[4, 1, 0, 11.25, 20.32, 98.5, 100]], 'projectiles': [[1, 12, 13]]},
+                    {'type': 'sample', 'frame': 12, 'units': [], 'projectiles': []},
+                    {'type': 'sample', 'frame': 18, 'units': [[4, 2, 1, 80, 40, 50, 60]], 'projectiles': []},
+                    {'type': 'end', 'samples': 4, 'frame': 18}]
+            path.write_text(''.join(json.dumps(r)+'\n' for r in rows))
+            packed = dashboard.world(path)
+            self.assertEqual(packed['samples'][1][1], [[4, 113, -2, -100]])
+            self.assertEqual(packed['samples'][2][2], [4])
+            self.assertEqual(packed['samples'][3][1], [[4, 2, 1, 8000, 4000, 5000, 6000]])
+            rows[-1]['samples'] = 5
+            path.write_text(''.join(json.dumps(r)+'\n' for r in rows))
+            with self.assertRaises(ValueError):
+                dashboard.world(path)
 
 
 if __name__ == '__main__':

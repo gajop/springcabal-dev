@@ -1,5 +1,31 @@
 # Lua/Wasm game measurements
 
+Open the [HTML benchmark explorer](../../docs/benchmarks/2026-10-26/index.html)
+with `bash verification/perf/serve.sh` and visit `http://127.0.0.1:8784/`.
+It includes paired intervals and individual runs, exact frame traces, synchronized
+world recordings, CPU flame graphs, source-backed analysis and follow-up experiments.
+The generated site also opens directly from disk, with no CDN dependencies.
+
+`dashboard.py` rebuilds it from saved runner evidence; `capture.sh` saves actual
+unit/projectile observations for dots playback, `capture-profiles.sh` samples CPU
+stacks without that observer, and `capture-video.sh` records the real GPU fire
+renderer through the existing screenshot action. Capture runs never enter timing
+aggregates. The observer records every six simulation frames, rounds coordinates
+and health to two decimals, and changes no game state or RNG.
+
+`profile_export.py --buildid-dir ...` resolves the pinned engine's matching debug
+symbols and injects Wasmtime JIT names. Its flame graph retains actual sampled
+stacks and explicit unresolved frames. It does not invent a complete call hierarchy
+when unwinding stops. Sampler/recorder work is kept separate from timing baselines.
+
+When another renderer shares the NVIDIA GPU, add `--wait-for-gpu-idle`. This opt-in
+guard uses `nvidia-smi pmon`: it waits for ten quiet seconds without other compute clients and Spring graphics
+clients, records process samples during the run, and marks any overlapping run
+contended so both members of its pair are excluded. Normal desktop graphics remain.
+This addresses observed overlapping engine runs; the CPU-pressure guard alone
+cannot detect GPU contention. `recheck-ttld.sh` applies both guards to the existing
+normal/stress and shadows-on/off TTLD inputs. No engine changes are required.
+
 `just verify perf mycube autonomous --output /absolute/run/path` stages private
 copies of both games, uses one engine binary, one map, fixed seeds and settings,
 and runs alternating Lua/Wasm pairs. Five repeats are the default. Source game

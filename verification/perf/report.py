@@ -8,6 +8,10 @@ import statistics
 import run as runner
 
 
+def is_timing(result):
+    return result.get('rust_jobs') != 'check' and not result.get('instrumented', False)
+
+
 def summarize(root):
     groups = {}
     for path in sorted(root.glob('**/result.json')):
@@ -19,7 +23,7 @@ def summarize(root):
     rows = []
     for (campaign, game, backend, mode), runs in groups.items():
         good = [r for r in runs if r['ok']]
-        timed = [r for r in good if r.get('rust_jobs') != 'check']
+        timed = [r for r in good if is_timing(r)]
         def median(values):
             values = [v for v in values if v is not None]
             return statistics.median(values) if values else None
@@ -68,7 +72,7 @@ def paired_summary(root, jobs=False):
         names = ('off', 'on') if jobs else ('lua', 'rust')
         change = 'jobs' if jobs else 'rust'
         pairs = [pair for pair in repeats.values() if set(pair) == {left, right}
-                 and all(r['ok'] and not r['contended'] and r.get('rust_jobs') != 'check' for r in pair.values())]
+                 and all(r['ok'] and not r['contended'] and is_timing(r) for r in pair.values())]
         row = {'campaign': campaign, 'game': game, 'measured_pairs': len(pairs),
                'attempted_pairs': len(repeats), 'excluded_pairs': len(repeats)-len(pairs)}
         if jobs:

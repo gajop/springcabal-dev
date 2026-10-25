@@ -6,13 +6,20 @@ function gadget:GetInfo()
 end
 
 local options = Spring.GetModOptions() or {}
+local recordEvery = tonumber(options.perf_record_every) or 0
 if not gadgetHandler:IsSyncedCode() then
+    local observer
     function gadget:Initialize()
         if tonumber(options.perf_frame_step) == 1 then
             -- Same engine mechanism used by the existing golden galleries.
             Spring.SetVideoCapturingMode(true)
         end
+        if recordEvery > 0 then
+            observer = VFS.Include("LuaRules/Gadgets/perf_world.lua")
+            observer.start(recordEvery)
+        end
     end
+    function gadget:Shutdown() if observer then observer.finish() end end
     return
 end
 
@@ -34,6 +41,9 @@ local function counts()
 end
 
 function gadget:GameFrame(frame)
+    if recordEvery > 0 and frame % recordEvery == 0 then
+        SendToUnsynced("perf-world-tick", frame)
+    end
     if frame == tonumber(options.perf_sample_frame) then
         Spring.Echo("[PerfWorkload] measured " .. counts())
     end

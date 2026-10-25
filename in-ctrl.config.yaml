@@ -1,0 +1,7 @@
+title: SpringCabal
+description: Games, releases, and reproducible Lua/Rust performance measurements.
+docs: docs
+home: README.md
+repo: https://github.com/gajop/springcabal-dev
+branch: main
+comments: false
