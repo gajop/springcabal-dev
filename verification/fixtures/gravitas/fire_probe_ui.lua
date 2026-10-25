@@ -24,6 +24,8 @@ post.ViewResize()
 local particles = {}
 local seed = 1
 local target = 0
+local perf = tonumber((Spring.GetModOptions() or {}).fire_perf) == 1
+if perf then Spring.SendCommands("hideinterface 1") end
 GG = {Lups = {AddParticlesArray = function(list)
     for i = 1, #list do
         randomState = seed + i - 1
@@ -57,6 +59,21 @@ widget:Update()
 function FireProbe(message)
     local fields = {}
     for value in message:gmatch("[^|]+") do fields[#fields+1] = value end
+    if perf then
+        thisGameFrame = Spring.GetGameFrame()
+        target = thisGameFrame
+        seed = target * 20
+        burnLayer = 0
+        randomState = seed
+        if fields[2] == "burn" then
+            onFireUnit(1, 1.0)
+        elseif fields[2] == "flame" then
+            seed = target * 10
+            EmitFlame(4288, 144.25, 531, 0, 0.5, 0, 0, 0, 0, 500)
+            gadget:GameFrame()
+        end
+        return
+    end
     if fields[2] == "probe" then
         for _, p in ipairs(particles) do p.fx:Destroy() end
         particles = {}
@@ -84,6 +101,7 @@ function Update()
     Spring.WarpMouse(1100, 500)
     Spring.SetCameraState({name="ta", mode=1, px=4288, py=0, pz=600,
         height=650, angle=0.464, fov=45}, 0)
+    if perf then target = Spring.GetGameFrame() end
     local n = target
     for i = #particles, 1, -1 do
         local p = particles[i]

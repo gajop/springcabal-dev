@@ -12,6 +12,9 @@ if [[ $variant == wasm ]]; then
 fi
 vf_workspace "gravitas-fire-$variant" stable
 staged=$(vf_stage_game "$source_game")
+# This fixture launches the base archive directly; the normal Lua menu entry
+# gets its single-player setting from Scenario Editor Gravitas.
+sed -i 's/modtype = "1",/modtype = "1", onlyLocal = true,/' "$staged/modinfo.lua"
 cp "$FIXTURES_DIR/gravitas/fire_probe_rules.lua" "$staged/LuaRules/main.lua"
 cp "$FIXTURES_DIR/gravitas/fire_probe_rules.lua" "$staged/LuaRules/draw.lua"
 if [[ $variant == lua ]]; then
@@ -23,7 +26,7 @@ else
 fi
 vf_link_map "$MAPS_DIR/Gravitas-map.sdd"
 vf_start_file "$(vf_launch_script gravitas)"
-vf_start_set GameType Gravitas
+vf_start_set GameType 'Gravitas $VERSION'
 vf_config "$VISUAL_CONFIG"
 vf_config_set UseFontConfigLib 0
 vf_config_set GroundDetail 200

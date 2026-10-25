@@ -18,14 +18,14 @@ declare -A MODES=(
     [host]='tests'
     [controls]='all area17 flove gravitas hunted mycube partsneeded ttld'
     [installed]='all area17 flove gravitas hunted mycube partsneeded ttld'
-    [perf]='all mycube ttld hunted area17 gravitas flove partsneeded'
+    [perf]='all tests comparison mycube ttld hunted area17 gravitas flove partsneeded'
 )
 # What `verify all` runs: every in-game assertion suite, the Lua/Rust pose
 # comparisons, host unit tests and the static checks; no golden screenshots.
 # Engine runs use offscreen GPU rendering. Real-input checks use a private
 # virtual display; no verification run opens a window on the desktop.
 ALL_RUNS=(
-    'host tests' 'installed all' 'area17 static' 'area17 headless' 'area17 tech-ui' 'flove headless'
+    'host tests' 'perf tests' 'installed all' 'area17 static' 'area17 headless' 'area17 tech-ui' 'flove headless'
     'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'gravitas lua-rules' 'gravitas lua-play' 'hunted headless' 'mycube headless'
     'mycube lua-headless' 'partsneeded headless' 'ttld headless' 'ttld pose-parity'
     'unit-scripts partsneeded' 'controls all' 'gravitas bob' 'gravitas lua-bob'

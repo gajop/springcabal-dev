@@ -28,6 +28,7 @@ just probe gravitas-fire lua     # a debugging probe
 | `host` | `tests` |
 | `controls` | `all` \| `<game>` (then `both`, `wasm` or `lua`) |
 | `installed` | `all` \| `<game>` |
+| `perf` | `all` \| `tests` \| `comparison` \| `<game>` (see [paired measurements](perf/README.md)) |
 
 - `headless` runs the in-game assertions (`headless-integration`) with invisible GPU rendering by default.
 - `visual` renders through SDL offscreen on the real GPU, runs the `e2e` scenario and compares screenshots with goldens.
@@ -48,6 +49,10 @@ just probe gravitas-fire lua     # a debugging probe
   `shared` (and Hunted's `ai`) crate.
 - `installed` checks that the modules installed in each game folder match a
   fresh build of its `wasm-src/`.
+- `perf tests` checks the performance runner's equivalence, render-window and
+  aggregation logic and is included in `verify all`. Benchmark campaigns are
+  opt-in; [perf/README.md](perf/README.md) covers the four game pairs, 10×
+  scenes and isolated Gravitas fire rendering.
 - `flove outline`, `wisps` and `original` render images for manual A/B
   inspection and do not fail on pixels.
 
