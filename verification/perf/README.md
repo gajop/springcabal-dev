@@ -2,6 +2,10 @@
 
 Open the [HTML benchmark explorer](../../docs/benchmarks/2026-10-26/index.html)
 with `bash verification/perf/serve.sh` and visit `http://127.0.0.1:8784/`.
+To serve it to your Tailscale devices, run
+`bash verification/perf/serve.sh "$PWD/docs/benchmarks/2026-10-26" 8784 "$(tailscale ip -4)"`
+and open `http://<this-machine's-Tailscale-IP-or-DNS-name>:8784/`.
+The arguments are the site directory, port and bind address; the default address is localhost.
 It includes paired intervals and individual runs, exact frame traces, synchronized
 world recordings, CPU flame graphs, source-backed analysis and follow-up experiments.
 The generated site also opens directly from disk, with no CDN dependencies.
