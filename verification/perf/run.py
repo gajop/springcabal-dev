@@ -142,6 +142,30 @@ def confidence(ratios):
  rng=random.Random(424242)
  means=[statistics.mean(rng.choices(ratios,k=len(ratios))) for _ in range(2000)]
  return [percentile(means,.025),percentile(means,.975)]
+def timed_input(text,warmup,stop):
+ # Use the released engine's existing input/echo path. The timestamps bracket
+ # complete stepped frames, including main-loop work and buffer swaps that
+ # lie outside the simulation/draw CPU scopes. No engine changes are needed.
+ actions=[(warmup,f'{warmup}: local echo [PerfWindow] begin frame={warmup}'),
+          (stop,f'{stop}: local echo [PerfWindow] end frame={stop}')]
+ previous=-1
+ for line in text.splitlines():
+  if line and not line.startswith('#'):
+   frame=int(line.split(':',1)[0])
+   if frame<0 or frame<previous:raise ValueError('Unordered or invalid input frame')
+   previous=frame;actions.append((frame,line))
+ return '\n'.join(line for _,line in sorted(actions,key=lambda item:item[0]))+'\n'
+def wall_window(log,warmup,stop):
+ matches=re.findall(r'\[t=(\d+):(\d+):(\d+\.\d+)\].*\[PerfWindow\] (begin|end) frame=(\d+)',log)
+ if len(matches)!=2:raise ValueError('Expected exactly two wall-time window markers')
+ times=[]
+ for match,expected in zip(matches,(('begin',warmup),('end',stop))):
+  hours,minutes,seconds,kind,frame=match
+  if (kind,int(frame))!=expected:raise ValueError('Incorrect wall-time window marker')
+  times.append(int(hours)*3600+int(minutes)*60+float(seconds))
+ elapsed=times[1]-times[0]
+ if elapsed<=0:raise ValueError('Nonpositive wall-time window')
+ return elapsed
 def compare(a,b):
  aa={int(r['frame']):r for r in a if r['kind']=='sim'};bb={int(r['frame']):r for r in b if r['kind']=='sim'}
  frames=sorted(aa.keys() & bb.keys())
@@ -166,6 +190,10 @@ def run(a):
  if a.input:
   frozen_input=output/'input.txt'
   shutil.copyfile(a.input,frozen_input)
+ effective_input=frozen_input
+ if a.frame_step or a.scenario=='effects':
+  effective_input=output/'timed-input.txt'
+  effective_input.write_text(timed_input(frozen_input.read_text() if frozen_input else '',a.warmup,a.frames))
  stamp={'engine':str(binary),'engine_sha256':sha(binary),'engine_commit':revision(ENGINE),
   'engine_source':str(ENGINE.resolve()),
   'framework_commit':revision(PROJECT),'runner_sha256':sha(Path(__file__)),
@@ -173,6 +201,7 @@ def run(a):
    PROJECT/'verification/fixtures/gravitas/fire_probe_rules.lua',PROJECT/'verification/fixtures/gravitas/fire_probe_ui.lua']},
   'engine_dirty':subprocess.check_output(['git','-C',str(ENGINE),'status','--porcelain'],text=True),
   'input_sha256':sha(frozen_input) if frozen_input else None,
+  'effective_input_sha256':sha(effective_input) if effective_input else None,
   'args':{k:str(v) if isinstance(v,Path) else v for k,v in vars(a).items()},'status':'diagnostic'}
  save(output/'provenance.json',stamp)
  probe=build_effects_probe(a.games_dir) if a.scenario=='effects' and 'wasm' in backends else None
@@ -232,7 +261,7 @@ def run(a):
      # Offscreen rendering needs no desktop. Content failures must not leave
      # a modal error dialog on the user's display or hold the run open.
      if a.mode!='headless':env.update(DISPLAY='',WAYLAND_DISPLAY='')
-     if frozen_input:env['SPRING_PERF_INPUT']=str(frozen_input)
+     if effective_input:env['SPRING_PERF_INPUT']=str(effective_input)
      before=host();samples=[before];memory=[];save(directory/'host-before.json',before)
      command=[str(binary),'--isolation','--isolation-dir',str(isolation),'--write-dir',str(write),'--config',str(directory/'settings.cfg'),str(script)]
      launched=time.monotonic()
@@ -258,13 +287,18 @@ def run(a):
      if a.unit_multiplier>1 and '[PerfWorkload] scaled ' not in log:errors.append('Unit scaling fixture did not complete')
      if a.scenario=='effects' and f'[FirePerf] emitters={a.effects_multiplier}' not in log:errors.append('Fire effects fixture did not initialize')
      if a.scenario=='effects' and backend=='wasm' and f'[FirePerf] Rust emitters={a.effects_multiplier}' not in log:errors.append('Rust fire renderer probe did not initialize')
+     renderer=None
      if a.mode!='headless':
       renderer=re.search(r'GL renderer : ([^\n]+)',log)
       if not renderer:errors.append('Offscreen GPU rendering did not initialize')
       elif re.search(r'llvmpipe|softpipe|swrast|SwiftShader|Software Rasterizer',renderer[1],re.I):errors.append('Offscreen GPU rendering selected a software renderer: '+renderer[1])
      rendered=draw_window(frame_rows,a.warmup,a.frames)
+     wall_seconds=None
      if (a.frame_step or a.scenario=='effects') and rendered!=list(range(a.warmup,a.frames)):
       errors.append('Frame stepping failed: expected exactly one draw for every measured simulation frame')
+     if a.frame_step or a.scenario=='effects':
+      try:wall_seconds=wall_window(log,a.warmup,a.frames)
+      except ValueError as error:errors.append(str(error))
      ok=process.returncode==0 and frames==list(range(a.frames+1)) and not errors
      if not ok and frames!=list(range(a.frames+1)):errors.append('Required frame window was not completed; timeout or early exit')
      contended=any(pressure(s)>5 for s in samples)
@@ -281,6 +315,9 @@ def run(a):
      result={'game':game,'backend':backend,'repeat':repeat,'ok':ok,'errors':errors,'exit':process.returncode,
       'launch_to_exit_seconds':time.monotonic()-launched,'contended':contended,'metrics':metrics,
       'script_sha256':sha(script),'settings_sha256':sha(directory/'settings.cfg'),'status':'diagnostic'}
+     result['renderer']=renderer[1] if renderer else None
+     result['window_wall_seconds']=wall_seconds
+     result['window_wall_ms_per_frame']=wall_seconds*1000/(a.frames-a.warmup) if wall_seconds is not None else None
      result['workload']=[line.split('[PerfWorkload] ',1)[1] for line in log.splitlines() if '[PerfWorkload] ' in line]
      result['rendered_measurement_frames']=len(rendered)
      result['sampled_peak_rss_kib']=max((s.get('VmHWM',s.get('VmRSS',0)) for s in memory),default=None)

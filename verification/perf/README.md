@@ -16,11 +16,13 @@ verification/perf/compare.sh "$PWD/perf-runs/my-comparison" \
     --frames 900 --warmup 300 --repeats 5
 ```
 
-This runs the four normal game pairs, 10× initial-scene loads, and Gravitas
-with 0, 1 and 10 fire emitter pairs. MyCube and Parts Needed are excluded.
-The Area 17 10× case runs once: the full scene currently exceeds its Lua
-memory and unit limits, so repeating that failure adds no timing evidence.
-The script continues to the remaining cases and exits nonzero if any failed.
+This runs the four normal game pairs, 10× initial-scene loads for Hunted,
+Flove and TTLD, Area 17 at 2×, Flove's mushroom combat input, TTLD with
+shadows enabled on both versions at 1×/10×, and Gravitas with 0, 1 and 10
+fire emitter pairs. MyCube and Parts Needed are excluded. Area 17's full
+10× scene exceeded its Lua memory and Rust unit limits in the earlier campaign;
+the default matrix uses the working 2× case. The script continues to the
+remaining cases and exits nonzero if any failed.
 `summary.csv` and `summary.json` include only successful runs in timing
 aggregates; attempted/completed counts retain the failures. Individual logs
 and results preserve the reasons. Run directories must be empty to prevent
@@ -62,7 +64,7 @@ frame with interpolation fixed. It runs as fast as the engine can draw; it
 does not record a video. This keeps the number of renders comparable across
 backends. The runner verifies exactly one draw for every measured simulation
 frame. Five repeats alternate Lua-first and Rust-first order. `verify all`
-includes the perf runner's seven regression tests, without launching benchmarks.
+includes the perf runner's ten regression tests, without launching benchmarks.
 
 `--unit-multiplier N` clones each unit present at frame 60, including its
 health and up to 32 queued orders. Normal creation handlers, scripts and AI
@@ -82,7 +84,13 @@ fixed inputs and seeds. The empty case measures each renderer's background
 cost (the Rust gallery also draws map edges). This measures the isolated fire
 renderer, rather than message transport or the entire Gravitas port.
 
-Read times as **CPU-side elapsed milliseconds**, not GPU timestamps or FPS.
+The per-frame simulation/draw distributions are **CPU-side elapsed milliseconds**,
+not GPU timestamps or FPS. Stepped GPU runs also record
+`window_wall_ms_per_frame`: elapsed time between engine log markers at the
+start and end of the measured window, divided by its frame count. This includes
+main-loop work, buffer swaps and waits outside the simulation/draw scopes;
+it excludes loading and shutdown. The existing engine input/echo commands
+supply these markers, and the effective input and its hash are preserved.
 `frame.cpu_us` joins simulation and drawing for the same frame; it matters for
 Gravitas because Lua emits inside simulation and the Rust probe emits during
 UI update. The log also separates inclusive Lua/Wasm callin time and Wasm
@@ -110,7 +118,7 @@ For API/transport attribution, reuse the engine's existing
 workloads (documented in `rts/wasm/docs/benchmarking.md`). Those already cover
 dispatch, spatial queries, lists, commands, drawing, allocation and GC.
 
-The default is GPU rendering through SDL offscreen at 100× simulation speed, with no desktop window. `--speed` controls simulation speed independently of the renderer. `--mode headless` selects CPU-only diagnostics. Errors and warnings make a run fail.
+The default is GPU rendering through SDL offscreen at 100× simulation speed, with no desktop window. GPU runs fail if the engine does not report a renderer or selects llvmpipe, softpipe, swrast, SwiftShader or Software Rasterizer. Each result records the actual renderer. `--speed` controls simulation speed independently of the renderer. `--mode headless` selects CPU-only diagnostics. Errors and warnings make a run fail.
 
 Options include `--frames 900 --warmup 300 --repeats 5`, `--mode headless|gpu`,
 `--engine /path/to/install`, `--timeout 120`, and `--max-minutes 20`. Only the
@@ -143,6 +151,12 @@ calls. Backend timers avoid double-counting recursive calls of the same kind.
 Counters are local to the frame thread. Worker jobs need separate attribution.
 The state digest quantizes positions/health and uses unit definition names rather
 than backend-specific numeric definition IDs.
+
+`report.py` writes `paired-summary.csv` and `.json` alongside the backend
+summaries. A pair enters these aggregates only if both runs succeeded and
+neither reported CPU contention. It reports simulation, drawing, combined CPU
+and full-window elapsed time, with paired Rust/Lua changes and bootstrap
+intervals. An excluded or missing partner excludes the whole pair.
 
 Every run records start scripts/settings, engine and content hashes, module hashes,
 logs, frame CSVs, host samples, distributions, first state divergence and equality
@@ -355,3 +369,74 @@ Source commits for this optimization pass:
 | Area 17 | [cf17232](https://github.com/SpringCabal/Area-17/commit/cf172327d24f3a65ab330cf4eb37ca0c594fcc7d) | [b99b0a1](https://github.com/SpringCabal/Area-17/commit/b99b0a1dfeb5cb47a7aad34e1e991c8c9169843b) |
 | To the Last Drop | [e0a3605](https://github.com/SpringCabal/LD43/commit/e0a36052f911252a8d87bdf198ee8f541ef1f369) | [88193d5](https://github.com/SpringCabal/LD43/commit/88193d52c4c35ad3aee1a97e5d6cbfcb1aa6107d) |
 | Gravitas | [3d6aea2](https://github.com/SpringCabal/Gravitas/commit/3d6aea2bac0ae38b644307cd988c5a6fbf1b72ed) | [41aa0b9](https://github.com/SpringCabal/Gravitas/commit/41aa0b92e5b14b2dd0468169a1a7d3cb06e2af26) |
+
+## Optimized Lua/Rust with GPU rendering
+
+This compares the optimized source commits listed above directly, using the
+released engine **2026.10.25** (`dd05f8647458ff5541a8aee8d43b6218a64eaef8`).
+Its executable SHA-256 is
+`d28e6c2f0cb889f7b7ab148ae9c80e1c3480d1c6b5c3425aec284f783af0193d`.
+The renderer reported by every run is **NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2**,
+NVIDIA 580.178.04, through SDL offscreen. No software rendering enters these
+timings. The engine and production game sources were unchanged during this
+comparison.
+
+Each case has five alternating Lua/Rust pairs: 300 warmup frames, then exactly
+600 simulation/render steps at 1024×736, VSync off and one ThreadPool worker.
+The table measures complete elapsed time for that window, including main-loop
+work and buffer swaps outside the narrower CPU timers. Values are medians of
+the five runs' mean milliseconds per frame. The change column is the median
+of paired Rust/Lua time changes; negative means Rust takes less time.
+
+| Scene | Lua ms/frame | Rust ms/frame | Rust time change |
+| --- | ---: | ---: | ---: |
+| Hunted, normal | 1.109 | 0.993 | -10.5% |
+| Hunted, 10× initial scene | 8.728 | 3.879 | -55.1% |
+| Flove, normal | 1.638 | 1.723 | +5.2% |
+| Flove, 350 mushrooms | 5.566 | 4.703 | -16.6% |
+| Flove, 10× initial scene | 5.375 | 4.870 | -10.7% |
+| TTLD, shipping defaults | 4.862 | 6.631 | +36.4% |
+| TTLD, 10×, shipping defaults | 57.697 | 58.019 | +0.5% |
+| TTLD, shadows on in both | 5.586 | 6.336 | +13.4% |
+| TTLD, 10×, shadows on in both | 60.113 | 57.042 | -4.5% |
+| Area 17, normal | 3.319 | 2.980 | -9.1% |
+| Area 17, 2× initial scene | 8.391 | 7.679 | -7.4% |
+| Gravitas, empty fire background | 0.409 | 0.386 | -4.8% |
+| Gravitas, 1 emitter pair | 0.632 | 0.605 | -4.3% |
+| Gravitas, 10 emitter pairs | 3.433 | 1.803 | -48.1% |
+
+Hunted and Area 17 favor Rust in both measured loads. Flove favors Lua in its
+quiet scene, then Rust in mushroom combat and at 10×. TTLD favors Lua normally;
+with shadows matched at 10×, Rust takes 4.5% less time. The shipping-default
+10× TTLD result is effectively tied: its paired mean-ratio bootstrap interval
+includes 1 (0.986–1.013). Heavy Gravitas fire favors Rust by 48% in complete
+elapsed time.
+
+These are the current game implementations with their features retained.
+Flove has 182 Lua versus 193 Rust units normally, and 1,820 versus 1,930 at
+10×; Rust retains its animated outlines and mouse hover. Hunted's startup
+sequence and the ports' combat decisions can diverge. TTLD's first normal pair
+records 2,944 versus 2,421 weapon fires. The matched-shadow rows align that
+setting without removing Rust's shadows from the shipping profile. These
+scene results do not isolate language execution from those workload differences.
+
+All **140 runs / 70 pairs** in this table pass the existing frame, error and
+hardware-renderer checks, with exactly 600 measured renders apiece. No pair
+was flagged for CPU contention (maximum sampled CPU-pressure avg10: 2.30,
+threshold: 5). NVIDIA telemetry was recorded throughout; GPU utilization
+reached 100%, and temperature peaked at 63°C. The original 40 preliminary GPU
+runs, which had only the narrower CPU timers, are retained separately within
+the same output tree and excluded from this table.
+
+[The comparison CSV](gpu-comparison-2026-10-25.csv) records source commits,
+simulation/draw p50 and p95, combined CPU timing, full-window timing, pair
+counts, populations and paired bootstrap intervals. Full logs, frame CSVs,
+effective inputs, provenance and `gpu-samples.csv` remain locally under
+`perf-runs/2026-10-25-optimized-gpu/`. `final-comparison.json` and
+`gpu-audit.json` contain the final table and renderer audit.
+
+`verification/perf/compare.sh` now reproduces this matrix through the existing
+verification runner. Its report excludes both members of a failed, incomplete
+or contended pair. Ten performance-framework regression tests pass, including
+input/marker ordering, wall-window boundaries and pair exclusion. No game or
+engine source change was needed for this comparison.

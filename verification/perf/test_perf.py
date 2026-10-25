@@ -44,8 +44,49 @@ class EquivalenceTests(unittest.TestCase):
         rows.append({'kind': 'draw', 'frame': '2'})
         self.assertNotEqual(run.draw_window(rows, 1, 3), [1, 2])
 
+    def test_wall_markers_preserve_scripted_action_order(self):
+        text = '# scene\n60: give 10 rabbit\n300: local shadows 1\n'
+        self.assertEqual(run.timed_input(text, 300, 900).splitlines(), [
+            '60: give 10 rabbit', '300: local echo [PerfWindow] begin frame=300',
+            '300: local shadows 1', '900: local echo [PerfWindow] end frame=900'])
+        for invalid in ('60: cheat\n1: cheat\n', '-1: cheat\n'):
+            with self.assertRaises(ValueError):
+                run.timed_input(invalid, 300, 900)
+
+    def test_wall_window_includes_time_between_complete_frame_boundaries(self):
+        log = ('[t=00:00:02.123456][f=0000300] [PerfWindow] begin frame=300\n'
+               '[t=00:00:05.123456][f=0000900] [PerfWindow] end frame=900\n')
+        self.assertAlmostEqual(run.wall_window(log, 300, 900), 3)
+        for invalid in (log.splitlines()[0], log+log, log.replace('frame=900', 'frame=899'),
+                        log.replace('05.123456', '01.123456')):
+            with self.assertRaises(ValueError):
+                run.wall_window(invalid, 300, 900)
+
 
 class ReportTests(unittest.TestCase):
+    def test_paired_report_excludes_both_members_of_contended_or_failed_pair(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for repeat in range(5):
+                for backend in ('lua', 'wasm'):
+                    if repeat == 4 and backend == 'wasm':
+                        continue
+                    bad = backend == 'wasm' and repeat in (2, 3)
+                    directory = root/'case'/f'game-{repeat}-{backend}'
+                    directory.mkdir(parents=True)
+                    result = {'game': 'hunted', 'backend': backend, 'repeat': repeat,
+                              'ok': not (bad and repeat == 2), 'contended': bad and repeat == 3,
+                              'metrics': {'frame.cpu_us': {'p50': 2000 if backend == 'lua' else 1000}},
+                              'window_wall_ms_per_frame': 4 if backend == 'lua' else 3,
+                              'population': {'units': {'p50': 10}}}
+                    (directory/'result.json').write_text(json.dumps(result))
+            row, = report.paired_summary(root)
+            self.assertEqual(row['measured_pairs'], 2)
+            self.assertEqual(row['attempted_pairs'], 5)
+            self.assertEqual(row['excluded_pairs'], 3)
+            self.assertEqual(row['cpu_p50_paired_rust_change_pct'], -50)
+            self.assertEqual(row['wall_mean_paired_rust_change_pct'], -25)
+
     def test_failed_stress_runs_do_not_enter_timing_aggregates(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
