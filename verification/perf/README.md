@@ -488,21 +488,49 @@ engine source change was needed for this comparison.
 
 ## Optional Rust jobs with GPU rendering
 
+At pool width 4, these job kernels produce no clear whole-frame win. The
+default remains serial Rust (`rust_jobs=off`). The table gives complete-window
+milliseconds per frame; lower is faster. Off/on are the same Rust build at the
+same pool width. The last column is the median paired on/off time change.
+
+| Scene | Off, pool 1 | On, pool 1 | Off, pool 4 | On, pool 4 | Jobs change, pool 4 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Hunted, normal | 1.026 | 1.137 | 1.066 | 1.177 | +10.1% |
+| Hunted, 10× initial scene | 3.708 | 3.979 | 3.459 | 3.560 | +3.1% |
+| Flove, 350 mushrooms | 4.924 | 4.858 | 4.483 | 4.541 | +1.3% |
+| Flove, 3,500 mushrooms | 85.345 | 85.429 | 70.568 | 70.697 | +0.0% |
+| Gravitas, 1 emitter pair | 0.557 | 0.831 | 0.582 | 0.766 | +31.0% |
+| Gravitas, 10 emitter pairs | 1.689 | 2.544 | 1.691 | 1.707 | +1.2% |
+| Gravitas, 100 pairs (32K cap) | 5.993 | 8.607 | 5.885 | 6.180 | +6.9% |
+
+Each row has five alternating pairs per width, except the dense Flove pool-1
+case: one CPU-pressure exclusion leaves four accepted pairs. [The jobs CSV](jobs-comparison-2026-10-26.csv)
+contains simulation/draw p50 and p95, full-window timing, paired intervals,
+state/event agreement, source commits and counts. Hunted retains the startup
+variation described above; Flove records identical frame states and events
+between off/on in every accepted pair.
+
+In Hunted's normal pool-4 case, median simulation import time rises from
+13 to 105 microseconds per frame with jobs. Most of the added time is inside
+the host calls, consistent with worker-store and packet overhead outweighing
+the savings from parallel light calculations here.
+
 The October 26 comparison adds opt-in same-tick jobs to Hunted's rabbit light
 sensing, Flove's mushroom target statistics and Gravitas's fire billboards.
 `rust_jobs=off` remains the production default. `on` dispatches pure work;
 `check` additionally checks every returned packet against inline computation.
 Read-only state is snapshotted on the calling thread; workers make no engine
 calls. RNG, commands and mutations retain their original order. Gravitas's
-check mode also compares the final expanded
-vertices with its serial renderer, float bit for float bit.
+check mode also compares the final expanded vertices with its serial renderer,
+float bit for float bit.
 
 Each batch targets four chunks, with ordered results; Gravitas splits further
 when needed to fit both input and output packet limits. Small dedicated
 worker modules have no imports and fixed 8 MiB memories. Flove reuses worker
 scratch storage and reads weights lazily from shared output packets.
-Gravitas transfers 13 floats per billboard and expands its six vertices on
-the calling thread. This avoids transferring the 54-float expanded geometry.
+Gravitas encodes fixed float records in bulk, transfers 13 floats per billboard
+and expands its six vertices on the calling thread. This avoids transferring
+the 54-float expanded geometry.
 The released API copies packets and creates a fresh private store for each
 job, so dispatching a small calculation can cost more than doing it inline.
 
@@ -522,6 +550,24 @@ combat input creates 350 mushrooms before scaling. Gravitas uses 1, 10 and
 are Lua/Rust controls at pool width 4; neither receives an artificial game
 job kernel for work already performed by the native engine.
 
+The 100-emitter stress case exceeds Rust's existing 32,768-particle ceiling;
+both Rust job modes retain that ceiling. The Lua effects fixture has no such
+ceiling, so its 100-emitter row includes a particle-budget difference. The
+1- and 10-emitter scenes stay below the ceiling.
+
+This matrix selects `--cpu-pressure-scope cgroup`: both global and application
+cgroup readings are retained, and the threshold remains 5. Another task's
+restricted CPU set drove global pressure high while this scope had zero CPU
+wait. A deliberate three-second contention check raised this scope's avg10
+from 0 to 15.76, proving the guard detects actual scoped wait. CPU affinity,
+scheduler priority and engine configuration are unchanged by this selection.
+
+```bash
+verification/perf/compare-jobs.sh /absolute/jobs-campaign \
+    --cpu-pressure-scope cgroup --repeats 5 --frames 900 --warmup 300 \
+    --timeout 180 --max-minutes 40
+```
+
 The shared helper is [09cd1d0](https://github.com/gajop/springcabal-rs/commit/09cd1d03d9fdec06c614fd29d978606096eb9378).
 The public Rust game branches contain:
 
@@ -529,12 +575,44 @@ The public Rust game branches contain:
 | --- | --- |
 | Hunted | [e916b24](https://github.com/SpringCabal/Hunted/commit/e916b24080968f6fdbc7b0a3c6674e236d68163f) |
 | Flove | [26869d0](https://github.com/SpringCabal/Flove/commit/26869d0) |
-| Gravitas | [cab763b](https://github.com/SpringCabal/Gravitas/commit/cab763b) |
+| Gravitas | [801119c](https://github.com/SpringCabal/Gravitas/commit/801119c) |
 
-The canonical builds pass all 22 existing standard verification runs,
-including 123 host tests. Jobs check mode passes on the three games at both
-pool widths. The targeted integration suites pass Hunted's 36 checks,
+The initial canonical jobs builds passed all 22 existing standard verification
+runs, including 123 host tests. Jobs check mode passes on the three games at
+both pool widths. The targeted integration suites pass Hunted's 36 checks,
 Flove's 66 rules, 10 UI and 8 scenario checks, and Gravitas's 19 end-to-end
-checks. Gravitas additionally passes checks at 100 emitter pairs at both
-widths. Its existing five-frame Lua/Rust image comparison remains below
+checks. Flove's packet-reuse follow-up passes its integration suite and both
+pool-width checks again. Gravitas's final packet bounds and bulk encoding pass
+checks at 100 emitter pairs at both widths. Both final games pass installed-module matching.
+The existing five-frame Lua/Rust fire image comparison remains below
 0.025% RMSE in every frame, against the unchanged 0.1% threshold.
+
+The independent Lua/Rust control pairs at pool width 4 give these complete
+window times. These Rust values come from separate serial runs from the off/on
+pairs above. The ports retain their implementation differences described earlier.
+
+| Scene | Lua ms/frame | Serial Rust ms/frame | Rust time change |
+| --- | ---: | ---: | ---: |
+| Hunted, normal | 1.143 | 1.054 | -8.3% |
+| Hunted, 10× initial scene | 7.211 | 3.427 | -53.5% |
+| Flove, 350 mushrooms | 5.359 | 4.385 | -18.2% |
+| Flove, 3,500 mushrooms | 80.688 | 70.275 | -12.9% |
+| Gravitas, 1 emitter pair | 0.609 | 0.592 | -2.4% |
+| Gravitas, 10 emitter pairs | 3.425 | 1.712 | -48.7% |
+| TTLD, shadows on in both | 5.428 | 6.410 | +15.6% |
+| TTLD, 10×, shadows on in both | 33.560 | 43.835 | +30.8% |
+| Area 17, normal | 2.639 | 2.272 | -13.5% |
+| Area 17, 2× initial scene | 6.510 | 5.837 | -11.6% |
+
+Rust takes less time in these Hunted, Flove, Area 17 and fire scenes; Lua is
+faster in TTLD. [The Lua/Rust CSV](jobs-lua-controls-2026-10-26.csv) includes all
+11 controls and labels the separate 100-emitter particle-budget difference.
+
+All **250 GPU runs / 125 attempted pairs** finish with 600 measured renders
+each on the NVIDIA GeForce GTX 1660 Ti. One contended Flove pair is excluded,
+leaving **124 accepted pairs**. All 70 job-enabled runs dispatch work. The
+performance framework passes 16 regression tests. Full logs, frame CSVs,
+source/module hashes, both CPU-pressure readings and `final-audit.json` remain
+locally under `perf-runs/2026-10-26-jobs/scoped/`; GPU telemetry is in
+`perf-runs/2026-10-26-jobs/scoped-gpu-samples.csv`. Earlier packet-encoding
+measurements are preserved separately and excluded from these final tables.
