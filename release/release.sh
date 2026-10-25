@@ -12,12 +12,13 @@ usage() {
     cat <<'EOF'
 Usage:
   release/release.sh prepare VERSION --engine-tag TAG
-  release/release.sh publish VERSION --notes FILE [--title TITLE] [--draft] [--dry-run]
+  release/release.sh publish VERSION --notes FILE [--title TITLE] [--prerelease] [--draft] [--dry-run]
 
 prepare  Rebuild local WASM, package Linux + Windows from published engine
          binaries, archive committed sources, write BUILDINFO and SHA256SUMS.
 publish  Check those assets and revisions, push framework main + vVERSION,
          upload to a draft release, verify GitHub checksums, then publish it.
+         --prerelease publishes without changing the latest stable release.
          --draft leaves it as a draft; --dry-run performs no remote writes.
 
 Game, map and shared-crate repositories are never pushed. See RELEASING.md.
@@ -31,12 +32,13 @@ action=$1 version=$2
 shift 2
 [[ $action == prepare || $action == publish ]] || die "expected prepare or publish"
 [[ $version =~ ^[0-9][A-Za-z0-9._-]*$ ]] || die "invalid version: $version"
-engine_tag='' notes='' title="SpringCabal $version" draft=0 dry_run=0
+engine_tag='' notes='' title="SpringCabal $version" prerelease=0 draft=0 dry_run=0
 while [[ $# -gt 0 ]]; do
     case $1 in
         --engine-tag) engine_tag=${2:?missing tag}; shift 2 ;;
         --notes) notes=${2:?missing notes file}; shift 2 ;;
         --title) title=${2:?missing title}; shift 2 ;;
+        --prerelease) prerelease=1; shift ;;
         --draft) draft=1; shift ;;
         --dry-run) dry_run=1; shift ;;
         *) die "unknown option: $1" ;;
@@ -61,7 +63,7 @@ source_inventory() {
 
 if [[ $action == prepare ]]; then
     [[ -n $engine_tag ]] || die "prepare requires --engine-tag"
-    [[ -z $notes && $draft == 0 && $dry_run == 0 ]] || die "--notes, --draft and --dry-run are publish options"
+    [[ -z $notes && $prerelease == 0 && $draft == 0 && $dry_run == 0 ]] || die "--notes, --prerelease, --draft and --dry-run are publish options"
     # Resolve annotated or lightweight tags to the actual released engine commit.
     ref=$(gh api "repos/$engine_repo/git/ref/tags/$engine_tag" --jq '.object | [.type, .sha] | @tsv')
     while [[ $ref == tag$'\t'* ]]; do
@@ -128,16 +130,19 @@ if (( dry_run )); then
         "$tag" "$([[ $draft == 1 ]] && echo 'keep a draft' || echo 'publish the release')"
     printf '  %s\n' "${assets[@]}"
     printf 'Title: %s\nNotes: %s\n' "$title" "$notes"
+    printf 'Prerelease: %s\n' "$prerelease"
     exit 0
 fi
 if ! git show-ref --verify --quiet "refs/tags/$tag"; then
     git tag -a "$tag" -m "$title" "$commit"
 fi
 git push --atomic origin HEAD:refs/heads/main "refs/tags/$tag"
+classification=(--prerelease=false)
+if (( prerelease )); then classification=(--prerelease=true); fi
 if [[ -z $existing ]]; then
-    gh release create "$tag" -R "$repo" --verify-tag --draft --title "$title" --notes-file "$notes"
+    gh release create "$tag" -R "$repo" --verify-tag --draft "${classification[@]}" --title "$title" --notes-file "$notes"
 else
-    gh release edit "$tag" -R "$repo" --title "$title" --notes-file "$notes"
+    gh release edit "$tag" -R "$repo" "${classification[@]}" --title "$title" --notes-file "$notes"
 fi
 asset_paths=()
 for asset in "${assets[@]}"; do asset_paths+=("$out/$asset"); done
@@ -160,6 +165,10 @@ for name in sys.argv[2:]:
 print('All five GitHub asset checksums match.')
 PY
 if (( ! draft )); then
-    gh release edit "$tag" -R "$repo" --verify-tag --draft=false --prerelease=false --latest
+    if (( prerelease )); then
+        gh release edit "$tag" -R "$repo" --verify-tag --draft=false --prerelease=true --latest=false
+    else
+        gh release edit "$tag" -R "$repo" --verify-tag --draft=false --prerelease=false --latest
+    fi
 fi
-gh release view "$tag" -R "$repo" --json url,isDraft --jq '{url, isDraft}'
+gh release view "$tag" -R "$repo" --json url,isDraft,isPrerelease --jq '{url, isDraft, isPrerelease}'

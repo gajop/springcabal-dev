@@ -37,7 +37,7 @@ else:
     with (directory / 'mutations').open('a') as log:
         log.write(json.dumps(a) + '\n')
     if a[:2] == ['release', 'create']:
-        s = {'draft': True, 'assets': []}
+        s = {'draft': True, 'prerelease': '--prerelease=true' in a, 'assets': []}
     elif a[:2] == ['release', 'upload']:
         s['assets'] = [{'name': pathlib.Path(p).name,
                         'digest': 'sha256:' + hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()}
@@ -45,6 +45,8 @@ else:
         if os.environ.get('MOCK_BAD_DIGEST'): s['assets'][0]['digest'] = 'sha256:bad'
     elif a[:2] == ['release', 'edit']:
         if '--draft=false' in a: s['draft'] = False
+        if '--prerelease=true' in a: s['prerelease'] = True
+        if '--prerelease=false' in a: s['prerelease'] = False
     else:
         sys.exit(f'Unexpected gh call: {a}')
     statefile.write_text(json.dumps(s))
@@ -194,6 +196,27 @@ class ReleaseTests(unittest.TestCase):
         self.prepare()
         self.publish(success=False, MOCK_BAD_DIGEST="1")
         self.assertTrue(json.loads((self.state / "github.json").read_text())["draft"])
+
+    def test_prerelease_preserves_latest_stable(self):
+        self.prepare()
+        self.publish("--prerelease")
+        state = json.loads((self.state / "github.json").read_text())
+        self.assertFalse(state["draft"])
+        self.assertTrue(state["prerelease"])
+        mutations = [json.loads(line) for line in (self.state / "mutations").read_text().splitlines()]
+        self.assertIn("--latest=false", mutations[-1])
+        self.assertNotIn("--latest", mutations[-1])
+
+    def test_prerelease_draft_resume(self):
+        self.prepare()
+        self.publish("--prerelease", "--draft")
+        state = json.loads((self.state / "github.json").read_text())
+        self.assertTrue(state["draft"])
+        self.assertTrue(state["prerelease"])
+        self.publish("--prerelease")
+        state = json.loads((self.state / "github.json").read_text())
+        self.assertFalse(state["draft"])
+        self.assertTrue(state["prerelease"])
 
     def test_remote_tag_at_another_commit_refused(self):
         self.run_command("git", "tag", "v1.2.3")

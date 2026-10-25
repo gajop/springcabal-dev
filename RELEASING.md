@@ -156,6 +156,9 @@ just release-publish 1.0.2 /tmp/springcabal-1.0.2-notes.md
 
 # Or upload and keep a draft for review:
 ./release/release.sh publish 1.0.2 --notes /tmp/springcabal-1.0.2-notes.md --draft
+
+# Publish a prerelease, leaving the latest stable release unchanged:
+./release/release.sh publish 1.0.3-rc.1 --notes /tmp/springcabal-1.0.3-rc.1-notes.md --prerelease
 ```
 
 The default title is `SpringCabal <version>`; pass `--title "..."` to change it.
@@ -163,7 +166,9 @@ Publication checks the exact prepared sources and asset checksums, creates an
 annotated `v<version>` tag, and atomically pushes framework `main` and the tag
 to `origin` (`gajop/springcabal-dev`). It uploads all five assets to a draft,
 compares GitHub's SHA-256 digests with local files, then makes it the latest
-stable release. `--draft` stops after the digest check. The command can resume
+stable release. `--prerelease` publishes a prerelease instead and preserves the
+latest stable release; it can also be combined with `--draft`. `--draft` stops
+after the digest check. The command can resume
 an interrupted draft upload with the same prepared files. A checksum failure
 leaves the release in draft form.
 
