@@ -48,6 +48,43 @@ It adds 150 normal, 150 small and 50 big enemy mushrooms at frame 60, with
 normal AI and combat active. The runner freezes a copy of the input file in
 the output directory and records its hash before starting the first engine.
 
+Jobs comparisons use the same staged modules in both modes:
+
+```bash
+just verify perf hunted autonomous --backend wasm --rust-jobs compare \
+    --worker-threads 4 --frame-step --repeats 5 --output /absolute/hunted-jobs
+verification/perf/compare-jobs.sh /absolute/jobs-campaign --repeats 5
+```
+
+`--rust-jobs compare` alternates `off` and `on` order, keeps their timing
+aggregates separate and compares their frame state and event counters. It
+requires `--backend wasm`. `on` selects the jobs path; `check` also compares
+each worker output with inline computation and is excluded from timing
+comparisons. A request fails if the staged game has no jobs API import.
+`jobs_active` records whether a run actually dispatched work. The default
+remains `off`.
+
+`--worker-threads N` sets the total engine ThreadPool width, including the
+main thread; the runner checks the effective width in the engine log. Compare
+jobs enabled/disabled at the same width. Pool width also affects native
+engine work in Lua games. `compare-jobs.sh` measures jobs at widths 1 and 4,
+adds Lua/serial-Rust controls at width 4, and includes dense mushroom combat
+and 100 fire emitter pairs to test larger pure workloads. TTLD and Area 17
+have pool-width controls without a game job kernel. `--wait-for-idle` waits
+before a run while the existing CPU-pressure threshold is exceeded; the
+jobs campaign enables it. Runs that become contended are still marked and
+excluded as before.
+
+`report.py` writes `jobs-summary.csv`/`.json` separately from Lua/Rust pairs.
+The job summaries contain `off`/`on` timing columns and paired job-on time
+changes, rather than relabeling them as languages. The default backend
+summaries also keep the two job modes separate.
+
+Existing game assertion and screenshot suites can exercise jobs with
+`VF_RUST_JOBS=check VF_WORKER_THREADS=4` and can select alternate checkouts
+with the existing `VF_GAMES_DIR`. These options only affect staged verification
+scripts/settings. Production launch profiles are unchanged.
+
 Individual cases:
 
 ```bash
@@ -64,7 +101,7 @@ frame with interpolation fixed. It runs as fast as the engine can draw; it
 does not record a video. This keeps the number of renders comparable across
 backends. The runner verifies exactly one draw for every measured simulation
 frame. Five repeats alternate Lua-first and Rust-first order. `verify all`
-includes the perf runner's ten regression tests, without launching benchmarks.
+includes the perf runner's fourteen regression tests, without launching benchmarks.
 
 `--unit-multiplier N` clones each unit present at frame 60, including its
 health and up to 32 queued orders. Normal creation handlers, scripts and AI

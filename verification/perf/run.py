@@ -66,6 +66,16 @@ def pressure(sample):
  text=sample.get('cpu_pressure') or ''
  m=re.search(r'some avg10=([0-9.]+)',text)
  return float(m[1]) if m else math.inf
+def pool_width(log):
+ wanted=None
+ for line in log.splitlines():
+  if '[ThreadPool::SetThreadCount][1]' in line:
+   match=re.search(r'wanted=(\d+).*\(init=0\)',line)
+   wanted=int(match[1]) if match else None
+  elif wanted is not None and '[ThreadPool::SetThreadCount][2]' in line:
+   match=re.search(r'workers=(\d+)',line)
+   if match:return wanted,int(match[1])+1
+ return None
 def process_memory(pid):
  try:
   status=Path(f'/proc/{pid}/status').read_text()
@@ -166,7 +176,7 @@ def wall_window(log,warmup,stop):
  elapsed=times[1]-times[0]
  if elapsed<=0:raise ValueError('Nonpositive wall-time window')
  return elapsed
-def compare(a,b):
+def compare(a,b,labels=('lua','wasm')):
  aa={int(r['frame']):r for r in a if r['kind']=='sim'};bb={int(r['frame']):r for r in b if r['kind']=='sim'}
  frames=sorted(aa.keys() & bb.keys())
  diverged=next((f for f in frames if aa[f]['state_digest']!=bb[f]['state_digest']),None)
@@ -174,7 +184,7 @@ def compare(a,b):
  events={}
  for key in ('created','destroyed','weapon_fires','damage_events','commands','cegs','damage_total'):
   if frames and key in aa[frames[0]] and key in bb[frames[0]]:
-   events[key]={'lua':sum(float(aa[f][key]) for f in frames),'wasm':sum(float(bb[f][key]) for f in frames)}
+   events[key]={labels[0]:sum(float(aa[f][key]) for f in frames),labels[1]:sum(float(bb[f][key]) for f in frames)}
  return {'frames':len(frames),'frame_sets_equal':bool(frames) and aa.keys()==bb.keys(),
   'first_state_divergence':diverged,'alive_counters_match':counts,
   'event_totals':events,'e1_complete':False,'reason':'Frame event counters are available; per-definition counts, unit-script equivalence and attribution are still required before acceptance.'}
@@ -186,6 +196,8 @@ def run(a):
  engine=a.engine.resolve();binary=engine/('spring-headless' if a.mode=='headless' else 'spring')
  if not binary.is_file():raise ValueError(f'missing engine: {binary}')
  backends=('lua','wasm') if a.backend=='both' else (a.backend,)
+ jobs_comparison=a.rust_jobs=='compare'
+ variants=[('wasm','off'),('wasm','on')] if jobs_comparison else [(backend,a.rust_jobs) for backend in backends]
  frozen_input=None
  if a.input:
   frozen_input=output/'input.txt'
@@ -197,6 +209,7 @@ def run(a):
  stamp={'engine':str(binary),'engine_sha256':sha(binary),'engine_commit':revision(ENGINE),
   'engine_source':str(ENGINE.resolve()),
   'framework_commit':revision(PROJECT),'runner_sha256':sha(Path(__file__)),
+  'shared_commit':revision(a.games_dir.parents[1]/'springcabal-rs'),
   'fixtures':{str(p.relative_to(PROJECT)):sha(p) for p in [PROJECT/'verification/perf/workload.lua',
    PROJECT/'verification/fixtures/gravitas/fire_probe_rules.lua',PROJECT/'verification/fixtures/gravitas/fire_probe_ui.lua']},
   'engine_dirty':subprocess.check_output(['git','-C',str(ENGINE),'status','--porcelain'],text=True),
@@ -232,6 +245,9 @@ def run(a):
     else:stage_workload(staged,a)
     content[backend]={'commit':revision(source),'content_sha256':tree_hash(staged),
      'modules':{str(p.relative_to(staged)):sha(p) for p in staged.rglob('*.wasm')}}
+    content[backend]['jobs_api']=any(b'run-batch-to' in p.read_bytes() for p in staged.rglob('*.wasm'))
+    if backend=='wasm' and a.rust_jobs!='off' and not content[backend]['jobs_api']:
+     raise ValueError(f'{game}: requested jobs but staged modules do not import the jobs API')
     text=(PROJECT/f'launch/games/{game}/{backend}.txt').read_text()
     if a.scenario=='effects' and backend=='lua':text=set_key(text,'GameType','Gravitas $VERSION')
     text=set_key(set_key(text,'FixedRNGSeed',424242),'MapName',map_name)
@@ -243,17 +259,19 @@ def run(a):
     scripts[backend]=speed(text,a.speed)
    save(output/f'{game}-content.json',content)
    for repeat in range(a.repeats):
-    for backend in (backends if repeat%2==0 else tuple(reversed(backends))):
+    for backend,job_mode in (variants if repeat%2==0 else list(reversed(variants))):
      if time.monotonic()>=deadline:raise TimeoutError('Configured campaign time limit reached; completed evidence is preserved')
-     directory=output/f'{game}-{repeat:02d}-{backend}';directory.mkdir(exist_ok=True)
+     suffix='-'+job_mode if jobs_comparison else ''
+     directory=output/f'{game}-{repeat:02d}-{backend}{suffix}';directory.mkdir(exist_ok=True)
      write=directory/'write';write.mkdir(exist_ok=True)
      script=directory/'start.txt'
      with socket.socket() as sock:sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
-     script.write_text(set_key(scripts[backend],'HostPort',port))
+     text=modoption(scripts[backend],'rust_jobs',job_mode) if backend=='wasm' else scripts[backend]
+     script.write_text(set_key(text,'HostPort',port))
      config=(PROJECT/'launch/springsettings.cfg').read_text()
      extra=PROJECT/f'launch/games/{game}/graphics.cfg'
      if extra.exists():config+='\n'+extra.read_text()
-     config+='\nFullscreen=0\nXResolutionWindowed=1024\nYResolutionWindowed=736\nVSync=0\nMaxFPS=0\nWorkerThreadCount=1\nSound=0\nUseFontConfigLib=0\n'
+     config+=f'\nFullscreen=0\nXResolutionWindowed=1024\nYResolutionWindowed=736\nVSync=0\nMaxFPS=0\nWorkerThreadCount={a.worker_threads}\nSound=0\nUseFontConfigLib=0\n'
      (directory/'settings.cfg').write_text(config)
      env=os.environ.copy();env.update(SPRING_PERF_LOG=str(directory/'frames.csv'),SPRING_PERF_STOP_FRAME=str(a.frames),
       SPRING_PERF_UNPAUSED='1',SPRING_DATADIR=os.pathsep.join(map(str,[isolation,engine,ENGINE/'cont/base',ENGINE/'cont'])),SPRING_ISOLATED=str(isolation))
@@ -262,7 +280,13 @@ def run(a):
      # a modal error dialog on the user's display or hold the run open.
      if a.mode!='headless':env.update(DISPLAY='',WAYLAND_DISPLAY='')
      if effective_input:env['SPRING_PERF_INPUT']=str(effective_input)
-     before=host();samples=[before];memory=[];save(directory/'host-before.json',before)
+     before=host();notice=0
+     while a.wait_for_idle and pressure(before)>5:
+      if time.monotonic()>=deadline:raise TimeoutError('CPU pressure stayed above the existing contention threshold; completed evidence is preserved')
+      if time.monotonic()-notice>=30:
+       print(f'{game}: waiting for CPU pressure below 5 (avg10={pressure(before):.2f})',flush=True);notice=time.monotonic()
+      time.sleep(1);before=host()
+     samples=[before];memory=[];save(directory/'host-before.json',before)
      command=[str(binary),'--isolation','--isolation-dir',str(isolation),'--write-dir',str(write),'--config',str(directory/'settings.cfg'),str(script)]
      launched=time.monotonic()
      with (directory/'engine.log').open('wb') as log:
@@ -284,6 +308,7 @@ def run(a):
      frames=[int(r['frame']) for r in frame_rows if r['kind']=='sim']
      errors=re.findall(r'(?im)^.*(?:Error:|Warning:|Fatal:|Lua.*(?:error|Error)|Core Wasm callin.*failed).*$' ,log)
      errors+=re.findall(r'(?im)^.*\[PerfWorkload\] FAIL.*$',log)
+     if pool_width(log)!=(a.worker_threads,a.worker_threads):errors.append('Requested ThreadPool width did not initialize')
      if a.unit_multiplier>1 and '[PerfWorkload] scaled ' not in log:errors.append('Unit scaling fixture did not complete')
      if a.scenario=='effects' and f'[FirePerf] emitters={a.effects_multiplier}' not in log:errors.append('Fire effects fixture did not initialize')
      if a.scenario=='effects' and backend=='wasm' and f'[FirePerf] Rust emitters={a.effects_multiplier}' not in log:errors.append('Rust fire renderer probe did not initialize')
@@ -316,23 +341,31 @@ def run(a):
       'launch_to_exit_seconds':time.monotonic()-launched,'contended':contended,'metrics':metrics,
       'script_sha256':sha(script),'settings_sha256':sha(directory/'settings.cfg'),'status':'diagnostic'}
      result['renderer']=renderer[1] if renderer else None
+     result['worker_threads']=a.worker_threads
+     result['rust_jobs']=job_mode if backend=='wasm' else 'off'
+     result['comparison_kind']='jobs' if jobs_comparison else 'lua-wasm'
+     result['jobs_active']=bool(re.search(r'\[GameJobs\].*active ',log))
      result['window_wall_seconds']=wall_seconds
      result['window_wall_ms_per_frame']=wall_seconds*1000/(a.frames-a.warmup) if wall_seconds is not None else None
      result['workload']=[line.split('[PerfWorkload] ',1)[1] for line in log.splitlines() if '[PerfWorkload] ' in line]
      result['rendered_measurement_frames']=len(rendered)
      result['sampled_peak_rss_kib']=max((s.get('VmHWM',s.get('VmRSS',0)) for s in memory),default=None)
      result['population']={field:distribution([float(r[field]) for r in frame_rows if r['kind']=='sim' and int(r['frame'])>=a.warmup]) for field in ('units','projectiles','features','particles')}
-     save(directory/'result.json',result);results.append(result);pair.append((backend,frame_rows))
+     save(directory/'result.json',result);results.append(result);pair.append((job_mode if jobs_comparison else backend,frame_rows))
      save(output/'baseline-status.json',{'status':'diagnostic','complete':False,'runs':len(results),'results':results})
-     print(f'{game} {repeat} {backend}: {"complete" if ok else "FAILED"}, {len(frames)} sim rows, contended={contended}',flush=True)
-    if len(backends)==2:
-     equality=compare(*[[r for r in dict(pair[-2:])[backend] if int(r['frame'])>=a.warmup] for backend in ('lua','wasm')]);save(output/f'{game}-{repeat:02d}-equivalence.json',equality)
+     print(f'{game} {repeat} {backend}{suffix}: {"complete" if ok else "FAILED"}, {len(frames)} sim rows, contended={contended}',flush=True)
+    if len(backends)==2 or jobs_comparison:
+     labels=('off','on') if jobs_comparison else ('lua','wasm')
+     equality=compare(*[[r for r in dict(pair[-2:])[backend] if int(r['frame'])>=a.warmup] for backend in labels],labels=labels);save(output/f'{game}-{repeat:02d}-equivalence.json',equality)
    # Ratios are descriptive even when equal-work acceptance fails. Never
    # silently average work-mismatched runs into a language-performance claim.
    ratios=[]
    for i in range(a.repeats):
-    if len(backends)!=2:break
-    by_backend={r['backend']:r for r in results if r['game']==game and r['repeat']==i};lua,wasm=by_backend['lua'],by_backend['wasm']
+    if len(backends)!=2 and not jobs_comparison:break
+    key='rust_jobs' if jobs_comparison else 'backend'
+    by_backend={r[key]:r for r in results if r['game']==game and r['repeat']==i}
+    left,right=('off','on') if jobs_comparison else ('lua','wasm')
+    lua,wasm=by_backend[left],by_backend[right]
     x=lua['metrics']['sim.elapsed_us']['p50'];y=wasm['metrics']['sim.elapsed_us']['p50']
     if lua['ok'] and wasm['ok'] and x and y:ratios.append(y/x)
    save(output/f'{game}-summary.json',{'status':'diagnostic','whole_sim_p50_ratio':statistics.mean(ratios) if ratios else None,
@@ -352,6 +385,9 @@ def main():
  p.add_argument('--scale-frame',type=int,default=60,help='frame at which the initial scene is cloned')
  p.add_argument('--frame-step',action='store_true',help='one simulation step per draw, using the gallery capture mechanism')
  p.add_argument('--effects-multiplier',type=int,default=1,help='Gravitas fire emitter pairs (0 gives the empty renderer baseline)')
+ p.add_argument('--worker-threads',type=int,default=1,help='total engine ThreadPool width, including the main thread')
+ p.add_argument('--rust-jobs',choices=['off','on','check','compare'],default='off',help='Rust pure jobs; check validates output, compare alternates off/on pairs')
+ p.add_argument('--wait-for-idle',action='store_true',help='wait before each run while CPU pressure exceeds the existing contention threshold')
  a=p.parse_args()
  a.games_dir=a.games_dir.resolve()
  if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
@@ -359,6 +395,8 @@ def main():
  if a.unit_multiplier<1 or a.scale_frame<1 or (a.unit_multiplier>1 and a.warmup<=a.scale_frame):p.error('scaling must finish before warmup ends')
  if a.scenario=='effects' and (a.game!='gravitas' or a.unit_multiplier!=1 or a.effects_multiplier<0):p.error('effects supports only Gravitas, without unit scaling')
  if a.mode=='headless' and (a.frame_step or a.scenario=='effects'):p.error('frame stepping and effects require GPU rendering')
+ if not 1<=a.worker_threads<=64:p.error('worker-threads must be between 1 and 64')
+ if a.rust_jobs=='compare' and a.backend!='wasm':p.error('rust-jobs compare requires --backend wasm')
  try:return run(a)
  except (ValueError,TimeoutError,KeyboardInterrupt) as e:print(str(e),file=sys.stderr);return 1
 if __name__=='__main__':raise SystemExit(main())

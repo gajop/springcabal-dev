@@ -24,6 +24,10 @@ vf_start_file() {
     VF_START_FILE="$VF_TEST_ROOT/start.txt"
     cp "$fixture" "$VF_START_FILE"
     vf_random_host_port
+    if [[ -n ${VF_RUST_JOBS:-} ]]; then
+        case "$VF_RUST_JOBS" in off|on|check) ;; *) vf_die 'VF_RUST_JOBS must be off, on or check' ;; esac
+        vf_modoption rust_jobs "$VF_RUST_JOBS"
+    fi
 }
 
 # vf_speed MIN [MAX]: the game speed range, and so the speed the game starts
@@ -57,6 +61,10 @@ vf_start_inline() {
     VF_START_FILE="$VF_TEST_ROOT/start.txt"
     cat >"$VF_START_FILE"
     vf_random_host_port
+    if [[ -n ${VF_RUST_JOBS:-} ]]; then
+        case "$VF_RUST_JOBS" in off|on|check) ;; *) vf_die 'VF_RUST_JOBS must be off, on or check' ;; esac
+        vf_modoption rust_jobs "$VF_RUST_JOBS"
+    fi
 }
 
 # Every run gets its own host port, so runs never collide on the fixed 8452 of
@@ -168,6 +176,11 @@ vf_config() {
         >>"$VF_CONFIG_FILE"
     # Verification runs are silent unless VF_SOUND=1.
     [[ ${VF_SOUND:-0} == 1 ]] || printf 'snd_volmaster = 0\n' >>"$VF_CONFIG_FILE"
+    if [[ -n ${VF_WORKER_THREADS:-} ]]; then
+        [[ $VF_WORKER_THREADS =~ ^[1-9][0-9]?$ && $VF_WORKER_THREADS -le 64 ]] ||
+            vf_die 'VF_WORKER_THREADS must be between 1 and 64'
+        vf_config_set WorkerThreadCount "$VF_WORKER_THREADS"
+    fi
 }
 
 # Settings for an ASAN engine; plain builds ignore them. Leak checking stays on

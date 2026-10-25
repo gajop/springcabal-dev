@@ -7,6 +7,17 @@ import report
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_pool_width_uses_configured_width_and_checks_effective_workers(self):
+        log = ('[ThreadPool::SetThreadCount][1] wanted=20 current=1 maximum=20 (init=1)\n'
+               '[ThreadPool::SetThreadCount][2] workers=19\n'
+               '[ThreadPool::SetThreadCount][1] wanted=4 current=20 maximum=20 (init=0)\n'
+               'thread affinity line\n[ThreadPool::SetThreadCount][2] workers=3\n'
+               '[ThreadPool::SetThreadCount][1] wanted=0 current=4 maximum=20 (init=1)\n'
+               '[ThreadPool::SetThreadCount][2] workers=0\n')
+        self.assertEqual(run.pool_width(log), (4, 4))
+        self.assertEqual(run.pool_width(log.replace('workers=3', 'workers=1')), (4, 2))
+        self.assertIsNone(run.pool_width(log.split('(init=0)')[0]))
+
     @staticmethod
     def row(frame, units=10, digest='123'):
         return {'kind': 'sim', 'frame': str(frame), 'units': str(units),
@@ -17,6 +28,12 @@ class EquivalenceTests(unittest.TestCase):
             result = run.compare(a, b)
             self.assertFalse(result['frame_sets_equal'])
             self.assertFalse(result['alive_counters_match'])
+
+    def test_job_comparison_labels_are_not_reported_as_languages(self):
+        a = dict(self.row(1), commands='3')
+        b = dict(self.row(1), commands='4')
+        result = run.compare([a], [b], labels=('off', 'on'))
+        self.assertEqual(result['event_totals']['commands'], {'off': 3, 'on': 4})
 
     def test_equal_counts_do_not_hide_state_divergence(self):
         result = run.compare([self.row(1), self.row(2)],
@@ -64,6 +81,43 @@ class EquivalenceTests(unittest.TestCase):
 
 
 class ReportTests(unittest.TestCase):
+    def test_check_mode_completes_but_does_not_supply_timing_results(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            directory = root/'case'/'game-00-wasm'
+            directory.mkdir(parents=True)
+            result = {'game': 'hunted', 'backend': 'wasm', 'repeat': 0,
+                      'ok': True, 'contended': False, 'rust_jobs': 'check',
+                      'window_wall_ms_per_frame': 1000,
+                      'metrics': {'sim.elapsed_us': {'p50': 1000000}},
+                      'population': {'units': {'p50': 10}}}
+            (directory/'result.json').write_text(json.dumps(result))
+            row, = report.summarize(root)
+            self.assertEqual(row['completed'], 1)
+            self.assertEqual(row['timed_runs'], 0)
+            self.assertIsNone(row['sim_p50_ms'])
+            self.assertIsNone(row['window_wall_ms_per_frame'])
+
+    def test_job_modes_are_kept_separate_and_only_paired_at_matching_width(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for width in (1, 4):
+                for mode in ('off', 'on'):
+                    directory = root/f'w{width}'/f'game-00-wasm-{mode}'
+                    directory.mkdir(parents=True)
+                    result = {'game': 'hunted', 'backend': 'wasm', 'repeat': 0,
+                              'ok': True, 'contended': False, 'comparison_kind': 'jobs',
+                              'rust_jobs': mode, 'worker_threads': width,
+                              'window_wall_ms_per_frame': 4 if mode == 'off' else 3,
+                              'metrics': {}, 'population': {'units': {'p50': 10}}}
+                    (directory/'result.json').write_text(json.dumps(result))
+            self.assertEqual(len(report.summarize(root)), 4)
+            self.assertEqual(report.paired_summary(root), [])
+            paired = report.paired_summary(root, jobs=True)
+            self.assertEqual({r['worker_threads'] for r in paired}, {1, 4})
+            self.assertTrue(all(r['measured_pairs'] == 1 for r in paired))
+            self.assertTrue(all(r['wall_mean_paired_jobs_change_pct'] == -25 for r in paired))
+
     def test_paired_report_excludes_both_members_of_contended_or_failed_pair(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
