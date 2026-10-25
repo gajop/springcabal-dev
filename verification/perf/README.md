@@ -85,6 +85,14 @@ Existing game assertion and screenshot suites can exercise jobs with
 with the existing `VF_GAMES_DIR`. These options only affect staged verification
 scripts/settings. Production launch profiles are unchanged.
 
+The pressure guard defaults to the machine-wide `/proc/pressure/cpu`.
+`--cpu-pressure-scope cgroup` instead uses the runner's unified cgroup
+`cpu.pressure`, inherited by its engine children. It records both readings
+and the selected file path. The same threshold of 5 applies; a missing scoped
+reading fails closed. This is useful when an unrelated task oversubscribes
+its restricted CPU set while the benchmark's scope has no CPU wait. It
+does not change CPU affinity, scheduler priority or the threshold.
+
 Individual cases:
 
 ```bash

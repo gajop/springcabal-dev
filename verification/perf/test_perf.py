@@ -7,6 +7,29 @@ import report
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_pressure_guard_uses_selected_scope_and_fails_closed(self):
+        sample = {'cpu_pressure': 'some avg10=40.00 avg60=20.00'}
+        self.assertEqual(run.pressure(sample), 40)
+        sample['contention_cpu_pressure'] = 'some avg10=0.20 avg60=0.10'
+        self.assertEqual(run.pressure(sample), 0.2)
+        sample['contention_cpu_pressure'] = None
+        self.assertEqual(run.pressure(sample), float('inf'))
+
+    def test_cgroup_pressure_resolves_own_scope_and_requires_available_file(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            proc = root / 'cgroup'
+            proc.write_text('0::/user.slice/app.scope\n')
+            expected = root / 'user.slice/app.scope/cpu.pressure'
+            with self.assertRaises(ValueError):
+                run.cpu_pressure_path('cgroup', proc, root)
+            expected.parent.mkdir(parents=True)
+            expected.write_text('some avg10=0.00\n')
+            self.assertEqual(run.cpu_pressure_path('cgroup', proc, root), expected)
+            proc.write_text('2:cpu:/legacy\n')
+            with self.assertRaises(ValueError):
+                run.cpu_pressure_path('cgroup', proc, root)
+
     def test_pool_width_uses_configured_width_and_checks_effective_workers(self):
         log = ('[ThreadPool::SetThreadCount][1] wanted=20 current=1 maximum=20 (init=1)\n'
                '[ThreadPool::SetThreadCount][2] workers=19\n'

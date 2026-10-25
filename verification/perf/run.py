@@ -53,17 +53,26 @@ def tree_hash(path):
   if not f.is_file() or any(x in ('.git','target','wasm-src') for x in f.relative_to(path).parts):continue
   h.update(str(f.relative_to(path)).encode());h.update(bytes.fromhex(sha(f)))
  return h.hexdigest()
-def host():
+def cpu_pressure_path(scope,cgroup_file=Path('/proc/self/cgroup'),root=Path('/sys/fs/cgroup')):
+ if scope=='global':return Path('/proc/pressure/cpu')
+ unified=[line[3:] for line in cgroup_file.read_text().splitlines() if line.startswith('0::')]
+ if len(unified)!=1:raise ValueError('cgroup CPU pressure requires a unified cgroup hierarchy')
+ path=root/unified[0].lstrip('/')/'cpu.pressure'
+ if not path.is_file():raise ValueError(f'cgroup CPU pressure unavailable: {path}')
+ return path
+def host(pressure_path=Path('/proc/pressure/cpu')):
  def read(p):
   try:return Path(p).read_text().strip()
   except OSError:return None
  return {'time':datetime.now(timezone.utc).isoformat(),'load':os.getloadavg(),
-  'cpu_pressure':read('/proc/pressure/cpu'),'memory_pressure':read('/proc/pressure/memory'),
+  'cpu_pressure':read('/proc/pressure/cpu'),
+  'contention_cpu_pressure':read(pressure_path),'cpu_pressure_source':str(pressure_path),
+  'memory_pressure':read('/proc/pressure/memory'),
   'memory':read('/proc/meminfo'),'cpu_governors':{str(p):read(p) for p in Path('/sys/devices/system/cpu').glob('cpu[0-9]*/cpufreq/scaling_governor')},
   'turbo_disabled':read('/sys/devices/system/cpu/intel_pstate/no_turbo'),
   'temperatures':{str(p):read(p) for p in Path('/sys/class/thermal').glob('thermal_zone*/temp')}}
 def pressure(sample):
- text=sample.get('cpu_pressure') or ''
+ text=sample.get('contention_cpu_pressure',sample.get('cpu_pressure')) or ''
  m=re.search(r'some avg10=([0-9.]+)',text)
  return float(m[1]) if m else math.inf
 def pool_width(log):
@@ -190,6 +199,7 @@ def compare(a,b,labels=('lua','wasm')):
   'event_totals':events,'e1_complete':False,'reason':'Frame event counters are available; per-definition counts, unit-script equivalence and attribution are still required before acceptance.'}
 
 def run(a):
+ pressure_path=cpu_pressure_path(a.cpu_pressure_scope)
  output=a.output.resolve()
  if output.exists() and any(output.iterdir()):raise ValueError(f'Output must be empty (existing evidence preserved): {output}')
  output.mkdir(parents=True,exist_ok=True)
@@ -207,6 +217,7 @@ def run(a):
   effective_input=output/'timed-input.txt'
   effective_input.write_text(timed_input(frozen_input.read_text() if frozen_input else '',a.warmup,a.frames))
  stamp={'engine':str(binary),'engine_sha256':sha(binary),'engine_commit':revision(ENGINE),
+  'cpu_pressure_source':str(pressure_path),
   'engine_source':str(ENGINE.resolve()),
   'framework_commit':revision(PROJECT),'runner_sha256':sha(Path(__file__)),
   'shared_commit':revision(a.games_dir.parents[1]/'springcabal-rs'),
@@ -280,12 +291,12 @@ def run(a):
      # a modal error dialog on the user's display or hold the run open.
      if a.mode!='headless':env.update(DISPLAY='',WAYLAND_DISPLAY='')
      if effective_input:env['SPRING_PERF_INPUT']=str(effective_input)
-     before=host();notice=0
+     before=host(pressure_path);notice=0
      while a.wait_for_idle and pressure(before)>5:
       if time.monotonic()>=deadline:raise TimeoutError('CPU pressure stayed above the existing contention threshold; completed evidence is preserved')
       if time.monotonic()-notice>=30:
        print(f'{game}: waiting for CPU pressure below 5 (avg10={pressure(before):.2f})',flush=True);notice=time.monotonic()
-      time.sleep(1);before=host()
+      time.sleep(1);before=host(pressure_path)
      samples=[before];memory=[];save(directory/'host-before.json',before)
      command=[str(binary),'--isolation','--isolation-dir',str(isolation),'--write-dir',str(write),'--config',str(directory/'settings.cfg'),str(script)]
      launched=time.monotonic()
@@ -294,7 +305,7 @@ def run(a):
       try:
        while process.poll() is None:
         if time.monotonic()>=min(deadline,launched+a.timeout):break
-        time.sleep(.5);samples.append(host())
+        time.sleep(.5);samples.append(host(pressure_path))
         value=process_memory(process.pid)
         if value:memory.append(value)
       finally:
@@ -388,6 +399,7 @@ def main():
  p.add_argument('--worker-threads',type=int,default=1,help='total engine ThreadPool width, including the main thread')
  p.add_argument('--rust-jobs',choices=['off','on','check','compare'],default='off',help='Rust pure jobs; check validates output, compare alternates off/on pairs')
  p.add_argument('--wait-for-idle',action='store_true',help='wait before each run while CPU pressure exceeds the existing contention threshold')
+ p.add_argument('--cpu-pressure-scope',choices=['global','cgroup'],default='global',help='CPU pressure used by the contention guard; both global and selected pressure are recorded')
  a=p.parse_args()
  a.games_dir=a.games_dir.resolve()
  if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
