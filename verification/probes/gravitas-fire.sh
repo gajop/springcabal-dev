@@ -11,6 +11,8 @@ if [[ $variant == wasm ]]; then
         --target wasm32-unknown-unknown --target-dir "$BUILD_CACHE/gravitas-fire-probe")
 fi
 vf_workspace "gravitas-fire-$variant" stable
+# The archive index stores platform-specific paths (POSIX versus Wine Z:).
+rm -f -- "$VF_WRITE_DIR"/cache/ArchiveCache*.lua
 staged=$(vf_stage_game "$source_game")
 # This fixture launches the base archive directly; the normal Lua menu entry
 # gets its single-player setting from Scenario Editor Gravitas.
@@ -34,6 +36,8 @@ vf_config_set MaxMapDetail 5
 vf_config_set LODScale 2.0
 vf_run_visual 35
 vf_save_logs
+vf_require_clean_exit
+vf_forbid_runtime_failures "the fire parity capture"
 mapfile -t captures < <(vf_screenshots)
 [[ ${#captures[@]} == 5 ]] || vf_die "expected five fire frames; got ${#captures[@]}"
 vf_forbid 'Error in (Update|DrawWorld)|LuaUI.*Error|shader.*error'

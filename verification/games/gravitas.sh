@@ -280,6 +280,9 @@ gravitas_rules() {
     fi
     vf_cleanup_on_exit
     if [[ $variant == lua ]]; then
+        if [[ $suite == rules ]]; then
+            lua "$FIXTURES/lups_regressions.lua" "$GAMES_DIR/Gravitas.sdd"
+        fi
         vf_workspace "gravitas-lua-$suite"
         staged=$(vf_stage_game "$GAMES_DIR/Gravitas.sdd")
         vf_link_game "$GAMES_DIR/Scenario-Editor-Gravitas.sdd"

@@ -1,0 +1,4 @@
+1: cheat 1
+60: give 150 normalmushroom 0 @7200,0,6500
+60: give 150 smallmushroom 0 @6800,0,7000
+60: give 50 bigmushroom 0 @7400,0,7200

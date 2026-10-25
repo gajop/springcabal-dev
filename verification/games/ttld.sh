@@ -39,6 +39,11 @@ ttld_lua_visual() {
     local seconds=${1:-90} screen=${2:-1280x720x24} staged shots
 
     vf_workspace ttld-lua-visual stable
+    # Keep prior player widget settings out of this scripted fixture, including
+    # retired widget names which otherwise produce startup warnings.
+    [[ ! -L $VF_ISOLATION/LuaUI ]] || rm -- "$VF_ISOLATION/LuaUI"
+    mkdir -p "$VF_ISOLATION/LuaUI"
+    rm -rf -- "$VF_WRITE_DIR/LuaUI"
     staged=$(vf_stage_game "$LUA_GAME_DIR")
     # The original test starts directly in gameplay. The normal intro window
     # pauses the game and captures the mouse, which would make an automated

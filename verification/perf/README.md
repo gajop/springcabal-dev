@@ -26,6 +26,26 @@ aggregates; attempted/completed counts retain the failures. Individual logs
 and results preserve the reasons. Run directories must be empty to prevent
 mixing old and new evidence.
 
+
+For a before/after optimization comparison within one backend, use
+`--backend lua` or `--backend wasm` and `--games-dir /path/to/frozen/games`.
+The default remains both backends and the normal checkout directory. Run one
+repeat from each revision, reverse revision order on the next pair, and keep
+the engine, map, settings and scene parameters identical. The staged content
+and module hashes identify each revision even before its changes are committed.
+
+The mushroom combat input used for the optimization campaign is included:
+
+```bash
+just verify perf flove scripted --frame-step --repeats 5 \
+    --input "$PWD/verification/perf/scenarios/flove-mushrooms.txt" \
+    --output /absolute/flove-combat
+```
+
+It adds 150 normal, 150 small and 50 big enemy mushrooms at frame 60, with
+normal AI and combat active. The runner freezes a copy of the input file in
+the output directory and records its hash before starting the first engine.
+
 Individual cases:
 
 ```bash
@@ -241,3 +261,97 @@ matching. The five-shot GPU visual scenario and HUD/restart assertions complete
 without errors or warnings. Golden pixel comparisons are skipped through the
 existing renderer-mismatch option because the references use Mesa software
 rendering; this run uses NVIDIA. Goldens and tolerances are unchanged.
+
+## Optimizing both implementations
+
+The follow-up keeps engine **2026.10.25** and compares each backend with its
+own frozen source revision. Normal cases use five alternating revision pairs;
+crowded scenes use three. Every run measures frames 300–899, with exactly
+600 draws. Pairs flagged by the existing CPU-pressure check are excluded from
+the reported changes and repeated; their original evidence remains available.
+
+Flove's Lua AI now gathers eligible targets once per AI tick, reuses weights
+and reads command counts directly. It preserves target order and random draw
+order. Both wisp renderers gather stage vertices once per draw frame and reuse
+them across stage/reflection passes. Hunted's Lua movement uses scalar
+coordinates instead of temporary vector tables; both implementations restrict
+food searches spatially while retaining their original tie rules. Rust shares
+static target snapshots until the roster changes.
+
+Area 17 queries nearby civilians once, then keeps the original wanderer order
+and strict base-position fear test. Lua's query includes a conservative model
+midpoint offset. Cloak and idle handling are unchanged. TTLD rejects deferred
+lights and mirrored terrain only when their full bounds are outside the
+frustum; bloom, geometry and visible detail are retained.
+
+Gravitas Lua caches compiled expression factories, returning a fresh function
+for each mutable particle environment. Rust streams packed flame/smoke vertices
+to reusable native buffers instead of calling the engine for every vertex.
+Texture order, depth, blending, fog and the heat-distortion pass are retained.
+At ten emitter pairs, median Rust drawing imports fall from 35,558 to 2,804 per
+frame. A shape-based batching trial was slower and was discarded. A separate
+Hunted iterator rewrite also showed no gain and was discarded.
+
+The five Rust workspaces use whole-program release LTO and one code generation
+unit. The isolated build trial reduced module sizes by 13–19% and Hunted's
+normal combined CPU time by about 5%. Flove and TTLD had no clear whole-frame
+gain from that build change alone; TTLD's measured guest draw-call time fell
+about 5%.
+
+| Case | Lua CPU cost change | Rust CPU cost change |
+| --- | ---: | ---: |
+| Flove, 350 mushrooms: simulation p95 | -79.2% | -2.7% |
+| Flove, 10×: drawing p50 | -33.0% | -2.9% |
+| Hunted, 10×: simulation p50 | -30.3% | -4.4% |
+| TTLD, normal: drawing p50 | -11.6% | -6.7% |
+| Area 17, normal: simulation p50 | -15.7% | -7.3% |
+| Gravitas, 10 emitters: sim + draw p50 | -13.6% | -29.4% |
+
+Changes above are medians of paired percentage changes, rather than ratios of
+separately aggregated medians. [The CSV](both-backends-2026-10-25.csv) records
+both raw medians, pair counts, pressure exclusions, API counts and bootstrap
+intervals. Rows starting with `final-` include the final Rust release profiles;
+other rows retain the earlier algorithm/rendering stage.
+
+Flove, TTLD and Area 17 before/after runs preserve every recorded simulation
+state digest, population and event counter in their measurement windows.
+Hunted's autonomous startup mouse message can arrive on different frames even
+with unchanged code, changing the first wave's random sequence. Its added Lua
+movement/RNG and spatial tie/removal cases pass against both original and
+optimized code; autonomous timings remain scene measurements.
+
+TTLD's Rust lighting widget enables shadows while Lua starts with the shared
+profile's shadows disabled. The included `ttld-shadows.txt` and
+`ttld-shadows-off.txt` inputs measure that setting independently in staged
+copies. In five alternating on/off pairs, enabling shadows raised drawing CPU cost by
+27% in Lua and 42% in Rust; all five on/off pairs in each backend retained the same recorded state
+digests, populations and event totals. Production visuals remain unchanged.
+
+The final builds pass all 22 existing verification runs, including 120 host
+unit tests, installed-module matching for all seven games, both versions’
+real-input controls, 19,760 Flove pose samples and 105 exact TTLD pose samples.
+The targeted Lua review probes pass 20 Hunted, 12 Flove and 13 Area 17 checks.
+Flove's nine GPU goldens pass. The other scenario suites complete their
+assertions and skip old Mesa pixels through the existing renderer-mismatch
+option; goldens and tolerances are unchanged.
+
+The existing five-frame fire comparison passes on Linux/NVIDIA and the
+released Windows executable under Wine/Mesa, below its 0.1% threshold in every
+frame. All six mushroom weapons fire and damage their targets in both versions.
+The shared music probe verifies continued audio through at least three loops in both
+versions. The wisp capture fixture now keeps camera/screenshot work unsynced,
+and the fire fixture clears its platform-specific archive index between runs.
+
+Raw timing, profiles, hashes and logs remain locally under
+`perf-runs/2026-10-25-both-opt/`; verification artifacts remain under
+`verification/out/`. The engine binary and SDK worktree were pinned throughout.
+
+Source commits for this optimization pass:
+
+| Game | Lua | Rust |
+| --- | --- | --- |
+| Hunted | [80615da](https://github.com/SpringCabal/Hunted/commit/80615da2c9b65dae8cef2b3d9f5ea614bdbd4a01) | [5bc1475](https://github.com/SpringCabal/Hunted/commit/5bc14750293b668ee1f94047fba1f57dfd22bcba) |
+| Flove | [50f6ca6](https://github.com/SpringCabal/Flove/commit/50f6ca64bee6b499ada9f04e953ee2007361d51f) | [03d572c](https://github.com/SpringCabal/Flove/commit/03d572ca98b2c0277157be927db4726294cc7416) |
+| Area 17 | [cf17232](https://github.com/SpringCabal/Area-17/commit/cf172327d24f3a65ab330cf4eb37ca0c594fcc7d) | [b99b0a1](https://github.com/SpringCabal/Area-17/commit/b99b0a1dfeb5cb47a7aad34e1e991c8c9169843b) |
+| To the Last Drop | [e0a3605](https://github.com/SpringCabal/LD43/commit/e0a36052f911252a8d87bdf198ee8f541ef1f369) | [88193d5](https://github.com/SpringCabal/LD43/commit/88193d52c4c35ad3aee1a97e5d6cbfcb1aa6107d) |
+| Gravitas | [3d6aea2](https://github.com/SpringCabal/Gravitas/commit/3d6aea2bac0ae38b644307cd988c5a6fbf1b72ed) | [41aa0b9](https://github.com/SpringCabal/Gravitas/commit/41aa0b92e5b14b2dd0468169a1a7d3cb06e2af26) |

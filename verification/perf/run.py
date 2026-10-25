@@ -111,8 +111,8 @@ def stage_effects(staged,backend,probe):
   info=staged/'modinfo.lua'
   info.write_text(info.read_text().replace('modtype = "1",','modtype = "1",\n onlyLocal = true,'))
  else:shutil.copyfile(probe,staged/'LuaUI/wasm/gravitas-ui.wasm')
-def build_effects_probe():
- source=PROJECT/'spring-linux/games/Gravitas-wasm.sdd/wasm-src'
+def build_effects_probe(games_dir):
+ source=games_dir/'Gravitas-wasm.sdd/wasm-src'
  target=PROJECT/'verification/cache/target/gravitas-fire-probe'
  subprocess.run(['cargo','build','-p','gravitas-ui-wasm','--features','fire-probe',
   '--release','--locked','--target','wasm32-unknown-unknown','--target-dir',str(target)],cwd=source,check=True)
@@ -161,15 +161,21 @@ def run(a):
  output.mkdir(parents=True,exist_ok=True)
  engine=a.engine.resolve();binary=engine/('spring-headless' if a.mode=='headless' else 'spring')
  if not binary.is_file():raise ValueError(f'missing engine: {binary}')
+ backends=('lua','wasm') if a.backend=='both' else (a.backend,)
+ frozen_input=None
+ if a.input:
+  frozen_input=output/'input.txt'
+  shutil.copyfile(a.input,frozen_input)
  stamp={'engine':str(binary),'engine_sha256':sha(binary),'engine_commit':revision(ENGINE),
   'engine_source':str(ENGINE.resolve()),
   'framework_commit':revision(PROJECT),'runner_sha256':sha(Path(__file__)),
   'fixtures':{str(p.relative_to(PROJECT)):sha(p) for p in [PROJECT/'verification/perf/workload.lua',
    PROJECT/'verification/fixtures/gravitas/fire_probe_rules.lua',PROJECT/'verification/fixtures/gravitas/fire_probe_ui.lua']},
   'engine_dirty':subprocess.check_output(['git','-C',str(ENGINE),'status','--porcelain'],text=True),
+  'input_sha256':sha(frozen_input) if frozen_input else None,
   'args':{k:str(v) if isinstance(v,Path) else v for k,v in vars(a).items()},'status':'diagnostic'}
  save(output/'provenance.json',stamp)
- probe=build_effects_probe() if a.scenario=='effects' else None
+ probe=build_effects_probe(a.games_dir) if a.scenario=='effects' and 'wasm' in backends else None
  start=time.monotonic();deadline=start+a.max_minutes*60
  results=[]
  games=list(GAMES) if a.game=='all' else list(COMPARISON_GAMES) if a.game=='comparison' else [a.game]
@@ -180,7 +186,7 @@ def run(a):
    save(output/f'{game}-map.json',stage_map(isolation,game))
    if game=='gravitas' and a.scenario!='effects':
     for dependency in ('Gravitas.sdd','Scenario-Editor-Core.sdd'):
-     (isolation/'games'/dependency).symlink_to(PROJECT/'spring-linux/games'/dependency,target_is_directory=True)
+     (isolation/'games'/dependency).symlink_to(a.games_dir/dependency,target_is_directory=True)
     (isolation/'projects').symlink_to(PROJECT/'spring-linux/projects',target_is_directory=True)
    scripts={};content={}
    # Choose the exact same map for both versions, including when the port's
@@ -189,7 +195,8 @@ def run(a):
    map_name=re.search(r'(?i)\bMapName\s*=([^;]+)',lua_script)[1].strip()
    folders=('Gravitas.sdd','Gravitas-wasm.sdd') if a.scenario=='effects' else GAMES[game]
    for backend,folder in zip(('lua','wasm'),folders):
-    source=PROJECT/'spring-linux/games'/folder
+    if backend not in backends:continue
+    source=a.games_dir/folder
     staged=isolation/'games'/folder
     shutil.copytree(source,staged,ignore=shutil.ignore_patterns('.git','target','wasm-src','screenshots','cache'))
     if a.scenario=='effects':stage_effects(staged,backend,probe)
@@ -207,7 +214,7 @@ def run(a):
     scripts[backend]=speed(text,a.speed)
    save(output/f'{game}-content.json',content)
    for repeat in range(a.repeats):
-    for backend in (('lua','wasm') if repeat%2==0 else ('wasm','lua')):
+    for backend in (backends if repeat%2==0 else tuple(reversed(backends))):
      if time.monotonic()>=deadline:raise TimeoutError('Configured campaign time limit reached; completed evidence is preserved')
      directory=output/f'{game}-{repeat:02d}-{backend}';directory.mkdir(exist_ok=True)
      write=directory/'write';write.mkdir(exist_ok=True)
@@ -225,7 +232,7 @@ def run(a):
      # Offscreen rendering needs no desktop. Content failures must not leave
      # a modal error dialog on the user's display or hold the run open.
      if a.mode!='headless':env.update(DISPLAY='',WAYLAND_DISPLAY='')
-     if a.input:env['SPRING_PERF_INPUT']=str(a.input.resolve())
+     if frozen_input:env['SPRING_PERF_INPUT']=str(frozen_input)
      before=host();samples=[before];memory=[];save(directory/'host-before.json',before)
      command=[str(binary),'--isolation','--isolation-dir',str(isolation),'--write-dir',str(write),'--config',str(directory/'settings.cfg'),str(script)]
      launched=time.monotonic()
@@ -281,11 +288,13 @@ def run(a):
      save(directory/'result.json',result);results.append(result);pair.append((backend,frame_rows))
      save(output/'baseline-status.json',{'status':'diagnostic','complete':False,'runs':len(results),'results':results})
      print(f'{game} {repeat} {backend}: {"complete" if ok else "FAILED"}, {len(frames)} sim rows, contended={contended}',flush=True)
-    equality=compare(*[[r for r in dict(pair[-2:])[backend] if int(r['frame'])>=a.warmup] for backend in ('lua','wasm')]);save(output/f'{game}-{repeat:02d}-equivalence.json',equality)
+    if len(backends)==2:
+     equality=compare(*[[r for r in dict(pair[-2:])[backend] if int(r['frame'])>=a.warmup] for backend in ('lua','wasm')]);save(output/f'{game}-{repeat:02d}-equivalence.json',equality)
    # Ratios are descriptive even when equal-work acceptance fails. Never
    # silently average work-mismatched runs into a language-performance claim.
    ratios=[]
    for i in range(a.repeats):
+    if len(backends)!=2:break
     by_backend={r['backend']:r for r in results if r['game']==game and r['repeat']==i};lua,wasm=by_backend['lua'],by_backend['wasm']
     x=lua['metrics']['sim.elapsed_us']['p50'];y=wasm['metrics']['sim.elapsed_us']['p50']
     if lua['ok'] and wasm['ok'] and x and y:ratios.append(y/x)
@@ -297,6 +306,8 @@ def run(a):
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('game',choices=['all','comparison',*GAMES]);p.add_argument('scenario',choices=['autonomous','scripted','effects'],default='autonomous',nargs='?')
  p.add_argument('--engine',type=Path,default=Path(os.environ.get('SPRING_ENGINE_DIR',ENGINE/'build-amd64-linux/install')));p.add_argument('--output',type=Path,required=True)
+ p.add_argument('--games-dir',type=Path,default=PROJECT/'spring-linux/games',help='game checkouts to stage (e.g. frozen Git worktrees for before/after measurements)')
+ p.add_argument('--backend',choices=['both','lua','wasm'],default='both',help='select one backend for alternating before/after source revisions, or both for Lua/Wasm pairs')
  p.add_argument('--mode',choices=['headless','gpu','realtime'],default='gpu',help='renderer backend; realtime is a legacy GPU alias');p.add_argument('--frames',type=int,default=900);p.add_argument('--warmup',type=int,default=300)
  p.add_argument('--speed',type=float,default=100,help='simulation speed multiplier (default: 100)')
  p.add_argument('--repeats',type=int,default=5);p.add_argument('--timeout',type=float,default=120);p.add_argument('--max-minutes',type=float,default=20);p.add_argument('--input',type=Path)
@@ -305,6 +316,7 @@ def main():
  p.add_argument('--frame-step',action='store_true',help='one simulation step per draw, using the gallery capture mechanism')
  p.add_argument('--effects-multiplier',type=int,default=1,help='Gravitas fire emitter pairs (0 gives the empty renderer baseline)')
  a=p.parse_args()
+ a.games_dir=a.games_dir.resolve()
  if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
  if a.scenario=='scripted' and not a.input:p.error('scripted requires --input')
  if a.unit_multiplier<1 or a.scale_frame<1 or (a.unit_multiplier>1 and a.warmup<=a.scale_frame):p.error('scaling must finish before warmup ends')

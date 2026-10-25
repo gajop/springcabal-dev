@@ -327,5 +327,70 @@ check("long hunts keep wave growth within the rabbit limit", function()
     assert(waves[1000][1] == 600 and waves[1000][2] == 600)
 end)
 
+for _, dropped in ipairs({false, true}) do
+    check('food buckets preserve ties, falloff and removal; dropped=' .. tostring(dropped), function()
+        local env, state, add = world("LuaRules/Gadgets/rabbit_ai.lua")
+        local goal
+        env.Spring.SetUnitMoveGoal = function(_, x, _, z) goal = {x, z} end
+        for id = 100, 199 do add(id, 2, 5000, 5000) end
+        add(1, 1, 1500, 1500)
+        -- Equal magnitudes in different buckets: the first main-list entry
+        -- wins even if its bucket is visited after the other one's bucket.
+        add(2, 2, 1530, 1490); add(3, 2, 1490, 1530)
+        if dropped then add(4, 3, 1550, 1500) end
+        state.frame = 1; env.gadget:GameFrame(1)
+        local first = dropped and 4 or 2
+        assert(goal[1] == state.units[first].x and goal[2] == state.units[first].z,
+            'spatial selection changed distance falloff or tie order')
+        env.Spring.DestroyUnit(first)
+        state.frame = 30; env.gadget:GameFrame(30)
+        local second = dropped and 2 or 3
+        assert(goal[1] == state.units[second].x and goal[2] == state.units[second].z,
+            'destroyed food stayed in a bucket or changed the remaining order')
+    end)
+end
+
+-- Recorded from the original table-vector AI, including its RNG call count.
+-- Exercise normal movement, eating, distant goals, panic and zero momentum.
+for _, case in ipairs({
+    {"food", 1300, 900, 2, -1, false, 5, {1191.5776888948001, 1294.7631036157454, 1.7577492578256111, 1, 0.94515776721718414}},
+    {"near food", 1030, 990, 0, 0, false, 1, {1030, 990, 0.05, 2, 0.2}},
+    {"far food", 5900, 5900, -3, 2, false, 5, {683.09744107801703, 1251.9446899719235, 2.0242489882444645, 1, 0.93190921654950976}},
+    {"scared", 1300, 900, 2, -1, true, 5, {3036.269930225847, 5226.5425789563806, 23.457438799063954, 5, 1.5}},
+    {"zero velocity", 1300, 900, 0, 0, false, 5, {875.85278594868191, 1328.8993271181255, 1.7577492578256111, 1, 0.94515776721718414}},
+}) do
+    check("rabbit movement and RNG stay unchanged: " .. case[1], function()
+        local env, state, add = world("LuaRules/Gadgets/rabbit_ai.lua")
+        local randoms, goal = 0
+        env.math = setmetatable({random = function()
+            randoms = randoms + 1
+            return 0.375
+        end}, {__index = math})
+        env.Spring.GetHeadingFromVector = function() return 1024 end
+        env.Spring.GetUnitVelocity = function() return case[4], 0, case[5], 0 end
+        env.Spring.SetUnitMoveGoal = function(_, x, _, z) goal = {x, z} end
+        add(1, 1, 1000, 1000)
+        add(2, 2, case[2], case[3])
+        add(3, 5, 2800, 2000)
+        state.frame = 30
+        if case[6] then
+            env.GG.ScareRabbitsInArea(1100, 1100, {
+                radiusSq = 1000^2, radius = 1000,
+                proximityMagnitude = 1000, edgeMagnitude = 0,
+            })
+        else
+            env.gadget:GameFrame(30)
+        end
+        local p = state.units[1].params
+        local actual = {goal[1], goal[2], p.selfMoveSpeedChange,
+            p.selfMaxAccelerationChange, p.selfTurnSpeedChange}
+        for index, expected in ipairs(case[8]) do
+            assert(math.abs(actual[index] - expected) < 1e-9,
+                "movement component changed: " .. index)
+        end
+        assert(randoms == case[7], "movement changed the synced RNG sequence")
+    end)
+end
+
 print(string.format("Hunted Lua regressions: %d passed, %d failed", passed, failed))
 os.exit(failed == 0 and 0 or 1)

@@ -184,5 +184,62 @@ check('rejected purchases do not apply gameplay effects', function()
     e.gadget:RecvLuaMsg('unlock|antiMissilePointDefense')
     e.gadget:RecvLuaMsg('upgrade|armor')
 end)
+check('civilian spatial fear keeps the strict radius, cloak and idle behavior', function()
+    local nextDef, nextUnit, frame = 0, 100, 0
+    local units, radius = {}, 500
+    local defs = setmetatable({}, {__index = function(t, name)
+        nextDef = nextDef + 1; local value = {id = nextDef}; rawset(t, name, value); return value
+    end})
+    local unitDefs = setmetatable({}, {__index = function(t, id)
+        local value = {customParams = {}}; rawset(t, id, value); return value
+    end})
+    local noop = function() end
+    local vector = {
+        DistSq = function(x, z, tx, tz) return (x-tx)^2 + (z-tz)^2 end,
+        PolarToCart = function(m, angle) return m*math.cos(angle), m*math.sin(angle) end,
+        Norm = function(m, x, z) local d=math.sqrt(x*x+z*z); return m*x/d, m*z/d end,
+    }
+    local spring = {Utilities = {Vector = vector, GiveClampedOrderToUnit = noop},
+        GetGameFrame = function() return frame end,
+        GetGameRulesParam = function(key)
+            if key == 'ufo_x' or key == 'ufo_z' then return 4000 end
+            if key == 'ufo_scare_radius' then return radius end
+        end,
+        GetAllUnits = function() return {} end,
+        ValidUnitID = function(id) return units[id] ~= nil end,
+        GetUnitDefID = function(id) return assert(units[id]).def end,
+        GetUnitPosition = function(id) local u=assert(units[id]); return u.x,0,u.z,u.x+20,30,u.z-10 end,
+        GetGroundHeight = function() return 0 end, TestBuildOrder = function() return 1 end,
+        SetUnitRotation = noop, GiveOrderToUnit = noop,
+        SetUnitRulesParam = function(id, key, value) units[id][key] = value end,
+        CreateUnit = function(def, x, _, z)
+            nextUnit=nextUnit+1; units[nextUnit]={def=def,x=x,z=z}; return nextUnit
+        end,
+        GetUnitsInCylinder = function(x, z, r)
+            local found = {}; for id,u in pairs(units) do
+                if vector.DistSq(x,z,u.x+20,u.z-10) <= r*r then found[#found+1]=id end
+            end; return found
+        end,
+    }
+    local e = {gadget={}, GG={UpdateUnitAttributes=noop}, Spring=spring,
+        UnitDefNames=defs, UnitDefs=unitDefs, CMD={FIGHT=16,STOP=0}, Game={gameName='Area17'},
+        gadgetHandler={IsSyncedCode=function() return true end},
+        math=setmetatable({random=function() return 0.5 end},{__index=math})}
+    load('LuaRules/Gadgets/unit_civilian_spawner.lua',e)
+    units[1]={def=defs.building3.id,x=2000,z=2000}
+    e.gadget:UnitCreated(1,defs.building3.id)
+    frame=5; e.gadget:GameFrame(frame); assert(nextUnit==102,'fixture did not spawn two civilians')
+    units[101].x,units[101].z=4100,4000
+    units[102].x,units[102].z=4500,4000
+    frame=6; e.gadget:GameFrame(frame)
+    assert(units[101].selfMoveSpeedChange==2.5,'nearby civilian did not flee')
+    assert(units[102].selfMoveSpeedChange==1,'civilian on the strict radius fled')
+    e.gadget:UnitIdle(101); radius=0; frame=7; e.gadget:GameFrame(frame)
+    assert(units[101].selfMoveSpeedChange==1,'cloak did not suppress fear')
+    radius=500; frame=8; e.gadget:GameFrame(frame)
+    assert(units[101].selfMoveSpeedChange==2.5,'uncloaking did not restore fear')
+    units[102].x=4499.9; frame=9; e.gadget:GameFrame(frame)
+    assert(units[102].selfMoveSpeedChange==2.5,'civilian just inside the radius did not flee')
+end)
 print(string.format('%d passed; %d failed', passed, failed))
 if failed > 0 then os.exit(1) end

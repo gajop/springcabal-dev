@@ -8,10 +8,6 @@ function gadget:GetInfo()
 	}
 end
 
-if not gadgetHandler:IsSyncedCode() then
-	return false
-end
-
 local STAGE = __STAGE__
 local FORCE_START = __FORCE_START__
 local COUNT = __COUNT__
@@ -19,17 +15,56 @@ local SHOT_NATURAL = __SHOT_NATURAL__
 local PIN_FROM = __PIN_FROM__
 local SHOT_PINNED = __SHOT_PINNED__
 
+local function closeCamera()
+	for _, unitID in ipairs(Spring.GetAllUnits()) do
+		local defID = Spring.GetUnitDefID(unitID)
+		local def = defID and UnitDefs[defID]
+		if def and def.customParams and def.customParams.tree then
+			local x, y, z = Spring.GetUnitPosition(unitID)
+			if x then
+				local cs = Spring.GetCameraState()
+				cs.px, cs.py, cs.pz = x, y + 700, z + 700
+				cs.dx, cs.dy, cs.dz = 0, -0.7, -0.7
+				cs.height = 700
+				Spring.SetCameraState(cs, 0)
+				Spring.Echo(string.format("[Flove-Wisp-Cam] CLOSE_CAMERA at %.0f,%.0f,%.0f", x, y, z))
+				return
+			end
+		end
+	end
+end
+
+-- Camera access and screenshot commands belong to unsynced rules. The synced
+-- half pins gameplay state and sends the requests at the original frames.
+if not gadgetHandler:IsSyncedCode() then
+    local quitAfterDraw
+    function gadget:Initialize()
+        if FORCE_START == 1 then Spring.SendCommands({"forcestart", "pause 0"}) end
+        gadgetHandler:AddSyncAction("flove_wisp_camera", closeCamera)
+        gadgetHandler:AddSyncAction("flove_wisp_capture", function(_, final)
+            Spring.SendCommands("screenshot png")
+            if final then quitAfterDraw = Spring.GetDrawFrame() + 3 end
+        end)
+    end
+    function gadget:Shutdown()
+        gadgetHandler:RemoveSyncAction("flove_wisp_camera")
+        gadgetHandler:RemoveSyncAction("flove_wisp_capture")
+    end
+    function gadget:Update()
+        if quitAfterDraw and Spring.GetDrawFrame() >= quitAfterDraw then
+            quitAfterDraw = nil
+            Spring.Echo("FLOVE WISP CAPTURE DONE")
+            Spring.SendCommands("quitforce")
+        end
+    end
+    return
+end
+
 local offsets = {}
 for i = 1, COUNT do
 	offsets[i] = (i - 1) * (0.25 / COUNT)
 end
 
-function gadget:Initialize()
-	if FORCE_START == 1 then
-		Spring.SendCommands("forcestart")
-		Spring.SendCommands("pause 0")
-	end
-end
 
 local function trees()
 	local found = {}
@@ -70,40 +105,22 @@ local function report(tag, frame)
 	end
 end
 
-local function closeCamera()
-	for _, unitID in ipairs(Spring.GetAllUnits()) do
-		local defID = Spring.GetUnitDefID(unitID)
-		local def = defID and UnitDefs[defID]
-		if def and def.customParams and def.customParams.tree then
-			local x, y, z = Spring.GetUnitPosition(unitID)
-			if x then
-				local cs = Spring.GetCameraState()
-				cs.px, cs.py, cs.pz = x, y + 700, z + 700
-				cs.dx, cs.dy, cs.dz = 0, -0.7, -0.7
-				cs.height = 700
-				Spring.SetCameraState(cs, 0)
-				Spring.Echo(string.format("[Flove-Wisp-Cam] CLOSE_CAMERA at %.0f,%.0f,%.0f", x, y, z))
-				return
-			end
-		end
-	end
-end
 
 function gadget:GameFrame(frame)
 	if frame == SHOT_NATURAL then
 		report("natural", frame)
-		Spring.SendCommands("screenshot png")
+		SendToUnsynced("flove_wisp_capture", false)
 		return
 	end
 
 	if frame == SHOT_PINNED - 30 then
-		closeCamera()
+		SendToUnsynced("flove_wisp_camera")
 		return
 	end
 
 	if frame == SHOT_PINNED then
 		report("pinned", frame)
-		Spring.SendCommands("screenshot png")
+		SendToUnsynced("flove_wisp_capture", true)
 		return
 	end
 

@@ -184,6 +184,8 @@ flove_wisps_render() {
     vf_config "$FIXTURES/spring.conf"
     vf_run_visual "$seconds"
     vf_save_logs
+    vf_require_clean_exit
+    vf_require 'FLOVE WISP CAPTURE DONE' 'the wisp capture did not finish'
 
     vf_require '\[Flove-Wisp-Test\]' 'the wisp helper never ran'
     grep -o '\[Flove-Wisp-Test\][^"]*' "$VF_OUT_DIR/last.combined.txt" | tail -1

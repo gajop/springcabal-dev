@@ -130,5 +130,100 @@ for _,file in ipairs({'1_tree_normalmapping.lua','1_mushroom_shader.lua'}) do
         mat.shader=20; mat.DrawUnit(1,mat); assert(queries==first*2,'uniforms belong to deleted shader')
     end)
 end
+check('mushroom target snapshots preserve weighted choices, allies and RNG', function()
+    local e, state = world('LuaRules/Gadgets/unit_poisoner.lua')
+    local nextDef = 100
+    setmetatable(e.UnitDefNames, {__index = function(t, name)
+        nextDef = nextDef + 1; local def = {id = nextDef}; rawset(t, name, def); return def
+    end})
+    setmetatable(e.UnitDefs, {__index = function(t, id)
+        local def = {customParams = {}}; rawset(t, id, def); return def
+    end})
+    e.UnitDefs[4] = {customParams = {tree = true}}
+    local positions = {[1] = 1000, [2] = 200, [3] = 50, [4] = 0, [100] = 0}
+    for _, id in ipairs({1, 2, 3, 4, 100}) do
+        state.units[id] = {def = id == 1 and 1 or 4, params = {}, team = id == 3 and 0 or 1}
+    end
+    state.units[100].team = 0
+    local nearest, positionReads, listReads, randomCalls = 2, 0, 0, 0
+    local randomValues = {}
+    e.math = setmetatable({random = function()
+        randomCalls = randomCalls + 1; return assert(table.remove(randomValues, 1))
+    end}, {__index = math})
+    e.Spring.GetAllUnits = function() listReads = listReads + 1; return {1, 2, 3, 4, 100} end
+    e.Spring.GetUnitPosition = function(id) positionReads = positionReads + 1; return positions[id], 0, 0 end
+    e.Spring.GetUnitTeam = function(id) return state.units[id].team end
+    e.Spring.GetUnitNearestEnemy = function() return nearest end
+    e.Spring.AreTeamsAllied = function(a, b) return a == b end
+    load('LuaRules/Gadgets/mushroom_spawner.lua', e); e.gadget:UnitCreated(1, 1)
+    randomValues = {0.25}; assert(e.SelectEnemy(100, {}) == 2)
+    assert(listReads == 0 and positionReads == 0, 'nearest-only choice scanned targets')
+    local snapshot = {}
+    randomValues = {0.75, 0.5}; assert(e.SelectEnemy(100, snapshot) == 2,
+        'weighted choice targeted an ally or a zero-distance tree')
+    local firstReads = positionReads
+    randomValues = {0.75, 0.01}; assert(e.SelectEnemy(100, snapshot) == 1)
+    assert(listReads == 1 and positionReads == firstReads + 1, 'target snapshot was queried again')
+    nearest = 1; randomValues = {0.25, 0.5}; assert(e.SelectEnemy(100, snapshot) == 2,
+        'nearest-spire fallback skipped weighted choice')
+    assert(randomCalls == 7 and #randomValues == 0, 'target selection changed the RNG sequence')
+end)
+-- The wisp renderer is Lua in both game variants. Check the three passes
+-- against their original vertices and require one rules snapshot per draw.
+local renderRoots = {root}
+if arg[2] then renderRoots[#renderRoots + 1] = arg[2] end
+for _, gameRoot in ipairs(renderRoots) do
+    check('wisp stages share one snapshot and survive unit replacement: ' .. gameRoot, function()
+        local frame, queries, draws = 1, 0, {}
+        local units = {
+            [11] = {wispCount = 3, wispStage1 = 1, wispOffset1 = 0.1,
+                wispStage2 = 2, wispOffset2 = 0.2, wispStage3 = 3, wispOffset3 = 0.3},
+            [12] = {wispCount = 1, wispStage1 = 0, wispOffset1 = 0}, [13] = {},
+        }
+        local gfx = setmetatable({
+            CreateShader = function() return 1 end, CreateList = function() return 1 end,
+            BeginEnd = function(_, fn) fn() end,
+            Vertex = function(...) draws[#draws + 1] = {...} end,
+        }, {__index = function() return noop end})
+        local spring = {
+            Echo = noop,
+            GetAllUnits = function()
+                local ids = {}; for _, id in ipairs({11, 12, 13}) do
+                    if units[id] then ids[#ids + 1] = id end
+                end; return ids
+            end,
+            GetUnitDefID = function(id) return id == 13 and 2 or 1 end,
+            GetUnitPosition = function() return 4096, 8192, 12288 end,
+            GetGroundHeight = function() return 8192 end,
+            GetDrawFrame = function() return frame end,
+            GetUnitRulesParam = function(id, key)
+                queries = queries + 1; return assert(units[id])[key]
+            end,
+        }
+        local e = setmetatable({gadget = {}, Spring = spring, gl = gfx, GL = {POINTS = 0},
+            UnitDefs = {{customParams = {tree = true}}, {customParams = {}}},
+            gadgetHandler = {IsSyncedCode = function() return false end,
+                AddChatAction = noop, RemoveChatAction = noop}}, {__index = _G})
+        local chunk = assert(loadfile(gameRoot .. '/LuaRules/Gadgets/wisp_animation.lua'))
+        setfenv(chunk, e)(); e.gadget:Initialize()
+        e.DrawParticles(1)
+        local snapshotQueries = queries
+        e.DrawParticles(2); e.DrawParticles(3)
+        assert(queries == snapshotQueries, 'the stage passes repeated engine queries')
+        assert(#draws == 3, 'a wisp stage disappeared or was duplicated')
+        for stage, vertex in ipairs(draws) do
+            assert(vertex[1] == 1 and vertex[2] == 2 and vertex[3] == 3)
+            assert(math.abs(vertex[4] - (0.05 + stage * 0.1)) < 1e-12)
+        end
+        frame = frame + 1; draws = {}; units[11].wispStage1 = 3
+        e.DrawParticles(3); assert(#draws == 2, 'a stage change stayed cached')
+        units[11] = nil; e.gadget:UnitDestroyed(11); draws = {}
+        e.DrawParticles(3); assert(#draws == 0, 'a destroyed tree stayed cached')
+        units[11] = {wispCount = 1, wispStage1 = 3, wispOffset1 = 0.4}
+        e.gadget:UnitCreated(11, 1); draws = {}; e.DrawParticles(3)
+        assert(#draws == 1 and math.abs(draws[1][4] - 0.45) < 1e-12,
+            'a replacement tree reused the old snapshot')
+    end)
+end
 print(string.format('Flove Lua regressions: %d passed, %d failed',passed,failed))
 os.exit(failed == 0 and 0 or 1)
