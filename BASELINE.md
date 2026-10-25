@@ -33,7 +33,7 @@ suite ran at 1x.
 |---|---|
 | host tests | **112** tests: springcabal-rs 40, area17-shared 6, flove-shared 6, gravitas-shared 9, hunted-ai 28, mycube-shared 9, partsneeded-shared 4, ttld-shared 10 |
 | installed all | the installed modules of all seven games match their source |
-| area17 static / headless | pass; Rust **22**, Lua **6**; log 1 error, 4 warnings |
+| area17 static / headless | pass; Rust **23**, Lua **6**; no errors or warnings (2026-10-25) |
 | flove headless | rules **66**, UI input **9**, scenario **8**; log 1 error, 9 warnings |
 | flove animation-trace | skeletons and 19,760 pose samples match Lua within 2e-3 |
 | gravitas e2e / headless | **19/19** cases, plus the build and log checks / pass |
@@ -47,6 +47,10 @@ suite ran at 1x.
 
 Each suite passes its exact count to `Suite::new`, so a run with fewer checks fails. Every suite
 also fails on any runtime failure (`verification/lib/failures.sh`).
+
+Area 17 gained its 23rd Rust check on 2026-10-25: every initial scenario unit
+must have its CUS script attached before the gameplay checks. This catches
+scene creation during module loading, before creation-event delivery is active.
 
 The "1 error" is the engine's headless `Could not finalize groundFX texture atlas`. Any other new
 error or warning is a regression until explained.

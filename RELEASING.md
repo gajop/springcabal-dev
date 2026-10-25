@@ -31,6 +31,10 @@ gh release view 2026.10.21 -R gajop/spring-rust
 just setup-dev-engine ../spring-bar
 ```
 
+The [2026.10.25 compatibility review](docs/engine-compatibility-2026-10-25.md)
+records all engine changes since 1.0.2, including the weapon-number and module
+startup changes applied for 1.0.3-rc.2.
+
 Commit the framework/menu, shared crate, games and maps before preparing a
 release. Preparation refuses dirty source checkouts, including untracked files.
 The engine's released tag is resolved to its full commit; the source snapshot
