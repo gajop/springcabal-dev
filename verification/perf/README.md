@@ -477,3 +477,56 @@ verification runner. Its report excludes both members of a failed, incomplete
 or contended pair. Ten performance-framework regression tests pass, including
 input/marker ordering, wall-window boundaries and pair exclusion. No game or
 engine source change was needed for this comparison.
+
+## Optional Rust jobs with GPU rendering
+
+The October 26 comparison adds opt-in same-tick jobs to Hunted's rabbit light
+sensing, Flove's mushroom target statistics and Gravitas's fire billboards.
+`rust_jobs=off` remains the production default. `on` dispatches pure work;
+`check` additionally checks every returned packet against inline computation.
+Read-only state is snapshotted on the calling thread; workers make no engine
+calls. RNG, commands and mutations retain their original order. Gravitas's
+check mode also compares the final expanded
+vertices with its serial renderer, float bit for float bit.
+
+Each batch targets four chunks, with ordered results; Gravitas splits further
+when needed to fit both input and output packet limits. Small dedicated
+worker modules have no imports and fixed 8 MiB memories. Flove reuses worker
+scratch storage and reads weights lazily from shared output packets.
+Gravitas transfers 13 floats per billboard and expands its six vertices on
+the calling thread. This avoids transferring the 54-float expanded geometry.
+The released API copies packets and creates a fresh private store for each
+job, so dispatching a small calculation can cost more than doing it inline.
+
+The comparison pins the same released engine, SDK and NVIDIA GPU as the
+preceding table. It alternates five off/on pairs at total engine pool widths
+1 and 4, and five Lua/serial-Rust pairs at width 4. Width includes the main
+thread. Every run uses 300 warmup steps and 600 measured simulation/render
+steps, 1024×736, VSync off. Complete-window elapsed time includes main-loop
+work and swaps. Check-mode runs never enter timing aggregates. Both members
+of a pair are excluded if either fails or exceeds the existing CPU-pressure
+threshold.
+
+`verification/perf/compare-jobs.sh` reproduces the matrix through the existing
+verification runner. Hunted and Flove include 10× initial scenes; the Flove
+combat input creates 350 mushrooms before scaling. Gravitas uses 1, 10 and
+100 fire emitter pairs. TTLD with shadows enabled in both ports, and Area 17,
+are Lua/Rust controls at pool width 4; neither receives an artificial game
+job kernel for work already performed by the native engine.
+
+The shared helper is [09cd1d0](https://github.com/gajop/springcabal-rs/commit/09cd1d03d9fdec06c614fd29d978606096eb9378).
+The public Rust game branches contain:
+
+| Game | Source |
+| --- | --- |
+| Hunted | [e916b24](https://github.com/SpringCabal/Hunted/commit/e916b24080968f6fdbc7b0a3c6674e236d68163f) |
+| Flove | [26869d0](https://github.com/SpringCabal/Flove/commit/26869d0) |
+| Gravitas | [cab763b](https://github.com/SpringCabal/Gravitas/commit/cab763b) |
+
+The canonical builds pass all 22 existing standard verification runs,
+including 123 host tests. Jobs check mode passes on the three games at both
+pool widths. The targeted integration suites pass Hunted's 36 checks,
+Flove's 66 rules, 10 UI and 8 scenario checks, and Gravitas's 19 end-to-end
+checks. Gravitas additionally passes checks at 100 emitter pairs at both
+widths. Its existing five-frame Lua/Rust image comparison remains below
+0.025% RMSE in every frame, against the unchanged 0.1% threshold.
