@@ -138,6 +138,10 @@ errors and workload divergence; see `perf-runs/2026-10-15-autonomous-diagnostic`
 
 ## 2026-10-25 measurements
 
+These are the initial campaign results. The follow-up below fixes Hunted's
+startup configuration and revisits TTLD's draw timing; keep that evidence
+alongside this original snapshot.
+
 Engine **2026.10.25** (`dd05f8647458ff5541a8aee8d43b6218a64eaef8`),
 i7-12700, GTX 1660 Ti, NVIDIA 580.178.04, SDL offscreen, 1024×736,
 VSync off, one ThreadPool worker (the main thread). Each successful run has
@@ -162,7 +166,7 @@ changes the populations; its normal measured weapon fires differ (2,944 Lua
 versus 2,421 Rust in the first pair). These differences belong beside the
 timings rather than being attributed to language overhead.
 
-The clearest normal-scene profiling targets are Hunted simulation (0.32 ms
+The initial normal-scene profiling targets were Hunted simulation (0.32 ms
 Lua, 0.65 ms Rust) and TTLD drawing (2.25 ms Lua, 5.52 ms Rust). At 10×, TTLD
 simulation alone reaches 36.82/38.66 ms, above the 33.33 ms budget for 30 Hz.
 Area 17's LuaRules allocation reaches its 1.5 GiB cap during cloning. Rust
@@ -189,3 +193,51 @@ callin/import measurements and whole-process peak RSS. Full provenance, CSV
 frames and logs remain locally under `perf-runs/2026-10-25-comparison/`.
 Earlier unstepped fire runs were excluded and retained separately under
 `perf-runs/2026-10-25-rejected-fire-unstepped/`.
+
+## Follow-up: Hunted startup LOS and TTLD repeatability
+
+Hunted's Lua `LuaUI/Widgets/start_force.lua` enables global LOS for **all**
+ally teams, including Gaia. The Rust port omitted that startup step. Linux
+`perf` sampling with the released engine's debug symbols located substantial
+Rust-run CPU time in native LOS circle/raycast updates. Those updates are
+skipped when global LOS is enabled: this was additional engine work caused by
+the port's configuration.
+
+Hunted Rust commit `364d646` restores that behavior through the typed synced
+control API on the first game frame. The existing flashlight/lighthouse pass
+still hides and reveals rabbits. In the first 900-frame repeat, LOS raycast
+cache misses drop from 11,949 to one. No engine change is required.
+
+Using the same released engine, settings, seed, frame stepping and measurement
+window, five alternating pairs per case give these medians of run p50s (ms):
+
+| Case | Lua simulation | Rust simulation | Lua sim + draw | Rust sim + draw |
+| --- | ---: | ---: | ---: | ---: |
+| Hunted before fix | 0.331 | 0.664 | 1.080 | 1.491 |
+| Hunted after fix | 0.312 | 0.244 | 1.008 | 0.931 |
+| Hunted after fix, 10× initial units | 4.397 | 1.750 | 8.214 | 3.479 |
+| TTLD repeated, unchanged | 3.708 | 3.329 | 8.149 | 7.018 |
+
+Hunted's Rust simulation time falls 63%. Normal measured median populations
+are 146 units in both ports after the fix; the stress case has 1,358 Lua and
+1,350 Rust units. AI decisions and later populations still differ, so the
+cross-language ratios describe these scenes rather than isolated runtimes.
+
+TTLD's original draw slowdown does **not** repeat: Rust drawing is faster in
+all five new pairs, with median draw p50s of 3.288 ms Rust and 4.277 ms Lua.
+The staged content/module hashes, map hashes and settings match the initial
+campaign. Both ports have 622 median units. The initial timing batch alone
+does not identify a TTLD rendering regression; its production code is unchanged.
+
+All 40 follow-up runs complete with exactly 600 measured draws and no detected
+CPU pressure contention. [The follow-up CSV](optimization-2026-10-25.csv) records
+simulation/draw p50/p95, populations and API counters. Full logs and provenance
+remain in `perf-runs/2026-10-25-opt-{baseline-hunted,fixed-hunted,fixed-hunted-10x,baseline-ttld}/`.
+
+The added startup LOS assertion fails on the old Hunted code and passes with
+the fix. The existing suite now passes 36 integration checks, all 30 common
+unit tests, strict Clippy, both Lua/Rust input checks, and installed-module
+matching. The five-shot GPU visual scenario and HUD/restart assertions complete
+without errors or warnings. Golden pixel comparisons are skipped through the
+existing renderer-mismatch option because the references use Mesa software
+rendering; this run uses NVIDIA. Goldens and tolerances are unchanged.
