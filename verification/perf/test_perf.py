@@ -7,9 +7,22 @@ import report
 import dashboard
 import profile_export
 import threading
+import subprocess
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_frozen_content_does_not_inherit_its_parent_repository_revision(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(['git', 'init', '--quiet', str(root)], check=True)
+            subprocess.run(['git', '-C', str(root), '-c', 'user.name=Perf test',
+                            '-c', 'user.email=perf@example.invalid', '-c', 'commit.gpgsign=false',
+                            'commit', '--quiet', '--allow-empty', '-m', 'Fixture'], check=True)
+            copied = root/'frozen-games'
+            copied.mkdir()
+            self.assertIsNotNone(run.revision(root))
+            self.assertIsNone(run.revision(copied))
+
     def test_gpu_sampling_does_not_block_the_frame_marker_controller(self):
         entered=threading.Event();release=threading.Event()
         def sample(group):

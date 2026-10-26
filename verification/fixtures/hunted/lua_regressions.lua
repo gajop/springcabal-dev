@@ -13,7 +13,7 @@ local function check(name, test)
     end
 end
 
-local function world(file)
+local function world(file, configure)
     local state = {frame = 0, units = {}, rules = {}, starts = 0, stops = 0, pickups = 0}
     local env = setmetatable({
         gadget = {}, GG = {}, Spring = {},
@@ -71,6 +71,7 @@ local function world(file)
     env.GG.UpdateUnitAttributes = noop
     env.GG.RabbitPickupCarrot = function() state.pickups = state.pickups + 1 end
     env.GG.RabbitDropCarrot = noop
+    if configure then configure(env, state) end
     local chunk = assert(loadfile(root .. "/" .. file))
     setfenv(chunk, env)()
     env.gadget:Initialize()
@@ -331,9 +332,10 @@ end)
 
 for _, dropped in ipairs({false, true}) do
     check('food buckets preserve ties, falloff and removal; dropped=' .. tostring(dropped), function()
-        local env, state, add = world("LuaRules/Gadgets/rabbit_ai.lua")
         local goal
-        env.Spring.SetUnitMoveGoal = function(_, x, _, z) goal = {x, z} end
+        local env, state, add = world("LuaRules/Gadgets/rabbit_ai.lua", function(env)
+            env.Spring.SetUnitMoveGoal = function(_, x, _, z) goal = {x, z} end
+        end)
         for id = 100, 199 do add(id, 2, 5000, 5000) end
         add(1, 1, 1500, 1500)
         -- Equal magnitudes in different buckets: the first main-list entry
@@ -362,15 +364,16 @@ for _, case in ipairs({
     {"zero velocity", 1300, 900, 0, 0, false, 5, {875.85278594868191, 1328.8993271181255, 1.7577492578256111, 1, 0.94515776721718414}},
 }) do
     check("rabbit movement and RNG stay unchanged: " .. case[1], function()
-        local env, state, add = world("LuaRules/Gadgets/rabbit_ai.lua")
         local randoms, goal = 0
-        env.math = setmetatable({random = function()
-            randoms = randoms + 1
-            return 0.375
-        end}, {__index = math})
-        env.Spring.GetHeadingFromVector = function() return 1024 end
-        env.Spring.GetUnitVelocity = function() return case[4], 0, case[5], 0 end
-        env.Spring.SetUnitMoveGoal = function(_, x, _, z) goal = {x, z} end
+        local env, state, add = world("LuaRules/Gadgets/rabbit_ai.lua", function(env)
+            env.math = setmetatable({random = function()
+                randoms = randoms + 1
+                return 0.375
+            end}, {__index = math})
+            env.Spring.GetHeadingFromVector = function() return 1024 end
+            env.Spring.GetUnitVelocity = function() return case[4], 0, case[5], 0 end
+            env.Spring.SetUnitMoveGoal = function(_, x, _, z) goal = {x, z} end
+        end)
         add(1, 1, 1000, 1000)
         add(2, 2, case[2], case[3])
         add(3, 5, 2800, 2000)

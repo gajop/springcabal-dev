@@ -9,6 +9,9 @@ local defs = {
     {name='treelevel3',customParams={tree=true}}, {name='spire',customParams={}},
     {name='base',customParams={effect=true}}}
 local gl = setmetatable({}, {__index=function() return noop end})
+-- The mock covers the legacy renderer; actual model-buffer submission is
+-- exercised by the existing in-engine image scenarios.
+gl.GetVBO, gl.GetVAO = false, false
 local shaderIDs, shaders, uniforms, draws = 0, {}, {}, {}
 local colour
 function gl.GetUniformLocation(_,name) return name end
@@ -32,12 +35,16 @@ local Spring = {
     IsAboveMiniMap=function() return false end,
     TraceScreenRay=function() return 'unit',state.hover end,
     GetUnitIsDead=function(id) return state.units[id] and state.units[id].dead end,
-    Log=function(_,_,msg) error(msg) end, ALL_UNITS=-1}
+    Log=function(_,_,msg) error(msg) end, Echo=noop, ALL_UNITS=-1}
 local env = setmetatable({widget={},Spring=Spring,UnitDefs=defs,gl=gl,
     GL=setmetatable({},{__index=function() return 1 end}),
     WG={Chili={Screen0={IsAbove=function() return state.above end}}},
     VFS={LoadFile=function(name) local f=assert(io.open(root..'/'..name)); local s=f:read('*a'); f:close(); return s end},
     widgetHandler={GetViewSizes=function() return 800,600 end}}, {__index=_G})
+env.VFS.Include=function(name)
+    local include=assert(loadfile(root..'/'..name))
+    return setfenv(include,env)()
+end
 local chunk=assert(loadfile(root..'/LuaUI/Widgets/gfx_outline.lua')); setfenv(chunk,env)(); env.widget:Initialize()
 local function draw() draws={}; env.widget:DrawWorldPreUnit() end
 local function green(id) local c=assert(draws[id]).colour; return c[1]>.05 and c[2]>.9 end

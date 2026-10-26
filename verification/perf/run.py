@@ -46,8 +46,11 @@ def sha(path):
   for chunk in iter(lambda:f.read(1<<20),b''):h.update(chunk)
  return h.hexdigest()
 def revision(path):
- p=subprocess.run(['git','-C',str(path),'rev-parse','HEAD'],capture_output=True,text=True)
- return p.stdout.strip() if p.returncode==0 else None
+ p=subprocess.run(['git','-C',str(path),'rev-parse','--show-toplevel','HEAD'],capture_output=True,text=True)
+ lines=p.stdout.splitlines()
+ # Frozen content copies can sit inside this tooling repository. Its parent
+ # commit does not identify the copied game; retain the content hashes instead.
+ return lines[1] if p.returncode==0 and len(lines)==2 and Path(lines[0]).resolve()==Path(path).resolve() else None
 def tree_hash(path):
  h=hashlib.sha256()
  for f in sorted(path.rglob('*')):
