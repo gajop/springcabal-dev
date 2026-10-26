@@ -313,7 +313,11 @@ class VerificationLease:
 
 def wait_for_resources(a,pressure_path,deadline,game,lease,host_sample=host,gpu_sample=gpu_processes,now=time.monotonic,sleep=time.sleep):
  before=None;gpu_before=None;quiet_since=None;notice=0;preflight=[]
- if a.wait_for_idle or a.wait_for_gpu_idle:lease.release()
+ if a.wait_for_idle or a.wait_for_gpu_idle:
+  lease.release()
+  # Give already-blocked verification/export work a chance before this same
+  # process reacquires the flock for another quiet period and engine run.
+  sleep(.05)
  while True:
   if now()>=deadline:raise TimeoutError('CPU/GPU stayed busy; completed evidence is preserved')
   if not lease.try_acquire():

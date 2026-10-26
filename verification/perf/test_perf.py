@@ -8,11 +8,58 @@ import dashboard
 import profile_export
 import threading
 import subprocess
+import struct
 import storage
 from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
+    def jit_fixture(self, root, loads, flags=0, extra=b''):
+        data = struct.pack('<6I2Q', 0x4a695444, 1, 40, 62, 0, 42, 0, flags)
+        for address, name, timestamp in loads:
+            payload = struct.pack('<II4Q', 42, 43, address, address, 32, 1)
+            payload += name.encode()+b'\0'+b'\x90'*32
+            data += struct.pack('<IIQ', 0, len(payload)+16, timestamp)+payload
+        (root/'jit-42.dump').write_bytes(data+extra)
+        return profile_export.JitSymbols(root)
+
+    def test_jit_symbols_require_matching_process_range_and_load_time(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            jit = self.jit_fixture(root, [(0x1000, 'core::slice::sort', 1_000_000_000)])
+            raw = ('recoil-main 42/43 2.000000: 2000000\n'
+                   '  1015 [unknown] (/tmp/perf-42.map)\n')
+            frames = profile_export.parse(raw, jit)[0]['frames']
+            self.assertEqual(frames, [('core::slice::sort', 'jit-42.dump')])
+            self.assertEqual(profile_export.category(*frames[0]), 'Wasm guest')
+            self.assertIsNone(jit.resolve(99, 0x1015, 2_000_000_000))
+            self.assertIsNone(jit.resolve(42, 0x1015, 999_999_999))
+            self.assertIsNone(jit.resolve(42, 0x1020, 2_000_000_000))
+            self.assertEqual(profile_export.parse(raw.replace('42/43', '99/43'), jit)[0]['frames'][0][0], '[unknown]')
+
+    def test_jit_symbols_leave_unsupported_or_ambiguous_code_unresolved(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            loads = [(0x1000, 'first', 1)]
+            self.assertIsNone(self.jit_fixture(root, loads, flags=1).resolve(42, 0x1000, 10))
+            move = struct.pack('<IIQ', 1, 16, 2)
+            self.assertIsNone(self.jit_fixture(root, loads, extra=move).resolve(42, 0x1000, 10))
+            overlap = loads+[(0x1010, 'second', 2)]
+            self.assertIsNone(self.jit_fixture(root, overlap).resolve(42, 0x1010, 10))
+            close = struct.pack('<IIQ', 3, 16, 3)
+            jit = self.jit_fixture(root, loads, extra=close)
+            self.assertEqual(jit.resolve(42, 0x1000, 2)[0], 'first')
+            self.assertIsNone(jit.resolve(42, 0x1000, 3))
+
+    def test_jit_symbols_reject_truncated_code_records(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.jit_fixture(root, [(0x1000, 'first', 1)])
+            path = root/'jit-42.dump'
+            path.write_bytes(path.read_bytes()[:-1])
+            with self.assertRaisesRegex(ValueError, 'record length'):
+                profile_export.JitSymbols(root)
+
     def test_frozen_content_does_not_inherit_its_parent_repository_revision(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

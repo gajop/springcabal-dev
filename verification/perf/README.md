@@ -743,3 +743,11 @@ is running. Unstarted scenes remain pending, with no fabricated measurements;
 confidence intervals require five clean pairs. The report shows its generation
 time and the number of scenes that reached five pairs. CPU profiles carry their
 own engine commit, binary SHA-256 and callback-timer mode.
+
+The exporter also resolves unknown JIT addresses from retained `jit-*.dump`
+code-load records. This covers perf versions whose JIT injection passes compressed
+event blocks through. Resolution requires the matching process, an unambiguous
+address range and a load timestamp preceding the sample. Unsupported clocks,
+moving code and overlapping registrations remain unresolved. This recovers names;
+it does not invent missing unwind parents. Each profile records the dump hashes
+and number of frames resolved this way.

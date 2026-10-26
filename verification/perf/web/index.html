@@ -60,7 +60,7 @@
   <div class="toolbar"><button id="flame-back">Back</button><button id="flame-reset">Reset zoom</button><label>Find symbol <input id="flame-search" placeholder="e.g. WaitBuffer, luaH_get, HAPFS"></label></div>
   <div id="flame" class="flame"></div><p id="flame-detail" class="mono caption" aria-live="polite"></p>
   <div class="two"><div><h3>Sampled instruction categories</h3><div id="profile-categories" class="chart"></div></div><div><h3>Hottest sampled instructions</h3><div class="table-scroll"><table><thead><tr><th>Symbol / library</th><th>CPU samples</th></tr></thead><tbody id="profile-leaves"></tbody></table></div></div>
-  <p class="caption">Release binary, matching debug symbols, Wasmtime JIT names; no world observer. Sampling is gated to frames 300–899. The GPU guard is active. Driver samples are CPU time, not GPU timestamps.</p>
+  <p class="caption">Optimized binary, matching debug symbols, Wasmtime JIT names; no world observer. Sampling is gated to frames 300–899. The GPU guard is active. Driver samples are CPU time, not GPU timestamps.</p>
 </section>
 
 <section id="explanation">
@@ -73,7 +73,7 @@
   <tr><td>Flove</td><td>Exact map export, spawn/AI/RNG order, ownership and targeting; Lua cylinder broadphase semantics; aim restoration and death waits; Lua grass-distance typo.</td><td>2,400 rendered frames × two Lua/Rust pairs: identical units, HP, XYZ, velocity, orientation, orders and projectiles at each six-frame sample with one worker. Identical Lua repeats diverge with four workers.</td></tr>
   <tr><td>Hunted</td><td>Matched f32 math, deadlines and wave growth; creation-order food rosters and rounded falloff ties; immediate pickup/drop; cached burrow origins. Cosmetic RNG is per unit in both.</td><td>2,400 rendered stress frames: identical units, health, XYZ, velocity, orientation, movement parameters, orders, projectiles and camera at every six-frame sample. Also checked a 9,000-frame normal run before the final falloff-tie correction.</td></tr>
   <tr><td>Area 17</td><td>Base versus midpoint positions, creation/RNG interleaving, scene yaw, NPC acceleration/braking/turning. Indexed civilian scans in both.</td><td>Same 1,329-unit initial scene; the previous 21 large collision-state mismatches disappear. Remaining early spawn differences ≤0.001 map unit.</td></tr>
-  <tr><td>To the Last Drop</td><td>Frame-zero population, villager/RNG order, placement retry count, deterministic house lights, matching RGB HDR/bloom targets; cached scales in both.</td><td>Same gameplay camera and shadows input. Callback timers exclude CUS ticks; an unscoped drawing gap is not attributed to Wasm arithmetic.</td></tr>
+  <tr><td>To the Last Drop</td><td>Engine spatial-query midpoint/filter semantics and cached velocity magnitude; f32 RNG/math parity, weapon ranges, death flags and immediate camera adoption. Matching RGB HDR/bloom targets and cached scales in both.</td><td>1,200 stress frames: all units and projectiles match at every six-frame sample. All 5,495 random draws match through frame 600. After the camera fix, every camera and world sample matches through frame 120. Shadows retained.</td></tr>
   <tr><td>Gravitas effects</td><td>GPU curves, billboards and birth-only buffer uploads in both; linear expiry compaction; removed Rust particle cap. CPU renderer retained for jobs comparison.</td><td>100 emitters: 51,400 / 50,200 / 50,800 normal particles at frames 300 / 600 / 899 in both; distortion 1,400 / 2,100 / 2,000. Five image pairs differ by at most 0.0018% RMSE.</td></tr>
   <tr><td>Parts Needed / My Cube</td><td>Normal-game audit; cached/indexed wisp rosters and definitions. No artificial 10× puzzle population.</td><td>Existing gameplay and image suites, plus normal-scene timings, stacks and rendered captures.</td></tr>
   </tbody></table></div>
@@ -93,16 +93,17 @@
 <section id="method">
   <p class="eyebrow">Reproduce and audit</p>
   <h2>Method and source data</h2>
-  <div class="three"><article><h3>Timings</h3><p>At least five clean alternating pairs; 300 warmup + 600 measured steps; one draw per step; 1024×736; VSync/sound off. A failure or CPU/GPU overlap excludes both members. Rejected attempts remain visible.</p></article><article><h3>World recordings</h3><p>Fresh runs with a read-only observer, derived from Ship Game’s recording approach. All observed units and sampled projectiles are retained. They show workload and movement; serialization makes them unsuitable timing baselines.</p></article><article><h3>CPU sampling</h3><p>Fresh runs without the world observer. Linux perf samples user CPU at 499 Hz with DWARF stacks and JIT names. Sampling perturbs execution; stack proportions diagnose hot paths, rather than replace paired timings.</p></article></div>
+  <div class="three"><article><h3>Timings</h3><p>Target: five clean alternating pairs; 300 warmup + 600 measured steps; one draw per step; 1024×736; VSync/sound off. A failure or CPU/GPU overlap excludes both members. Rejected attempts remain visible.</p></article><article><h3>World recordings</h3><p>Fresh runs with a read-only observer, derived from Ship Game’s recording approach. All observed units and sampled projectiles are retained. They show workload and movement; serialization makes them unsuitable timing baselines.</p></article><article><h3>CPU sampling</h3><p>Fresh runs without the world observer. Linux perf samples user CPU at 499 Hz with DWARF stacks and JIT names. Sampling perturbs execution; stack proportions diagnose hot paths, rather than replace paired timings.</p></article></div>
   <p>Each comparison uses the same engine binary for both versions; its commit and SHA-256 are shown in the scene lab. Release 2026.10.25 and separately tested API corrections retain their own identities. NVIDIA hardware rendering is required; the existing runner rejects llvmpipe and other software renderers. The cgroup guard retains global/local CPU pressure. The GPU guard requires ten quiet seconds and monitors competing GPU processes during each run. All engine threads are pinned to the eight P cores; E cores are excluded.</p>
   <details><summary>Runtime identities and source commits</summary><pre id="identities"></pre></details>
   <h3>Rebuild this report from saved evidence</h3>
-  <pre><code>export SPRING_BAR_DIR="$PWD/../release-engine-2026.10.25"
-export SPRING_ENGINE_DIR="$PWD/codex-work/game-bugfixes-20261025/engine-linux-2026.10.25"
+  <pre><code>export SPRING_BAR_DIR="/absolute/engine-checkout"
+export SPRING_ENGINE_DIR="/absolute/optimized-engine-install"
+# Match the scene’s recorded engine commit and binary SHA-256.
 
 # Existing paired benchmark runner (timings only)
 verification/perf/compare-jobs.sh /absolute/timing-output \
-  --cpu-pressure-scope cgroup --repeats 5 --clean-pairs 5 \
+  --callback-timers off --cpu-pressure-scope cgroup --repeats 5 --clean-pairs 5 \
   --frames 900 --warmup 300 --wait-for-gpu-idle \
   --cpu-affinity 0,2,4,6,8,10,12,14
 
