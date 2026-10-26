@@ -1,12 +1,12 @@
-recorded   2026-09-25T04:39:15Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 78901124f85fed01d27425c2e494277dff182f4c  +9 uncommitted files
-game       spring-linux/games/Hunted-wasm.sdd  hunted-wasm-port f6d80162bdea690c29ea5131c0a09765a949d86f  +3 uncommitted files
-map        spring-linux/maps/HuntedMap.sdd  master 2b3bee4d0e9ce3a35b324edbb887885c3479f644  +2 uncommitted files
-springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
-version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
-renderer   software
-gpu        llvmpipe (LLVM 20.1.2, 256 bits)
-gl         4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
+recorded   2026-10-26T03:36:52Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 954885cc97a7a17731a920bfc27707d9b50d2726  +17 uncommitted files
+game       spring-linux/games/Hunted-wasm.sdd  rust e916b24080968f6fdbc7b0a3c6674e236d68163f  +11 uncommitted files
+map        spring-linux/maps/HuntedMap.sdd  master 77bd03eb349eeea52af646a1486278936b8f1987
+springcabal git dependency (revision in the game's wasm-src/Cargo.lock)
+engine     codex-work/game-bugfixes-20261025/engine-linux-2026.10.25  spring version 2026.10.25
+version    Spring Engine Version: 2026.10.25
+renderer   gpu
+gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
+gl         4.6.0 NVIDIA 580.178.04
 settings   launch/springsettings.cfg sha1 a487bc4da703
+source changes committed as f2ca49944ff8a211f3d9781c3f961a48426bc7a3 (public rust branch)

@@ -1,13 +1,13 @@
-recorded   2026-09-25T01:15:22Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 21f5fc328602229be3cffc3cf01892b73c996b45  +25 uncommitted files
-game       spring-linux/games/Area17-wasm.sdd  area17-wasm-port 35ebbc09382e39fe3ae7836c55d48357017a71fa
+recorded   2026-10-26T03:37:21Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 954885cc97a7a17731a920bfc27707d9b50d2726  +22 uncommitted files
+game       spring-linux/games/Area17-wasm.sdd  rust b99b0a1dfeb5cb47a7aad34e1e991c8c9169843b  +7 uncommitted files
 map        build/maps/Area17.sdd  (not version-controlled)
 map patch  patches/area17-map (in dev repo)
-springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
-version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
-renderer   software
-gpu        llvmpipe (LLVM 20.1.2, 256 bits)
-gl         4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
+springcabal git dependency (revision in the game's wasm-src/Cargo.lock)
+engine     codex-work/game-bugfixes-20261025/engine-linux-2026.10.25  spring version 2026.10.25
+version    Spring Engine Version: 2026.10.25
+renderer   gpu
+gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
+gl         4.6.0 NVIDIA 580.178.04
 settings   launch/springsettings.cfg sha1 a487bc4da703
+source changes committed as a73592cc51f36322e7b03024ab1439ef73e88893 (public rust branch)

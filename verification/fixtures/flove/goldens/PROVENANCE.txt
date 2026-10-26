@@ -1,6 +1,6 @@
-recorded   2026-10-26T01:51:24Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 2461b90640c21bce4d457d237661ce158b4f54d3  +10 uncommitted files
-game       spring-linux/games/Flove-wasm.sdd  rust 26869d0b7a230fa42eec791303340587b8a45b59  +7 uncommitted files
+recorded   2026-10-26T05:12:46Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 954885cc97a7a17731a920bfc27707d9b50d2726  +34 uncommitted files
+game       spring-linux/games/Flove-wasm.sdd  rust 7da08cc3318ae033cc77fee2161f2c4e1daffd2a  +22 uncommitted files
 map        spring-linux/maps/LD34-map.sdd  master 622c051ef7df424855a383a238ae991d3f3bddcf
 springcabal git dependency (revision in the game's wasm-src/Cargo.lock)
 engine     codex-work/game-bugfixes-20261025/engine-linux-2026.10.25  spring version 2026.10.25
@@ -9,4 +9,4 @@ renderer   gpu
 gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
 gl         4.6.0 NVIDIA 580.178.04
 settings   launch/springsettings.cfg sha1 a487bc4da703
-source resolved to 7da08cc3318ae033cc77fee2161f2c4e1daffd2a after capture (same runtime code; committed with documentation)
+source changes committed as 1e4a9e0d44f4c9da0f87a30a9801144c2b469248 (public rust branch)

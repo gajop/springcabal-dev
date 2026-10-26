@@ -29,6 +29,7 @@ local function world(file)
     spring.SetConfigInt, spring.SendCommands = noop, noop
     spring.Log = function(_, _, message) error(message) end
     spring.GetGameFrame = function() return state.frame end
+    spring.GetGroundHeight = function() return 0 end
     spring.GetAllUnits = function() return {} end
     spring.GetGameRulesParam = function(key) return state.rules[key] or 0 end
     spring.SetGameRulesParam = function(key, value) state.rules[key] = value end
@@ -307,6 +308,7 @@ check("long hunts keep wave growth within the rabbit limit", function()
         Spring = {
             GetAllUnits = function() return {} end,
             GetGameFrame = function() return 0 end,
+            GetGroundHeight = function() return 0 end,
             CreateUnit = function() return 1 end, SetUnitRotation = noop,
             SetGameRulesParam = noop, GetTeamUnitDefCount = function() return 0 end,
         },

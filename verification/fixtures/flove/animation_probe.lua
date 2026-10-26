@@ -29,6 +29,7 @@ local CASES = {
 	{ name = "poison", def = "poisonmushroom", x = 5000, z = 4750 },
 	{ name = "bomb", def = "bombmushroom", x = 5250, z = 4750 },
 	{ name = "king", def = "kingshroom", x = 5500, z = 4750 },
+	{ name = "tree", def = "treelevel1", x = 6000, z = 5000, stationary = true },
 }
 
 local units = {}
@@ -150,7 +151,7 @@ local function issueMove(frame)
 	echo("EVENT frame=%d name=movement_begin", frame)
 	for _, case in ipairs(CASES) do
 		local unitID = units[case.name]
-		if unitID then
+		if unitID and not case.stationary then
 			local x, y, z = Spring.GetUnitPosition(unitID)
 			Spring.SetUnitMoveGoal(unitID, x + 400, y, z, 16, nil, true)
 		end
@@ -161,7 +162,7 @@ local function issueStop(frame)
 	echo("EVENT frame=%d name=movement_stop", frame)
 	for _, case in ipairs(CASES) do
 		local unitID = units[case.name]
-		if unitID then
+		if unitID and not case.stationary then
 			Spring.GiveOrderToUnit(unitID, CMD.STOP, {}, {})
 		end
 	end
@@ -215,6 +216,12 @@ function gadget:GameFrame(frame)
 		issueStop(frame)
 	elseif frame == 105 then
 		issueAttack(frame)
+	elseif frame == 220 then
+		echo("EVENT frame=%d name=tree_death_begin", frame)
+		Spring.DestroyUnit(units.tree, false, false)
+	elseif frame == 240 then
+		echo("EVENT frame=%d name=small_death_begin", frame)
+		Spring.DestroyUnit(units.small, false, false)
 	end
 
 	if frame == 105 or frame == 106 or frame == 120 or frame == 160 or frame == 200 then
@@ -232,7 +239,7 @@ function gadget:GameFrame(frame)
 		end
 	end
 
-	if frame == 210 and not traceDone then
+	if frame == 300 and not traceDone then
 		traceDone = true
 		echo("DONE")
 		Spring.SendCommands("quitforce")
@@ -244,7 +251,7 @@ end
 -- after native animation integration so both runtimes are compared at the
 -- same end-of-frame boundary.
 function gadget:GameFramePost(frame)
-	if frame >= 3 and frame <= 210 then
+	if frame >= 3 and frame <= 300 then
 		emitAllPoses(frame)
 	end
 end
