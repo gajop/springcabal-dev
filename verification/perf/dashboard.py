@@ -131,6 +131,8 @@ def world(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--timings', type=Path, required=True)
+    parser.add_argument('--supplemental-timings', type=Path, action='append', default=[],
+                        help='Replacement campaign roots, in order; retain earlier evidence separately')
     parser.add_argument('--recordings', type=Path, required=True)
     parser.add_argument('--profiles', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
@@ -140,6 +142,7 @@ def main():
                         help='Show pending scenes while a campaign is running; never fill missing measurements')
     args = parser.parse_args()
     args.timings = args.timings.resolve()
+    timing_roots = [args.timings, *(p.resolve() for p in args.supplemental_timings)]
     args.recordings = args.recordings.resolve()
     args.profiles = args.profiles.resolve()
     out = args.output.resolve()
@@ -150,8 +153,12 @@ def main():
     if args.optimizations:
         data['optimization'] = report.source_optimization_summary(read(args.optimizations), PROJECT)
         report.write_rows(out/'optimizations', [{k: v for k, v in row.items() if k != 'evidence'} for row in data['optimization']])
-    language = {r['campaign']: r for r in report.paired_summary(args.timings)}
-    jobs = {r['campaign']: r for r in report.paired_summary(args.timings, jobs=True)}
+    language, jobs, campaign_roots = {}, {}, {}
+    for timing_root in timing_roots:
+        for target, is_jobs in ((language, False), (jobs, True)):
+            for row in report.paired_summary(timing_root, jobs=is_jobs):
+                target[row['campaign']] = row
+                campaign_roots[row['campaign']] = timing_root
     for sid, game, title, load, control, job, capture in SCENES:
         scene = {'id': sid, 'game': game, 'title': title, 'load': load,
                  'language': scene_summary(language, control, game, args.allow_incomplete), 'jobs': {}, 'capture': capture,
@@ -169,14 +176,15 @@ def main():
                 scene['jobs'][str(width)] = jobs[key]
                 campaigns.append((key, scene['jobs'][str(width)]))
         for campaign, summary in campaigns:
-            if not (args.timings/campaign/'provenance.json').exists() and args.allow_incomplete:
+            campaign_root = campaign_roots.get(campaign, args.timings)/campaign
+            if not (campaign_root/'provenance.json').exists() and args.allow_incomplete:
                 continue
-            stamp = read(args.timings/campaign/'provenance.json')
+            stamp = read(campaign_root/'provenance.json')
             summary['runtime'] = {key: stamp.get(key) for key in
                                   ('engine_commit', 'engine_sha256', 'engine_source')}
-            summary['game_content'] = read(args.timings/campaign/f'{game}-content.json')
+            summary['game_content'] = read(campaign_root/f'{game}-content.json')
             pair_status = {}
-            paths = sorted((args.timings/campaign).glob('*/result.json'))
+            paths = sorted(campaign_root.glob('*/result.json'))
             for path in paths:
                 result = report.read_result(path)
                 pair_status.setdefault(result['repeat'], []).append(result)
@@ -259,13 +267,15 @@ def main():
         data['videos'] = clips
     report.write_rows(out/'language', list(language.values()))
     report.write_rows(out/'jobs', list(jobs.values()))
-    saved = [report.read_result(p) for p in args.timings.glob('**/result.json')]
-    provenance = [read(p) for p in args.timings.glob('**/provenance.json')]
+    saved = [report.read_result(p) for root in timing_roots for p in root.glob('**/result.json')]
+    provenance = [read(p) for root in timing_roots for p in root.glob('**/provenance.json')]
     sources = {}
-    for path in args.timings.glob('**/*-content.json'):
-        sources[path.stem.removesuffix('-content')+':'+path.parent.name] = read(path)
+    for root in timing_roots:
+        for path in root.glob('**/*-content.json'):
+            sources[path.stem.removesuffix('-content')+':'+path.parent.name] = read(path)
     data['audit'] = {
         'generated_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+        'timing_roots': [str(root) for root in timing_roots],
         'primary_scenes_at_five_pairs': sum(s['language']['measured_pairs'] >= 5 for s in data['scenes']),
         'primary_scene_count': len(data['scenes']),
         'callback_timers': sorted({r.get('callback_timers', 'on') for r in saved}),

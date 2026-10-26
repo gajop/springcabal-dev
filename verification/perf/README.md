@@ -17,6 +17,10 @@ renderer through the existing screenshot action. Capture runs never enter timing
 aggregates. The observer records every six simulation frames, rounds coordinates
 and health to two decimals, and changes no game state or RNG.
 
+Use `dashboard.py --supplemental-timings /path/to/replacement-root` to replace
+named campaigns with fresh runs while retaining earlier evidence. Later roots
+take precedence; their own provenance, traces and game hashes are used.
+
 World recordings are stored as `world.jsonl.gz`, with a verified uncompressed
 SHA-256 in `result.json`. The dashboard accepts both this format and older raw
 JSONL. It streams snapshots rather than retaining all diagnostic fields in RAM.
