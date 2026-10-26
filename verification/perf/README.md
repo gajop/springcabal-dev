@@ -17,6 +17,25 @@ renderer through the existing screenshot action. Capture runs never enter timing
 aggregates. The observer records every six simulation frames, rounds coordinates
 and health to two decimals, and changes no game state or RNG.
 
+World recordings are stored as `world.jsonl.gz`, with a verified uncompressed
+SHA-256 in `result.json`. The dashboard accepts both this format and older raw
+JSONL. It streams snapshots rather than retaining all diagnostic fields in RAM.
+Profiling uses perf's native compression. After export, the derived
+`cpu.injected.data` is removed; the raw capture and JIT inputs remain available.
+Video capture removes PNGs after verifying the 200-frame MP4; use `--keep-frames`
+to retain them.
+
+To compact completed older runs without removing measurements or logs:
+
+```bash
+python3 verification/perf/compact.py perf-runs
+```
+
+This uses the verification lock, compresses and verifies world recordings,
+removes their redundant write-directory copies, and drops reproducible profile
+intermediates. New runs require 40 GiB free by default (`--min-free-gib`), and
+stop their own engine if free space falls below 20 GiB during capture.
+
 `profile_export.py --buildid-dir ...` resolves the pinned engine's matching debug
 symbols and injects Wasmtime JIT names. Its flame graph retains actual sampled
 stacks and explicit unresolved frames. It does not invent a complete call hierarchy
@@ -706,3 +725,11 @@ in normal gameplay. GPU runs require an acknowledgement from the UI.
 screenshot action. Each clip is 200 real GPU PNGs at three-frame intervals,
 encoded at 10 fps; ffprobe checks the output count. `--case NAME` selects one
 scene and `--encode-only` reuses saved PNGs. Never include these runs in timings.
+
+For a same-behavior source comparison, pass `dashboard.py --optimizations
+/path/to/experiments.json`. Each experiment lists five rounds with `before` and
+`after` campaign directories (including explicit retry directories). The report
+uses the first clean Lua/Rust pair from each phase, accepts only complete
+four-run rounds, and rejects changed engine binaries or scene parameters.
+Callback/import counters overlap: imports from direct CUS ticks are outside
+the dispatch timer, so do not subtract import time from dispatch time.

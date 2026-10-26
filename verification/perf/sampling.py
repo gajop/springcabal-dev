@@ -24,7 +24,7 @@ class Capture:
         self.tail = ''
 
     def command(self, command):
-        return ['perf', 'record', '-k', '1', '-e', 'cpu-clock:u', '-F', '499',
+        return ['perf', 'record', '--compression-level=1', '-k', '1', '-e', 'cpu-clock:u', '-F', '499',
                 '--call-graph', 'dwarf,16384', '--delay=-1',
                 '--control=fifo:'+str(self.fifo), '-o',
                 str(self.directory/'cpu.perf.data'), '--', *command]

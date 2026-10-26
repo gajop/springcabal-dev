@@ -108,7 +108,8 @@ def main():
         if not raw.exists() or (output.exists() and json.loads(output.read_text()).get('exporter_sha256') == exporter_sha):
             continue
         if not metadata['ok'] or not metadata.get('sampling'):
-            raise ValueError(f'Incomplete profiling run: {directory}')
+            print(f'Skipping incomplete profiling run: {directory}', flush=True)
+            continue
         controls = metadata['sampling']['control']
         if [c['action'] for c in controls] != ['enable', 'disable']:
             raise ValueError(f'Missing sampling window control: {directory}')
@@ -131,6 +132,9 @@ def main():
                        ('game', 'backend', 'rust_jobs', 'renderer', 'fire_renderer', 'worker_threads', 'contended',
                         'gpu_process_guard', 'gpu_contended')}
         output.write_text(json.dumps(data, separators=(',', ':'))+'\n')
+        # The raw capture and jitdump inputs can regenerate this intermediate.
+        if source != raw:
+            source.unlink()
         print(directory.relative_to(args.captures), data['samples'], 'samples', flush=True)
 
 

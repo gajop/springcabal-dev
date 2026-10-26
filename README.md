@@ -56,7 +56,8 @@ the Rust/WASM port.
 ### Prerequisites
 
 Linux with `git`, `just`, `7z`, `rsync`, `zip`, the GitHub CLI (`gh`, logged in),
-and a Rust toolchain with the `wasm32-unknown-unknown` target:
+Clang with the WebAssembly target, `llvm-ar`, and a Rust toolchain with the
+`wasm32-unknown-unknown` target:
 ```bash
 rustup target add wasm32-unknown-unknown
 ```

@@ -22,6 +22,20 @@ local function object(value)
     return '{' .. table.concat(fields, ',') .. '}'
 end
 local function camera() return object(Spring.GetCameraState()) end
+local collisionKeys = {"collisionScaleX", "collisionScaleY", "collisionScaleZ",
+    "collisionOffsetX", "collisionOffsetY", "collisionOffsetZ", "collisionType",
+    "collisionTest", "collisionAxis", "collisionDisabled"}
+local blockingKeys = {"blocking", "solidCollision", "projectileCollision",
+    "rayCollision", "crushable", "blockEnemyPushing", "blockHeightChanges"}
+local function physics(id, movement)
+    local collision = {Spring.GetUnitCollisionVolumeData(id)}
+    for i, value in ipairs(collision) do movement[collisionKeys[i]] = value end
+    local blocking = {Spring.GetUnitBlocking(id)}
+    for i, value in ipairs(blocking) do movement[blockingKeys[i]] = value end
+    movement.maxWeaponRange = Spring.GetUnitMaxRange(id)
+    movement.dead, movement.neutral = Spring.GetUnitIsDead(id), Spring.GetUnitNeutral(id)
+    for key, value in pairs(Spring.GetUnitStates(id) or {}) do movement["state_" .. key] = value end
+end
 
 local function write(s)
     local ok, err = file:write(s, '\n')
@@ -38,7 +52,7 @@ local function snapshot(_, frame)
                 Spring.GetUnitTeam(id), number(x), number(z), number(hp), number(maxhp)}, ',') .. ']'
             if detailed then
                 local px, py, pz = Spring.GetUnitPosition(id)
-                local vx, vy, vz = Spring.GetUnitVelocity(id)
+                local vx, vy, vz, speedMagnitude = Spring.GetUnitVelocity(id)
                 local commands = {}
                 for _, cmd in ipairs(Spring.GetUnitCommands(id, 32)) do
                     local params = {}
@@ -46,13 +60,16 @@ local function snapshot(_, frame)
                     commands[#commands+1] = '[' .. cmd.id .. ',' .. (cmd.options.coded or 0)
                         .. ',[' .. table.concat(params, ',') .. ']]'
                 end
+                local movement = Spring.GetUnitMoveTypeData(id) or {}
+                movement.velocityMagnitude = speedMagnitude
+                physics(id, movement)
                 local front, up, right = Spring.GetUnitVectors(id)
                 local state = {px, py, pz, Spring.GetUnitHeading(id), vx, vy, vz,
                     front[1],front[2],front[3],up[1],up[2],up[3],right[1],right[2],right[3]}
                 for i, value in ipairs(state) do state[i] = string.format('%.9g', value) end
                 details[#details+1] = '[' .. id .. ',[' .. table.concat(state, ',')
                     .. '],[' .. table.concat(commands, ',') .. '],'
-                    .. object(Spring.GetUnitMoveTypeData(id)) .. ',['
+                    .. object(movement) .. ',['
                     .. string.format('%.9g,%.9g', Spring.GetUnitRadius(id), Spring.GetUnitHeight(id)) .. '],'
                     .. object(Spring.GetUnitRulesParams(id)) .. ']'
             end
@@ -68,7 +85,7 @@ local function snapshot(_, frame)
     samples, lastFrame = samples + 1, frame
     -- Detailed diagnostic snapshots allocate faster than the engine GC budget
     -- in an uncapped headless run. They are excluded from timing baselines.
-    if detailed and samples % 30 == 0 then collectgarbage("collect") end
+    if detailed then collectgarbage("collect") end
 end
 function M.start(every)
     local err

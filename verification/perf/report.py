@@ -23,7 +23,7 @@ def summarize(root):
     rows = []
     for (campaign, game, backend, mode), runs in groups.items():
         good = [r for r in runs if r['ok']]
-        timed = [r for r in good if is_timing(r)]
+        timed = [r for r in good if not r['contended'] and is_timing(r)]
         def median(values):
             values = [v for v in values if v is not None]
             return statistics.median(values) if values else None
@@ -107,6 +107,75 @@ def paired_summary(root, jobs=False):
         for backend in (left, right):
             row[backend+'_units_p50'] = statistics.median(pair[backend]['population']['units']['p50'] for pair in pairs) if pairs else None
         output.append(row)
+    return output
+
+
+def source_optimization_summary(manifest, project):
+    """Compare the same backend before/after using complete four-run rounds."""
+    output = []
+    for experiment in manifest:
+        rounds = []
+        attempted = 0
+        for candidates in experiment['rounds']:
+            phases = {}
+            for phase in ('before', 'after'):
+                choices = []
+                for relative in candidates[phase]:
+                    directory = project/relative
+                    provenance = directory/'provenance.json'
+                    if not provenance.exists():
+                        continue
+                    stamp = json.loads(provenance.read_text())
+                    pairs = {}
+                    for path in sorted(directory.glob('*/result.json')):
+                        result = json.loads(path.read_text())
+                        pairs.setdefault(result['repeat'], {})[result['backend']] = (result, path)
+                    attempted += len(pairs)
+                    for pair in pairs.values():
+                        if set(pair) != {'lua', 'wasm'}:
+                            continue
+                        if all(r['ok'] and not r['contended'] and is_timing(r) for r, _ in pair.values()):
+                            choices.append((pair, stamp))
+                if choices:
+                    phases[phase] = choices[0]
+            if set(phases) != {'before', 'after'}:
+                continue
+            before, after = phases['before'], phases['after']
+            for key in ('input_sha256', 'effective_input_sha256'):
+                if before[1].get(key) != after[1].get(key):
+                    raise ValueError(f'Source A/B has different {key}')
+            for key in ('worker_threads', 'unit_multiplier', 'effects_multiplier', 'warmup', 'frames', 'rust_jobs'):
+                if before[1].get('args', {}).get(key) != after[1].get('args', {}).get(key):
+                    raise ValueError(f'Source A/B has different {key}')
+            if before[1]['engine_sha256'] != after[1]['engine_sha256']:
+                raise ValueError('Source A/B must use the same engine binary')
+            for backend in ('lua', 'wasm'):
+                a, b = before[0][backend][0], after[0][backend][0]
+                for key in ('game', 'worker_threads', 'cpu_affinity', 'unit_multiplier', 'effects_multiplier', 'fire_renderer', 'callback_timers'):
+                    if a.get(key) != b.get(key):
+                        raise ValueError(f'Source A/B has different {key}')
+            rounds.append(phases)
+        for backend in ('lua', 'wasm'):
+            row = {k: v for k, v in experiment.items() if k != 'rounds'}
+            row.update(backend=backend, measured_rounds=len(rounds), planned_rounds=len(experiment['rounds']),
+                       attempted_phase_pairs=attempted, evidence=[])
+            for name, metric in (('wall', None), ('sim', 'sim.elapsed_us'), ('draw', 'draw.elapsed_us')):
+                values = []
+                for phases in rounds:
+                    results = [phases[p][0][backend][0] for p in ('before', 'after')]
+                    pair = [r.get('window_wall_ms_per_frame') if metric is None else
+                            r['metrics'][metric]['p50']/1000 for r in results]
+                    if all(v is not None and v > 0 for v in pair):
+                        values.append(pair)
+                ratios = [b/a for a, b in values]
+                row[name+'_before_ms'] = statistics.median(a for a, _ in values) if values else None
+                row[name+'_after_ms'] = statistics.median(b for _, b in values) if values else None
+                row[name+'_change_pct'] = (statistics.median(ratios)-1)*100 if ratios else None
+                row[name+'_mean_ratio_95ci'] = runner.confidence(ratios) if ratios else None
+            for phases in rounds:
+                row['evidence'].append({phase: str(phases[phase][0][backend][1].parent.relative_to(project))
+                                        for phase in ('before', 'after')})
+            output.append(row)
     return output
 
 

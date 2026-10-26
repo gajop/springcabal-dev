@@ -8,6 +8,8 @@ import dashboard
 import profile_export
 import threading
 import subprocess
+import storage
+from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
@@ -22,6 +24,153 @@ class EquivalenceTests(unittest.TestCase):
             copied.mkdir()
             self.assertIsNotNone(run.revision(root))
             self.assertIsNone(run.revision(copied))
+
+    def test_dashboard_preserves_partial_evidence_without_inventing_frames(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'frames.csv').write_text(
+                'kind,frame,elapsed_us,lua_us,wasm_us,import_us,units,projectiles,particles\n'
+                'sim,300,1000,100,200,10,7,2,1\n'
+                'draw,300,2000,300,400,20,7,2,1\n'
+                'sim,301,1000,100,200,10,8,2,1\n')
+            rows = dashboard.trace(root, strict=False)
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(rows[0][0], 300)
+            self.assertEqual(rows[0][9:], [7, 2, 1])
+            with self.assertRaises(ValueError): dashboard.trace(root)
+
+    def test_verification_lease_yields_idle_time_without_allowing_active_overlap(self):
+        with tempfile.TemporaryDirectory() as directory:
+            lock=Path(directory)/'verification.lock'
+            def competitor():
+                return subprocess.run(['flock','-n',str(lock),'true'],check=False).returncode
+            with run.VerificationLease(lock) as lease:
+                self.assertEqual(competitor(),1)
+                lease.release()
+                self.assertEqual(competitor(),0)
+                self.assertTrue(lease.try_acquire())
+                self.assertEqual(competitor(),1)
+            self.assertEqual(competitor(),0)
+
+    def test_idle_wait_samples_gpu_only_while_owning_the_resource_lease(self):
+        from types import SimpleNamespace
+        class Lease:
+            held=True
+            attempts=0
+            def release(self): self.held=False
+            def try_acquire(self):
+                self.attempts+=1
+                self.held=self.attempts>2
+                return self.held
+        lease=Lease();clock=[0];samples=[]
+        def gpu():
+            self.assertTrue(lease.held)
+            sample={'foreign':[{'pid':12}] if not samples else [],'time':clock[0]}
+            samples.append(sample);return sample
+        def host(_):
+            self.assertTrue(lease.held)
+            return {'cpu_pressure':'some avg10=0.00'}
+        options=SimpleNamespace(wait_for_idle=True,wait_for_gpu_idle=True)
+        before,last,history=run.wait_for_resources(options,None,100,'fixture',lease,
+            host_sample=host,gpu_sample=gpu,now=lambda:clock[0],sleep=lambda duration:clock.__setitem__(0,clock[0]+duration))
+        self.assertTrue(lease.held)
+        self.assertFalse(last['foreign'])
+        self.assertGreaterEqual(last['time']-samples[1]['time'],10)
+        self.assertEqual(history,samples)
+
+    def test_timer_off_control_requires_engine_acknowledgement_and_zero_counters(self):
+        row={'callback_timers':'0','lua_us':'0','wasm_us':'0','import_us':'0'}
+        self.assertTrue(run.callback_timers_off([row,dict(row)]))
+        self.assertFalse(run.callback_timers_off([]))
+        self.assertFalse(run.callback_timers_off([{k:v for k,v in row.items() if k!='callback_timers'}]))
+        self.assertFalse(run.callback_timers_off([dict(row, callback_timers='1')]))
+        self.assertFalse(run.callback_timers_off([row,dict(row, import_us='0.001')]))
+
+    def optimization_fixture(self, root):
+        experiment={'id':'example', 'title':'Fixture', 'load':'Normal', 'change':'Same work',
+                    'rounds':[{'before':['before'], 'after':['after']}]}
+        for phase, factor in [('before', 1), ('after', .5)]:
+            campaign=root/phase;campaign.mkdir()
+            (campaign/'provenance.json').write_text(json.dumps({'engine_sha256':'same', 'args':{'unit_multiplier':1}}))
+            for backend, time in [('lua', 10), ('wasm', 8)]:
+                directory=campaign/('fixture-00-'+backend);directory.mkdir()
+                result={'repeat':0, 'backend':backend, 'game':'fixture', 'ok':True,
+                        'contended':False, 'window_wall_ms_per_frame':time*factor,
+                        'metrics':{key:{'p50':time*factor*1000} for key in ('sim.elapsed_us','draw.elapsed_us')}}
+                (directory/'result.json').write_text(json.dumps(result))
+        return [experiment]
+
+    def test_source_ab_uses_each_language_and_complete_clean_four_run_rounds(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);manifest=self.optimization_fixture(root)
+            rows=report.source_optimization_summary(manifest, root)
+            self.assertEqual([r['wall_before_ms'] for r in rows], [10,8])
+            self.assertEqual([r['wall_after_ms'] for r in rows], [5,4])
+            self.assertTrue(all(r['wall_change_pct']==-50 and r['measured_rounds']==1 for r in rows))
+            path=root/'after/fixture-00-wasm/result.json';result=json.loads(path.read_text())
+            result['contended']=True;path.write_text(json.dumps(result))
+            rows=report.source_optimization_summary(manifest, root)
+            self.assertTrue(all(r['measured_rounds']==0 and r['wall_change_pct'] is None for r in rows))
+
+    def test_source_ab_rejects_changed_engine_or_workload(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);manifest=self.optimization_fixture(root)
+            path=root/'after/provenance.json';stamp=json.loads(path.read_text())
+            stamp['engine_sha256']='different';path.write_text(json.dumps(stamp))
+            with self.assertRaisesRegex(ValueError, 'same engine'):
+                report.source_optimization_summary(manifest, root)
+            stamp['engine_sha256']='same';stamp['args']['unit_multiplier']=10;path.write_text(json.dumps(stamp))
+            with self.assertRaisesRegex(ValueError, 'unit_multiplier'):
+                report.source_optimization_summary(manifest, root)
+
+    def test_world_compression_preserves_bytes_and_removes_the_raw_copy(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);source=root/'world.jsonl';destination=root/'world.jsonl.gz'
+            original=b'{"frame": 1, "units": []}\n'*1000
+            source.write_bytes(original)
+            metadata=storage.compress_world(source, destination)
+            self.assertFalse(source.exists())
+            self.assertEqual(metadata['world_recording_sha256'],hashlib.sha256(original).hexdigest())
+            with storage.open_world(source) as stream:self.assertEqual(stream.read().encode(),original)
+            self.assertLess(destination.stat().st_size,len(original)//5)
+
+    def test_failed_compression_keeps_the_original_recording(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);source=root/'world.jsonl';destination=root/'world.jsonl.gz'
+            source.write_bytes(b'original evidence')
+            with patch.object(storage.gzip,'open',side_effect=OSError('readback failure')):
+                with self.assertRaisesRegex(OSError,'readback failure'):
+                    storage.compress_world(source,destination)
+            self.assertEqual(source.read_bytes(),b'original evidence')
+            self.assertFalse(destination.exists())
+            self.assertFalse(destination.with_suffix('.gz.partial').exists())
+
+    def test_compaction_keeps_identical_recordings_shared_and_removes_duplicates(self):
+        import compact, os
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);first=root/'one';second=root/'two'
+            for p in (first,second):
+                (p/'write').mkdir(parents=True)
+                (p/'result.json').write_text(json.dumps({'world_recording':'world.jsonl'}))
+            original=b'{"type":"sample","frame":3}\n'
+            (first/'world.jsonl').write_bytes(original)
+            os.link(first/'world.jsonl',second/'world.jsonl')
+            for p in (first,second):os.link(p/'world.jsonl',p/'write/perf-world.jsonl')
+            self.assertEqual(compact.compact(root),(2,0))
+            self.assertEqual((first/'world.jsonl.gz').stat().st_ino,(second/'world.jsonl.gz').stat().st_ino)
+            for p in (first,second):
+                self.assertFalse((p/'world.jsonl').exists())
+                self.assertFalse((p/'write/perf-world.jsonl').exists())
+                with storage.open_world(p/'world.jsonl') as stream:self.assertEqual(stream.read().encode(),original)
+                self.assertEqual(json.loads((p/'result.json').read_text())['world_recording'],'world.jsonl.gz')
+
+    def test_disk_reserve_rejects_a_run_before_the_emergency_floor(self):
+        from types import SimpleNamespace
+        with patch.object(storage.shutil,'disk_usage',return_value=SimpleNamespace(free=30*1024**3)):
+            with self.assertRaisesRegex(ValueError,'40 GiB reserve'):
+                storage.require_space(Path('.'),40)
+            storage.require_space(Path('.'),20)
 
     def test_gpu_sampling_does_not_block_the_frame_marker_controller(self):
         entered=threading.Event();release=threading.Event()
@@ -234,6 +383,16 @@ class ReportTests(unittest.TestCase):
             self.assertEqual(summary['completed'], 2)
             self.assertEqual(summary['sim_p50_ms'], 2)
             self.assertIsNone(summary['sampled_peak_rss_mib'])
+            contended = root/'case'/'game-3-lua'
+            contended.mkdir()
+            result.update(ok=True, contended=True)
+            (contended/'result.json').write_text(json.dumps(result))
+            summary, = report.summarize(root)
+            self.assertEqual(summary['attempted'], 4)
+            self.assertEqual(summary['completed'], 3)
+            self.assertEqual(summary['timed_runs'], 2)
+            self.assertEqual(summary['sim_p50_ms'], 2)
+
 
 
 class ProfileAndRecordingTests(unittest.TestCase):

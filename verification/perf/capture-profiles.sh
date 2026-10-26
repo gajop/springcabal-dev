@@ -5,7 +5,7 @@ project=$(cd -- "$(dirname -- "$0")/../.." && pwd)
 out=${1:?Usage: capture-profiles.sh /absolute/output [runner options]}
 shift
 run=("$project/verification/verify" perf)
-common=(--frame-step --profile --repeats 1 --worker-threads 1
+common=(--frame-step --profile --repeats 1 --clean-pairs 1 --worker-threads 1
     --cpu-pressure-scope cgroup --wait-for-idle --wait-for-gpu-idle
     --timeout 300 --max-minutes 30 "$@")
 for multiplier in 1 10; do

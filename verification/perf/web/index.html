@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SpringCabal · Lua, Rust & jobs</title>
+<title>SpringCabal · Lua / Rust benchmarks</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top"><a href="#overview" class="brand">SpringCabal <span>/ performance lab</span></a><span class="hardware">i7-12700 · GTX 1660 Ti · engine 2026.10.25</span><button id="theme" aria-label="Switch color theme">Light / dark</button></header>
+<header class="top"><a href="#overview" class="brand">SpringCabal <span>/ Lua / Rust</span></a><span class="hardware">i7-12700 · GTX 1660 Ti · engine 2026.10.25</span><button id="theme" aria-label="Switch color theme">Light / dark</button></header>
 <div class="shell">
 <nav class="side" aria-label="Report">
   <p class="eyebrow">Lua · Rust/Wasm · jobs</p>
@@ -15,30 +15,30 @@
   <a href="#lab">Scene lab & replay</a>
   <a href="#profiles">CPU profiles</a>
   <a href="#explanation">Causes</a>
-  <a href="#optimizations">Changes and runtime costs</a>
+  <a href="#optimizations">Code and API costs</a>
   <a href="#method">Evidence & reproduce</a>
   <hr><p>Frame traces · worlds · CPU stacks</p>
-  <a href="jobs-lua-controls-2026-10-26.csv" download>Lua/Rust CSV ↗</a>
-  <a href="jobs-comparison-2026-10-26.csv" download>Jobs CSV ↗</a>
+  <a href="language.csv" download>Lua/Rust CSV ↗</a>
+  <a href="jobs.csv" download>Jobs CSV ↗</a>
   <a href="data.json" download>Explorer data ↗</a>
 </nav>
 <main>
 <section id="overview">
   <p class="eyebrow">GPU-rendered game measurements · October 25–26, 2026</p>
   <h1>SpringCabal benchmarks</h1>
-  <p class="note"><strong>Earlier campaign.</strong> These charts precede the startup, RNG and render-target corrections being checked now. They compare the old ports' workloads; they do not isolate language or API cost.</p>
-  <div class="facts"><div><strong>250</strong><span>NVIDIA GPU runs</span></div><div><strong>124 / 125</strong><span>completed / CPU-screened pairs</span></div><div><strong>600</strong><span>measured rendered steps / run</span></div><div><strong>1 & 4</strong><span>engine pool widths, main included</span></div></div>
+  <div class="facts"><div><strong id="total-runs">—</strong><span>GPU runs</span></div><div><strong id="accepted-pairs">—</strong><span>clean / attempted pairs</span></div><div><strong>600</strong><span>rendered steps / sample</span></div><div><strong>1 &amp; 4</strong><span>engine worker widths</span></div></div>
+  <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Lua ms/frame</th><th>Rust ms/frame</th><th>Rust change</th><th>Sim p50<br>Lua / Rust</th><th>Draw p50<br>Lua / Rust</th><th>Units<br>Lua / Rust</th></tr></thead><tbody id="overview-rows"></tbody></table></div>
   <div class="toolbar"><h2>Rust time change versus Lua</h2><label>Measure <select id="overview-metric"><option value="wall_mean">Whole frame · window mean</option><option value="sim_p50">Simulation · p50</option><option value="draw_p50">Drawing · p50</option><option value="cpu_p95">Sim + draw · p95</option></select></label></div>
-  <p class="caption">Left is less time in Rust; right is less time in Lua. Click a scene to inspect it. The dot is the mean paired time ratio; whiskers are its bootstrap 95% interval across five pairs.</p>
+  <p class="caption">Left is less time in Rust; right is less time in Lua. Click a scene to inspect it. The dot is the mean paired time ratio; whiskers are its bootstrap 95% interval across independent pairs.</p>
   <div id="overview-chart" class="chart"></div>
-  <p class="caption">Whole frame = elapsed time between the existing frame markers, including main-loop work and swaps. It is not a GPU timestamp. Included pairs pass completion, rendering and CPU-pressure checks; they do not certify identical work or exclusive GPU access. The 100-emitter Gravitas case is shown only in the scene lab because its particle budgets differ.</p>
+  <p class="caption">Whole frame = elapsed time between the existing frame markers, including main-loop work and swaps. It is not a GPU timestamp. Included pairs pass completion, NVIDIA rendering, CPU-pressure and GPU-process checks. Primary game controls use one engine worker; jobs use matched widths. Gravitas uses the same GPU curve algorithm and equal particle budgets.</p>
 </section>
 
 <section id="lab">
-  <div class="toolbar"><h2>Scene lab</h2><label>Scene <select id="scene"></select></label><label>Compare <select id="comparison"><option value="language">Lua / serial Rust</option><option value="jobs4">Rust jobs off / on · pool 4</option><option value="jobs1">Rust jobs off / on · pool 1</option></select></label></div>
+  <div class="toolbar"><h2>Scene lab</h2><label>Scene <select id="scene"></select></label><label>Compare <select id="comparison"><option value="language">Lua / serial Rust · pool 1 (fire: 4)</option><option value="language4">Lua / serial Rust · pool 4</option><option value="jobs4">Rust jobs off / on · pool 4</option><option value="jobs1">Rust jobs off / on · pool 1</option></select></label></div>
   <p id="scene-note" class="note"></p>
   <div class="scene-numbers" id="scene-numbers"></div>
-  <div class="two"><div><h3>Every paired repeat</h3><div id="repeat-chart" class="chart"></div></div><div><h3>Where the scoped time goes</h3><div id="cost-chart" class="chart"></div><p class="caption">Mean measured simulation + draw scope. Lua callback time includes its native API work. Wasm imports are nested inside Wasm callbacks and are split out once. The unscoped remainder includes native engine work, CUS execution and waits. The Wasm counter does not cover CUS ticks.</p></div></div>
+  <div class="two"><div><h3>Every paired repeat</h3><div id="repeat-chart" class="chart"></div></div><div><h3>Where the scoped time goes</h3><div id="cost-chart" class="chart"></div><p class="caption">Simulation and drawing are separate scopes. Callback/import counters are listed below; CUS imports can occur outside the dispatch timer, so their times are not subtracted.</p></div></div>
   <details><summary>Individual run records, counters and acceptance</summary><div class="table-scroll"><table><thead><tr><th>Pair</th><th>Version</th><th>Whole ms/frame</th><th>Sim p50</th><th>Draw p50</th><th>Median units</th><th>Draw imports</th><th>Included?</th></tr></thead><tbody id="run-rows"></tbody></table></div></details>
   <div class="toolbar"><h3>Frame-by-frame trace</h3><label>Pair <select id="repeat"></select></label><label>Trace <select id="trace-metric"><option value="cpu">Sim + draw · ms</option><option value="sim">Simulation · ms</option><option value="draw">Drawing · ms</option><option value="units">Units · count</option><option value="projectiles">Projectiles · count</option></select></label></div>
   <div id="trace-chart" class="chart"></div><p class="caption" id="trace-detail">Exact frame samples, 300–899. Hover or tap for both versions. The thin line shows every frame; a heavy line shows a 15-frame mean.</p>
@@ -48,7 +48,7 @@
   <div class="toolbar"><button id="play">Play</button><label>Speed <select id="speed"><option value="0.5">½×</option><option value="1" selected>1×</option><option value="2">2×</option><option value="4">4×</option></select></label><label class="timeline">Frame <output id="frame-value">300</output><input id="frame" type="range" min="0" max="900" value="300" step="1"></label><button id="fit">Fit units / map</button></div>
   <div id="worlds" class="two"><figure><figcaption id="world-left-title"></figcaption><canvas id="world-left" aria-label="Left version observed unit positions"></canvas><p class="caption" id="world-left-count"></p></figure><figure><figcaption id="world-right-title"></figcaption><canvas id="world-right" aria-label="Right version observed unit positions"></canvas><p class="caption" id="world-right-count"></p></figure></div>
   <p id="world-status" class="caption" aria-live="polite"></p><div id="world-legend" class="legend"></div>
-  <div id="fire-videos" hidden><p>For fire, the useful scene is the rendered effect, rather than an empty unit map. These synchronized clips use the real GPU renderer and the same ten-emitter fixture.</p><div class="three" id="video-grid"></div><button id="video-play">Play / pause together</button></div>
+  <div id="fire-videos"><h3>Rendered capture</h3><p class="caption">Real NVIDIA output from separate screenshot runs; 20 simulated seconds, synchronized at frame 300. Capture overhead is excluded from timings.</p><div class="two" id="video-grid"></div><button id="video-play">Play / pause together</button></div>
 </section>
 
 <section id="profiles">
@@ -58,35 +58,32 @@
   <div class="toolbar"><button id="flame-back">Back</button><button id="flame-reset">Reset zoom</button><label>Find symbol <input id="flame-search" placeholder="e.g. WaitBuffer, luaH_get, HAPFS"></label></div>
   <div id="flame" class="flame"></div><p id="flame-detail" class="mono caption" aria-live="polite"></p>
   <div class="two"><div><h3>Sampled instruction categories</h3><div id="profile-categories" class="chart"></div></div><div><h3>Hottest sampled instructions</h3><div class="table-scroll"><table><thead><tr><th>Symbol / library</th><th>CPU samples</th></tr></thead><tbody id="profile-leaves"></tbody></table></div></div>
-  <p class="caption">These captures use the unchanged release engine with its matching debug symbols and Wasmtime JIT names. The world observer is absent. Sampling is enabled after frame 300 and disabled at frame 900; the FIFO controller polls every 20 ms. GPU-process exclusion was not enabled for these profile captures, and another engine was observed using the GPU during this work. Their driver-wait proportions diagnose those captures; they do not establish the cause of the original paired timing gap.</p>
+  <p class="caption">Release binary, matching debug symbols, Wasmtime JIT names; no world observer. Sampling is gated to frames 300–899. The GPU guard is active. Driver samples are CPU time, not GPU timestamps.</p>
 </section>
 
 <section id="explanation">
+  <h2>Source optimizations: same game, before / after</h2>
+  <p class="caption">Each round contains Lua and Rust both before and after the source change, alternating phase order. Only complete rounds with four clean runs enter this table. Engine binary, worker width and input settings match within each round. Times are medians across rounds; changes use paired ratios.</p>
+  <div class="table-scroll"><table><thead><tr><th>Game / load</th><th>Language</th><th>Whole ms<br>before → after</th><th>Change</th><th>Sim p50 ms<br>before → after</th><th>Draw p50 ms<br>before → after</th><th>Clean rounds</th></tr></thead><tbody id="optimization-rows"></tbody></table></div>
+  <details><summary>Changes and source A/B evidence paths</summary><div id="optimization-evidence"></div></details>
   <h2>Causes and corrections</h2>
-  <div class="table-scroll"><table><thead><tr><th>Game</th><th>Found in the parity audit</th><th>Changed</th></tr></thead><tbody>
-  <tr><td>To the Last Drop</td><td>Different initialization phases, RNG ordering, house-light choices and HDR formats. Rust used RGBA32F; Lua used RGB32F.</td><td>Frame-zero population; matching random draws and light masks; cached unit scales; RGB lighting/bloom targets. Gameplay-view reruns pending.</td></tr>
-  <tr><td>Flove</td><td>Tunnels spawned before groves; missing placement jitter; wisp RNG delayed until after grass; different marker ownership.</td><td>Same creation phases and order. Tree-only growth shuffle in both; terrain-height spawns. Initial 189-unit worlds match; later growth and gameplay checks continue.</td></tr>
-  <tr><td>Area 17</td><td>Rust used building midpoints for placement and sampled all placements before creation. Ground movement applied only maximum speed.</td><td>Base positions; adjacent placement/creation; canonical spawner/type order; matching acceleration, braking and turning. Collision-state audit continues.</td></tr>
-  <tr><td>Hunted</td><td>Batched versus immediate world creation; different burrow RNG algorithm; reversed jitter draws; different actor order.</td><td>One frame-zero setup; matching burrow-family scheduler and random calls; ordered actors. Movement parity checks continue.</td></tr>
-  <tr><td>Gravitas fire</td><td>Lua evaluates curves in a vertex shader. Rust samples curves and expands billboards on the CPU. The 100-emitter particle budgets differ.</td><td>The existing packed-buffer optimization is in the charts. GPU expansion and equal-budget comparisons remain in this optimization pass.</td></tr>
+  <div class="table-scroll"><table><thead><tr><th>Game</th><th>Algorithm / behavior corrected</th><th>Evidence</th></tr></thead><tbody>
+  <tr><td>Flove</td><td>Exact map export, spawn/AI/RNG order, ownership and targeting; Lua cylinder broadphase semantics; aim restoration and death waits; Lua grass-distance typo.</td><td>2,400 rendered frames × two Lua/Rust pairs: identical units, HP, XYZ, velocity, orientation, orders and projectiles at each six-frame sample with one worker. Identical Lua repeats diverge with four workers.</td></tr>
+  <tr><td>Hunted</td><td>Matched f32 math, deadlines and wave growth; creation-order food rosters and rounded falloff ties; immediate pickup/drop; cached burrow origins. Cosmetic RNG is per unit in both.</td><td>2,400 rendered stress frames: identical units, health, XYZ, velocity, orientation, movement parameters, orders, projectiles and camera at every six-frame sample. Also checked a 9,000-frame normal run before the final falloff-tie correction.</td></tr>
+  <tr><td>Area 17</td><td>Base versus midpoint positions, creation/RNG interleaving, scene yaw, NPC acceleration/braking/turning. Indexed civilian scans in both.</td><td>Same 1,329-unit initial scene; the previous 21 large collision-state mismatches disappear. Remaining early spawn differences ≤0.001 map unit.</td></tr>
+  <tr><td>To the Last Drop</td><td>Frame-zero population, villager/RNG order, placement retry count, deterministic house lights, matching RGB HDR/bloom targets; cached scales in both.</td><td>Same gameplay camera and shadows input. Callback timers exclude CUS ticks; an unscoped drawing gap is not attributed to Wasm arithmetic.</td></tr>
+  <tr><td>Gravitas effects</td><td>GPU curves, billboards and birth-only buffer uploads in both; linear expiry compaction; removed Rust particle cap. CPU renderer retained for jobs comparison.</td><td>100 emitters: 51,400 / 50,200 / 50,800 normal particles at frames 300 / 600 / 899 in both; distortion 1,400 / 2,100 / 2,000. Five image pairs differ by at most 0.0018% RMSE.</td></tr>
+  <tr><td>Parts Needed / My Cube</td><td>Normal-game audit; cached/indexed wisp rosters and definitions. No artificial 10× puzzle population.</td><td>Existing gameplay and image suites, plus normal-scene timings, stacks and rendered captures.</td></tr>
   </tbody></table></div>
-  <p class="caption">The old CPU profiles identify buffer-fence waits in those captures. They do not attribute the earlier TTLD frame gap. GL-command inspection found the lighting-format difference; the final result will use fresh gameplay-view runs on the unchanged engine.</p>
-  <div id="followup" hidden>
-    <h3>TTLD follow-up with a GPU-process guard</h3>
-    <p id="followup-status"></p>
-    <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Included / attempted pairs</th><th>Lua ms/frame</th><th>Rust ms/frame</th><th>Paired change</th></tr></thead><tbody id="followup-rows"></tbody></table></div>
-    <p class="caption">The same released engine, game sources and saved shadows inputs. The guard waits for ten seconds without another compute/Spring graphics client and monitors the run; any overlap excludes the pair. These results stay separate from the original 250-run campaign. Desktop graphics can remain active.</p>
-  </div>
 </section>
 
 <section id="optimizations">
-  <h2>Measured earlier optimizations</h2>
-  <div class="toolbar"><h3>Measured changes in each implementation</h3><label>Show <select id="optimization-backend"><option value="lua">Lua</option><option value="wasm">Rust</option></select></label></div><div id="optimization-chart" class="chart"></div><p class="caption">Each row compares that backend with its own frozen earlier source. These are selected workload/scope improvements, not gains inferred by comparing the Lua and Rust languages. Three-pair rows have no bootstrap interval in the saved campaign.</p>
-  <div id="ceiling" class="note"></div>
+  <h2>Code and API costs</h2>
+  <p id="ceiling" class="caption"></p>
   <div class="table-scroll"><table><thead><tr><th>Pinned-runtime cost</th><th>Implementation</th></tr></thead><tbody>
-  <tr><td>Wasm imports</td><td>Typed host calls include argument packing, dispatch and result copying. Import time is nested within measured Wasm callbacks.</td></tr>
-  <tr><td>Jobs</td><td>Each job instantiates a private Wasmtime store and copies its input/output. Kernels must repay packing, dispatch, joining and application costs.</td></tr>
-  <tr><td>Shared engine work</td><td>Native movement, pathfinding, model submission and GPU synchronization run in both versions. Equal settings and counts alone do not prove equal submitted work.</td></tr>
+  <tr><td>Wasm imports</td><td>Typed host calls include argument packing, dispatch and result copying. The import timer also covers direct CUS ticks outside the dispatch timer; these scopes overlap and cannot be subtracted.</td></tr>
+  <tr><td>Jobs</td><td>The pinned jobs implementation creates private stores and copies inputs/outputs. Light/weight kernels are measured off/on at widths 1 and 4. GPU fire has no CPU curve work to parallelize; its jobs comparison uses the explicitly labeled CPU reference.</td></tr>
+  <tr><td>Shared engine work</td><td>Native movement, pathfinding, model submission and GPU synchronization run in both versions. HAPFS dispatches path requests over this same pool. Repeated identical Lua runs already show path-state variation at width 4; width 1 is the primary control.</td></tr>
   </tbody></table></div>
 
 </section>
@@ -94,9 +91,8 @@
 <section id="method">
   <p class="eyebrow">Reproduce and audit</p>
   <h2>Method and source data</h2>
-  <div class="three"><article><h3>Timings</h3><p>Five alternating pairs; 300 warmup steps, 600 measured steps, one draw per step, 1024×736, VSync off, sound off. Both members of a pair are excluded if either fails or crosses the CPU-pressure threshold. One Flove pair is excluded.</p></article><article><h3>World recordings</h3><p>Fresh runs with a read-only observer, derived from Ship Game’s recording approach. All observed units and sampled projectiles are retained. They show workload and movement; serialization makes them unsuitable timing baselines.</p></article><article><h3>CPU sampling</h3><p>Fresh runs without the world observer. Linux perf samples user CPU at 499 Hz with DWARF stacks and JIT names. Sampling perturbs execution; stack proportions diagnose hot paths, rather than replace paired timings.</p></article></div>
-  <p>The engine and SDK remain pinned to release 2026.10.25. NVIDIA hardware rendering is required; the existing runner rejects llvmpipe and other software renderers. The cgroup pressure guard retains both global and local readings and fails closed. It does not certify exclusive GPU access.</p>
-  <p>Native work and visible output are not identical across all ports. Flove retains Rust-only visual improvements; Hunted startup decisions can vary; TTLD uses shadows on in both selected controls; the 100-emitter fire row has unequal particle caps. The scene lab exposes populations and traces alongside the times.</p>
+  <div class="three"><article><h3>Timings</h3><p>At least five clean alternating pairs; 300 warmup + 600 measured steps; one draw per step; 1024×736; VSync/sound off. A failure or CPU/GPU overlap excludes both members. Rejected attempts remain visible.</p></article><article><h3>World recordings</h3><p>Fresh runs with a read-only observer, derived from Ship Game’s recording approach. All observed units and sampled projectiles are retained. They show workload and movement; serialization makes them unsuitable timing baselines.</p></article><article><h3>CPU sampling</h3><p>Fresh runs without the world observer. Linux perf samples user CPU at 499 Hz with DWARF stacks and JIT names. Sampling perturbs execution; stack proportions diagnose hot paths, rather than replace paired timings.</p></article></div>
+  <p>The engine and SDK remain pinned to release 2026.10.25. NVIDIA hardware rendering is required; the existing runner rejects llvmpipe and other software renderers. The cgroup guard retains global/local CPU pressure. The GPU guard requires ten quiet seconds and monitors competing GPU processes during each run. All engine threads are pinned to the eight P cores; E cores are excluded.</p>
   <details><summary>Runtime identities and source commits</summary><pre id="identities"></pre></details>
   <h3>Rebuild this report from saved evidence</h3>
   <pre><code>export SPRING_BAR_DIR="$PWD/../release-engine-2026.10.25"
@@ -104,20 +100,23 @@ export SPRING_ENGINE_DIR="$PWD/codex-work/game-bugfixes-20261025/engine-linux-20
 
 # Existing paired benchmark runner (timings only)
 verification/perf/compare-jobs.sh /absolute/timing-output \
-  --cpu-pressure-scope cgroup --repeats 5 --frames 900 --warmup 300
+  --cpu-pressure-scope cgroup --repeats 5 --clean-pairs 5 \
+  --frames 900 --warmup 300 --wait-for-gpu-idle \
+  --cpu-affinity 0,2,4,6,8,10,12,14
 
 # Separate replay and profile captures; matching release symbols required
 bash verification/perf/capture.sh /absolute/world-captures
 bash verification/perf/capture-profiles.sh /absolute/clean-profiles
+bash verification/perf/capture-video.sh /absolute/rendered-clips
 python3 verification/perf/profile_export.py /absolute/clean-profiles \
   --buildid-dir /absolute/matching-perf-buildid-cache
 python3 verification/perf/dashboard.py \
-  --timings perf-runs/2026-10-26-jobs/scoped \
+  --timings /absolute/timing-output \
   --recordings /absolute/world-captures --profiles /absolute/clean-profiles \
-  --output docs/benchmarks/2026-10-26</code></pre>
+  --videos /absolute/rendered-clips --output docs/benchmarks/2026-10-26</code></pre>
   <p>This report opens from a local file or an HTTP server, with no CDN dependencies. The generated assets include the paired results, every measured trace, world recordings and flame trees. Full engine logs and raw perf captures remain in their recorded local evidence directories.</p>
 </section>
-<footer>SpringCabal performance lab · data from the existing verification framework · engine unchanged</footer>
+<footer>SpringCabal Lua / Rust benchmarks · data from the existing verification framework · engine unchanged</footer>
 </main></div>
 <div id="tooltip" role="tooltip" hidden></div>
 <script src="data.js"></script><script src="app.js"></script>

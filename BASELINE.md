@@ -33,7 +33,7 @@ suite ran at 1x.
 
 | run | result |
 |---|---|
-| host tests | **120** tests: springcabal-rs 44, area17-shared 6, flove-shared 6, gravitas-shared 9, hunted-common 32, mycube-shared 9, partsneeded-shared 4, ttld-shared 10 (2026-10-25) |
+| host tests | **139** tests: springcabal-rs workspace 51, area17-shared 6, flove-shared 6, gravitas-shared 9, hunted-common 43, mycube-shared 9, partsneeded-shared 4, ttld-shared 11 (2026-10-26) |
 | installed all | the installed modules of all seven games match their source |
 | area17 static / headless | pass; Rust **23**, Lua **6**; no errors or warnings (2026-10-25) |
 | flove headless | rules **66**, UI input **10**, scenario **8**; no errors or warnings (2026-10-25) |
@@ -41,7 +41,7 @@ suite ran at 1x.
 | gravitas e2e / headless | **19/19** cases, plus the build and log checks / pass |
 | gravitas lua-rules | **3/3** cases (collision damage 266, boss 10 shots in 11 s), no def, CEG or texture warning |
 | gravitas lua-play | **8/8** steps through real input, Ctrl+Q back to the menu (the Lua game; xvfb) |
-| hunted headless | **36** assertions, `ALL HUNTED INTEGRATION TESTS PASSED`; no errors or warnings (2026-10-25) |
+| hunted headless | **38** Rust assertions and **20** Lua regressions, `ALL HUNTED INTEGRATION TESTS PASSED`; no errors or warnings (2026-10-25) |
 | mycube headless / lua-headless | **32** assertions / pass |
 | partsneeded headless | **58** + **4** ending + **4** restart + **5** same-pass |
 | ttld headless / pose-parity | **54** / 105 samples, exact |
@@ -54,9 +54,9 @@ Area 17 gained its 23rd Rust check on 2026-10-25: every initial scenario unit
 must have its CUS script attached before the gameplay checks. This catches
 scene creation during module loading, before creation-event delivery is active.
 
-The host count includes four shared music-loop tests and two new Hunted spatial
-bucket tests. Hunted's common crate now has 32 tests. The bucket cases cover
-negative coordinates, radius boundaries and empty/distant queries.
+The host count includes shared music-loop, matched f32 math and Hunted behavior tests.
+Hunted's common crate has 43 tests, including spatial boundaries, rounded falloff
+ties, cosmetic RNG and attribute rounding.
 
 Hunted's 36th check (2026-10-25) requires global LOS for all ally teams,
 matching the Lua startup widget. This prevents redundant native LOS work;

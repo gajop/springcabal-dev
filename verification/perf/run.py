@@ -8,6 +8,7 @@ never accepts a language-performance claim. Source checkouts are read-only.
 from __future__ import annotations
 import argparse
 import csv
+import fcntl
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -24,6 +25,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import storage
 import time
 
 PROJECT=Path(__file__).resolve().parents[2]
@@ -281,7 +283,71 @@ def compare(a,b,labels=('lua','wasm')):
   'first_state_divergence':diverged,'alive_counters_match':counts,
   'event_totals':events,'e1_complete':False,'reason':'Frame event counters are available; per-definition counts, unit-script equivalence and attribution are still required before acceptance.'}
 
+class VerificationLease:
+ """Keep active work serialized, but let other work proceed during idle waits."""
+ def __init__(self,path=None):
+  path=Path(path or os.environ.get('VF_LOCK_HELD') or os.environ.get('VF_LOCK_FILE') or '/tmp/springcabal-verify.lock')
+  self.fd=None;self.inherited=False;self.held=False
+  if path.exists():
+   expected=path.stat()
+   for entry in Path('/proc/self/fd').iterdir():
+    try:
+     fd=int(entry.name);actual=os.fstat(fd)
+    except (OSError,ValueError):continue
+    if (actual.st_dev,actual.st_ino)==(expected.st_dev,expected.st_ino):
+     self.fd=os.dup(fd);self.inherited=True;break
+  if self.fd is None:self.fd=os.open(path,os.O_WRONLY|os.O_CREAT,0o600)
+  fcntl.flock(self.fd,fcntl.LOCK_EX);self.held=True
+ def release(self):
+  if self.held:fcntl.flock(self.fd,fcntl.LOCK_UN);self.held=False
+ def try_acquire(self):
+  if self.held:return True
+  try:fcntl.flock(self.fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+  except BlockingIOError:return False
+  self.held=True;return True
+ def __enter__(self):return self
+ def __exit__(self,*_):
+  # Nested callers may continue under their original flock after this exits.
+  if self.inherited and not self.held:fcntl.flock(self.fd,fcntl.LOCK_EX)
+  os.close(self.fd)
+
+def wait_for_resources(a,pressure_path,deadline,game,lease,host_sample=host,gpu_sample=gpu_processes,now=time.monotonic,sleep=time.sleep):
+ before=None;gpu_before=None;quiet_since=None;notice=0;preflight=[]
+ if a.wait_for_idle or a.wait_for_gpu_idle:lease.release()
+ while True:
+  if now()>=deadline:raise TimeoutError('CPU/GPU stayed busy; completed evidence is preserved')
+  if not lease.try_acquire():
+   quiet_since=None
+   if now()-notice>=30:
+    print(f'{game}: waiting for verification lock',flush=True);notice=now()
+   sleep(1);continue
+  before=host_sample(pressure_path)
+  gpu_before=gpu_sample() if a.wait_for_gpu_idle else None
+  if gpu_before:
+   preflight.append(gpu_before)
+   if len(preflight)>16:preflight.pop(0)
+  cpu_busy=a.wait_for_idle and pressure(before)>5
+  gpu_busy=bool(gpu_before and gpu_before['foreign'])
+  if cpu_busy or gpu_busy:
+   quiet_since=None;lease.release()
+  else:
+   quiet_since=now() if quiet_since is None else quiet_since
+   if not a.wait_for_gpu_idle or now()-quiet_since>=10:break
+  if now()-notice>=30:
+   print(f'{game}: waiting for CPU/GPU idle (CPU avg10={pressure(before):.2f}, GPU clients={gpu_before["foreign"] if gpu_before else []})',flush=True);notice=now()
+  sleep(1)
+ return before,gpu_before,preflight
+
+def callback_timers_off(frame_rows):
+ # A released engine may ignore the new environment variable. Require its
+ # explicit CSV acknowledgement and zero timing counters before using it.
+ return bool(frame_rows) and all(r.get('callback_timers') == '0' and
+  all(float(r[k]) == 0 for k in ('lua_us', 'wasm_us', 'import_us')) for r in frame_rows)
+
 def run(a):
+ with VerificationLease() as lease:return run_locked(a,lease)
+
+def run_locked(a,lease):
  pressure_path=cpu_pressure_path(a.cpu_pressure_scope)
  output=a.output.resolve()
  if output.exists() and any(output.iterdir()):raise ValueError(f'Output must be empty (existing evidence preserved): {output}')
@@ -372,26 +438,19 @@ def run(a):
      if extra.exists():config+='\n'+extra.read_text()
      config+=f'\nFullscreen=0\nXResolutionWindowed=1024\nYResolutionWindowed=736\nVSync=0\nMaxFPS=0\nWorkerThreadCount={a.worker_threads}\nSound=0\nUseFontConfigLib=0\n'
      (directory/'settings.cfg').write_text(config)
-     env=os.environ.copy();env.update(SPRING_PERF_LOG=str(directory/'frames.csv'),SPRING_PERF_STOP_FRAME=str(a.frames),
+     env=os.environ.copy();env.update(SPRING_PERF_LOG=str(directory/'frames.csv'),SPRING_PERF_TIMERS='0' if a.callback_timers=='off' else '1',SPRING_PERF_STOP_FRAME=str(a.frames),
       SPRING_PERF_UNPAUSED='1',SPRING_DATADIR=os.pathsep.join(map(str,[isolation,engine,ENGINE/'cont/base',ENGINE/'cont'])),SPRING_ISOLATED=str(isolation))
      if a.mode!='headless':env['SDL_VIDEODRIVER']='offscreen'
      # Offscreen rendering needs no desktop. Content failures must not leave
      # a modal error dialog on the user's display or hold the run open.
      if a.mode!='headless':env.update(DISPLAY='',WAYLAND_DISPLAY='')
      if effective_input:env['SPRING_PERF_INPUT']=str(effective_input)
-     before=host(pressure_path);notice=0
-     gpu_before=gpu_processes() if a.wait_for_gpu_idle else None
-     gpu_quiet_since=time.monotonic() if gpu_before and not gpu_before['foreign'] else None
-     def gpu_busy():
-      return a.wait_for_gpu_idle and (gpu_quiet_since is None or time.monotonic()-gpu_quiet_since<10)
-     while (a.wait_for_idle and pressure(before)>5) or gpu_busy():
-      if time.monotonic()>=deadline:raise TimeoutError('CPU/GPU stayed busy; completed evidence is preserved')
-      if time.monotonic()-notice>=30:
-       print(f'{game}: waiting for idle (CPU avg10={pressure(before):.2f}, GPU clients={gpu_before["foreign"] if gpu_before else []})',flush=True);notice=time.monotonic()
-      time.sleep(1);before=host(pressure_path)
-      if a.wait_for_gpu_idle:
-       gpu_before=gpu_processes()
-       gpu_quiet_since=None if gpu_before['foreign'] else (gpu_quiet_since or time.monotonic())
+     storage.require_space(output,a.min_free_gib)
+     before,gpu_before,preflight=wait_for_resources(a,pressure_path,deadline,game,lease)
+     storage.require_space(output,a.min_free_gib)
+     if a.wait_for_gpu_idle:save(directory/'gpu-preflight.json',preflight)
+     if sha(binary)!=stamp['engine_sha256']:
+      raise ValueError('Engine binary changed while waiting; use a frozen engine install for this campaign')
      samples=[before];memory=[];gpu_samples=[gpu_before] if gpu_before else [];save(directory/'host-before.json',before)
      command=[str(binary),'--isolation','--isolation-dir',str(isolation),'--write-dir',str(write),'--config',str(directory/'settings.cfg'),str(script)]
      capture=None
@@ -404,6 +463,7 @@ def run(a):
       command=[str(a.apitrace),'trace','--api=egl','--output='+str(directory/'opengl.trace'),*command]
      if a.cpu_affinity:
       command=['taskset','--cpu-list',','.join(map(str,a.cpu_affinity)),*command]
+     disk_error=None
      launched=time.monotonic()
      with (directory/'engine.log').open('wb') as log:
       process=subprocess.Popen(command,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
@@ -414,6 +474,8 @@ def run(a):
         time.sleep(.02 if capture else .5)
         if capture:capture.poll(directory/'engine.log')
         if not samples or time.monotonic()-samples[-1].get('sample_monotonic',0)>.5:
+         if shutil.disk_usage(output).free < 20*1024**3:
+          disk_error='Free disk space fell below the 20 GiB emergency floor';break
          sample=host(pressure_path);sample['sample_monotonic']=time.monotonic();samples.append(sample)
          pid=engine_pid(process.pid,binary)
          value=process_memory(pid) if pid else None
@@ -434,6 +496,7 @@ def run(a):
      frames=[int(r['frame']) for r in frame_rows if r['kind']=='sim']
      errors=re.findall(r'(?im)^.*(?:Error:|Warning:|Fatal:|Lua.*(?:error|Error)|Core Wasm callin.*failed).*$' ,log)
      errors+=re.findall(r'(?im)^.*\[PerfWorkload\] FAIL.*$',log)
+     if disk_error:errors.append(disk_error)
      if gpu_monitor and gpu_monitor.error:errors.append('GPU monitor failed: '+str(gpu_monitor.error))
      if a.cpu_affinity and any(not set(mask).issubset(a.cpu_affinity)
        for sample in memory for mask in sample.get('thread_affinities',{}).values()):
@@ -460,6 +523,8 @@ def run(a):
      if a.frame_step or a.scenario=='effects':
       try:wall_seconds=wall_window(log,a.warmup,a.frames)
       except ValueError as error:errors.append(str(error))
+     if a.callback_timers=='off' and not callback_timers_off(frame_rows):
+      errors.append('Engine did not acknowledge disabled callback timers; a timer-control build is required')
      ok=process.returncode==0 and frames==list(range(a.frames+1)) and not errors
      if not ok and frames!=list(range(a.frames+1)):errors.append('Required frame window was not completed; timeout or early exit')
      gpu_contended=any(s['foreign'] for s in gpu_samples)
@@ -479,6 +544,8 @@ def run(a):
       'script_sha256':sha(script),'settings_sha256':sha(directory/'settings.cfg'),'status':'diagnostic'}
      result['renderer']=renderer[1] if renderer else None
      result['worker_threads']=a.worker_threads
+     result['unit_multiplier']=a.unit_multiplier
+     result['effects_multiplier']=a.effects_multiplier
      result['cpu_affinity']=a.cpu_affinity
      result['rust_jobs']=job_mode if backend=='wasm' else 'off'
      result['fire_renderer']=a.fire_renderer if a.scenario=='effects' and backend=='wasm' else None
@@ -497,10 +564,10 @@ def run(a):
       recording=write/'perf-world.jsonl'
       if not recording.is_file():errors.append('World recording was not written');result['ok']=False
       else:
-       shutil.copyfile(recording,directory/'world.jsonl')
-       result['world_recording']='world.jsonl'
+       result.update(storage.compress_world(recording,directory/'world.jsonl.gz'))
      if capture:result['sampling']=capture.metadata
      result['window_wall_seconds']=wall_seconds
+     result['callback_timers']=a.callback_timers
      result['window_wall_ms_per_frame']=wall_seconds*1000/(a.frames-a.warmup) if wall_seconds is not None else None
      result['workload']=[line.split('[PerfWorkload] ',1)[1] for line in log.splitlines() if '[PerfWorkload] ' in line]
      result['custom_particles']=[dict(zip(('frame','normal','distortion'),map(int,row))) for row in
@@ -538,6 +605,8 @@ def main():
  p.add_argument('--engine',type=Path,default=Path(os.environ.get('SPRING_ENGINE_DIR',ENGINE/'build-amd64-linux/install')));p.add_argument('--output',type=Path,required=True)
  p.add_argument('--games-dir',type=Path,default=PROJECT/'spring-linux/games',help='game checkouts to stage (e.g. frozen Git worktrees for before/after measurements)')
  p.add_argument('--clean-pairs',type=int,default=0,help='continue until this many complete uncontended pairs are collected, bounded by max-minutes and six times the requested count')
+ p.add_argument('--min-free-gib',type=float,default=40,help='free disk reserve required before each engine launch')
+ p.add_argument('--callback-timers',choices=['on','off'],default='on',help='callback/import timer overhead control; off requires a supporting engine, while frame timing and event counters remain active')
  p.add_argument('--backend',choices=['both','lua','wasm'],default='both',help='select one backend for alternating before/after source revisions, or both for Lua/Wasm pairs')
  p.add_argument('--mode',choices=['headless','gpu','realtime'],default='gpu',help='renderer backend; realtime is a legacy GPU alias');p.add_argument('--frames',type=int,default=900);p.add_argument('--warmup',type=int,default=300)
  p.add_argument('--speed',type=float,default=100,help='simulation speed multiplier (default: 100)')
@@ -565,6 +634,7 @@ def main():
   try:a.cpu_affinity=cpu_list(a.cpu_affinity,os.sched_getaffinity(0))
   except ValueError as error:p.error(str(error))
  a.games_dir=a.games_dir.resolve()
+ if a.min_free_gib<20:p.error('disk reserve must be at least 20 GiB')
  if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.clean_pairs<0 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
  if a.scenario=='scripted' and not a.input:p.error('scripted requires --input')
  if a.unit_multiplier<1 or a.scale_frame<1 or (a.unit_multiplier>1 and a.warmup<=a.scale_frame):p.error('scaling must finish before warmup ends')
