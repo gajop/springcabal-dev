@@ -13,6 +13,7 @@ from pathlib import Path
 import re
 import struct
 import subprocess
+import report
 
 HEADER = re.compile(r'^(.*?)\s+(\d+)/(\d+)\s+([\d.]+):\s+(\d+)\s*$')
 FRAME = re.compile(r'^\s+([a-fA-F\d]+)\s+(.+)\s+\(([^()]*)\)\s*$')
@@ -105,7 +106,7 @@ class JitSymbols:
 def category(symbol, dso):
     """Mutually exclusive categories of the sampled instruction, not its callers."""
     if 'nvidia' in dso.lower() or re.search(r'lib(?:GL|EGL|drm)', dso):
-        return 'Graphics driver (CPU)'
+        return 'CPU time in graphics driver'
     if symbol == '[unknown]' or re.fullmatch(r'0x[\da-f]+', symbol):
         return 'Unresolved'
     if re.search(r'wasmtime|cranelift|wasm_runtime|wasm_enter|wasm_to_array', symbol, re.I):
@@ -192,7 +193,7 @@ def main():
     exporter_sha = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     for result in sorted(args.captures.glob('**/result.json')):
         directory = result.parent
-        metadata = json.loads(result.read_text())
+        metadata = report.read_result(result)
         raw = directory/'cpu.perf.data'
         output = directory/'profile.json'
         if not raw.exists() or (output.exists() and json.loads(output.read_text()).get('exporter_sha256') == exporter_sha):

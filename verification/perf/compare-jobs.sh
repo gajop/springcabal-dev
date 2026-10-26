@@ -11,7 +11,7 @@ status=0
 measure() {
     local name=$1 game=$2 scenario=$3
     shift 3
-    "$root/verification/verify" perf "$game" "$scenario" --mode gpu --frame-step --wait-for-idle \
+    "$root/verification/verify" perf "$game" "$scenario" --mode gpu --frame-step --wait-for-idle --wait-for-gpu-idle \
         --output "$output/$name" "${options[@]}" "$@" || status=1
 }
 case_pair() {

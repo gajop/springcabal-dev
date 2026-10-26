@@ -41,13 +41,19 @@ symbols and injects Wasmtime JIT names. Its flame graph retains actual sampled
 stacks and explicit unresolved frames. It does not invent a complete call hierarchy
 when unwinding stops. Sampler/recorder work is kept separate from timing baselines.
 
-When another renderer shares the NVIDIA GPU, add `--wait-for-gpu-idle`. This opt-in
-guard uses `nvidia-smi pmon`: it waits for ten quiet seconds without other compute clients and Spring graphics
-clients, records process samples during the run, and marks any overlapping run
-contended so both members of its pair are excluded. Normal desktop graphics remain.
-This addresses observed overlapping engine runs; the CPU-pressure guard alone
-cannot detect GPU contention. `recheck-ttld.sh` applies both guards to the existing
-normal/stress and shadows-on/off TTLD inputs. No engine changes are required.
+GPU runs always use the idle guard, including world recordings and videos.
+The guard requires ten quiet seconds before launch and monitors NVIDIA clients
+throughout the run. Competing compute clients, other Spring renderers, or active
+graphics clients (including the desktop) interrupt the capture; the pair is excluded. Global
+and selected-cgroup CPU pressure must both stay below the contention threshold.
+Idle waits release the verification lock so other work can proceed. No user
+interaction, minimized applications or engine changes are required.
+
+All primary comparisons use NVIDIA OpenGL rendering. CPU flame graphs measure
+CPU execution, including driver submission and waiting; they do not measure GPU
+execution time. Gravitas jobs controls separately update particle curves on the
+CPU while retaining GPU graphics. Its primary Lua/Rust comparison uses GPU
+particle updates in both languages.
 
 `just verify perf mycube autonomous --output /absolute/run/path` stages private
 copies of both games, uses one engine binary, one map, fixed seeds and settings,

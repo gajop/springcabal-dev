@@ -35,10 +35,18 @@ for name,game,scene,options in cases:
         requests=root/(name+'-input.txt')
         requests.write_text(original+'\n'+''.join(f'{f}: local screenshot png\n' for f in range(300,900,3)))
         subprocess.run([str(project/'verification/verify'),'perf',game,scene,'--mode','gpu','--frame-step','--diagnostic','--repeats','1',
+            '--wait-for-idle','--wait-for-gpu-idle','--clean-pairs','1',
             '--worker-threads','1','--cpu-affinity','0,2,4,6,8,10,12,14','--timeout','300','--max-minutes','30',
             '--input',str(requests),'--output',str(directory),*options],check=True)
     for backend in ['lua','wasm']:
-        run=directory/f'{game}-00-{backend}'
+        candidates=[]
+        for candidate in directory.glob(f'{game}-*-{backend}'):
+            result=json.loads((candidate/'result.json').read_text())
+            repeat=result['repeat']
+            pair=[json.loads(p.read_text()) for p in directory.glob(f'{game}-{repeat:02d}-*/result.json')]
+            if len(pair)==2 and all(r['ok'] and not r['contended'] for r in pair):candidates.append(candidate)
+        if not candidates:raise ValueError('No clean complete GPU capture pair: '+str(directory))
+        run=sorted(candidates)[0]
         result=json.loads((run/'result.json').read_text())
         if not result['ok'] or result['renderer']!='NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2':raise ValueError('Incomplete GPU capture: '+str(run))
         frames=sorted((run/'write/screenshots').glob('*.png'))
@@ -65,4 +73,12 @@ for name,game,scene,options in cases:
                 for image in sequence.glob('*.png'):
                     if image.is_symlink():image.unlink()
                 if not any(sequence.iterdir()):sequence.rmdir()
+    if not a.keep_frames:
+        # Interrupted attempts retain their logs/counters, not unused PNG sets.
+        for rejected in directory.glob(f'{game}-*'):
+            status=rejected/'result.json'
+            if not status.is_file():continue
+            result=json.loads(status.read_text())
+            if result['ok'] and not result['contended']:continue
+            for image in (rejected/'write/screenshots').glob('*.png'):image.unlink()
 PY

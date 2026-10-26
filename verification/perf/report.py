@@ -12,10 +12,31 @@ def is_timing(result):
     return result.get('rust_jobs') != 'check' and not result.get('instrumented', False)
 
 
+def read_result(path):
+    """Review retained global pressure without rewriting the original result."""
+    result = json.loads(path.read_text())
+    telemetry = path.parent/'host-samples.json'
+    if telemetry.exists():
+        samples = json.loads(telemetry.read_text())
+        peak = max((runner.pressure({'cpu_pressure': sample.get('cpu_pressure')})
+                    for sample in samples), default=float('inf'))
+        result['recorded_contended'] = result['contended']
+        result['global_cpu_pressure_review'] = {
+            'max_avg10': peak if peak != float('inf') else None,
+            'passed': peak <= 5,
+        }
+        result['contended'] = result['contended'] or peak > 5
+    elif result.get('gpu_process_guard'):
+        result['recorded_contended'] = result['contended']
+        result['global_cpu_pressure_review'] = {'max_avg10': None, 'passed': False}
+        result['contended'] = True
+    return result
+
+
 def summarize(root):
     groups = {}
     for path in sorted(root.glob('**/result.json')):
-        result = json.loads(path.read_text())
+        result = read_result(path)
         campaign = str(path.parent.parent.relative_to(root))
         mode = result.get('rust_jobs', '')
         key = campaign, result['game'], result['backend'], mode
@@ -58,7 +79,7 @@ def summarize(root):
 def paired_summary(root, jobs=False):
     groups = {}
     for path in sorted(root.glob('**/result.json')):
-        result = json.loads(path.read_text())
+        result = read_result(path)
         if (result.get('comparison_kind') == 'jobs') != jobs:
             continue
         if 'repeat' not in result:
@@ -131,7 +152,7 @@ def source_optimization_summary(manifest, project):
                     stamp = json.loads(provenance.read_text())
                     pairs = {}
                     for path in sorted(directory.glob('*/result.json')):
-                        result = json.loads(path.read_text())
+                        result = read_result(path)
                         if result['backend'] not in backends:
                             continue
                         pairs.setdefault(result['repeat'], {})[result['backend']] = (result, path)

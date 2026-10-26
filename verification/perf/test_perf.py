@@ -14,6 +14,25 @@ from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_saved_global_pressure_excludes_old_cgroup_only_acceptance_without_rewriting(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            status = root/'result.json'
+            original = {'ok': True, 'contended': False, 'gpu_process_guard': True}
+            status.write_text(json.dumps(original))
+            telemetry = root/'host-samples.json'
+            telemetry.write_text(json.dumps([{'cpu_pressure': 'some avg10=39.22',
+                                             'contention_cpu_pressure': 'some avg10=0.00'}]))
+            reviewed = report.read_result(status)
+            self.assertTrue(reviewed['contended'])
+            self.assertFalse(reviewed['recorded_contended'])
+            self.assertEqual(reviewed['global_cpu_pressure_review'], {'max_avg10': 39.22, 'passed': False})
+            self.assertEqual(json.loads(status.read_text()), original)
+            telemetry.write_text(json.dumps([{'cpu_pressure': 'some avg10=0.00'}]))
+            self.assertFalse(report.read_result(status)['contended'])
+            telemetry.unlink()
+            self.assertTrue(report.read_result(status)['contended'])
+
     def test_empty_report_clears_a_previous_campaign_export(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory)/'jobs'
@@ -285,15 +304,20 @@ class EquivalenceTests(unittest.TestCase):
                   '0 10 G 20 Xorg\n0 20 G - spring\n'
                   '0 30 C+G 99 spring\n0 40 C 80 python\n'
                   '0 50 G - eglretrace\n0 60 G 25 blender\n')
-        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample)], [20, 30, 40, 50, 60])
-        groups = {20: 123, 30: 321, 40: 321, 50: 321, 60: 321}
-        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample, 123, groups.__getitem__)], [30, 40, 50, 60])
+        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample)], [10, 20, 30, 40, 50, 60])
+        groups = {10: 321, 20: 123, 30: 321, 40: 321, 50: 321, 60: 321}
+        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample, 123, groups.__getitem__)], [10, 30, 40, 50, 60])
 
-    def test_pressure_guard_uses_selected_scope_and_fails_closed(self):
+    def test_pressure_guard_checks_global_and_selected_scope_and_fails_closed(self):
         sample = {'cpu_pressure': 'some avg10=40.00 avg60=20.00'}
         self.assertEqual(run.pressure(sample), 40)
         sample['contention_cpu_pressure'] = 'some avg10=0.20 avg60=0.10'
+        self.assertEqual(run.pressure(sample), 40)
+        sample['cpu_pressure'] = 'some avg10=0.10'
         self.assertEqual(run.pressure(sample), 0.2)
+        sample['cpu_pressure'] = None
+        self.assertEqual(run.pressure(sample), float('inf'))
+        sample['cpu_pressure'] = 'some avg10=0.10'
         sample['contention_cpu_pressure'] = None
         self.assertEqual(run.pressure(sample), float('inf'))
 
@@ -492,7 +516,7 @@ class ProfileAndRecordingTests(unittest.TestCase):
         tree = profile_export.export(samples)
         self.assertEqual(tree['threads'][0]['weight'], 5000000)
         self.assertEqual(sum(n['weight'] for n in tree['leaves']), 5000000)
-        self.assertEqual(profile_export.category('[unknown]', 'libnvidia-eglcore.so'), 'Graphics driver (CPU)')
+        self.assertEqual(profile_export.category('[unknown]', 'libnvidia-eglcore.so'), 'CPU time in graphics driver')
 
     def test_recording_delta_encoding_preserves_moves_removals_and_id_reuse(self):
         with tempfile.TemporaryDirectory() as temporary:

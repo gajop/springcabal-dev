@@ -79,9 +79,12 @@ def host(pressure_path=Path('/proc/pressure/cpu')):
   'cpu_frequencies_khz':{str(p):read(p) for p in Path('/sys/devices/system/cpu').glob('cpu[0-9]*/cpufreq/scaling_cur_freq')},
   'temperatures':{str(p):read(p) for p in Path('/sys/class/thermal').glob('thermal_zone*/temp')}}
 def pressure(sample):
- text=sample.get('contention_cpu_pressure',sample.get('cpu_pressure')) or ''
- m=re.search(r'some avg10=([0-9.]+)',text)
- return float(m[1]) if m else math.inf
+ # A quiet benchmark cgroup must not hide pressure elsewhere on the machine.
+ values=[]
+ for text in (sample.get('cpu_pressure'),sample.get('contention_cpu_pressure',sample.get('cpu_pressure'))):
+  m=re.search(r'some avg10=([0-9.]+)',text or '')
+  values.append(float(m[1]) if m else math.inf)
+ return max(values)
 def pool_width(log):
  wanted=None
  for line in log.splitlines():
@@ -133,12 +136,9 @@ def foreign_gpu_processes(text, own_group=None, process_group=os.getpgid):
   fields=line.split()
   if len(fields)<4 or not fields[1].isdigit():continue
   pid,kind=int(fields[1]),fields[2]
-  # Ordinary desktop compositor/browser graphics remain present. A competing
-  # compute client or another Spring renderer is a material workload.
-  # Xorg/compositor activity can be charged for this run's presentation too.
-  # Keep their telemetry, but do not mistake it for an independent benchmark.
-  desktop=fields[-1] in ('Xorg','Xwayland','gnome-shell')
-  busy_graphics=not desktop and fields[3].isdigit() and int(fields[3])>5
+  # Idle desktop clients remain present, but active desktop rendering also
+  # competes with our offscreen renderer and must pass the same activity gate.
+  busy_graphics=fields[3].isdigit() and int(fields[3])>5
   if 'C' not in kind and not busy_graphics and not re.match(r'(?i)(?:spring|recoil|eglretrace|glretrace)',fields[-1]):continue
   if own_group is not None:
    try:
@@ -374,6 +374,7 @@ def run_locked(a,lease):
   effective_input.write_text(timed_input(frozen_input.read_text() if frozen_input else '',a.warmup,a.frames))
  stamp={'engine':str(binary),'engine_sha256':sha(binary),'engine_commit':revision(ENGINE),
   'cpu_pressure_source':str(pressure_path),
+  'cpu_pressure_policy':'maximum of global and selected scope, avg10 <= 5',
   'engine_source':str(ENGINE.resolve()),
   'framework_commit':revision(PROJECT),'runner_sha256':sha(Path(__file__)),
   'shared_commit':revision(a.games_dir.parents[1]/'springcabal-rs'),
@@ -470,7 +471,7 @@ def run_locked(a,lease):
       command=[str(a.apitrace),'trace','--api=egl','--output='+str(directory/'opengl.trace'),*command]
      if a.cpu_affinity:
       command=['taskset','--cpu-list',','.join(map(str,a.cpu_affinity)),*command]
-     disk_error=None
+     disk_error=None;resource_interruption=None
      launched=time.monotonic()
      with (directory/'engine.log').open('wb') as log:
       process=subprocess.Popen(command,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
@@ -484,9 +485,13 @@ def run_locked(a,lease):
          if shutil.disk_usage(output).free < 20*1024**3:
           disk_error='Free disk space fell below the 20 GiB emergency floor';break
          sample=host(pressure_path);sample['sample_monotonic']=time.monotonic();samples.append(sample)
+         if a.wait_for_idle and pressure(sample)>5:
+          resource_interruption='CPU pressure interrupted capture';break
          pid=engine_pid(process.pid,binary)
          value=process_memory(pid) if pid else None
          if value:memory.append(value)
+        if gpu_monitor and any(s['foreign'] for s in gpu_monitor.samples):
+         resource_interruption='Competing GPU activity interrupted capture';break
       finally:
        if process.poll() is None:
         os.killpg(process.pid,signal.SIGTERM)
@@ -504,6 +509,7 @@ def run_locked(a,lease):
      errors=re.findall(r'(?im)^.*(?:Error:|Warning:|Fatal:|Lua.*(?:error|Error)|Core Wasm callin.*failed).*$' ,log)
      errors+=re.findall(r'(?im)^.*\[PerfWorkload\] FAIL.*$',log)
      if disk_error:errors.append(disk_error)
+     if resource_interruption:errors.append(resource_interruption)
      if gpu_monitor and gpu_monitor.error:errors.append('GPU monitor failed: '+str(gpu_monitor.error))
      if a.cpu_affinity and any(not set(mask).issubset(a.cpu_affinity)
        for sample in memory for mask in sample.get('thread_affinities',{}).values()):
@@ -622,12 +628,12 @@ def main():
  p.add_argument('--scale-frame',type=int,default=60,help='frame at which the initial scene is cloned')
  p.add_argument('--frame-step',action='store_true',help='one simulation step per draw, using the gallery capture mechanism')
  p.add_argument('--effects-multiplier',type=int,default=1,help='Gravitas fire emitter pairs (0 gives the empty renderer baseline)')
- p.add_argument('--fire-renderer',choices=['gpu','cpu'],default='gpu',help='Gravitas Rust effect curves: GPU default or CPU reference for jobs comparison')
+ p.add_argument('--fire-renderer',choices=['gpu','cpu'],default='gpu',help='Gravitas particle updates: GPU default or CPU reference for jobs; both render with OpenGL on the GPU')
  p.add_argument('--worker-threads',type=int,default=1,help='total engine ThreadPool width, including the main thread')
  p.add_argument('--cpu-affinity',help='Linux CPU list for the engine and its threads; useful to hold core type constant on hybrid CPUs')
  p.add_argument('--rust-jobs',choices=['off','on','check','compare'],default='off',help='Rust pure jobs; check validates output, compare alternates off/on pairs')
  p.add_argument('--wait-for-idle',action='store_true',help='wait before each run while CPU pressure exceeds the existing contention threshold')
- p.add_argument('--cpu-pressure-scope',choices=['global','cgroup'],default='global',help='CPU pressure used by the contention guard; both global and selected pressure are recorded')
+ p.add_argument('--cpu-pressure-scope',choices=['global','cgroup'],default='global',help='additional CPU pressure scope; the guard checks both global and selected pressure')
  p.add_argument('--record-world',action='store_true',help='separate diagnostic run: save observed unit/projectile positions for dots playback (never a timing baseline)')
  p.add_argument('--record-every',type=int,default=6,help='world recording interval in simulation frames')
  p.add_argument('--record-details',action='store_true',help='include exact height, heading, velocity and command queues in diagnostic world recordings')
@@ -637,6 +643,8 @@ def main():
  p.add_argument('--diagnostic',action='store_true',help='exclude custom probes (such as screenshot capture) from timing aggregates')
  p.add_argument('--wait-for-gpu-idle',action='store_true',help='NVIDIA: wait for competing compute/Spring graphics clients; exclude pairs if any appear during a run')
  a=p.parse_args()
+ # Timings, world recordings and screenshots all wait for the same idle gate.
+ if a.mode!='headless':a.wait_for_idle=True;a.wait_for_gpu_idle=True
  if a.cpu_affinity:
   try:a.cpu_affinity=cpu_list(a.cpu_affinity,os.sched_getaffinity(0))
   except ValueError as error:p.error(str(error))

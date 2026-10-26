@@ -174,10 +174,11 @@ def main():
             stamp = read(args.timings/campaign/'provenance.json')
             summary['runtime'] = {key: stamp.get(key) for key in
                                   ('engine_commit', 'engine_sha256', 'engine_source')}
+            summary['game_content'] = read(args.timings/campaign/f'{game}-content.json')
             pair_status = {}
             paths = sorted((args.timings/campaign).glob('*/result.json'))
             for path in paths:
-                result = read(path)
+                result = report.read_result(path)
                 pair_status.setdefault(result['repeat'], []).append(result)
             accepted = {r for r, pair in pair_status.items()
                         if len(pair) == 2 and all(p['ok'] and not p['contended'] and report.is_timing(p) for p in pair)}
@@ -192,7 +193,7 @@ def main():
                 reasons[repeat] = why
             ids = []
             for path in paths:
-                result = read(path)
+                result = report.read_result(path)
                 rid = campaign+'/'+path.parent.name
                 key = 'traces/'+rid.replace('/', '--')
                 frames = trace(path.parent, strict=result['ok'])
@@ -216,10 +217,10 @@ def main():
             sid = {'hunted-10x-jobs': 'hunted10', 'flove-combat-10x-jobs': 'flove10'}.get(case)
         if not sid:
             continue
-        result = read(path.parent/'result.json')
-        if not result['ok']:
-            raise ValueError(f'Failed recording: {path}')
-        key = 'recordings/'+case+'--'+path.parent.name
+        result = report.read_result(path.parent/'result.json')
+        if not result['ok'] or result['contended']:
+            continue
+        key = 'recordings/'+str(path.parent.relative_to(args.recordings)).replace('/', '--')
         data['recordings'].append(dict(asset(out, key, world(path)), scene=sid,
             backend=result['backend'], jobs=result['rust_jobs'],
             renderer=result['renderer'], source=str(path.relative_to(PROJECT))))
@@ -230,16 +231,21 @@ def main():
             sid = {'hunted-10x-jobs': 'hunted10', 'flove-combat-10x-jobs': 'flove10', 'fire-10-jobs': 'fire10'}.get(case)
         if not sid:
             continue
-        result = read(path.parent/'result.json')
+        result = report.read_result(path.parent/'result.json')
         if result.get('world_recording'):
             raise ValueError('Profiles must be separate from the world observer')
         if not result['ok'] or result['contended']:
             continue
-        key = 'profiles/'+case+'--'+path.parent.name
+        key = 'profiles/'+str(path.parent.relative_to(args.profiles)).replace('/', '--')
         profile = read(path)
+        content = read(path.parent.parent/f'{result["game"]}-content.json')
         data['profiles'].append(dict(asset(out, key, profile), scene=sid,
             backend=result['backend'], jobs=result['rust_jobs'], samples=profile['samples'],
             fire_renderer=result.get('fire_renderer'),
+            worker_threads=result.get('worker_threads'),
+            callback_timers=result.get('callback_timers', 'on'),
+            content_sha256=content[result['backend']]['content_sha256'],
+            engine_sha256=profile.get('runtime', {}).get('engine_sha256'),
             source=str(path.relative_to(PROJECT))))
     for source in (HERE/'web').iterdir():
         if source.is_file():
@@ -253,7 +259,7 @@ def main():
         data['videos'] = clips
     report.write_rows(out/'language', list(language.values()))
     report.write_rows(out/'jobs', list(jobs.values()))
-    saved = [read(p) for p in args.timings.glob('**/result.json')]
+    saved = [report.read_result(p) for p in args.timings.glob('**/result.json')]
     provenance = [read(p) for p in args.timings.glob('**/provenance.json')]
     sources = {}
     for path in args.timings.glob('**/*-content.json'):
