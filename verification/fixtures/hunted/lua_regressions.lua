@@ -236,7 +236,12 @@ check("rabbit idle animates its tail and restores the resting pose", function()
         local chunk = assert(loadfile(root .. "/Scripts/" .. filename))
         return setfenv(chunk, env)()
     end
+    env.VFS = {Include = function(file)
+        return setfenv(assert(loadfile(root .. "/" .. file)), env)()
+    end}
     env.include("rabbit.lua")
+    -- Idle presentation may not consume the gameplay random stream.
+    env.math = setmetatable({random = function() error("idle changed gameplay RNG") end}, {__index = math})
     env.Move(pieces.center, 2, 5)
     env.Turn(pieces.Body, 1, -0.3)
     env.idle()
