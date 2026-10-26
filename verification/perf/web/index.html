@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top"><a href="#overview" class="brand">SpringCabal <span>/ Lua / Rust</span></a><span class="hardware">i7-12700 · GTX 1660 Ti · engine 2026.10.25</span><button id="theme" aria-label="Switch color theme">Light / dark</button></header>
+<header class="top"><a href="#overview" class="brand">SpringCabal <span>/ Lua / Rust</span></a><span class="hardware">i7-12700 · GTX 1660 Ti</span><button id="theme" aria-label="Switch color theme">Light / dark</button></header>
 <div class="shell">
 <nav class="side" aria-label="Report">
   <p class="eyebrow">Lua · Rust/Wasm · jobs</p>
@@ -26,8 +26,9 @@
 <section id="overview">
   <p class="eyebrow">GPU-rendered game measurements · October 25–26, 2026</p>
   <h1>SpringCabal benchmarks</h1>
+  <p id="campaign-status" class="note"></p>
   <div class="facts"><div><strong id="total-runs">—</strong><span>GPU runs</span></div><div><strong id="accepted-pairs">—</strong><span>clean / attempted pairs</span></div><div><strong>600</strong><span>rendered steps / sample</span></div><div><strong>1 &amp; 4</strong><span>engine worker widths</span></div></div>
-  <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Lua ms/frame</th><th>Rust ms/frame</th><th>Rust change</th><th>Sim p50<br>Lua / Rust</th><th>Draw p50<br>Lua / Rust</th><th>Units<br>Lua / Rust</th></tr></thead><tbody id="overview-rows"></tbody></table></div>
+  <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Lua ms/frame</th><th>Rust ms/frame</th><th>Rust change</th><th>Sim p50<br>Lua / Rust</th><th>Draw p50<br>Lua / Rust</th><th>Units<br>Lua / Rust</th><th>Clean pairs</th></tr></thead><tbody id="overview-rows"></tbody></table></div>
   <div class="toolbar"><h2>Rust time change versus Lua</h2><label>Measure <select id="overview-metric"><option value="wall_mean">Whole frame · window mean</option><option value="sim_p50">Simulation · p50</option><option value="draw_p50">Drawing · p50</option><option value="cpu_p95">Sim + draw · p95</option></select></label></div>
   <p class="caption">Left is less time in Rust; right is less time in Lua. Click a scene to inspect it. The dot is the mean paired time ratio; whiskers are its bootstrap 95% interval across independent pairs.</p>
   <div id="overview-chart" class="chart"></div>

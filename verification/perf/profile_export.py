@@ -130,7 +130,10 @@ def main():
         data['capture'] = metadata['sampling']
         data['run'] = {k: metadata.get(k) for k in
                        ('game', 'backend', 'rust_jobs', 'renderer', 'fire_renderer', 'worker_threads', 'contended',
-                        'gpu_process_guard', 'gpu_contended')}
+                        'gpu_process_guard', 'gpu_contended', 'callback_timers')}
+        provenance = json.loads((directory.parent/'provenance.json').read_text())
+        data['runtime'] = {key: provenance.get(key) for key in
+                           ('engine_commit', 'engine_sha256', 'engine_source')}
         output.write_text(json.dumps(data, separators=(',', ':'))+'\n')
         # The raw capture and jitdump inputs can regenerate this intermediate.
         if source != raw:

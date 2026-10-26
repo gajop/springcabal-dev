@@ -736,3 +736,10 @@ uses the first clean Lua/Rust pair from each phase, accepts only complete
 four-run rounds, and rejects changed engine binaries or scene parameters.
 Callback/import counters overlap: imports from direct CUS ticks are outside
 the dispatch timer, so do not subtract import time from dispatch time.
+
+
+Use `dashboard.py --allow-incomplete` for a snapshot while the timing campaign
+is running. Unstarted scenes remain pending, with no fabricated measurements;
+confidence intervals require five clean pairs. The report shows its generation
+time and the number of scenes that reached five pairs. CPU profiles carry their
+own engine commit, binary SHA-256 and callback-timer mode.

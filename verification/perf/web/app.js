@@ -54,22 +54,22 @@ function overview(){
   const left=narrow?16:250,right=80,x0=left,x1=w-right;
   const values=rows.map(s=>{const p=s.language,rs=p.run_ids.map(id=>DATA.runs[id]),pairs=new Map();for(const r of rs){if(!r.pair_accepted)continue;if(!pairs.has(r.repeat))pairs.set(r.repeat,{});pairs.get(r.repeat)[r.backend]=r;}
     const value=r=>metric==='wall_mean'?r.window_wall_ms_per_frame:r.metrics[metric.startsWith('cpu')?'frame.cpu_us':metric.startsWith('sim')?'sim.elapsed_us':'draw.elapsed_us'][metric.endsWith('p95')?'p95':'p50']/1000;
-    const ratio=mean([...pairs.values()].map(p=>value(p.wasm)/value(p.lua)));
-    return{s,p,change:(ratio-1)*100,lo:(p[metric+'_mean_ratio_95ci_lo']-1)*100,hi:(p[metric+'_mean_ratio_95ci_hi']-1)*100};});
-  const lo=Math.min(-5,...values.map(r=>r.lo))-5,hi=Math.max(5,...values.map(r=>r.hi))+5,scale=x=>x0+(x-lo)/(hi-lo)*(x1-x0);
+    const ratios=[...pairs.values()].map(p=>value(p.wasm)/value(p.lua)),ratio=ratios.length?mean(ratios):NaN;
+    return{s,p,change:(ratio-1)*100,lo:Number.isFinite(p[metric+'_mean_ratio_95ci_lo'])?(p[metric+'_mean_ratio_95ci_lo']-1)*100:NaN,hi:Number.isFinite(p[metric+'_mean_ratio_95ci_hi'])?(p[metric+'_mean_ratio_95ci_hi']-1)*100:NaN};});
+  const lo=Math.min(-5,...values.flatMap(r=>[r.lo,r.change]).filter(Number.isFinite))-5,hi=Math.max(5,...values.flatMap(r=>[r.hi,r.change]).filter(Number.isFinite))+5,scale=x=>x0+(x-lo)/(hi-lo)*(x1-x0);
   for(let i=0;i<=4;i++){const value=lo+(hi-lo)*i/4;line(e,scale(value),top-8,scale(value),top+rows.length*rowH,{class:'grid'});text(e,scale(value),top+rows.length*rowH+19,fmt(value,0)+'%',{'text-anchor':'middle',class:'muted'});}
   line(e,scale(0),top-8,scale(0),top+rows.length*rowH,{class:'zero'});
   values.forEach((r,i)=>{const y=top+i*rowH+(narrow?34:18),g=element('g',{'class':'click-row'});g.append(element('rect',{x:0,y:top+i*rowH-8,width:w,height:rowH,fill:'transparent'}));
     if(narrow){text(g,8,y-17,r.s.title+' · '+r.s.load);}else{text(g,0,y-3,r.s.title);text(g,0,y+13,r.s.load,{class:'muted'});}
-    line(g,scale(r.lo),y,scale(r.hi),y,{stroke:'var(--rust)','stroke-width':2});for(const v of[r.lo,r.hi])line(g,scale(v),y-4,scale(v),y+4,{stroke:'var(--rust)'});
-    g.append(element('circle',{cx:scale(r.change),cy:y,r:4.5,fill:'var(--rust)'}));text(g,w-5,y+4,pct(r.change),{'text-anchor':'end'});
+    if(Number.isFinite(r.lo)&&Number.isFinite(r.hi)){line(g,scale(r.lo),y,scale(r.hi),y,{stroke:'var(--rust)','stroke-width':2});for(const v of[r.lo,r.hi])line(g,scale(v),y-4,scale(v),y+4,{stroke:'var(--rust)'});}
+    if(Number.isFinite(r.change))g.append(element('circle',{cx:scale(r.change),cy:y,r:4.5,fill:'var(--rust)'}));text(g,w-5,y+4,Number.isFinite(r.change)?pct(r.change):'pending',{'text-anchor':'end'});
     hit(g,`${r.s.title} · ${r.s.load}\nMean paired time change ${pct(r.change)}\nBootstrap 95% interval ${pct(r.lo)} to ${pct(r.hi)}\nMedian paired change ${pct(r.p[metric+'_paired_rust_change_pct'])}`);
     g.addEventListener('click',()=>{selectScene(r.s.id);location.hash='lab';});e.append(g);
   });
   text(e,(x0+x1)/2,top+rows.length*rowH+43,'Paired Rust time change (%)',{'text-anchor':'middle'});
 }
 function repeats(){
-  const ps=paired(),{e,w}=svg('repeat-chart',ps.length*39+70),left=60,right=22,top=25,max=Math.max(...ps.flat().map(r=>r.window_wall_ms_per_frame))*1.1,scale=v=>left+v/max*(w-left-right);
+  const ps=paired();if(!ps.length){$('repeat-chart').textContent='No completed pair yet.';return;}const {e,w}=svg('repeat-chart',ps.length*39+70),left=60,right=22,top=25,max=Math.max(...ps.flat().map(r=>r.window_wall_ms_per_frame))*1.1,scale=v=>left+v/max*(w-left-right);
   for(const t of numberTicks(max)){line(e,scale(t),top-10,scale(t),top+ps.length*39,{class:'grid'});text(e,scale(t),top+ps.length*39+19,fmt(t,1),{'text-anchor':'middle',class:'muted'});}
   ps.forEach((p,i)=>{const y=top+i*39;const accepted=p.every(r=>r.pair_accepted);text(e,0,y+4,'Pair '+(p[0].repeat+1),{class:'muted'});line(e,scale(p[0].window_wall_ms_per_frame),y,scale(p[1].window_wall_ms_per_frame),y,{stroke:'var(--muted)','stroke-width':1,opacity:accepted?1:.35});p.forEach((r,j)=>{const c=element(j?'rect':'circle',j?{x:scale(r.window_wall_ms_per_frame)-4,y:y-4,width:8,height:8,fill:'var(--rust)',opacity:accepted?1:.3}:{cx:scale(r.window_wall_ms_per_frame),cy:y,r:4,fill:'var(--lua)',opacity:accepted?1:.3});hit(c,`${names()[j]} · pair ${r.repeat+1}\n${fmt(r.window_wall_ms_per_frame)} ms/frame\n${accepted?'Included':'Excluded as a pair'}`);e.append(c);});});
   text(e,left,13,'● '+names()[0],{fill:'var(--lua)'});text(e,w-right,13,'■ '+names()[1],{'text-anchor':'end',fill:'var(--rust)'});text(e,(left+w-right)/2,top+ps.length*39+43,'Whole-frame elapsed mean (ms/frame)',{'text-anchor':'middle'});
@@ -88,7 +88,7 @@ function optimizationTable(){
 }
 
 function costs(){
-  const good=runs().filter(r=>r.pair_accepted),rs=[0,1].map(i=>good.filter(r=>variantOrder(r)===i)),computed=rs.map(group=>{
+  const good=runs().filter(r=>r.pair_accepted);if(!good.length){$('cost-chart').textContent='No accepted pair yet.';return;}const rs=[0,1].map(i=>good.filter(r=>variantOrder(r)===i)),computed=rs.map(group=>{
     const value=k=>mean(group.map(r=>r.means[k]));
     const sim=value('sim_ms'),draw=value('draw_ms');
     return{timerOff:group.length>0&&group.every(r=>r.callback_timers==='off'),total:sim+draw,lua:value('sim_lua_ms')+value('draw_lua_ms'),wasm:value('sim_wasm_ms')+value('draw_wasm_ms'),imports:value('sim_import_ms')+value('draw_import_ms'),segments:[['Simulation scope',sim,'host'],['Drawing scope',draw,'native']]};
@@ -148,8 +148,8 @@ let lastAnimation=0;function animate(t){if(state.playing&&state.worlds.length){c
 
 let profileToken=0;
 function profileName(p){const s=DATA.scenes.find(s=>s.id===p.scene);return`${s.title} · ${s.load} · ${p.backend==='lua'?'Lua':'Rust · '+(p.fire_renderer==='cpu'?'CPU reference · ':'')+'jobs '+p.jobs}`;}
-function selectProfileForScene(){const preferred=DATA.profiles.find(p=>p.scene===state.scene.id&&p.backend==='wasm'&&p.jobs===(isLanguage()?'off':'on'));if(preferred){$('profile').value=preferred.key;loadProfile();}}
-async function loadProfile(){const token=++profileToken,entry=DATA.profiles.find(p=>p.key===$('profile').value);if(!entry){$('profile-meta').textContent='No sampled capture for this selection.';return;}try{const p=await loadAsset(entry);if(token!==profileToken)return;state.profile=p;state.history=[];$('thread').replaceChildren();const threads=[...p.threads].sort((a,b)=>b.weight-a.weight);for(const t of threads)option($('thread'),t.name,t.name+' · '+fmt(t.weight/1e6,0)+' sampled CPU ms');const main=threads.find(t=>t.name.includes('recoil-main'));if(main)$('thread').value=main.name;$('profile-meta').textContent=`${profileName(entry)} · ${p.samples.toLocaleString()} stack samples · ${p.run.renderer} · pool ${p.run.worker_threads}${p.run.contended?' · CPU pressure flagged; diagnostic only':''}`;selectThread();}catch(error){$('profile-meta').textContent=error.message;}}
+function selectProfileForScene(){const preferred=DATA.profiles.find(p=>p.scene===state.scene.id&&p.backend==='wasm'&&p.jobs===(isLanguage()?'off':'on'));if(preferred){$('profile').value=preferred.key;loadProfile();}else{++profileToken;state.profile=null;state.flame=null;state.history=[];$('profile').value='';$('thread').replaceChildren();for(const id of ['flame','flame-detail','profile-categories','profile-leaves'])$(id).replaceChildren();$('profile-meta').textContent='No sampled capture for this scene yet.';}}
+async function loadProfile(){const token=++profileToken,entry=DATA.profiles.find(p=>p.key===$('profile').value);if(!entry){$('profile-meta').textContent='No sampled capture for this selection.';return;}try{const p=await loadAsset(entry);if(token!==profileToken)return;state.profile=p;state.history=[];$('thread').replaceChildren();const threads=[...p.threads].sort((a,b)=>b.weight-a.weight);for(const t of threads)option($('thread'),t.name,t.name+' · '+fmt(t.weight/1e6,0)+' sampled CPU ms');const main=threads.find(t=>t.name.includes('recoil-main'));if(main)$('thread').value=main.name;$('profile-meta').textContent=`${profileName(entry)} · ${p.samples.toLocaleString()} stack samples · ${p.run.renderer} · pool ${p.run.worker_threads} · timers ${p.run.callback_timers??'on'} · engine ${(p.runtime?.engine_commit??'unknown').slice(0,12)}${p.run.contended?' · CPU pressure flagged; diagnostic only':''}`;selectThread();}catch(error){$('profile-meta').textContent=error.message;}}
 function selectThread(){state.flame=state.profile?.threads.find(t=>t.name===$('thread').value);state.history=[];drawFlame();profileCategories();}
 function nodeName(n){return n.name==='[unknown]'?'[unresolved] '+n.dso:n.name;}
 function drawFlame(){
@@ -164,7 +164,7 @@ function overviewTable(){
     const r=scene.language,tr=document.createElement('tr');tr.className='click-row';
     const cells=[scene.title+' · '+scene.load,fmt(r.wall_mean_lua_ms),fmt(r.wall_mean_rust_ms),pct(r.wall_mean_paired_rust_change_pct),
       fmt(r.sim_p50_lua_ms)+' / '+fmt(r.sim_p50_rust_ms),fmt(r.draw_p50_lua_ms)+' / '+fmt(r.draw_p50_rust_ms),
-      fmt(r.lua_units_p50,0)+' / '+fmt(r.wasm_units_p50,0)];
+      fmt(r.lua_units_p50,0)+' / '+fmt(r.wasm_units_p50,0),r.measured_pairs+' / 5'];
     for(const value of cells){const td=document.createElement('td');td.textContent=value;tr.append(td);}
     tr.onclick=()=>{selectScene(scene.id);location.hash='lab';};body.append(tr);
   }
@@ -178,4 +178,5 @@ $('theme').onclick=()=>{document.documentElement.dataset.theme=document.document
 $('video-play').onclick=()=>{const videos=[...$('video-grid').querySelectorAll('video')],play=videos.some(v=>v.paused);for(const v of videos){if(play){v.currentTime=videos[0].currentTime;v.play().catch(()=>{});}else v.pause();}};
 $('identities').textContent=JSON.stringify(DATA.audit,null,2);
 let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{overview();repeats();costs();drawTrace();drawWorlds();if(state.profile){drawFlame();profileCategories();}},100);}).observe(document.querySelector('main'));
+$('campaign-status').textContent=`Snapshot ${DATA.audit.generated_at??'unknown time'} · ${DATA.audit.primary_scenes_at_five_pairs??'—'} / ${DATA.scenes.length} primary scenes have five clean pairs · callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
 $('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();overview();selectScene(DATA.scenes[0].id);requestAnimationFrame(animate);

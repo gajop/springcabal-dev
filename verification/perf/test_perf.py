@@ -25,6 +25,17 @@ class EquivalenceTests(unittest.TestCase):
             self.assertIsNotNone(run.revision(root))
             self.assertIsNone(run.revision(copied))
 
+    def test_pending_campaign_has_no_fabricated_measurements(self):
+        with self.assertRaises(ValueError):
+            dashboard.scene_summary({}, 'ttld-pending', 'ttld')
+        pending = dashboard.scene_summary({}, 'ttld-pending', 'ttld', True)
+        self.assertEqual(pending['measured_pairs'], 0)
+        self.assertEqual(pending['run_ids'], [])
+        self.assertNotIn('wall_mean_lua_ms', pending)
+        completed = {'campaign': 'ttld-pending', 'measured_pairs': 5}
+        self.assertIs(dashboard.scene_summary({'ttld-pending': completed},
+                                            'ttld-pending', 'ttld', True), completed)
+
     def test_dashboard_preserves_partial_evidence_without_inventing_frames(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -8,6 +8,7 @@ import argparse
 import base64
 from collections import defaultdict
 import csv
+from datetime import datetime, timezone
 import gzip
 import hashlib
 import json
@@ -41,6 +42,15 @@ TRACE_FIELDS = ['frame', 'sim_ms', 'draw_ms', 'sim_lua_ms', 'sim_wasm_ms', 'sim_
 
 def read(path):
     return json.loads(path.read_text())
+
+
+def scene_summary(summaries, campaign, game, allow_incomplete=False):
+    if campaign in summaries:
+        return summaries[campaign]
+    if not allow_incomplete:
+        raise ValueError(f'Missing timing campaign: {campaign}')
+    return {'campaign': campaign, 'game': game, 'measured_pairs': 0,
+            'attempted_pairs': 0, 'excluded_pairs': 0, 'run_ids': []}
 
 
 def asset(out, key, value):
@@ -126,6 +136,8 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--videos', type=Path, help='capture-video.sh output directory')
     parser.add_argument('--optimizations', type=Path, help='same-behavior source A/B experiment manifest')
+    parser.add_argument('--allow-incomplete', action='store_true',
+                        help='Show pending scenes while a campaign is running; never fill missing measurements')
     args = parser.parse_args()
     args.timings = args.timings.resolve()
     args.recordings = args.recordings.resolve()
@@ -142,7 +154,7 @@ def main():
     jobs = {r['campaign']: r for r in report.paired_summary(args.timings, jobs=True)}
     for sid, game, title, load, control, job, capture in SCENES:
         scene = {'id': sid, 'game': game, 'title': title, 'load': load,
-                 'language': language[control], 'jobs': {}, 'capture': capture,
+                 'language': scene_summary(language, control, game, args.allow_incomplete), 'jobs': {}, 'capture': capture,
                  'different_cap': False, 'jobs_renderer': 'CPU reference' if game == 'gravitas' else 'production'}
         campaigns = [(control, scene['language'])]
         secondary = control[:-1]+'4' if control.endswith('w1') else None
@@ -157,6 +169,8 @@ def main():
                 scene['jobs'][str(width)] = jobs[key]
                 campaigns.append((key, scene['jobs'][str(width)]))
         for campaign, summary in campaigns:
+            if not (args.timings/campaign/'provenance.json').exists() and args.allow_incomplete:
+                continue
             stamp = read(args.timings/campaign/'provenance.json')
             summary['runtime'] = {key: stamp.get(key) for key in
                                   ('engine_commit', 'engine_sha256', 'engine_source')}
@@ -245,6 +259,10 @@ def main():
     for path in args.timings.glob('**/*-content.json'):
         sources[path.stem.removesuffix('-content')+':'+path.parent.name] = read(path)
     data['audit'] = {
+        'generated_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+        'primary_scenes_at_five_pairs': sum(s['language']['measured_pairs'] >= 5 for s in data['scenes']),
+        'primary_scene_count': len(data['scenes']),
+        'callback_timers': sorted({r.get('callback_timers', 'on') for r in saved}),
         'runs': len(saved), 'complete': sum(r['ok'] for r in saved),
         'accepted_pairs': sum(r['measured_pairs'] for r in [*language.values(), *jobs.values()]),
         'attempted_pairs': sum(r['attempted_pairs'] for r in [*language.values(), *jobs.values()]),
