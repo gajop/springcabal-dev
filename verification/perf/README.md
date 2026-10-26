@@ -646,3 +646,29 @@ source/module hashes, both CPU-pressure readings and `final-audit.json` remain
 locally under `perf-runs/2026-10-26-jobs/scoped/`; GPU telemetry is in
 `perf-runs/2026-10-26-jobs/scoped-gpu-samples.csv`. Earlier packet-encoding
 measurements are preserved separately and excluded from these final tables.
+
+The optimization audit adds diagnostic controls to the same runner:
+
+- `--cpu-affinity 0,2,4,6,8,10,12,14` holds this i7-12700 on its eight P cores.
+  Requested CPUs must be available. Process samples retain every observed thread's
+  affinity; a thread escaping the requested set rejects the run. Host samples
+  include CPU frequencies; GPU-process samples include clocks, power and temperature.
+- GPU monitoring runs on a separate thread, keeping the one-second `nvidia-smi`
+  sample out of the 20 ms perf sampling controller. Other Spring/Recoil, GL replay
+  and compute clients remain exclusions. Xorg/compositor samples are retained but
+  are not classified as independent workloads; presentation can charge activity
+  to them. Busy other graphics clients are retained and excluded.
+- `--record-world --record-details --record-every 1` adds camera state, full
+  precision positions/heading/velocity, commands, movement attributes and dimensions.
+  Headless mode permits these simulation-only diagnostics; performance comparisons
+  still require NVIDIA rendering. Recorded/instrumented runs do not enter timings.
+- `--trace-gl --apitrace /absolute/apitrace` captures the GL command stream through
+  EGL in a separate diagnostic run. Tracer warnings remain errors in the result;
+  they must be inspected before interpreting a replay. Never count a trace as an
+  uninstrumented timing run.
+- TTLD comparisons set `skip_intro=1` in both versions and require its startup
+  marker. The game option skips only the intro; normal launch profiles keep it.
+
+The pinned engine's Wasm callback counter does **not** include CUS guest ticks.
+The unscoped remainder therefore includes CUS as well as native work and waits;
+subtracting measured callbacks does not isolate native execution.

@@ -23,6 +23,7 @@ import statistics
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 
 PROJECT=Path(__file__).resolve().parents[2]
@@ -70,6 +71,7 @@ def host(pressure_path=Path('/proc/pressure/cpu')):
   'memory_pressure':read('/proc/pressure/memory'),
   'memory':read('/proc/meminfo'),'cpu_governors':{str(p):read(p) for p in Path('/sys/devices/system/cpu').glob('cpu[0-9]*/cpufreq/scaling_governor')},
   'turbo_disabled':read('/sys/devices/system/cpu/intel_pstate/no_turbo'),
+  'cpu_frequencies_khz':{str(p):read(p) for p in Path('/sys/devices/system/cpu').glob('cpu[0-9]*/cpufreq/scaling_cur_freq')},
   'temperatures':{str(p):read(p) for p in Path('/sys/class/thermal').glob('thermal_zone*/temp')}}
 def pressure(sample):
  text=sample.get('contention_cpu_pressure',sample.get('cpu_pressure')) or ''
@@ -89,7 +91,34 @@ def process_memory(pid):
  try:
   status=Path(f'/proc/{pid}/status').read_text()
  except OSError:return None
- return {key:int(value) for key,value in re.findall(r'^(VmRSS|VmHWM):\s+(\d+) kB',status,re.M)}
+ result={key:int(value) for key,value in re.findall(r'^(VmRSS|VmHWM):\s+(\d+) kB',status,re.M)}
+ try:
+  result['cpu']=int(Path(f'/proc/{pid}/stat').read_text().rsplit(')',1)[1].split()[36])
+  result['thread_affinities']={p.name:sorted(os.sched_getaffinity(int(p.name))) for p in Path(f'/proc/{pid}/task').iterdir()}
+ except (OSError,ProcessLookupError):pass
+ return result
+
+def engine_pid(parent,binary):
+ pending=[parent]
+ while pending:
+  pid=pending.pop()
+  try:
+   if Path(f'/proc/{pid}/exe').resolve()==binary:return pid
+   pending.extend(int(x) for x in Path(f'/proc/{pid}/task/{pid}/children').read_text().split())
+  except (OSError,ProcessLookupError):continue
+ return None
+
+def cpu_list(value,available):
+ if not re.fullmatch(r'\d+(?:-\d+)?(?:,\d+(?:-\d+)?)*',value):
+  raise ValueError('CPU affinity must be a list such as 0,2,4-6')
+ selected=set()
+ for part in value.split(','):
+  ends=[int(x) for x in part.split('-')];first,last=ends[0],ends[-1]
+  if first>last:raise ValueError('CPU affinity ranges must be ascending')
+  if last>max(available):raise ValueError('CPU affinity includes unavailable CPUs')
+  selected.update(range(first,last+1))
+ if not selected.issubset(available):raise ValueError('CPU affinity includes unavailable CPUs')
+ return sorted(selected)
 
 def foreign_gpu_processes(text, own_group=None, process_group=os.getpgid):
  """NVIDIA compute clients, plus Spring graphics clients, outside this run."""
@@ -101,7 +130,11 @@ def foreign_gpu_processes(text, own_group=None, process_group=os.getpgid):
   pid,kind=int(fields[1]),fields[2]
   # Ordinary desktop compositor/browser graphics remain present. A competing
   # compute client or another Spring renderer is a material workload.
-  if 'C' not in kind and not re.match(r'(?i)(?:spring|recoil)',fields[-1]):continue
+  # Xorg/compositor activity can be charged for this run's presentation too.
+  # Keep their telemetry, but do not mistake it for an independent benchmark.
+  desktop=fields[-1] in ('Xorg','Xwayland','gnome-shell')
+  busy_graphics=not desktop and fields[3].isdigit() and int(fields[3])>5
+  if 'C' not in kind and not busy_graphics and not re.match(r'(?i)(?:spring|recoil|eglretrace|glretrace)',fields[-1]):continue
   if own_group is not None:
    try:
     if process_group(pid)==own_group:continue
@@ -113,8 +146,26 @@ def gpu_processes(own_group=None):
  result=subprocess.run(['nvidia-smi','pmon','-c','1','-s','um'],capture_output=True,text=True,timeout=10)
  if result.returncode:raise ValueError('GPU process guard unavailable: '+result.stderr.strip())
  if not result.stdout.startswith('# gpu'):raise ValueError('GPU process guard returned an unrecognized format')
+ fields='pstate,clocks.gr,clocks.mem,temperature.gpu,power.draw,utilization.gpu'
+ stats=subprocess.run(['nvidia-smi','--query-gpu='+fields,'--format=csv,noheader,nounits'],capture_output=True,text=True,timeout=10)
+ if stats.returncode:raise ValueError('GPU clock telemetry unavailable: '+stats.stderr.strip())
  return {'time':datetime.now(timezone.utc).isoformat(),'foreign':foreign_gpu_processes(result.stdout,own_group),
-         'pmon':result.stdout}
+         'pmon':result.stdout,'gpu_metric_fields':fields,'gpu_metrics_csv':stats.stdout}
+
+class GpuMonitor:
+ """Keep nvidia-smi's blocking one-second sample off the perf FIFO loop."""
+ def __init__(self,own_group,sampler=gpu_processes):
+  self.samples=[];self.error=None;self._stop=threading.Event()
+  def collect():
+   while not self._stop.is_set():
+    try:self.samples.append(sampler(own_group))
+    except Exception as error:self.error=error;return
+    self._stop.wait(.1)
+  self._thread=threading.Thread(target=collect,name='perf-gpu-monitor',daemon=True)
+  self._thread.start()
+ def stop(self):
+  self._stop.set();self._thread.join(12)
+  if self._thread.is_alive():self.error=TimeoutError('GPU monitor did not finish')
 
 def set_key(text,key,value):
  pattern=rf'(?im)^(\s*){re.escape(key)}\s*=[^;]*;'
@@ -130,7 +181,7 @@ def modoption(text,key,value):
   return re.sub(r'(?i)(\[modoptions\]\s*\{)',lambda m:m[0]+f'\n {key}={value};',text,count=1)
  return text[:text.rfind('}')]+f'\n[modoptions] {{{key}={value};}}\n}}\n'
 def stage_workload(staged,a):
- if a.unit_multiplier==1 and not a.frame_step:return
+ if a.unit_multiplier==1 and not a.frame_step and not a.record_world:return
  gadgets=staged/'LuaRules/Gadgets';gadgets.mkdir(parents=True,exist_ok=True)
  shutil.copyfile(PROJECT/'verification/perf/workload.lua',gadgets/'zz_perf_workload.lua')
  if a.record_world:
@@ -292,7 +343,8 @@ def run(a):
     if a.scenario=='effects' and backend=='lua':text=set_key(text,'GameType','Gravitas $VERSION')
     text=set_key(set_key(text,'FixedRNGSeed',424242),'MapName',map_name)
     text=set_key(text,'FixedUnsyncedRNGSeed',424242)
-    for key,value in [('perf_unit_multiplier',a.unit_multiplier),('perf_scale_frame',a.scale_frame),('perf_frame_step',int(a.frame_step)),('perf_sample_frame',a.warmup),('perf_record_every',a.record_every if a.record_world else 0)]:
+    if game=='ttld':text=modoption(text,'skip_intro',1)
+    for key,value in [('perf_unit_multiplier',a.unit_multiplier),('perf_scale_frame',a.scale_frame),('perf_frame_step',int(a.frame_step)),('perf_sample_frame',a.warmup),('perf_record_every',a.record_every if a.record_world else 0),('perf_record_details',int(a.record_details))]:
      text=modoption(text,key,value)
     if a.scenario=='effects':
      for key,value in [('gallery','ceg'),('fire_perf',1),('fire_perf_emitters',a.effects_multiplier)]:text=modoption(text,key,value)
@@ -341,9 +393,14 @@ def run(a):
       capture=Capture(directory,a.warmup,a.frames)
       command=capture.command(command)
       env.update(SPRING_WASM_JITDUMP='1',JITDUMPDIR=str(directory))
+     if a.trace_gl:
+      command=[str(a.apitrace),'trace','--api=egl','--output='+str(directory/'opengl.trace'),*command]
+     if a.cpu_affinity:
+      command=['taskset','--cpu-list',','.join(map(str,a.cpu_affinity)),*command]
      launched=time.monotonic()
      with (directory/'engine.log').open('wb') as log:
       process=subprocess.Popen(command,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+      gpu_monitor=GpuMonitor(process.pid) if a.wait_for_gpu_idle else None
       try:
        while process.poll() is None:
         if time.monotonic()>=min(deadline,launched+a.timeout):break
@@ -351,26 +408,35 @@ def run(a):
         if capture:capture.poll(directory/'engine.log')
         if not samples or time.monotonic()-samples[-1].get('sample_monotonic',0)>.5:
          sample=host(pressure_path);sample['sample_monotonic']=time.monotonic();samples.append(sample)
-         if a.wait_for_gpu_idle:gpu_samples.append(gpu_processes(process.pid))
-        value=process_memory(process.pid) if not capture else None
-        if value:memory.append(value)
+         pid=engine_pid(process.pid,binary)
+         value=process_memory(pid) if pid else None
+         if value:memory.append(value)
       finally:
        if process.poll() is None:
         os.killpg(process.pid,signal.SIGTERM)
         try:process.wait(5)
         except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait()
+       if gpu_monitor:
+        gpu_monitor.stop();gpu_samples.extend(gpu_monitor.samples)
      if capture:capture.finish(directory/'engine.log')
      save(directory/'host-samples.json',samples)
+     save(directory/'process-samples.json',memory)
      if a.wait_for_gpu_idle:save(directory/'gpu-processes.json',gpu_samples)
      log=(directory/'engine.log').read_text(errors='replace')
      frame_rows=rows(directory/'frames.csv') if (directory/'frames.csv').exists() else []
      frames=[int(r['frame']) for r in frame_rows if r['kind']=='sim']
      errors=re.findall(r'(?im)^.*(?:Error:|Warning:|Fatal:|Lua.*(?:error|Error)|Core Wasm callin.*failed).*$' ,log)
      errors+=re.findall(r'(?im)^.*\[PerfWorkload\] FAIL.*$',log)
+     if gpu_monitor and gpu_monitor.error:errors.append('GPU monitor failed: '+str(gpu_monitor.error))
+     if a.cpu_affinity and any(not set(mask).issubset(a.cpu_affinity)
+       for sample in memory for mask in sample.get('thread_affinities',{}).values()):
+      errors.append('Engine thread affinity escaped the requested CPU set')
      if pool_width(log)!=(a.worker_threads,a.worker_threads):errors.append('Requested ThreadPool width did not initialize')
      if a.unit_multiplier>1 and '[PerfWorkload] scaled ' not in log:errors.append('Unit scaling fixture did not complete')
      if a.scenario=='effects' and f'[FirePerf] emitters={a.effects_multiplier}' not in log:errors.append('Fire effects fixture did not initialize')
      if a.scenario=='effects' and backend=='wasm' and f'[FirePerf] Rust emitters={a.effects_multiplier}' not in log:errors.append('Rust fire renderer probe did not initialize')
+     if game=='ttld' and a.mode!='headless' and 'TTLD intro skipped (skip_intro=1)' not in log:
+      errors.append('TTLD gameplay view did not skip the intro')
      renderer=None
      if a.mode!='headless':
       renderer=re.search(r'GL renderer : ([^\n]+)',log)
@@ -402,10 +468,16 @@ def run(a):
       'script_sha256':sha(script),'settings_sha256':sha(directory/'settings.cfg'),'status':'diagnostic'}
      result['renderer']=renderer[1] if renderer else None
      result['worker_threads']=a.worker_threads
+     result['cpu_affinity']=a.cpu_affinity
      result['rust_jobs']=job_mode if backend=='wasm' else 'off'
      result['comparison_kind']='jobs' if jobs_comparison else 'lua-wasm'
      result['jobs_active']=bool(re.search(r'\[GameJobs\].*active ',log))
-     result['instrumented']=bool(a.record_world or a.profile or a.diagnostic)
+     result['instrumented']=bool(a.record_world or a.profile or a.trace_gl or a.diagnostic)
+     if a.trace_gl:
+      trace=directory/'opengl.trace'
+      result['opengl_trace']='opengl.trace'
+      if not trace.is_file() or trace.stat().st_size==0:
+       errors.append('OpenGL trace was not written');result['ok']=False
      result['gpu_process_guard']=a.wait_for_gpu_idle
      result['gpu_quiet_seconds']=10 if a.wait_for_gpu_idle else None
      result['gpu_contended']=gpu_contended
@@ -457,15 +529,22 @@ def main():
  p.add_argument('--frame-step',action='store_true',help='one simulation step per draw, using the gallery capture mechanism')
  p.add_argument('--effects-multiplier',type=int,default=1,help='Gravitas fire emitter pairs (0 gives the empty renderer baseline)')
  p.add_argument('--worker-threads',type=int,default=1,help='total engine ThreadPool width, including the main thread')
+ p.add_argument('--cpu-affinity',help='Linux CPU list for the engine and its threads; useful to hold core type constant on hybrid CPUs')
  p.add_argument('--rust-jobs',choices=['off','on','check','compare'],default='off',help='Rust pure jobs; check validates output, compare alternates off/on pairs')
  p.add_argument('--wait-for-idle',action='store_true',help='wait before each run while CPU pressure exceeds the existing contention threshold')
  p.add_argument('--cpu-pressure-scope',choices=['global','cgroup'],default='global',help='CPU pressure used by the contention guard; both global and selected pressure are recorded')
  p.add_argument('--record-world',action='store_true',help='separate diagnostic run: save observed unit/projectile positions for dots playback (never a timing baseline)')
  p.add_argument('--record-every',type=int,default=6,help='world recording interval in simulation frames')
+ p.add_argument('--record-details',action='store_true',help='include exact height, heading, velocity and command queues in diagnostic world recordings')
  p.add_argument('--profile',action='store_true',help='separate diagnostic run: sample CPU stacks with perf only after the warmup marker')
+ p.add_argument('--trace-gl',action='store_true',help='separate diagnostic run: capture EGL/OpenGL calls with installed apitrace (never a timing baseline)')
+ p.add_argument('--apitrace',default='apitrace',help='apitrace executable for --trace-gl')
  p.add_argument('--diagnostic',action='store_true',help='exclude custom probes (such as screenshot capture) from timing aggregates')
  p.add_argument('--wait-for-gpu-idle',action='store_true',help='NVIDIA: wait for competing compute/Spring graphics clients; exclude pairs if any appear during a run')
  a=p.parse_args()
+ if a.cpu_affinity:
+  try:a.cpu_affinity=cpu_list(a.cpu_affinity,os.sched_getaffinity(0))
+  except ValueError as error:p.error(str(error))
  a.games_dir=a.games_dir.resolve()
  if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
  if a.scenario=='scripted' and not a.input:p.error('scripted requires --input')
@@ -475,10 +554,13 @@ def main():
  if not 1<=a.worker_threads<=64:p.error('worker-threads must be between 1 and 64')
  if a.rust_jobs=='compare' and a.backend!='wasm':p.error('rust-jobs compare requires --backend wasm')
  if a.record_every<1:p.error('record-every must be positive')
- if a.record_world and (not a.frame_step or a.scenario=='effects'):
-  p.error('world recording requires a frame-stepped gameplay scene')
+ if a.record_details and not a.record_world:p.error('record-details requires record-world')
+ if a.record_world and (a.scenario=='effects' or (not a.frame_step and a.mode!='headless')):
+  p.error('world recording requires frame-stepped GPU rendering or headless gameplay diagnostics')
  if a.profile and not (a.frame_step or a.scenario=='effects'):
   p.error('CPU sampling requires frame stepping')
+ if a.trace_gl and (a.mode=='headless' or a.profile):
+  p.error('OpenGL tracing requires GPU rendering without CPU sampling')
  try:return run(a)
  except (ValueError,TimeoutError,KeyboardInterrupt) as e:print(str(e),file=sys.stderr);return 1
 if __name__=='__main__':raise SystemExit(main())

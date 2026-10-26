@@ -11,13 +11,13 @@
 <div class="shell">
 <nav class="side" aria-label="Report">
   <p class="eyebrow">Lua · Rust/Wasm · jobs</p>
-  <a href="#overview">The results</a>
+  <a href="#overview">Timings</a>
   <a href="#lab">Scene lab & replay</a>
   <a href="#profiles">CPU profiles</a>
-  <a href="#explanation">Why the results differ</a>
-  <a href="#optimizations">What to optimize next</a>
+  <a href="#explanation">Causes</a>
+  <a href="#optimizations">Changes and runtime costs</a>
   <a href="#method">Evidence & reproduce</a>
-  <hr><p>Actual runs. Actual positions.<br>Every replicate stays inspectable.</p>
+  <hr><p>Frame traces · worlds · CPU stacks</p>
   <a href="jobs-lua-controls-2026-10-26.csv" download>Lua/Rust CSV ↗</a>
   <a href="jobs-comparison-2026-10-26.csv" download>Jobs CSV ↗</a>
   <a href="data.json" download>Explorer data ↗</a>
@@ -25,10 +25,9 @@
 <main>
 <section id="overview">
   <p class="eyebrow">GPU-rendered game measurements · October 25–26, 2026</p>
-  <h1>The workload decides the winner.</h1>
-  <p class="lead">Rust wins in most of these scenes. Lua wins in To the Last Drop. The tested jobs kernels do not produce a clear whole-frame win at pool width four.</p>
-  <p>Compare complete frame time below, then inspect the simulation, drawing, API costs and recorded scene. These are measurements of the game ports; they are not a universal language ranking.</p>
-  <div class="facts"><div><strong>250</strong><span>NVIDIA GPU runs</span></div><div><strong>124 / 125</strong><span>accepted paired comparisons</span></div><div><strong>600</strong><span>measured rendered steps / run</span></div><div><strong>1 & 4</strong><span>engine pool widths, main included</span></div></div>
+  <h1>SpringCabal benchmarks</h1>
+  <p class="note"><strong>Earlier campaign.</strong> These charts precede the startup, RNG and render-target corrections being checked now. They compare the old ports' workloads; they do not isolate language or API cost.</p>
+  <div class="facts"><div><strong>250</strong><span>NVIDIA GPU runs</span></div><div><strong>124 / 125</strong><span>completed / CPU-screened pairs</span></div><div><strong>600</strong><span>measured rendered steps / run</span></div><div><strong>1 & 4</strong><span>engine pool widths, main included</span></div></div>
   <div class="toolbar"><h2>Rust time change versus Lua</h2><label>Measure <select id="overview-metric"><option value="wall_mean">Whole frame · window mean</option><option value="sim_p50">Simulation · p50</option><option value="draw_p50">Drawing · p50</option><option value="cpu_p95">Sim + draw · p95</option></select></label></div>
   <p class="caption">Left is less time in Rust; right is less time in Lua. Click a scene to inspect it. The dot is the mean paired time ratio; whiskers are its bootstrap 95% interval across five pairs.</p>
   <div id="overview-chart" class="chart"></div>
@@ -36,11 +35,10 @@
 </section>
 
 <section id="lab">
-  <p class="eyebrow">Inspect the work behind a number</p>
   <div class="toolbar"><h2>Scene lab</h2><label>Scene <select id="scene"></select></label><label>Compare <select id="comparison"><option value="language">Lua / serial Rust</option><option value="jobs4">Rust jobs off / on · pool 4</option><option value="jobs1">Rust jobs off / on · pool 1</option></select></label></div>
   <p id="scene-note" class="note"></p>
   <div class="scene-numbers" id="scene-numbers"></div>
-  <div class="two"><div><h3>Every paired repeat</h3><div id="repeat-chart" class="chart"></div></div><div><h3>Where the scoped time goes</h3><div id="cost-chart" class="chart"></div><p class="caption">Mean measured simulation + draw scope. Lua callback time includes its native API work. Wasm imports are nested inside Wasm callbacks and are split out once. Outside callbacks includes native engine work and waits.</p></div></div>
+  <div class="two"><div><h3>Every paired repeat</h3><div id="repeat-chart" class="chart"></div></div><div><h3>Where the scoped time goes</h3><div id="cost-chart" class="chart"></div><p class="caption">Mean measured simulation + draw scope. Lua callback time includes its native API work. Wasm imports are nested inside Wasm callbacks and are split out once. The unscoped remainder includes native engine work, CUS execution and waits. The Wasm counter does not cover CUS ticks.</p></div></div>
   <details><summary>Individual run records, counters and acceptance</summary><div class="table-scroll"><table><thead><tr><th>Pair</th><th>Version</th><th>Whole ms/frame</th><th>Sim p50</th><th>Draw p50</th><th>Median units</th><th>Draw imports</th><th>Included?</th></tr></thead><tbody id="run-rows"></tbody></table></div></details>
   <div class="toolbar"><h3>Frame-by-frame trace</h3><label>Pair <select id="repeat"></select></label><label>Trace <select id="trace-metric"><option value="cpu">Sim + draw · ms</option><option value="sim">Simulation · ms</option><option value="draw">Drawing · ms</option><option value="units">Units · count</option><option value="projectiles">Projectiles · count</option></select></label></div>
   <div id="trace-chart" class="chart"></div><p class="caption" id="trace-detail">Exact frame samples, 300–899. Hover or tap for both versions. The thin line shows every frame; a heavy line shows a 15-frame mean.</p>
@@ -54,7 +52,6 @@
 </section>
 
 <section id="profiles">
-  <p class="eyebrow">Sampled CPU stacks, independent of replay capture</p>
   <div class="toolbar"><h2>What the CPU was doing</h2><label>Capture <select id="profile"></select></label><label>Thread <select id="thread"></select></label></div>
   <p id="profile-meta" class="caption"></p>
   <p>Width means sampled user-space CPU time in the selected thread, not elapsed frame time or GPU utilization. GPU-driver symbols are often private, but their library and visible caller remain identifiable. Missing unwind parents remain missing; no call chain is invented.</p>
@@ -65,17 +62,15 @@
 </section>
 
 <section id="explanation">
-  <p class="eyebrow">Follow the evidence, not the language label</p>
-  <h2>Why can either version be faster?</h2>
-  <p>Both versions hand most world simulation and rendering to the same native engine. Lua calls native functions directly through its API. Rust executes compiled Wasm and crosses a typed host boundary for engine access. Rust can save interpreter, table and allocation work; it can also lose that gain to tiny imports, serialization, extra engine work or a different rendering workload.</p>
-  <div class="explanations">
-  <article><h3>Hunted: fixing extra work mattered more than syntax.</h3><p>The first Rust port left per-team global LOS disabled while Lua enabled it. That caused extra native LOS raycasting. Restoring the same setting removed that cost. The subsequent pass uses a spatial food index, scalar Lua movement and cached Rust static surroundings. At 10×, Rust now spends much less time in both simulation and drawing.</p><p>That result supports efficient compiled game logic and fewer temporary data structures; it does not isolate a language constant. Startup input timing can change the first wave’s random sequence, so the recorded paths and later populations are not guaranteed equal.</p><a href="https://github.com/SpringCabal/Hunted/blob/e916b24080968f6fdbc7b0a3c6674e236d68163f/wasm-src/rules-synced/src/gadgets/rabbit_ai.rs">Rust snapshot cache ↗</a></article>
-  <article><h3>Flove: the dense scene is largely an engine workload.</h3><p>Lua’s targeting now snapshots eligible targets once per AI tick, reuses weights and avoids copying command queues. Both renderers cache wisp geometry across passes. Rust’s dense scene is faster, but its host imports consume much more time than its remaining Wasm-only work. Rewriting arithmetic again cannot remove native collision, weapon or drawing costs.</p><p>Both target selectors preserve candidate order and random draw order. A nearest-target spatial index alone is not an equivalent replacement for weighted selection over every eligible target. Rust also retains its animated outlines and hover highlight.</p><a href="https://github.com/SpringCabal/Flove/tree/26869d0b7a230fa42eec791303340587b8a45b59/wasm-src/rules-synced/src/mushrooms">Targeting and jobs code ↗</a></article>
-  <article><h3>To the Last Drop: Lua’s advantage is mostly outside Wasm callbacks.</h3><p>At 10× with shadows on in both, mean drawing is about 10.6 ms for Lua and 20.8 ms for Rust in the saved timing runs. All Rust callbacks, simulation and drawing combined, account for about 2.3 ms, including 1.0 ms in imports. Faster Wasm arithmetic cannot explain away the roughly 11 ms total gap.</p><p id="ttld-profile-finding">The separate CPU profiles contain NVIDIA-driver samples under <code>IStreamBufferConcept::WaitBuffer</code>. The pinned engine loops around <code>glClientWaitSync</code> to wait for a buffer’s GPU fence before reuse. At 10×, roughly 20% of sampled Lua main-thread CPU and 18% of Rust main-thread CPU have that visible ancestor. This demonstrates waits in those captures, not the cause of the original gap. Another engine shared the GPU, and the instrumented timing direction reversed.</p><p>It is not justified to call TTLD finished. The next test should isolate shadow/model streaming costs while keeping positions, poses and visual settings fixed, rather than remove an effect and declare the language faster.</p></article>
-  <article><h3>Area 17: fewer scans and crossings, modest whole-game gain.</h3><p>Both ports now query nearby civilians once and retain the original ordered, strict base-position fear test. Rust’s normal per-frame import median fell from 1,037 to 59 in the optimization experiment. Much of the remaining scene cost is native unit movement and drawing, so the whole-frame win is smaller than the reduction in API calls.</p><p>The useful stress case is 2×. The attempted 10× Lua run hit its allocation ceiling, while Rust hit unit creation limits. Those failed scenes are not included as successful benchmarks.</p><a href="https://github.com/SpringCabal/Area-17/tree/b99b0a1dfeb5cb47a7aad34e1e991c8c9169843b">Rust game source ↗</a></article>
-  <article><h3>Gravitas fire: fewer host calls plus compiled particle work.</h3><p>Lua caches expression factories while giving each particle a fresh mutable environment. Rust streams packed flame/smoke vertices into reusable native buffers. At ten emitter pairs, the previous per-vertex implementation made 35,558 drawing imports per frame; the final serial renderer makes 2,804. That change has a measured benefit, and the existing fire image comparison checks that the look is retained.</p><p>One emitter pair is close enough that the paired interval crosses a tie. At ten pairs, Rust’s advantage is clear. At 100 pairs, Rust’s existing 32,768-particle cap differs from the uncapped Lua fixture: that is not an equal-particle language comparison.</p></article>
-  <article><h3>Why these jobs do not win at pool width four.</h3><p>The released API copies input/output packets and instantiates a fresh private Wasmtime store per job. These kernels use immutable snapshots and ordered results; RNG, commands and mutations stay on the original thread. There is real parallel work, but also packing, dispatch, joining and result application.</p><p>Hunted’s small light calculation cannot repay that cost. Flove parallelizes target statistics, not the expensive native combat. Fire shifts billboard math to workers, but still transfers records and expands vertices on the caller. The one-thread experiment exposes much of this overhead without a parallel execution benefit. Four threads recover some of it, but do not deliver a clear overall win here.</p><a href="https://github.com/gajop/spring-rust/blob/dd05f8647458ff5541a8aee8d43b6218a64eaef8/rts/WasmInterface/jobs/WasmJobProgram.cpp">Pinned worker implementation ↗</a></article>
-  </div>
+  <h2>Causes and corrections</h2>
+  <div class="table-scroll"><table><thead><tr><th>Game</th><th>Found in the parity audit</th><th>Changed</th></tr></thead><tbody>
+  <tr><td>To the Last Drop</td><td>Different initialization phases, RNG ordering, house-light choices and HDR formats. Rust used RGBA32F; Lua used RGB32F.</td><td>Frame-zero population; matching random draws and light masks; cached unit scales; RGB lighting/bloom targets. Gameplay-view reruns pending.</td></tr>
+  <tr><td>Flove</td><td>Tunnels spawned before groves; missing placement jitter; wisp RNG delayed until after grass; different marker ownership.</td><td>Same creation phases and order. Tree-only growth shuffle in both; terrain-height spawns. Initial 189-unit worlds match; later growth and gameplay checks continue.</td></tr>
+  <tr><td>Area 17</td><td>Rust used building midpoints for placement and sampled all placements before creation. Ground movement applied only maximum speed.</td><td>Base positions; adjacent placement/creation; canonical spawner/type order; matching acceleration, braking and turning. Collision-state audit continues.</td></tr>
+  <tr><td>Hunted</td><td>Batched versus immediate world creation; different burrow RNG algorithm; reversed jitter draws; different actor order.</td><td>One frame-zero setup; matching burrow-family scheduler and random calls; ordered actors. Movement parity checks continue.</td></tr>
+  <tr><td>Gravitas fire</td><td>Lua evaluates curves in a vertex shader. Rust samples curves and expands billboards on the CPU. The 100-emitter particle budgets differ.</td><td>The existing packed-buffer optimization is in the charts. GPU expansion and equal-budget comparisons remain in this optimization pass.</td></tr>
+  </tbody></table></div>
+  <p class="caption">The old CPU profiles identify buffer-fence waits in those captures. They do not attribute the earlier TTLD frame gap. GL-command inspection found the lighting-format difference; the final result will use fresh gameplay-view runs on the unchanged engine.</p>
   <div id="followup" hidden>
     <h3>TTLD follow-up with a GPU-process guard</h3>
     <p id="followup-status"></p>
@@ -85,26 +80,20 @@
 </section>
 
 <section id="optimizations">
-  <p class="eyebrow">Optimized is a claim about eliminated waste, not a finish line</p>
-  <h2>What is already improved — and where to go next</h2>
-  <p>There is concrete evidence of useful optimization: fewer API calls, fewer repeated scans and allocations, reused geometry, conservative visibility culling, and release LTO. The before/after tests retain state/event checks where applicable, plus existing pose and image comparisons. That supports “substantially optimized.” It does not establish optimal algorithms, renderer parity or a hardware ceiling.</p>
+  <h2>Measured earlier optimizations</h2>
   <div class="toolbar"><h3>Measured changes in each implementation</h3><label>Show <select id="optimization-backend"><option value="lua">Lua</option><option value="wasm">Rust</option></select></label></div><div id="optimization-chart" class="chart"></div><p class="caption">Each row compares that backend with its own frozen earlier source. These are selected workload/scope improvements, not gains inferred by comparing the Lua and Rust languages. Three-pair rows have no bootstrap interval in the saved campaign.</p>
   <div id="ceiling" class="note"></div>
-  <div class="table-scroll"><table class="next"><thead><tr><th>Next experiment</th><th>Why it is worth doing</th><th>What would prove it</th></tr></thead><tbody>
-  <tr><td>TTLD shadow and model streaming</td><td>The largest unexplained gap lies outside timed Wasm callbacks, especially at 10×. Inspect buffer fences, model uploads and visible model/piece counts.</td><td>Paired GPU timings with identical captured state/poses; separate shadow and main passes. Shadow-off is an attribution probe, not a production “optimization.”</td></tr>
-  <tr><td>Bulk host operations</td><td>Dense Flove and Area 17 have little remaining Wasm-only cost. More useful work per crossing can beat instruction-level tuning.</td><td>Lower import counts/packing cost and a full-frame gain while retaining command/RNG order and the same engine work. An engine ABI change needs its own tested release.</td></tr>
-  <tr><td>Coarser jobs or reusable worker state</td><td>Fresh stores and copied packets are a fixed tax. Persistent workers or larger batches could change the crossover point.</td><td>An off/on matrix with identical output, at several pool widths and useful-work sizes. Measure packing, store creation, worker execution and join separately.</td></tr>
-  <tr><td>Flove weighted targeting</td><td>Repeated all-target statistics still scale poorly as the candidate roster grows.</td><td>A data structure that preserves exact weighted probabilities, eligibility and ordering. Benchmark dense combat, not just an idle roster.</td></tr>
-  <tr><td>GPU particle expansion</td><td>Gravitas still builds billboard data on the CPU; instancing could cut packing and upload volume.</td><td>Matched particle counts, texture order, blending, fog and distortion; GPU pass timestamps and the existing image checks.</td></tr>
-  <tr><td>Allocation and ABI microbenchmarks</td><td>They can identify a fixable crossing or allocator cost, but cannot rank whole games.</td><td>A microbenchmark tied to a sampled hot path, followed by a repeatable win in the original scene.</td></tr>
-  <tr><td>Counter-overhead control</td><td>The current engine reads clocks around Wasm imports and outer Lua callbacks. Those are different numbers of timer reads; the timings are not zero-overhead production measurements.</td><td>Repeat complete-window measurements with counters disabled, retaining the same scripted frame markers and checking the workload separately. Especially relevant to small percentage differences.</td></tr>
+  <div class="table-scroll"><table><thead><tr><th>Pinned-runtime cost</th><th>Implementation</th></tr></thead><tbody>
+  <tr><td>Wasm imports</td><td>Typed host calls include argument packing, dispatch and result copying. Import time is nested within measured Wasm callbacks.</td></tr>
+  <tr><td>Jobs</td><td>Each job instantiates a private Wasmtime store and copies its input/output. Kernels must repay packing, dispatch, joining and application costs.</td></tr>
+  <tr><td>Shared engine work</td><td>Native movement, pathfinding, model submission and GPU synchronization run in both versions. Equal settings and counts alone do not prove equal submitted work.</td></tr>
   </tbody></table></div>
-  <p>Discarded experiments matter too: a shape-based fire batching trial was slower, a Hunted iterator rewrite showed no gain, and optional jobs do not improve these pool-four whole-frame results. Those findings justify keeping the simpler serial defaults; they do not rule out all future parallel or GPU approaches.</p>
+
 </section>
 
 <section id="method">
   <p class="eyebrow">Reproduce and audit</p>
-  <h2>Keep each kind of evidence in its place.</h2>
+  <h2>Method and source data</h2>
   <div class="three"><article><h3>Timings</h3><p>Five alternating pairs; 300 warmup steps, 600 measured steps, one draw per step, 1024×736, VSync off, sound off. Both members of a pair are excluded if either fails or crosses the CPU-pressure threshold. One Flove pair is excluded.</p></article><article><h3>World recordings</h3><p>Fresh runs with a read-only observer, derived from Ship Game’s recording approach. All observed units and sampled projectiles are retained. They show workload and movement; serialization makes them unsuitable timing baselines.</p></article><article><h3>CPU sampling</h3><p>Fresh runs without the world observer. Linux perf samples user CPU at 499 Hz with DWARF stacks and JIT names. Sampling perturbs execution; stack proportions diagnose hot paths, rather than replace paired timings.</p></article></div>
   <p>The engine and SDK remain pinned to release 2026.10.25. NVIDIA hardware rendering is required; the existing runner rejects llvmpipe and other software renderers. The cgroup pressure guard retains both global and local readings and fails closed. It does not certify exclusive GPU access.</p>
   <p>Native work and visible output are not identical across all ports. Flove retains Rust-only visual improvements; Hunted startup decisions can vary; TTLD uses shadows on in both selected controls; the 100-emitter fire row has unequal particle caps. The scene lab exposes populations and traces alongside the times.</p>

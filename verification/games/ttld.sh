@@ -175,6 +175,8 @@ ttld_headless() {
     local seconds=${1:-45}
     vf_cleanup_on_exit
 
+    lua5.1 "$FIXTURES_DIR/ttld/lua_lighting_test.lua" "$GAMES_DIR/ToTheLastDrop.sdd"
+
     vf_workspace ttld-headless
     ttld_stage headless-integration
     vf_quit_when "$TEST_MARKER"

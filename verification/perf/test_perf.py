@@ -6,16 +6,43 @@ import run
 import report
 import dashboard
 import profile_export
+import threading
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_gpu_sampling_does_not_block_the_frame_marker_controller(self):
+        entered=threading.Event();release=threading.Event()
+        def sample(group):
+            entered.set();release.wait(1)
+            return {'group':group,'foreign':[]}
+        monitor=run.GpuMonitor(123,sample)
+        self.assertTrue(entered.wait(1))
+        self.assertEqual(monitor.samples, [])
+        release.set();monitor.stop()
+        self.assertIsNone(monitor.error)
+        self.assertEqual(monitor.samples[0]['group'],123)
+
+    def test_gpu_monitor_failure_is_retained_for_run_rejection(self):
+        entered=threading.Event()
+        def sample(_):
+            entered.set();raise ValueError('driver unavailable')
+        monitor=run.GpuMonitor(123,sample)
+        self.assertTrue(entered.wait(1));monitor.stop()
+        self.assertIsInstance(monitor.error,ValueError)
+
+    def test_affinity_rejects_invalid_or_unavailable_cpu_sets(self):
+        self.assertEqual(run.cpu_list('0,2-4,2',set(range(8))), [0,2,3,4])
+        for value in ['', '3-1', '2,9', '-1', '0,,2', '0;true']:
+            with self.assertRaises(ValueError):run.cpu_list(value,set(range(8)))
+
     def test_gpu_guard_distinguishes_desktop_own_and_foreign_clients(self):
         sample = ('# gpu pid type sm command\n'
-                  '0 10 G - Xorg\n0 20 G - spring\n'
-                  '0 30 C+G 99 spring\n0 40 C 80 python\n')
-        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample)], [20, 30, 40])
-        groups = {20: 123, 30: 321, 40: 321}
-        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample, 123, groups.__getitem__)], [30, 40])
+                  '0 10 G 20 Xorg\n0 20 G - spring\n'
+                  '0 30 C+G 99 spring\n0 40 C 80 python\n'
+                  '0 50 G - eglretrace\n0 60 G 25 blender\n')
+        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample)], [20, 30, 40, 50, 60])
+        groups = {20: 123, 30: 321, 40: 321, 50: 321, 60: 321}
+        self.assertEqual([p['pid'] for p in run.foreign_gpu_processes(sample, 123, groups.__getitem__)], [30, 40, 50, 60])
 
     def test_pressure_guard_uses_selected_scope_and_fails_closed(self):
         sample = {'cpu_pressure': 'some avg10=40.00 avg60=20.00'}

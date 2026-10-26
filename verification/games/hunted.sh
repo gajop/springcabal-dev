@@ -18,6 +18,7 @@ MODULES=(
 )
 
 hunted_headless() {
+    lua5.1 "$FIXTURES_DIR/hunted/lua_regressions.lua" "$GAMES_DIR/Hunted.sdd"
     local seconds=${1:-60} asset staged checks
     vf_cleanup_on_exit
 
