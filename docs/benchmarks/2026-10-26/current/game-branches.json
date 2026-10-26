@@ -1,0 +1,156 @@
+[
+  {
+    "game": "Hunted.sdd",
+    "branch": "master",
+    "public_branch": "master",
+    "head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "frozen_expected": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "remote": "git@github.com:SpringCabal/Hunted.git",
+    "remote_head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "Hunted-wasm.sdd",
+    "branch": "rust",
+    "public_branch": "rust",
+    "head": "bfd28b8be617b4bcf6289cddf263079ccdd714ff",
+    "frozen_expected": "bfd28b8be617b4bcf6289cddf263079ccdd714ff",
+    "remote": "git@github.com:SpringCabal/Hunted.git",
+    "remote_head": "bfd28b8be617b4bcf6289cddf263079ccdd714ff",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "ToTheLastDrop.sdd",
+    "branch": "master",
+    "public_branch": "master",
+    "head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+    "frozen_expected": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+    "remote": "git@github.com:SpringCabal/LD43.git",
+    "remote_head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "ToTheLastDrop-wasm.sdd",
+    "branch": "ttld-wasm-port",
+    "public_branch": "rust",
+    "head": "036dadbe47d5b4d5c5db4eefd00ccc818f6cd1d8",
+    "frozen_expected": "036dadbe47d5b4d5c5db4eefd00ccc818f6cd1d8",
+    "remote": "git@github.com:SpringCabal/LD43.git",
+    "remote_head": "036dadbe47d5b4d5c5db4eefd00ccc818f6cd1d8",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "Flove.sdd",
+    "branch": "main",
+    "public_branch": "master",
+    "head": "ff06007e58303e169a7a39d301f70b479d745625",
+    "frozen_expected": "ff06007e58303e169a7a39d301f70b479d745625",
+    "remote": "git@github.com:SpringCabal/Flove.git",
+    "remote_head": "ff06007e58303e169a7a39d301f70b479d745625",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "Flove-wasm.sdd",
+    "branch": "rust",
+    "public_branch": "rust",
+    "head": "889fc7c9f9f5418839ea0bdee7b5e1636e86a28d",
+    "frozen_expected": "889fc7c9f9f5418839ea0bdee7b5e1636e86a28d",
+    "remote": "git@github.com:SpringCabal/Flove.git",
+    "remote_head": "889fc7c9f9f5418839ea0bdee7b5e1636e86a28d",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "Area-17.sdd",
+    "branch": "master",
+    "public_branch": "master",
+    "head": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+    "frozen_expected": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+    "remote": "git@github.com:SpringCabal/Area-17.git",
+    "remote_head": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "Area17-wasm.sdd",
+    "branch": "rust",
+    "public_branch": "rust",
+    "head": "a73592cc51f36322e7b03024ab1439ef73e88893",
+    "frozen_expected": "a73592cc51f36322e7b03024ab1439ef73e88893",
+    "remote": "git@github.com:SpringCabal/Area-17.git",
+    "remote_head": "a73592cc51f36322e7b03024ab1439ef73e88893",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "MyCube.sdd",
+    "branch": "master",
+    "public_branch": "master",
+    "head": "4698657d927b4eac083319f86b177195e1ef7480",
+    "frozen_expected": "4698657d927b4eac083319f86b177195e1ef7480",
+    "remote": "git@github.com:SpringCabal/LD42.git",
+    "remote_head": "4698657d927b4eac083319f86b177195e1ef7480",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "MyCube-wasm.sdd",
+    "branch": "mycube-wasm-port",
+    "public_branch": "rust",
+    "head": "ada482206a1a868ea601d09ee296abf17e9cc637",
+    "frozen_expected": "ada482206a1a868ea601d09ee296abf17e9cc637",
+    "remote": "git@github.com:SpringCabal/LD42.git",
+    "remote_head": "ada482206a1a868ea601d09ee296abf17e9cc637",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "PartsNeeded.sdd",
+    "branch": "master",
+    "public_branch": "master",
+    "head": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+    "frozen_expected": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+    "remote": "git@github.com:SpringCabal/LD35.git",
+    "remote_head": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "PartsNeeded-wasm.sdd",
+    "branch": "partsneeded-wasm-port",
+    "public_branch": "rust",
+    "head": "36ddaad8eb2e023700c11f7d9da5ba1f060e49c5",
+    "frozen_expected": "36ddaad8eb2e023700c11f7d9da5ba1f060e49c5",
+    "remote": "git@github.com:SpringCabal/LD35.git",
+    "remote_head": "36ddaad8eb2e023700c11f7d9da5ba1f060e49c5",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "Gravitas.sdd",
+    "branch": "master",
+    "public_branch": "master",
+    "head": "28f46bf874131e7b05efe293fe97df870c4bc0f5",
+    "frozen_expected": "28f46bf874131e7b05efe293fe97df870c4bc0f5",
+    "remote": "git@github.com:SpringCabal/Gravitas.git",
+    "remote_head": "28f46bf874131e7b05efe293fe97df870c4bc0f5",
+    "dirty": "",
+    "committed_and_pushed": true
+  },
+  {
+    "game": "Gravitas-wasm.sdd",
+    "branch": "gravitas-wasm-port",
+    "public_branch": "rust",
+    "head": "1df6daf3e0d9ccf8474776c4c3baaddbef769791",
+    "frozen_expected": "1df6daf3e0d9ccf8474776c4c3baaddbef769791",
+    "remote": "git@github.com:SpringCabal/Gravitas.git",
+    "remote_head": "1df6daf3e0d9ccf8474776c4c3baaddbef769791",
+    "dirty": "",
+    "committed_and_pushed": true
+  }
+]

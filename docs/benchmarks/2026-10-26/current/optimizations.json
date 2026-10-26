@@ -1,0 +1,52 @@
+[
+  {
+    "id": "hunted-snapshot-1x",
+    "title": "Hunted",
+    "load": "1\u00d7",
+    "backends": [
+      "wasm"
+    ],
+    "change": "Candidate, not adopted: build static target lists in one pass through the Lua swap-removal order; remove repeated per-category sorting.",
+    "backend": "wasm",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "hunted-snapshot-10x",
+    "title": "Hunted",
+    "load": "10\u00d7",
+    "backends": [
+      "wasm"
+    ],
+    "change": "Candidate, not adopted: build static target lists in one pass through the Lua swap-removal order; remove repeated per-category sorting.",
+    "backend": "wasm",
+    "measured_rounds": 1,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 4,
+    "wall_before_ms": 3.750395,
+    "wall_after_ms": 3.4958483333333326,
+    "wall_change_pct": -6.787196193112132,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": 1.554894,
+    "sim_after_ms": 1.5310709999999998,
+    "sim_change_pct": -1.5321301644999674,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": 1.783298,
+    "draw_after_ms": 1.79185,
+    "draw_change_pct": 0.4795609034496717,
+    "draw_mean_ratio_95ci": null
+  }
+]
