@@ -207,6 +207,9 @@ class EquivalenceTests(unittest.TestCase):
             stamp['engine_sha256']='same';stamp['args']['unit_multiplier']=10;path.write_text(json.dumps(stamp))
             with self.assertRaisesRegex(ValueError, 'unit_multiplier'):
                 report.source_optimization_summary(manifest, root)
+            stamp['args']['unit_multiplier']=1;stamp['runner_sha256']='new runner'
+            path.write_text(json.dumps(stamp))
+            self.assertTrue(all(r['measured_rounds']==0 for r in report.source_optimization_summary(manifest, root)))
 
     def test_lua_only_source_change_uses_its_clean_runs_without_a_rust_counterpart(self):
         with tempfile.TemporaryDirectory() as directory:

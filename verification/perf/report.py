@@ -167,6 +167,9 @@ def source_optimization_summary(manifest, project):
             if set(phases) != {'before', 'after'}:
                 continue
             before, after = phases['before'], phases['after']
+            # A guard/framework update during a campaign needs a fresh pair.
+            if before[1].get('runner_sha256') != after[1].get('runner_sha256'):
+                continue
             for key in ('input_sha256', 'effective_input_sha256'):
                 if before[1].get(key) != after[1].get(key):
                     raise ValueError(f'Source A/B has different {key}')
