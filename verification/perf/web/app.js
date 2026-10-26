@@ -26,7 +26,7 @@ function loadAsset(asset){
   let resolve,reject;const promise=new Promise((ok,no)=>{resolve=ok;reject=no;});requests.set(asset.key,{promise,resolve,reject});
   const script=document.createElement('script');script.src=asset.url;script.onerror=()=>reject(Error('Could not load '+asset.url));document.head.append(script);return promise;
 }
-const fmt=(v,n=3)=>Number.isFinite(v)?v.toFixed(n):'—', pct=v=>(v>0?'+':'')+fmt(v,1)+'%', mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
+const fmt=(v,n=3)=>Number.isFinite(v)?v.toFixed(n):'—', pct=v=>Number.isFinite(v)?(v>0?'+':'')+fmt(v,1)+'%':'—', mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
 const color=name=>getComputedStyle(document.documentElement).getPropertyValue('--'+name).trim();
 function option(select,value,label){const o=document.createElement('option');o.value=value;o.textContent=label;select.append(o);return o;}
 function element(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}

@@ -14,6 +14,14 @@ from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_empty_report_clears_a_previous_campaign_export(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/'jobs'
+            report.write_rows(output, [{'campaign': 'previous', 'measured_pairs': 5}])
+            report.write_rows(output, [])
+            self.assertEqual(json.loads(output.with_suffix('.json').read_text()), [])
+            self.assertEqual(output.with_suffix('.csv').read_text(), '')
+
     def jit_fixture(self, root, loads, flags=0, extra=b''):
         data = struct.pack('<6I2Q', 0x4a695444, 1, 40, 62, 0, 42, 0, flags)
         for address, name, timestamp in loads:

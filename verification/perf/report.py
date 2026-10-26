@@ -186,6 +186,8 @@ def source_optimization_summary(manifest, project):
 
 def write_rows(path, rows):
     if not rows:
+        path.with_suffix('.csv').write_text('')
+        path.with_suffix('.json').write_text('[]\n')
         return
     with path.with_suffix('.csv').open('w') as stream:
         writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator='\n')
