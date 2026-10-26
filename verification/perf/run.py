@@ -354,6 +354,9 @@ def run_locked(a,lease):
  output.mkdir(parents=True,exist_ok=True)
  engine=a.engine.resolve();binary=engine/('spring-headless' if a.mode=='headless' else 'spring')
  if not binary.is_file():raise ValueError(f'missing engine: {binary}')
+ # Probe builds and private staging also consume disk; refuse them before
+ # writing those artifacts, then recheck before each engine launch below.
+ storage.require_space(output,a.min_free_gib)
  backends=('lua','wasm') if a.backend=='both' else (a.backend,)
  jobs_comparison=a.rust_jobs=='compare'
  variants=[('wasm','off'),('wasm','on')] if jobs_comparison else [(backend,a.rust_jobs) for backend in backends]

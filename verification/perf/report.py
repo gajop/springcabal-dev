@@ -114,6 +114,9 @@ def source_optimization_summary(manifest, project):
     """Compare the same backend before/after using complete four-run rounds."""
     output = []
     for experiment in manifest:
+        backends = experiment.get('backends', ['lua', 'wasm'])
+        if not backends or len(set(backends)) != len(backends) or not set(backends) <= {'lua', 'wasm'}:
+            raise ValueError('Source A/B backends must select lua, wasm, or both')
         rounds = []
         attempted = 0
         for candidates in experiment['rounds']:
@@ -129,10 +132,12 @@ def source_optimization_summary(manifest, project):
                     pairs = {}
                     for path in sorted(directory.glob('*/result.json')):
                         result = json.loads(path.read_text())
+                        if result['backend'] not in backends:
+                            continue
                         pairs.setdefault(result['repeat'], {})[result['backend']] = (result, path)
                     attempted += len(pairs)
                     for pair in pairs.values():
-                        if set(pair) != {'lua', 'wasm'}:
+                        if set(pair) != set(backends):
                             continue
                         if all(r['ok'] and not r['contended'] and is_timing(r) for r, _ in pair.values()):
                             choices.append((pair, stamp))
@@ -149,13 +154,13 @@ def source_optimization_summary(manifest, project):
                     raise ValueError(f'Source A/B has different {key}')
             if before[1]['engine_sha256'] != after[1]['engine_sha256']:
                 raise ValueError('Source A/B must use the same engine binary')
-            for backend in ('lua', 'wasm'):
+            for backend in backends:
                 a, b = before[0][backend][0], after[0][backend][0]
                 for key in ('game', 'worker_threads', 'cpu_affinity', 'unit_multiplier', 'effects_multiplier', 'fire_renderer', 'callback_timers'):
                     if a.get(key) != b.get(key):
                         raise ValueError(f'Source A/B has different {key}')
             rounds.append(phases)
-        for backend in ('lua', 'wasm'):
+        for backend in backends:
             row = {k: v for k, v in experiment.items() if k != 'rounds'}
             row.update(backend=backend, measured_rounds=len(rounds), planned_rounds=len(experiment['rounds']),
                        attempted_phase_pairs=attempted, evidence=[])

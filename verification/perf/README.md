@@ -84,6 +84,9 @@ The default remains both backends and the normal checkout directory. Run one
 repeat from each revision, reverse revision order on the next pair, and keep
 the engine, map, settings and scene parameters identical. The staged content
 and module hashes identify each revision even before its changes are committed.
+Source A/B manifests default to both languages; set `"backends": ["lua"]`
+or `["wasm"]` for a change affecting only that language. Only its complete,
+clean before/after rounds enter the optimization table.
 
 The mushroom combat input used for the optimization campaign is included:
 
@@ -158,7 +161,7 @@ frame with interpolation fixed. It runs as fast as the engine can draw; it
 does not record a video. This keeps the number of renders comparable across
 backends. The runner verifies exactly one draw for every measured simulation
 frame. Five repeats alternate Lua-first and Rust-first order. `verify all`
-includes the perf runner's twenty-three regression tests, without launching benchmarks.
+includes the perf runner's 35 regression tests, without launching benchmarks.
 
 `--unit-multiplier N` clones each unit present at frame 60, including its
 health and up to 32 queued orders. Normal creation handlers, scripts and AI

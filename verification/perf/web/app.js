@@ -79,7 +79,8 @@ function optimizationTable(){
   body.replaceChildren();evidence.replaceChildren();
   for(const r of DATA.optimization??[]){
     const tr=document.createElement('tr');
-    for(const value of [r.title+' · '+r.load,r.backend==='lua'?'Lua':'Rust',fmt(r.wall_before_ms)+' → '+fmt(r.wall_after_ms),pct(r.wall_change_pct),fmt(r.sim_before_ms)+' → '+fmt(r.sim_after_ms),fmt(r.draw_before_ms)+' → '+fmt(r.draw_after_ms),r.measured_rounds+' / '+r.planned_rounds]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);
+    const interval=r.wall_mean_ratio_95ci?.map(v=>pct((v-1)*100)).join(' to ')??'—';
+    for(const value of [r.title+' · '+r.load,r.backend==='lua'?'Lua':'Rust',fmt(r.wall_before_ms)+' → '+fmt(r.wall_after_ms),pct(r.wall_change_pct),interval,fmt(r.sim_before_ms)+' → '+fmt(r.sim_after_ms),fmt(r.draw_before_ms)+' → '+fmt(r.draw_after_ms),r.measured_rounds+' / '+r.planned_rounds]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);
     const details=document.createElement('details'), heading=document.createElement('summary');heading.textContent=r.title+' · '+r.load+' · '+(r.backend==='lua'?'Lua':'Rust');details.append(heading);
     const note=document.createElement('p');note.textContent=r.change;details.append(note);
     const paths=document.createElement('pre');paths.textContent=r.evidence.map((p,i)=>'Round '+(i+1)+'\n'+p.before+'\n'+p.after).join('\n\n');details.append(paths);evidence.append(details);
@@ -111,6 +112,8 @@ function drawTrace(){
 async function selectScene(id){state.scene=DATA.scenes.find(s=>s.id===id)??DATA.scenes[0];$('scene').value=state.scene.id;const select=$('comparison');for(const o of select.options)o.disabled=o.value.startsWith('language')?!state.scene[o.value]:!state.scene.jobs[o.value==='jobs1'?'1':'4'];if(select.selectedOptions[0].disabled)select.value='language';state.comparison=select.value;refreshScene();}
 function refreshScene(){
   const s=summary(),n=names(),a=s[isLanguage()?'wall_mean_lua_ms':'wall_mean_off_ms'],b=s[isLanguage()?'wall_mean_rust_ms':'wall_mean_on_ms'],change=s[isLanguage()?'wall_mean_paired_rust_change_pct':'wall_mean_paired_jobs_change_pct'];
+  const runtime=s.runtime;
+  $('scene-runtime').textContent=runtime?`Engine ${runtime.engine_commit??'unknown commit'} · SHA-256 ${runtime.engine_sha256}`:'';
   $('scene-note').textContent=sceneNote(state.scene);$('scene-numbers').replaceChildren();for(const[label,value,sub]of[[n[0],fmt(a)+' ms','median of run window means'],[n[1],fmt(b)+' ms','median of run window means'],['Paired time change',pct(change),`${s.measured_pairs} accepted / ${s.attempted_pairs} pairs`]]){const d=document.createElement('div');const t=document.createElement('span');t.textContent=label;const v=document.createElement('strong');v.textContent=value;const sm=document.createElement('small');sm.textContent=sub;d.append(t,v,sm);$('scene-numbers').append(d);}
   videos();repeats();costs();runTable();$('repeat').replaceChildren();for(const p of paired())option($('repeat'),p[0].repeat,'Pair '+(p[0].repeat+1)+(p.every(r=>r.pair_accepted)?'':' · excluded'));traces();loadWorlds();selectProfileForScene();
 }

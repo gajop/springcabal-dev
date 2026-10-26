@@ -157,6 +157,9 @@ def main():
                 scene['jobs'][str(width)] = jobs[key]
                 campaigns.append((key, scene['jobs'][str(width)]))
         for campaign, summary in campaigns:
+            stamp = read(args.timings/campaign/'provenance.json')
+            summary['runtime'] = {key: stamp.get(key) for key in
+                                  ('engine_commit', 'engine_sha256', 'engine_source')}
             pair_status = {}
             paths = sorted((args.timings/campaign).glob('*/result.json'))
             for path in paths:

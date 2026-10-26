@@ -37,6 +37,7 @@
 <section id="lab">
   <div class="toolbar"><h2>Scene lab</h2><label>Scene <select id="scene"></select></label><label>Compare <select id="comparison"><option value="language">Lua / serial Rust · pool 1 (fire: 4)</option><option value="language4">Lua / serial Rust · pool 4</option><option value="jobs4">Rust jobs off / on · pool 4</option><option value="jobs1">Rust jobs off / on · pool 1</option></select></label></div>
   <p id="scene-note" class="note"></p>
+  <p id="scene-runtime" class="caption mono"></p>
   <div class="scene-numbers" id="scene-numbers"></div>
   <div class="two"><div><h3>Every paired repeat</h3><div id="repeat-chart" class="chart"></div></div><div><h3>Where the scoped time goes</h3><div id="cost-chart" class="chart"></div><p class="caption">Simulation and drawing are separate scopes. Callback/import counters are listed below; CUS imports can occur outside the dispatch timer, so their times are not subtracted.</p></div></div>
   <details><summary>Individual run records, counters and acceptance</summary><div class="table-scroll"><table><thead><tr><th>Pair</th><th>Version</th><th>Whole ms/frame</th><th>Sim p50</th><th>Draw p50</th><th>Median units</th><th>Draw imports</th><th>Included?</th></tr></thead><tbody id="run-rows"></tbody></table></div></details>
@@ -63,8 +64,8 @@
 
 <section id="explanation">
   <h2>Source optimizations: same game, before / after</h2>
-  <p class="caption">Each round contains Lua and Rust both before and after the source change, alternating phase order. Only complete rounds with four clean runs enter this table. Engine binary, worker width and input settings match within each round. Times are medians across rounds; changes use paired ratios.</p>
-  <div class="table-scroll"><table><thead><tr><th>Game / load</th><th>Language</th><th>Whole ms<br>before → after</th><th>Change</th><th>Sim p50 ms<br>before → after</th><th>Draw p50 ms<br>before → after</th><th>Clean rounds</th></tr></thead><tbody id="optimization-rows"></tbody></table></div>
+  <p class="caption">Each round pairs before/after runs for the languages changed, alternating phase order. Only complete clean rounds enter this table. Engine binary, worker width and input settings match within each round. Times are medians across rounds; changes use paired ratios. The bootstrap 95% interval estimates the mean ratio and requires five rounds.</p>
+  <div class="table-scroll"><table><thead><tr><th>Game / load</th><th>Language</th><th>Whole ms<br>before → after</th><th>Change</th><th>Mean change<br>95% interval</th><th>Sim p50 ms<br>before → after</th><th>Draw p50 ms<br>before → after</th><th>Clean rounds</th></tr></thead><tbody id="optimization-rows"></tbody></table></div>
   <details><summary>Changes and source A/B evidence paths</summary><div id="optimization-evidence"></div></details>
   <h2>Causes and corrections</h2>
   <div class="table-scroll"><table><thead><tr><th>Game</th><th>Algorithm / behavior corrected</th><th>Evidence</th></tr></thead><tbody>
@@ -92,7 +93,7 @@
   <p class="eyebrow">Reproduce and audit</p>
   <h2>Method and source data</h2>
   <div class="three"><article><h3>Timings</h3><p>At least five clean alternating pairs; 300 warmup + 600 measured steps; one draw per step; 1024×736; VSync/sound off. A failure or CPU/GPU overlap excludes both members. Rejected attempts remain visible.</p></article><article><h3>World recordings</h3><p>Fresh runs with a read-only observer, derived from Ship Game’s recording approach. All observed units and sampled projectiles are retained. They show workload and movement; serialization makes them unsuitable timing baselines.</p></article><article><h3>CPU sampling</h3><p>Fresh runs without the world observer. Linux perf samples user CPU at 499 Hz with DWARF stacks and JIT names. Sampling perturbs execution; stack proportions diagnose hot paths, rather than replace paired timings.</p></article></div>
-  <p>The engine and SDK remain pinned to release 2026.10.25. NVIDIA hardware rendering is required; the existing runner rejects llvmpipe and other software renderers. The cgroup guard retains global/local CPU pressure. The GPU guard requires ten quiet seconds and monitors competing GPU processes during each run. All engine threads are pinned to the eight P cores; E cores are excluded.</p>
+  <p>Each comparison uses the same engine binary for both versions; its commit and SHA-256 are shown in the scene lab. Release 2026.10.25 and separately tested API corrections retain their own identities. NVIDIA hardware rendering is required; the existing runner rejects llvmpipe and other software renderers. The cgroup guard retains global/local CPU pressure. The GPU guard requires ten quiet seconds and monitors competing GPU processes during each run. All engine threads are pinned to the eight P cores; E cores are excluded.</p>
   <details><summary>Runtime identities and source commits</summary><pre id="identities"></pre></details>
   <h3>Rebuild this report from saved evidence</h3>
   <pre><code>export SPRING_BAR_DIR="$PWD/../release-engine-2026.10.25"
@@ -116,7 +117,7 @@ python3 verification/perf/dashboard.py \
   --videos /absolute/rendered-clips --output docs/benchmarks/2026-10-26</code></pre>
   <p>This report opens from a local file or an HTTP server, with no CDN dependencies. The generated assets include the paired results, every measured trace, world recordings and flame trees. Full engine logs and raw perf captures remain in their recorded local evidence directories.</p>
 </section>
-<footer>SpringCabal Lua / Rust benchmarks · data from the existing verification framework · engine unchanged</footer>
+<footer>SpringCabal Lua / Rust benchmarks · data from the existing verification framework</footer>
 </main></div>
 <div id="tooltip" role="tooltip" hidden></div>
 <script src="data.js"></script><script src="app.js"></script>

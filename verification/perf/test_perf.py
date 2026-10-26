@@ -123,6 +123,23 @@ class EquivalenceTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'unit_multiplier'):
                 report.source_optimization_summary(manifest, root)
 
+    def test_lua_only_source_change_uses_its_clean_runs_without_a_rust_counterpart(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);manifest=self.optimization_fixture(root)
+            manifest[0]['backends']=['lua']
+            path=root/'after/fixture-00-wasm/result.json'
+            result=json.loads(path.read_text());result['contended']=True
+            path.write_text(json.dumps(result))
+            rows=report.source_optimization_summary(manifest, root)
+            self.assertEqual(len(rows),1)
+            self.assertEqual(rows[0]['backend'],'lua')
+            self.assertEqual(rows[0]['wall_change_pct'],-50)
+            self.assertEqual(rows[0]['measured_rounds'],1)
+            result=json.loads((root/'after/fixture-00-lua/result.json').read_text())
+            result['contended']=True
+            (root/'after/fixture-00-lua/result.json').write_text(json.dumps(result))
+            self.assertEqual(report.source_optimization_summary(manifest, root)[0]['measured_rounds'],0)
+
     def test_world_compression_preserves_bytes_and_removes_the_raw_copy(self):
         import hashlib
         with tempfile.TemporaryDirectory() as directory:
