@@ -61,6 +61,7 @@ partsneeded_stage() {
 
 partsneeded_headless() {
     local seconds=${1:-120}
+    lua5.1 "$FIXTURES_DIR/partsneeded/lua_regressions.lua" "$LUA_GAME_DIR"
     vf_cleanup_on_exit
 
     vf_workspace partsneeded-headless

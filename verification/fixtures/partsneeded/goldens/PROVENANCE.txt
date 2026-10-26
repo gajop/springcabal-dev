@@ -1,12 +1,13 @@
-recorded   2026-09-24T22:44:00Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 36774e444d69068712c8b71beb8395fb04e7ee6d  +21 uncommitted files
-game       spring-linux/games/PartsNeeded-wasm.sdd  partsneeded-wasm-port 92792687f65714193611547176d8c13cec626e23  +6 uncommitted files
-map        spring-linux/maps/LD35-map.sdd  master 4809b4e68667ef5df2034e6a3616201fb3ec270b  +2 uncommitted files
-springcabal springcabal-rs  main 3187499d779251b4a8ec6dbf0a39b2a7f48f842d
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
-version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
-renderer   software
-gpu        llvmpipe (LLVM 20.1.2, 256 bits)
-gl         4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
+recorded   2026-10-26T03:12:40Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 3cc9ebf2d5deffd80179dfc6606f25d9fa19d53e  +13 uncommitted files
+game       spring-linux/games/PartsNeeded-wasm.sdd  partsneeded-wasm-port 8c415fed5ed5d5455ca428d6c50326b7f153bf0c  +2 uncommitted files
+map        spring-linux/maps/LD35-map.sdd  master c81623a6ed13d8fd46055cfd96f8cd05739607f6
+springcabal git dependency (revision in the game's wasm-src/Cargo.lock)
+engine     codex-work/game-bugfixes-20261025/engine-linux-2026.10.25  spring version 2026.10.25
+version    Spring Engine Version: 2026.10.25
+renderer   gpu
+gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
+gl         4.6.0 NVIDIA 580.178.04
 settings   launch/springsettings.cfg sha1 a487bc4da703
+
+Captured runtime sources resolved to 36ddaad8eb2e023700c11f7d9da5ba1f060e49c5 after capture (same runtime code; committed with documentation).
