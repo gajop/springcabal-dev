@@ -40,7 +40,9 @@ local function counts()
     return table.concat(parts, ",")
 end
 
-function gadget:GameFrame(frame)
+-- The Lua GameFrame callin precedes Wasm GameFrame. Sample and clone only
+-- after both runtimes, native movement and unit-script ticks have completed.
+function gadget:GameFramePost(frame)
     if recordEvery > 0 and frame % recordEvery == 0 then
         SendToUnsynced("perf-world-tick", frame)
     end

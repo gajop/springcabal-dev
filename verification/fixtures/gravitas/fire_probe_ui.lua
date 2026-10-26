@@ -25,6 +25,8 @@ local particles = {}
 local seed = 1
 local target = 0
 local perf = tonumber((Spring.GetModOptions() or {}).fire_perf) == 1
+local countParticles = tonumber((Spring.GetModOptions() or {}).fire_diagnostic_counts) == 1
+local countedFrame = -1
 if perf then Spring.SendCommands("hideinterface 1") end
 GG = {Lups = {AddParticlesArray = function(list)
     for i = 1, #list do
@@ -103,13 +105,30 @@ function Update()
         height=650, angle=0.464, fov=45}, 0)
     if perf then target = Spring.GetGameFrame() end
     local n = target
-    for i = #particles, 1, -1 do
+    -- Compact once. Removing every expired effect separately shifted the
+    -- entire surviving list repeatedly at high emitter counts.
+    local kept = 0
+    for i = 1, #particles do
         local p = particles[i]
-        p.fx.frame = n - p.fx.firstGameFrame
-        if n > p.fx.dieGameFrame then
-            p.fx:Destroy()
-            table.remove(particles, i)
+        local fx = p.fx
+        fx.frame = n - fx.firstGameFrame
+        if n > fx.dieGameFrame then fx:Destroy()
+        else kept = kept + 1; particles[kept] = p end
+    end
+    for i = #particles, kept+1, -1 do particles[i] = nil end
+    if countParticles and n ~= countedFrame and (n==300 or n==600 or n==899) then
+        countedFrame = n
+        local normal, distortion = 0,0
+        for _,p in ipairs(particles) do
+            local data = assert(p.fx.gpuParticles, "diagnostic particle records")
+            for at=0,#data-1,28 do
+                local age = p.fx.frame - data[at+12]
+                if age>0 and age<=data[at+8] then
+                    if p.class==jitter then distortion=distortion+1 else normal=normal+1 end
+                end
+            end
         end
+        Spring.Echo("[FireCounts] frame="..n.." normal="..normal.." distortion="..distortion)
     end
 end
 

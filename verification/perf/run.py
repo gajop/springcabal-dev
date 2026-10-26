@@ -244,7 +244,8 @@ def timed_input(text,warmup,stop):
  # Use the released engine's existing input/echo path. The timestamps bracket
  # complete stepped frames, including main-loop work and buffer swaps that
  # lie outside the simulation/draw CPU scopes. No engine changes are needed.
- actions=[(warmup,f'{warmup}: local echo [PerfWindow] begin frame={warmup}'),
+ actions=[(0,'0: local console 0'),
+          (warmup,f'{warmup}: local echo [PerfWindow] begin frame={warmup}'),
           (stop,f'{stop}: local echo [PerfWindow] end frame={stop}')]
  previous=-1
  for line in text.splitlines():
@@ -343,14 +344,17 @@ def run(a):
     if a.scenario=='effects' and backend=='lua':text=set_key(text,'GameType','Gravitas $VERSION')
     text=set_key(set_key(text,'FixedRNGSeed',424242),'MapName',map_name)
     text=set_key(text,'FixedUnsyncedRNGSeed',424242)
+    if game=='hunted' and a.scenario=='autonomous':text=modoption(text,'benchmark_no_input',1)
     if game=='ttld':text=modoption(text,'skip_intro',1)
+    if game=='flove':text=modoption(text,'skip_tutorial',1)
     for key,value in [('perf_unit_multiplier',a.unit_multiplier),('perf_scale_frame',a.scale_frame),('perf_frame_step',int(a.frame_step)),('perf_sample_frame',a.warmup),('perf_record_every',a.record_every if a.record_world else 0),('perf_record_details',int(a.record_details))]:
      text=modoption(text,key,value)
     if a.scenario=='effects':
-     for key,value in [('gallery','ceg'),('fire_perf',1),('fire_perf_emitters',a.effects_multiplier)]:text=modoption(text,key,value)
+     for key,value in [('gallery','ceg'),('fire_perf',1),('fire_perf_emitters',a.effects_multiplier),('fire_renderer',a.fire_renderer),('fire_diagnostic_counts',int(a.diagnostic))]:text=modoption(text,key,value)
     scripts[backend]=speed(text,a.speed)
    save(output/f'{game}-content.json',content)
-   for repeat in range(a.repeats):
+   clean_pairs=0
+   for repeat in range(max(a.repeats,a.clean_pairs)*6 if a.clean_pairs else a.repeats):
     for backend,job_mode in (variants if repeat%2==0 else list(reversed(variants))):
      if time.monotonic()>=deadline:raise TimeoutError('Configured campaign time limit reached; completed evidence is preserved')
      suffix='-'+job_mode if jobs_comparison else ''
@@ -435,8 +439,12 @@ def run(a):
      if a.unit_multiplier>1 and '[PerfWorkload] scaled ' not in log:errors.append('Unit scaling fixture did not complete')
      if a.scenario=='effects' and f'[FirePerf] emitters={a.effects_multiplier}' not in log:errors.append('Fire effects fixture did not initialize')
      if a.scenario=='effects' and backend=='wasm' and f'[FirePerf] Rust emitters={a.effects_multiplier}' not in log:errors.append('Rust fire renderer probe did not initialize')
+     if game=='hunted' and a.scenario=='autonomous' and a.mode!='headless' and '[HuntedBenchmark] mouse_input=off' not in log:
+      errors.append('Hunted autonomous fixture did not disable ambient mouse input')
      if game=='ttld' and a.mode!='headless' and 'TTLD intro skipped (skip_intro=1)' not in log:
       errors.append('TTLD gameplay view did not skip the intro')
+     if game=='flove' and '[FloveStartup] tutorial skipped frame=4' not in log:
+      errors.append('Flove gameplay did not skip the tutorial at frame four')
      renderer=None
      if a.mode!='headless':
       renderer=re.search(r'GL renderer : ([^\n]+)',log)
@@ -470,6 +478,7 @@ def run(a):
      result['worker_threads']=a.worker_threads
      result['cpu_affinity']=a.cpu_affinity
      result['rust_jobs']=job_mode if backend=='wasm' else 'off'
+     result['fire_renderer']=a.fire_renderer if a.scenario=='effects' and backend=='wasm' else None
      result['comparison_kind']='jobs' if jobs_comparison else 'lua-wasm'
      result['jobs_active']=bool(re.search(r'\[GameJobs\].*active ',log))
      result['instrumented']=bool(a.record_world or a.profile or a.trace_gl or a.diagnostic)
@@ -491,6 +500,8 @@ def run(a):
      result['window_wall_seconds']=wall_seconds
      result['window_wall_ms_per_frame']=wall_seconds*1000/(a.frames-a.warmup) if wall_seconds is not None else None
      result['workload']=[line.split('[PerfWorkload] ',1)[1] for line in log.splitlines() if '[PerfWorkload] ' in line]
+     result['custom_particles']=[dict(zip(('frame','normal','distortion'),map(int,row))) for row in
+      re.findall(r'\[FireCounts\] frame=(\d+) normal=(\d+) distortion=(\d+)',log)]
      result['rendered_measurement_frames']=len(rendered)
      result['sampled_peak_rss_kib']=max((s.get('VmHWM',s.get('VmRSS',0)) for s in memory),default=None)
      result['population']={field:distribution([float(r[field]) for r in frame_rows if r['kind']=='sim' and int(r['frame'])>=a.warmup]) for field in ('units','projectiles','features','particles')}
@@ -500,10 +511,13 @@ def run(a):
     if len(backends)==2 or jobs_comparison:
      labels=('off','on') if jobs_comparison else ('lua','wasm')
      equality=compare(*[[r for r in dict(pair[-2:])[backend] if int(r['frame'])>=a.warmup] for backend in labels],labels=labels);save(output/f'{game}-{repeat:02d}-equivalence.json',equality)
+    current=[r for r in results if r['game']==game and r['repeat']==repeat]
+    clean_pairs+=int(bool(current) and all(r['ok'] and not r['contended'] for r in current))
+    if a.clean_pairs and clean_pairs>=a.clean_pairs and repeat+1>=a.repeats:break
    # Ratios are descriptive even when equal-work acceptance fails. Never
    # silently average work-mismatched runs into a language-performance claim.
    ratios=[]
-   for i in range(a.repeats):
+   for i in range(repeat+1):
     if len(backends)!=2 and not jobs_comparison:break
     key='rust_jobs' if jobs_comparison else 'backend'
     by_backend={r[key]:r for r in results if r['game']==game and r['repeat']==i}
@@ -520,6 +534,7 @@ def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('game',choices=['all','comparison',*GAMES]);p.add_argument('scenario',choices=['autonomous','scripted','effects'],default='autonomous',nargs='?')
  p.add_argument('--engine',type=Path,default=Path(os.environ.get('SPRING_ENGINE_DIR',ENGINE/'build-amd64-linux/install')));p.add_argument('--output',type=Path,required=True)
  p.add_argument('--games-dir',type=Path,default=PROJECT/'spring-linux/games',help='game checkouts to stage (e.g. frozen Git worktrees for before/after measurements)')
+ p.add_argument('--clean-pairs',type=int,default=0,help='continue until this many complete uncontended pairs are collected, bounded by max-minutes and six times the requested count')
  p.add_argument('--backend',choices=['both','lua','wasm'],default='both',help='select one backend for alternating before/after source revisions, or both for Lua/Wasm pairs')
  p.add_argument('--mode',choices=['headless','gpu','realtime'],default='gpu',help='renderer backend; realtime is a legacy GPU alias');p.add_argument('--frames',type=int,default=900);p.add_argument('--warmup',type=int,default=300)
  p.add_argument('--speed',type=float,default=100,help='simulation speed multiplier (default: 100)')
@@ -528,6 +543,7 @@ def main():
  p.add_argument('--scale-frame',type=int,default=60,help='frame at which the initial scene is cloned')
  p.add_argument('--frame-step',action='store_true',help='one simulation step per draw, using the gallery capture mechanism')
  p.add_argument('--effects-multiplier',type=int,default=1,help='Gravitas fire emitter pairs (0 gives the empty renderer baseline)')
+ p.add_argument('--fire-renderer',choices=['gpu','cpu'],default='gpu',help='Gravitas Rust effect curves: GPU default or CPU reference for jobs comparison')
  p.add_argument('--worker-threads',type=int,default=1,help='total engine ThreadPool width, including the main thread')
  p.add_argument('--cpu-affinity',help='Linux CPU list for the engine and its threads; useful to hold core type constant on hybrid CPUs')
  p.add_argument('--rust-jobs',choices=['off','on','check','compare'],default='off',help='Rust pure jobs; check validates output, compare alternates off/on pairs')
@@ -546,7 +562,7 @@ def main():
   try:a.cpu_affinity=cpu_list(a.cpu_affinity,os.sched_getaffinity(0))
   except ValueError as error:p.error(str(error))
  a.games_dir=a.games_dir.resolve()
- if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
+ if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.clean_pairs<0 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
  if a.scenario=='scripted' and not a.input:p.error('scripted requires --input')
  if a.unit_multiplier<1 or a.scale_frame<1 or (a.unit_multiplier>1 and a.warmup<=a.scale_frame):p.error('scaling must finish before warmup ends')
  if a.scenario=='effects' and (a.game!='gravitas' or a.unit_multiplier!=1 or a.effects_multiplier<0):p.error('effects supports only Gravitas, without unit scaling')

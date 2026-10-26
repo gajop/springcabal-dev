@@ -139,7 +139,7 @@ frame with interpolation fixed. It runs as fast as the engine can draw; it
 does not record a video. This keeps the number of renders comparable across
 backends. The runner verifies exactly one draw for every measured simulation
 frame. Five repeats alternate Lua-first and Rust-first order. `verify all`
-includes the perf runner's fourteen regression tests, without launching benchmarks.
+includes the perf runner's twenty-three regression tests, without launching benchmarks.
 
 `--unit-multiplier N` clones each unit present at frame 60, including its
 health and up to 32 queued orders. Normal creation handlers, scripts and AI
@@ -672,3 +672,37 @@ The optimization audit adds diagnostic controls to the same runner:
 The pinned engine's Wasm callback counter does **not** include CUS guest ticks.
 The unscoped remainder therefore includes CUS as well as native work and waits;
 subtracting measured callbacks does not isolate native execution.
+
+The world observer and stress cloning use `GameFramePost`, after Lua, Wasm,
+native physics and CUS ticks finish. Recordings include this phase in their
+header. Earlier `GameFrame` captures observed Lua and Wasm at different phases.
+Detailed captures also retain front/up/right vectors after position, heading
+and velocity.
+
+Gravitas defaults to GPU particle curves on both sides. `--fire-renderer cpu`
+selects the Rust CPU reference for a jobs off/on comparison; `--rust-jobs on`
+with the GPU renderer does not move shader work to CPU workers.
+
+`--clean-pairs 5 --repeats 5` continues alternating pairs after a contended
+run until five complete uncontended pairs exist. All rejected attempts remain
+in the output. The time limit and a six-times-count bound still apply. This
+controls contention only; world, workload and visual equivalence require their
+separate evidence. Detailed diagnostic recordings collect garbage every thirty
+samples to keep uncapped headless captures within the Lua memory budget.
+
+Primary game comparisons use one engine worker. HAPFS dispatches path requests
+through the shared pool; three identical rendered Lua Flove runs at width four
+already diverge in path state at frame 61 or 91. Width-one Lua/Rust Flove runs
+match through frame 2400 in two pairs. Width-four Lua controls and Rust jobs
+remain separate measurements, with their observed trajectories retained.
+
+Hunted's autonomous fixture sets `benchmark_no_input=1` in both UIs. Otherwise
+SDL/desktop mouse state generates gun targets, asynchronous messages and unit
+creation even though the scenario supplies no input. The option defaults off
+in normal gameplay. GPU runs require an acknowledgement from the UI.
+
+`capture-video.sh OUTPUT` records all core normal/stress scenes, Gravitas
+1/10/100 emitter pairs and normal My Cube/Parts Needed scenes with the existing
+screenshot action. Each clip is 200 real GPU PNGs at three-frame intervals,
+encoded at 10 fps; ffprobe checks the output count. `--case NAME` selects one
+scene and `--encode-only` reuses saved PNGs. Never include these runs in timings.

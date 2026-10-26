@@ -6,7 +6,7 @@ project=$(cd -- "$(dirname -- "$0")/../.." && pwd)
 out=${1:?Usage: capture.sh /absolute/output [runner options]}
 shift
 run=("$project/verification/verify" perf)
-common=(--frame-step --repeats 1 --worker-threads 4
+common=(--frame-step --repeats 1 --worker-threads 1
     --cpu-pressure-scope cgroup --timeout 300 --max-minutes 30 "$@")
 for multiplier in 1 10; do
     "${run[@]}" hunted --output "$out/hunted-${multiplier}x" \
@@ -24,9 +24,13 @@ for multiplier in 1 2; do
 done
 # Stress scenes expose the useful-work/dispatch tradeoff most clearly.
 "${run[@]}" hunted --output "$out/hunted-10x-jobs" --backend wasm \
-    --rust-jobs compare --unit-multiplier 10 --record-world "${common[@]}"
+    --rust-jobs compare --unit-multiplier 10 --record-world "${common[@]}" --worker-threads 4
 "${run[@]}" flove scripted --output "$out/flove-combat-10x-jobs" --backend wasm \
     --rust-jobs compare --unit-multiplier 10 --record-world \
-    --input "$project/verification/perf/scenarios/flove-mushrooms.txt" "${common[@]}"
+    --input "$project/verification/perf/scenarios/flove-mushrooms.txt" "${common[@]}" --worker-threads 4
 # Fire has no unit world to project; capture-profiles.sh and capture-video.sh
 # retain its real renderer instead.
+
+for game in mycube partsneeded; do
+    "${run[@]}" "$game" --output "$out/${game}-1x" --record-world "${common[@]}"
+done

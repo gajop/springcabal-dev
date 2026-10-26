@@ -46,12 +46,15 @@ local function snapshot(_, frame)
                     commands[#commands+1] = '[' .. cmd.id .. ',' .. (cmd.options.coded or 0)
                         .. ',[' .. table.concat(params, ',') .. ']]'
                 end
-                local state = {px, py, pz, Spring.GetUnitHeading(id), vx, vy, vz}
+                local front, up, right = Spring.GetUnitVectors(id)
+                local state = {px, py, pz, Spring.GetUnitHeading(id), vx, vy, vz,
+                    front[1],front[2],front[3],up[1],up[2],up[3],right[1],right[2],right[3]}
                 for i, value in ipairs(state) do state[i] = string.format('%.9g', value) end
                 details[#details+1] = '[' .. id .. ',[' .. table.concat(state, ',')
                     .. '],[' .. table.concat(commands, ',') .. '],'
                     .. object(Spring.GetUnitMoveTypeData(id)) .. ',['
-                    .. string.format('%.9g,%.9g', Spring.GetUnitRadius(id), Spring.GetUnitHeight(id)) .. ']]'
+                    .. string.format('%.9g,%.9g', Spring.GetUnitRadius(id), Spring.GetUnitHeight(id)) .. '],'
+                    .. object(Spring.GetUnitRulesParams(id)) .. ']'
             end
         end
     end
@@ -60,9 +63,12 @@ local function snapshot(_, frame)
         if x then shots[#shots+1] = '[' .. table.concat({id, number(x), number(z)}, ',') .. ']' end
     end
     write('{"type":"sample","frame":' .. frame .. ',"camera":' .. camera() .. ',"units":[' .. table.concat(units, ',')
-        .. '],"projectiles":[' .. table.concat(shots, ',') .. ']'
+        .. '],"projectiles":[' .. table.concat(shots, ',') .. '],"rules":' .. object(Spring.GetGameRulesParams())
         .. (detailed and ',"details":[' .. table.concat(details, ',') .. ']' or '') .. '}')
     samples, lastFrame = samples + 1, frame
+    -- Detailed diagnostic snapshots allocate faster than the engine GC budget
+    -- in an uncapped headless run. They are excluded from timing baselines.
+    if detailed and samples % 30 == 0 then collectgarbage("collect") end
 end
 function M.start(every)
     local err
@@ -77,7 +83,7 @@ function M.start(every)
         local r, g, b = Spring.GetTeamColor(id)
         teams[#teams+1] = quote(id) .. ':[' .. table.concat({number(r), number(g), number(b)}, ',') .. ']'
     end
-    write('{"type":"header","format":"springcabal-world","version":1,"fps":30,"sample_frames":'
+    write('{"type":"header","format":"springcabal-world","version":1,"phase":"GameFramePost","fps":30,"sample_frames":'
         .. every .. ',"map":[' .. Game.mapSizeX .. ',' .. Game.mapSizeZ .. '],"defs":{'
         .. table.concat(defs, ',') .. '},"teams":{' .. table.concat(teams, ',') .. '}}')
     if gadgetHandler.AddSyncAction then

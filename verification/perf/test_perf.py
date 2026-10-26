@@ -124,7 +124,7 @@ class EquivalenceTests(unittest.TestCase):
     def test_wall_markers_preserve_scripted_action_order(self):
         text = '# scene\n60: give 10 rabbit\n300: local shadows 1\n'
         self.assertEqual(run.timed_input(text, 300, 900).splitlines(), [
-            '60: give 10 rabbit', '300: local echo [PerfWindow] begin frame=300',
+            '0: local console 0', '60: give 10 rabbit', '300: local echo [PerfWindow] begin frame=300',
             '300: local shadows 1', '900: local echo [PerfWindow] end frame=900'])
         for invalid in ('60: cheat\n1: cheat\n', '-1: cheat\n'):
             with self.assertRaises(ValueError):

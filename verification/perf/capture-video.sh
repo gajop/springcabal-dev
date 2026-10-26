@@ -1,52 +1,58 @@
 #!/usr/bin/env bash
-# The existing screenshot input action captures the actual GPU fire fixture.
-# PNG capture and CPU sampling make these diagnostic runs, never timing baselines.
+# Capture real GPU output with the existing screenshot input action, then encode.
+# These instrumented runs are excluded from timing aggregates.
 set -euo pipefail
 project=$(cd -- "$(dirname -- "$0")/../.." && pwd)
-out=${1:?Usage: capture-video.sh /absolute/output [--encode-only]}
+out=${1:?Usage: capture-video.sh OUTPUT [--encode-only] [--case NAME]}
+shift
 mkdir -p "$out"
-out=$(realpath -- "$out")
-if [[ "${2:-}" != --encode-only ]]; then
-python3 - "$out/input.txt" <<'PY'
-from pathlib import Path
-import sys
-Path(sys.argv[1]).write_text(''.join(f'{f}: local screenshot png\n' for f in range(300, 900, 3)))
-PY
-common=(gravitas effects --frame-step --diagnostic --repeats 1 --worker-threads 4
-    --effects-multiplier 10 --input "$out/input.txt" --cpu-pressure-scope cgroup
-    --timeout 300 --max-minutes 20)
-"$project/verification/verify" perf "${common[@]}" --output "$out/serial"
-"$project/verification/verify" perf "${common[@]}" --output "$out/jobs" --backend wasm --rust-jobs on
-fi
-python3 - "$out" <<'PY'
-import hashlib, json
+python3 - "$project" "$(realpath -- "$out")" "$@" <<'PY'
+import argparse, hashlib, json
 from pathlib import Path
 import subprocess, sys
-root=Path(sys.argv[1]); clips=[]
-for case, run, name, label in [
-    ('serial','gravitas-00-lua','fire10-lua','Lua · 10 emitter pairs'),
-    ('serial','gravitas-00-wasm','fire10-rust','Rust · serial · 10 emitter pairs'),
-    ('jobs','gravitas-00-wasm','fire10-rust-jobs','Rust · jobs on · 10 emitter pairs')]:
-    directory=root/case/run
-    result=json.loads((directory/'result.json').read_text())
-    if not result['ok'] or result['renderer']!='NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2':
-        raise ValueError('Incomplete GPU video capture: '+str(directory))
-    frames=sorted((directory/'write/screenshots').glob('*.png'))
-    if len(frames)!=200:raise ValueError(f'Expected 200 PNGs, found {len(frames)} in {directory}')
-    sequence=root/(name+'-sequence');sequence.mkdir(exist_ok=True)
-    for i, image in enumerate(frames):
-        link=sequence/f'{i:04d}.png'
-        if not link.exists():link.symlink_to(image)
-    video=root/(name+'.mp4')
-    if not video.exists():
-        subprocess.run(['ffmpeg','-v','error','-nostdin','-framerate','10','-i',str(sequence/'%04d.png'),
-            '-c:v','libx264','-preset','fast','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart',str(video)],check=True)
-    info=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries',
-        'stream=width,height,nb_frames,r_frame_rate,duration','-of','json',str(video)],text=True))
-    if info['streams'][0]['nb_frames']!='200':raise ValueError('Encoded frame count mismatch')
-    clips.append({'file':video.name,'label':label,'url':'videos/'+video.name,
-        'renderer':result['renderer'],'sha256':hashlib.sha256(video.read_bytes()).hexdigest(),
-        'capture_requests':{'first_frame':300,'last_frame':897,'interval':3},
-        'video':info['streams'][0], 'source':str(directory)})
-(root/'videos.json').write_text(json.dumps(clips,indent=2)+'\n')
+project, root = map(Path, sys.argv[1:3])
+p=argparse.ArgumentParser();p.add_argument('--encode-only',action='store_true');p.add_argument('--case',action='append')
+a=p.parse_args(sys.argv[3:]); clips=[]
+cases=[]
+for game, scene, prefix in [('hunted','autonomous','hunted'),('flove','scripted','flove-combat'),('ttld','scripted','ttld-shadows'),('area17','autonomous','area17')]:
+    for mult in ([1,2] if game=='area17' else [1,10]):
+        name=f'{prefix}-{mult}x';options=['--unit-multiplier',str(mult)]
+        if scene=='scripted':options+=['--input',str(project/'verification/perf/scenarios'/('flove-mushrooms.txt' if game=='flove' else 'ttld-shadows.txt'))]
+        cases.append((name,game,scene,options))
+for count in [1,10,100]:cases.append((f'fire-{count}','gravitas','effects',['--effects-multiplier',str(count)]))
+for game in ['mycube','partsneeded']:cases.append((f'{game}-1x',game,'autonomous',[]))
+for name,game,scene,options in cases:
+    if a.case and name not in a.case:continue
+    directory=root/name
+    if not a.encode_only:
+        if directory.exists():raise ValueError(f'Evidence already exists: {directory}; use --encode-only or a new output directory')
+        # Keep all original combat/shadow controls, and add only screenshots.
+        original=''
+        if '--input' in options:
+            i=options.index('--input');original=Path(options[i+1]).read_text();del options[i:i+2]
+        requests=root/(name+'-input.txt')
+        requests.write_text(original+'\n'+''.join(f'{f}: local screenshot png\n' for f in range(300,900,3)))
+        subprocess.run([str(project/'verification/verify'),'perf',game,scene,'--mode','gpu','--frame-step','--diagnostic','--repeats','1',
+            '--worker-threads','1','--cpu-affinity','0,2,4,6,8,10,12,14','--timeout','300','--max-minutes','30',
+            '--input',str(requests),'--output',str(directory),*options],check=True)
+    for backend in ['lua','wasm']:
+        run=directory/f'{game}-00-{backend}'
+        result=json.loads((run/'result.json').read_text())
+        if not result['ok'] or result['renderer']!='NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2':raise ValueError('Incomplete GPU capture: '+str(run))
+        frames=sorted((run/'write/screenshots').glob('*.png'))
+        if len(frames)!=200:raise ValueError(f'Expected 200 PNGs, found {len(frames)} in {run}')
+        key=f'{name}-{backend}';sequence=root/(key+'-sequence');sequence.mkdir(exist_ok=True)
+        for i,image in enumerate(frames):
+            link=sequence/f'{i:04d}.png'
+            if not link.exists():link.symlink_to(image.resolve())
+        video=root/(key+'.mp4')
+        if not video.exists():
+            subprocess.run(['ffmpeg','-v','error','-nostdin','-framerate','10','-i',str(sequence/'%04d.png'),'-c:v','libx264',
+                '-preset','fast','-crf','20','-pix_fmt','yuv420p','-movflags','+faststart',str(video)],check=True)
+        info=json.loads(subprocess.check_output(['ffprobe','-v','error','-show_entries','stream=width,height,nb_frames,r_frame_rate,duration','-of','json',str(video)],text=True))
+        if info['streams'][0]['nb_frames']!='200':raise ValueError('Encoded frame count mismatch')
+        clips.append({'case':name,'backend':backend,'file':video.name,'label':('Lua' if backend=='lua' else 'Rust · serial')+' · '+name,
+            'url':'videos/'+video.name,'renderer':result['renderer'],'sha256':hashlib.sha256(video.read_bytes()).hexdigest(),
+            'capture_requests':{'first_frame':300,'last_frame':897,'interval':3},'video':info['streams'][0],'source':str(run)})
+        (root/'videos.json').write_text(json.dumps(clips,indent=2)+'\n')
 PY

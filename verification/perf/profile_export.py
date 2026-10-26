@@ -128,7 +128,7 @@ def main():
         data['exporter_sha256'] = exporter_sha
         data['capture'] = metadata['sampling']
         data['run'] = {k: metadata.get(k) for k in
-                       ('game', 'backend', 'rust_jobs', 'renderer', 'worker_threads', 'contended',
+                       ('game', 'backend', 'rust_jobs', 'renderer', 'fire_renderer', 'worker_threads', 'contended',
                         'gpu_process_guard', 'gpu_contended')}
         output.write_text(json.dumps(data, separators=(',', ':'))+'\n')
         print(directory.relative_to(args.captures), data['samples'], 'samples', flush=True)
