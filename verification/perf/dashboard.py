@@ -44,6 +44,33 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def capture_identity(campaign, game, backend):
+    """Identify the frozen game, independently of added recording observers."""
+    stamp = read(campaign/'provenance.json')
+    content = read(campaign/f'{game}-content.json')[backend]
+    source_commit = content.get('commit')
+    games = Path(stamp['args']['games_dir'])
+    manifest = games/'source-commits.json'
+    if not source_commit and manifest.is_file():
+        folders = ('Gravitas.sdd', 'Gravitas-wasm.sdd') if game == 'gravitas' and stamp['args']['scenario'] == 'effects' else report.runner.GAMES[game]
+        source_commit = read(manifest).get(folders[backend == 'wasm'])
+    return {'source_commit': source_commit, 'modules': content.get('modules', {}),
+            'engine_sha256': stamp['engine_sha256']}
+
+
+def cpu_costs(profile):
+    """Exclusive sampled costs; never interpret driver CPU as GPU duration."""
+    main = next((t for t in profile['threads'] if t['name'].startswith('recoil-main ')), None)
+    frames = profile['capture']['stop_frame'] - profile['capture']['warmup_frame']
+    if main is None or frames <= 0:
+        return None
+    divisor = 1e6 * frames
+    return {'main_ms': main['weight']/divisor,
+            'other_threads_ms': sum(t['weight'] for t in profile['threads'] if t is not main)/divisor,
+            'categories': {c['category']: c['weight']/divisor for c in profile['categories'] if c['thread'] == main['name']},
+            'leaves': [{'name': c['name'], 'ms': c['weight']/divisor} for c in profile['leaves'] if c['thread'] == main['name']][:8]}
+
+
 def scene_summary(summaries, campaign, game, allow_incomplete=False):
     if campaign in summaries:
         return summaries[campaign]
@@ -183,6 +210,8 @@ def main():
             summary['runtime'] = {key: stamp.get(key) for key in
                                   ('engine_commit', 'engine_sha256', 'engine_source')}
             summary['game_content'] = read(campaign_root/f'{game}-content.json')
+            for backend, content in summary['game_content'].items():
+                content.update(capture_identity(campaign_root, game, backend))
             pair_status = {}
             paths = sorted(campaign_root.glob('*/result.json'))
             for path in paths:
@@ -231,6 +260,8 @@ def main():
         key = 'recordings/'+str(path.parent.relative_to(args.recordings)).replace('/', '--')
         data['recordings'].append(dict(asset(out, key, world(path)), scene=sid,
             backend=result['backend'], jobs=result['rust_jobs'],
+            worker_threads=result.get('worker_threads'),
+            **capture_identity(path.parent.parent, result['game'], result['backend']),
             renderer=result['renderer'], source=str(path.relative_to(PROJECT))))
     for path in sorted(args.profiles.glob('**/profile.json')):
         case = path.parent.parent.name
@@ -253,6 +284,8 @@ def main():
             worker_threads=result.get('worker_threads'),
             callback_timers=result.get('callback_timers', 'on'),
             content_sha256=content[result['backend']]['content_sha256'],
+            cpu_costs=cpu_costs(profile),
+            pair_key=str(path.parent.parent.relative_to(args.profiles))+'/'+str(result['repeat']),
             engine_sha256=profile.get('runtime', {}).get('engine_sha256'),
             source=str(path.relative_to(PROJECT))))
     for source in (HERE/'web').iterdir():
@@ -263,6 +296,10 @@ def main():
         (out/'videos').mkdir(exist_ok=True)
         for clip in clips:
             clip['scene'] = capture_to_scene.get(clip['case'])
+            source = Path(clip['source'])
+            result = report.read_result(source/'result.json')
+            clip.update(capture_identity(source.parent, result['game'], clip['backend']))
+            clip['worker_threads'] = result.get('worker_threads')
             shutil.copyfile(args.videos/clip['file'], out/clip['url'])
         data['videos'] = clips
     report.write_rows(out/'language', list(language.values()))

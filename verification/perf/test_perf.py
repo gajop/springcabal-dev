@@ -127,6 +127,28 @@ class EquivalenceTests(unittest.TestCase):
         self.assertIs(dashboard.scene_summary({'ttld-pending': completed},
                                             'ttld-pending', 'ttld', True), completed)
 
+    def test_recordings_use_explicit_frozen_revision_instead_of_observer_tree_hash(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); games = root/'games'; games.mkdir()
+            (games/'source-commits.json').write_text(json.dumps({'Hunted.sdd': 'lua-old', 'Hunted-wasm.sdd': 'rust-new'}))
+            (root/'provenance.json').write_text(json.dumps({'engine_sha256': 'engine', 'args': {'games_dir': str(games), 'scenario': 'autonomous'}}))
+            (root/'hunted-content.json').write_text(json.dumps({'lua': {'commit': None, 'modules': {}}, 'wasm': {'commit': None, 'modules': {'rules.wasm': 'module'}}}))
+            self.assertEqual(dashboard.capture_identity(root, 'hunted', 'wasm'),
+                             {'source_commit': 'rust-new', 'engine_sha256': 'engine', 'modules': {'rules.wasm': 'module'}})
+            games.joinpath('source-commits.json').unlink()
+            self.assertIsNone(dashboard.capture_identity(root, 'hunted', 'lua')['source_commit'])
+
+    def test_cpu_capture_costs_normalize_exclusive_weights_without_adding_threads_to_wall_time(self):
+        profile = {'capture': {'warmup_frame': 300, 'stop_frame': 900},
+                   'threads': [{'name': 'recoil-main (1)', 'weight': 600000000}, {'name': 'worker (2)', 'weight': 300000000}],
+                   'categories': [{'thread': 'recoil-main (1)', 'category': 'Wasm guest', 'weight': 300000000}, {'thread': 'worker (2)', 'category': 'Wasm guest', 'weight': 300000000}],
+                   'leaves': [{'thread': 'recoil-main (1)', 'name': 'kernel', 'weight': 120000000}]}
+        costs = dashboard.cpu_costs(profile)
+        self.assertEqual(costs['main_ms'], 1)
+        self.assertEqual(costs['other_threads_ms'], 0.5)
+        self.assertEqual(costs['categories'], {'Wasm guest': 0.5})
+        self.assertEqual(costs['leaves'], [{'name': 'kernel', 'ms': 0.2}])
+
     def test_dashboard_preserves_partial_evidence_without_inventing_frames(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
