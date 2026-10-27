@@ -177,7 +177,7 @@
   "diagnostic_root": "perf-runs/2026-10-27-gravitas-fire-gl",
   "effect_lifetime_candidate": {
     "source": "e070fde6dc9803c14a6cd02b9de8b680a5d470d7",
-    "status": "10 host tests and release Clippy passed; fixed-frame images and timings pending",
+    "status": "10 host tests, release Clippy and continuous image checks passed; fixed-frame images and timings pending",
     "continuous_images": {
       "passed": true,
       "rows": [
@@ -195,6 +195,79 @@
         }
       ],
       "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-27-gravitas-fire-lifetimes"
-    }
+    },
+    "submitted_instances": {
+      "lua": {
+        "ranges": {
+          "flame": [
+            {
+              "count": 113,
+              "offset": 382
+            },
+            {
+              "count": 288,
+              "offset": 0
+            }
+          ],
+          "distortion": [
+            {
+              "count": 24,
+              "offset": 84
+            }
+          ],
+          "smoke": [
+            {
+              "count": 125,
+              "offset": 385
+            },
+            {
+              "count": 330,
+              "offset": 0
+            }
+          ]
+        },
+        "submitted_instances": {
+          "flame": 401,
+          "distortion": 24,
+          "smoke": 455
+        }
+      },
+      "wasm": {
+        "ranges": {
+          "flame": [
+            {
+              "count": 104,
+              "offset": 391
+            },
+            {
+              "count": 297,
+              "offset": 0
+            }
+          ],
+          "distortion": [
+            {
+              "count": 24,
+              "offset": 84
+            }
+          ],
+          "smoke": [
+            {
+              "count": 125,
+              "offset": 385
+            },
+            {
+              "count": 330,
+              "offset": 0
+            }
+          ]
+        },
+        "submitted_instances": {
+          "flame": 401,
+          "distortion": 24,
+          "smoke": 455
+        }
+      }
+    },
+    "trace_note": "Both NVIDIA traces had no contention. Tracer extension/client-array warnings exclude them from timing and replay claims; these numbers inspect recorded instanced draw calls only."
   }
 }
