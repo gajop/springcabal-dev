@@ -510,8 +510,8 @@
     "campaign": "flove-combat-10x-lua-rust-w1",
     "game": "flove",
     "measured_pairs": 1,
-    "attempted_pairs": 20,
-    "excluded_pairs": 19,
+    "attempted_pairs": 23,
+    "excluded_pairs": 22,
     "sim_p50_lua_ms": 30.99235,
     "sim_p50_rust_ms": 26.783363,
     "sim_p50_paired_rust_change_pct": -13.580728792750463,
@@ -615,7 +615,88 @@
       "flove-combat-10x-lua-rust-w1/flove-17-wasm",
       "flove-combat-10x-lua-rust-w1/flove-18-lua",
       "flove-combat-10x-lua-rust-w1/flove-18-wasm",
-      "flove-combat-10x-lua-rust-w1/flove-19-wasm"
+      "flove-combat-10x-lua-rust-w1/flove-19-lua",
+      "flove-combat-10x-lua-rust-w1/flove-19-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-20-lua",
+      "flove-combat-10x-lua-rust-w1/flove-20-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-21-lua",
+      "flove-combat-10x-lua-rust-w1/flove-21-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-22-lua"
+    ]
+  },
+  {
+    "campaign": "fire-1-lua-rust-w4",
+    "game": "gravitas",
+    "measured_pairs": 0,
+    "attempted_pairs": 1,
+    "excluded_pairs": 1,
+    "sim_p50_lua_ms": null,
+    "sim_p50_rust_ms": null,
+    "sim_p50_paired_rust_change_pct": null,
+    "sim_p50_mean_ratio_95ci_lo": null,
+    "sim_p50_mean_ratio_95ci_hi": null,
+    "sim_p95_lua_ms": null,
+    "sim_p95_rust_ms": null,
+    "sim_p95_paired_rust_change_pct": null,
+    "sim_p95_mean_ratio_95ci_lo": null,
+    "sim_p95_mean_ratio_95ci_hi": null,
+    "draw_p50_lua_ms": null,
+    "draw_p50_rust_ms": null,
+    "draw_p50_paired_rust_change_pct": null,
+    "draw_p50_mean_ratio_95ci_lo": null,
+    "draw_p50_mean_ratio_95ci_hi": null,
+    "draw_p95_lua_ms": null,
+    "draw_p95_rust_ms": null,
+    "draw_p95_paired_rust_change_pct": null,
+    "draw_p95_mean_ratio_95ci_lo": null,
+    "draw_p95_mean_ratio_95ci_hi": null,
+    "cpu_p50_lua_ms": null,
+    "cpu_p50_rust_ms": null,
+    "cpu_p50_paired_rust_change_pct": null,
+    "cpu_p50_mean_ratio_95ci_lo": null,
+    "cpu_p50_mean_ratio_95ci_hi": null,
+    "cpu_p95_lua_ms": null,
+    "cpu_p95_rust_ms": null,
+    "cpu_p95_paired_rust_change_pct": null,
+    "cpu_p95_mean_ratio_95ci_lo": null,
+    "cpu_p95_mean_ratio_95ci_hi": null,
+    "wall_mean_lua_ms": null,
+    "wall_mean_rust_ms": null,
+    "wall_mean_paired_rust_change_pct": null,
+    "wall_mean_mean_ratio_95ci_lo": null,
+    "wall_mean_mean_ratio_95ci_hi": null,
+    "lua_units_p50": null,
+    "wasm_units_p50": null,
+    "runtime": {
+      "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
+      "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "5c23a755d07a088a042716dd353ea79b573ef228dc48cafb1b7aecc3bcd91ac9",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981"
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "21f7ed3329739c380b6c65ecd9faa7d6cbe16e06b49957e01e6a1700b2c01eec",
+        "modules": {
+          "LuaUI/wasm/gravitas-jobs.wasm": "48e72cb1864827cd97823b46e115add950c8d673202a7f20091bfbbe15b7259e",
+          "LuaUI/wasm/gravitas-ui.wasm": "f3b20dad35bc896df1f1140fd1b0bf3cd5b2b4298fd7a041ef9c8787d6679038",
+          "LuaRules/wasm/gravitas-rules.wasm": "c890d21ecaceb40e210c3111c40c2bbcbd4b7cd14b87c92a038310911f1dc7c1"
+        },
+        "jobs_api": true,
+        "source_commit": "1df6daf3e0d9ccf8474776c4c3baaddbef769791",
+        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981"
+      }
+    },
+    "run_ids": [
+      "fire-1-lua-rust-w4/gravitas-00-lua",
+      "fire-1-lua-rust-w4/gravitas-00-wasm"
     ]
   }
 ]
