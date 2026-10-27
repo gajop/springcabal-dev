@@ -256,7 +256,7 @@
     "backend": "lua",
     "measured_rounds": 1,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 3,
+    "attempted_phase_pairs": 4,
     "wall_before_ms": 34.84460833333333,
     "wall_after_ms": 35.488958333333336,
     "wall_change_pct": 1.8492100523443078,
