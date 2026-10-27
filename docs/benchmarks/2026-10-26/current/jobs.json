@@ -1,1 +1,74 @@
-[]
+[
+  {
+    "campaign": "hunted-jobs-w1",
+    "game": "hunted",
+    "measured_pairs": 1,
+    "attempted_pairs": 2,
+    "excluded_pairs": 1,
+    "worker_threads": 1,
+    "on_active_runs": 1,
+    "state_matched_pairs": 1,
+    "events_matched_pairs": 1,
+    "sim_p50_off_ms": 0.208808,
+    "sim_p50_on_ms": 0.297647,
+    "sim_p50_paired_jobs_change_pct": 42.54578368644879,
+    "sim_p50_mean_ratio_95ci_lo": null,
+    "sim_p50_mean_ratio_95ci_hi": null,
+    "sim_p95_off_ms": 0.29180700000000004,
+    "sim_p95_on_ms": 0.38565,
+    "sim_p95_paired_jobs_change_pct": 32.15926965425775,
+    "sim_p95_mean_ratio_95ci_lo": null,
+    "sim_p95_mean_ratio_95ci_hi": null,
+    "draw_p50_off_ms": 0.612029,
+    "draw_p50_on_ms": 0.64442,
+    "draw_p50_paired_jobs_change_pct": 5.292396275339883,
+    "draw_p50_mean_ratio_95ci_lo": null,
+    "draw_p50_mean_ratio_95ci_hi": null,
+    "draw_p95_off_ms": 0.70853,
+    "draw_p95_on_ms": 0.739819,
+    "draw_p95_paired_jobs_change_pct": 4.416044486471993,
+    "draw_p95_mean_ratio_95ci_lo": null,
+    "draw_p95_mean_ratio_95ci_hi": null,
+    "cpu_p50_off_ms": 0.827058,
+    "cpu_p50_on_ms": 0.9431369999999999,
+    "cpu_p50_paired_jobs_change_pct": 14.035170447538125,
+    "cpu_p50_mean_ratio_95ci_lo": null,
+    "cpu_p50_mean_ratio_95ci_hi": null,
+    "cpu_p95_off_ms": 1.0040930000000001,
+    "cpu_p95_on_ms": 1.116249,
+    "cpu_p95_paired_jobs_change_pct": 11.169881674307058,
+    "cpu_p95_mean_ratio_95ci_lo": null,
+    "cpu_p95_mean_ratio_95ci_hi": null,
+    "wall_mean_off_ms": 0.8681016666666667,
+    "wall_mean_on_ms": 0.9785600000000001,
+    "wall_mean_paired_jobs_change_pct": 12.7241240945281,
+    "wall_mean_mean_ratio_95ci_lo": null,
+    "wall_mean_mean_ratio_95ci_hi": null,
+    "off_units_p50": 143.0,
+    "on_units_p50": 143.0,
+    "runtime": {
+      "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
+      "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+    },
+    "game_content": {
+      "wasm": {
+        "commit": null,
+        "content_sha256": "afa4cc21ae2ca474e8e077ed559217959f45f7d90a5262f34d47ab8767338790",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "7046a4c51d04ad87e2e4dfccf495f14a81f40478755326936affb9fbcf6f35d5",
+          "LuaRules/wasm/hunted-rules.wasm": "dfca1fa91eb2d611b4d0243bfa079cea4d4a2a0e4bd01ee3a1044e234c947778",
+          "LuaRules/wasm/hunted-jobs.wasm": "5109e8d9af40dd55b45bd079f7e0fe70906005d5f9ac84041f1b53a98c87a9ea"
+        },
+        "jobs_api": true,
+        "source_commit": "af9c0b37ad94c0cfeb672c31bc2a90681d4f44a8",
+        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981"
+      }
+    },
+    "run_ids": [
+      "hunted-jobs-w1/hunted-00-wasm-off",
+      "hunted-jobs-w1/hunted-00-wasm-on",
+      "hunted-jobs-w1/hunted-01-wasm-on"
+    ]
+  }
+]
