@@ -831,123 +831,11 @@
     ]
   },
   {
-    "campaign": "fire-1-lua-rust-w4",
-    "game": "gravitas",
-    "measured_pairs": 2,
-    "attempted_pairs": 16,
-    "excluded_pairs": 14,
-    "sim_p50_lua_ms": 0.13194650000000002,
-    "sim_p50_rust_ms": 0.0378775,
-    "sim_p50_paired_rust_change_pct": -71.29296671203234,
-    "sim_p50_mean_ratio_95ci_lo": null,
-    "sim_p50_mean_ratio_95ci_hi": null,
-    "sim_p95_lua_ms": 0.27855550000000007,
-    "sim_p95_rust_ms": 0.0486735,
-    "sim_p95_paired_rust_change_pct": -82.52133840657545,
-    "sim_p95_mean_ratio_95ci_lo": null,
-    "sim_p95_mean_ratio_95ci_hi": null,
-    "draw_p50_lua_ms": 0.460327,
-    "draw_p50_rust_ms": 0.377411,
-    "draw_p50_paired_rust_change_pct": -18.011647492113326,
-    "draw_p50_mean_ratio_95ci_lo": null,
-    "draw_p50_mean_ratio_95ci_hi": null,
-    "draw_p95_lua_ms": 0.521453,
-    "draw_p95_rust_ms": 0.9248285,
-    "draw_p95_paired_rust_change_pct": 77.35897692222724,
-    "draw_p95_mean_ratio_95ci_lo": null,
-    "draw_p95_mean_ratio_95ci_hi": null,
-    "cpu_p50_lua_ms": 0.5932980000000001,
-    "cpu_p50_rust_ms": 0.416226,
-    "cpu_p50_paired_rust_change_pct": -29.8445116389385,
-    "cpu_p50_mean_ratio_95ci_lo": null,
-    "cpu_p50_mean_ratio_95ci_hi": null,
-    "cpu_p95_lua_ms": 0.8082940000000001,
-    "cpu_p95_rust_ms": 0.961106,
-    "cpu_p95_paired_rust_change_pct": 18.920359875078276,
-    "cpu_p95_mean_ratio_95ci_lo": null,
-    "cpu_p95_mean_ratio_95ci_hi": null,
-    "wall_mean_lua_ms": 0.6390166666666668,
-    "wall_mean_rust_ms": 0.5136758333333333,
-    "wall_mean_paired_rust_change_pct": -19.607422291563893,
-    "wall_mean_mean_ratio_95ci_lo": null,
-    "wall_mean_mean_ratio_95ci_hi": null,
-    "lua_units_p50": 0.0,
-    "wasm_units_p50": 0.0,
-    "runtime": {
-      "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
-      "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
-    },
-    "game_content": {
-      "lua": {
-        "commit": null,
-        "content_sha256": "5c23a755d07a088a042716dd353ea79b573ef228dc48cafb1b7aecc3bcd91ac9",
-        "modules": {},
-        "jobs_api": false,
-        "source_commit": "8a095ada488347d2b22b3d83bbe37094c394eb20",
-        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-        "effects_fixtures": {
-          "fire_probe_rules.lua": "a4064fdb2aac6753e8c3bfba30d0f1a46a8561dfa8b48161d8a16c043ede297e",
-          "fire_probe_ui.lua": "2675ac8c8104eb0aa78d9abb74e90fee730ec981da388ac36582e269eed3414b"
-        }
-      },
-      "wasm": {
-        "commit": null,
-        "content_sha256": "21f7ed3329739c380b6c65ecd9faa7d6cbe16e06b49957e01e6a1700b2c01eec",
-        "modules": {
-          "LuaUI/wasm/gravitas-jobs.wasm": "48e72cb1864827cd97823b46e115add950c8d673202a7f20091bfbbe15b7259e",
-          "LuaUI/wasm/gravitas-ui.wasm": "f3b20dad35bc896df1f1140fd1b0bf3cd5b2b4298fd7a041ef9c8787d6679038",
-          "LuaRules/wasm/gravitas-rules.wasm": "c890d21ecaceb40e210c3111c40c2bbcbd4b7cd14b87c92a038310911f1dc7c1"
-        },
-        "jobs_api": true,
-        "source_commit": "1df6daf3e0d9ccf8474776c4c3baaddbef769791",
-        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-        "effects_fixtures": {
-          "fire_probe_rules.lua": "a4064fdb2aac6753e8c3bfba30d0f1a46a8561dfa8b48161d8a16c043ede297e",
-          "fire_probe_ui.lua": "2675ac8c8104eb0aa78d9abb74e90fee730ec981da388ac36582e269eed3414b"
-        }
-      }
-    },
-    "run_ids": [
-      "fire-1-lua-rust-w4/gravitas-00-lua",
-      "fire-1-lua-rust-w4/gravitas-00-wasm",
-      "fire-1-lua-rust-w4/gravitas-01-lua",
-      "fire-1-lua-rust-w4/gravitas-01-wasm",
-      "fire-1-lua-rust-w4/gravitas-02-lua",
-      "fire-1-lua-rust-w4/gravitas-02-wasm",
-      "fire-1-lua-rust-w4/gravitas-03-lua",
-      "fire-1-lua-rust-w4/gravitas-03-wasm",
-      "fire-1-lua-rust-w4/gravitas-04-lua",
-      "fire-1-lua-rust-w4/gravitas-04-wasm",
-      "fire-1-lua-rust-w4/gravitas-05-lua",
-      "fire-1-lua-rust-w4/gravitas-05-wasm",
-      "fire-1-lua-rust-w4/gravitas-06-lua",
-      "fire-1-lua-rust-w4/gravitas-06-wasm",
-      "fire-1-lua-rust-w4/gravitas-07-lua",
-      "fire-1-lua-rust-w4/gravitas-07-wasm",
-      "fire-1-lua-rust-w4/gravitas-08-lua",
-      "fire-1-lua-rust-w4/gravitas-08-wasm",
-      "fire-1-lua-rust-w4/gravitas-09-lua",
-      "fire-1-lua-rust-w4/gravitas-09-wasm",
-      "fire-1-lua-rust-w4/gravitas-10-lua",
-      "fire-1-lua-rust-w4/gravitas-10-wasm",
-      "fire-1-lua-rust-w4/gravitas-11-lua",
-      "fire-1-lua-rust-w4/gravitas-11-wasm",
-      "fire-1-lua-rust-w4/gravitas-12-lua",
-      "fire-1-lua-rust-w4/gravitas-12-wasm",
-      "fire-1-lua-rust-w4/gravitas-13-lua",
-      "fire-1-lua-rust-w4/gravitas-13-wasm",
-      "fire-1-lua-rust-w4/gravitas-14-lua",
-      "fire-1-lua-rust-w4/gravitas-14-wasm",
-      "fire-1-lua-rust-w4/gravitas-15-wasm"
-    ]
-  },
-  {
     "campaign": "mycube-1x-w1",
     "game": "mycube",
     "measured_pairs": 1,
-    "attempted_pairs": 6,
-    "excluded_pairs": 5,
+    "attempted_pairs": 7,
+    "excluded_pairs": 6,
     "sim_p50_lua_ms": 0.33015,
     "sim_p50_rust_ms": 0.084647,
     "sim_p50_paired_rust_change_pct": -74.361048008481,
@@ -1023,7 +911,9 @@
       "mycube-1x-w1/mycube-04-lua",
       "mycube-1x-w1/mycube-04-wasm",
       "mycube-1x-w1/mycube-05-lua",
-      "mycube-1x-w1/mycube-05-wasm"
+      "mycube-1x-w1/mycube-05-wasm",
+      "mycube-1x-w1/mycube-06-lua",
+      "mycube-1x-w1/mycube-06-wasm"
     ]
   }
 ]
