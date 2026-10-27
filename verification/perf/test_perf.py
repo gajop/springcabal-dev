@@ -278,11 +278,13 @@ class EquivalenceTests(unittest.TestCase):
             root=Path(directory)
             fixtures={'verification/fixtures/gravitas/fire_probe_rules.lua':'rules',
                       'verification/fixtures/gravitas/fire_probe_ui.lua':'ui'}
-            (root/'provenance.json').write_text(json.dumps({'engine_sha256':'engine',
+            (root/'provenance.json').write_text(json.dumps({'engine_sha256':'engine','effects_probe_sha256':'probe',
                 'args':{'games_dir':str(root),'scenario':'effects'},'fixtures':fixtures}))
-            (root/'gravitas-content.json').write_text(json.dumps({'lua':{'commit':'source'}}))
+            (root/'gravitas-content.json').write_text(json.dumps({'lua':{'commit':'source'},'wasm':{'commit':'rust'}}))
             self.assertEqual(dashboard.capture_identity(root,'gravitas','lua')['effects_fixtures'],
                              {'fire_probe_rules.lua':'rules','fire_probe_ui.lua':'ui'})
+            self.assertEqual(dashboard.capture_identity(root,'gravitas','wasm')['effects_probe_sha256'],'probe')
+            self.assertNotIn('effects_probe_sha256',dashboard.capture_identity(root,'gravitas','lua'))
 
     def test_lua_only_source_change_uses_its_clean_runs_without_a_rust_counterpart(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -68,6 +68,8 @@ def capture_identity(campaign, game, backend):
                 'engine_sha256': stamp['engine_sha256']}
     if game == 'gravitas' and stamp['args']['scenario'] == 'effects':
         identity['effects_fixtures'] = effects_fixtures(stamp)
+        if backend == 'wasm':
+            identity['effects_probe_sha256'] = stamp.get('effects_probe_sha256')
     return identity
 
 
@@ -305,7 +307,7 @@ def main():
             content_sha256=content[result['backend']]['content_sha256'],
             cpu_costs=cpu_costs(profile),
             pair_key=str(path.parent.parent.relative_to(args.profiles))+'/'+str(result['repeat']),
-            engine_sha256=profile.get('runtime', {}).get('engine_sha256'),
+            **capture_identity(path.parent.parent, result['game'], result['backend']),
             source=str(path.relative_to(PROJECT))))
     for source in (HERE/'web').iterdir():
         if source.is_file():
