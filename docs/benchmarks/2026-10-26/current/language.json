@@ -507,11 +507,94 @@
     ]
   },
   {
+    "campaign": "area17-1x-w1",
+    "game": "area17",
+    "measured_pairs": 1,
+    "attempted_pairs": 6,
+    "excluded_pairs": 5,
+    "sim_p50_lua_ms": 1.50436,
+    "sim_p50_rust_ms": 1.254067,
+    "sim_p50_paired_rust_change_pct": -16.63783934696481,
+    "sim_p50_mean_ratio_95ci_lo": null,
+    "sim_p50_mean_ratio_95ci_hi": null,
+    "sim_p95_lua_ms": 2.560327,
+    "sim_p95_rust_ms": 1.5807609999999999,
+    "sim_p95_paired_rust_change_pct": -38.25940983319709,
+    "sim_p95_mean_ratio_95ci_lo": null,
+    "sim_p95_mean_ratio_95ci_hi": null,
+    "draw_p50_lua_ms": 0.9679009999999999,
+    "draw_p50_rust_ms": 0.9241849999999999,
+    "draw_p50_paired_rust_change_pct": -4.51657762519101,
+    "draw_p50_mean_ratio_95ci_lo": null,
+    "draw_p50_mean_ratio_95ci_hi": null,
+    "draw_p95_lua_ms": 1.360114,
+    "draw_p95_rust_ms": 1.231086,
+    "draw_p95_paired_rust_change_pct": -9.486557744424374,
+    "draw_p95_mean_ratio_95ci_lo": null,
+    "draw_p95_mean_ratio_95ci_hi": null,
+    "cpu_p50_lua_ms": 2.509802,
+    "cpu_p50_rust_ms": 2.1844259999999998,
+    "cpu_p50_paired_rust_change_pct": -12.964209925723235,
+    "cpu_p50_mean_ratio_95ci_lo": null,
+    "cpu_p50_mean_ratio_95ci_hi": null,
+    "cpu_p95_lua_ms": 3.789133,
+    "cpu_p95_rust_ms": 2.7391,
+    "cpu_p95_paired_rust_change_pct": -27.7116955250713,
+    "cpu_p95_mean_ratio_95ci_lo": null,
+    "cpu_p95_mean_ratio_95ci_hi": null,
+    "wall_mean_lua_ms": 2.709191666666667,
+    "wall_mean_rust_ms": 2.3267483333333328,
+    "wall_mean_paired_rust_change_pct": -14.116510767356838,
+    "wall_mean_mean_ratio_95ci_lo": null,
+    "wall_mean_mean_ratio_95ci_hi": null,
+    "lua_units_p50": 1329.0,
+    "wasm_units_p50": 1329.0,
+    "runtime": {
+      "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
+      "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "0de5d9b82853650e51e1bb492421308b43e7eb099748193dfc7b1d999921d744",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981"
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "55cd080b2342f2ff0128ad672262651fcef74117a3af028c17a768f102f57b89",
+        "modules": {
+          "LuaUI/wasm/area17-ui.wasm": "f6c2af3d53323454be74c3332dbdbe66c7ac75740b6c8cdae2744d19f9f541c0",
+          "LuaRules/wasm/area17-rules.wasm": "90b3b01fa7749cb3ad3e2c3a5cdca9b84cb4aa63f9272dc8dc90b0c673300a63"
+        },
+        "jobs_api": false,
+        "source_commit": "a73592cc51f36322e7b03024ab1439ef73e88893",
+        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981"
+      }
+    },
+    "run_ids": [
+      "area17-1x-w1/area17-00-lua",
+      "area17-1x-w1/area17-00-wasm",
+      "area17-1x-w1/area17-01-lua",
+      "area17-1x-w1/area17-01-wasm",
+      "area17-1x-w1/area17-02-lua",
+      "area17-1x-w1/area17-02-wasm",
+      "area17-1x-w1/area17-03-lua",
+      "area17-1x-w1/area17-03-wasm",
+      "area17-1x-w1/area17-04-lua",
+      "area17-1x-w1/area17-04-wasm",
+      "area17-1x-w1/area17-05-wasm"
+    ]
+  },
+  {
     "campaign": "flove-combat-10x-lua-rust-w1",
     "game": "flove",
     "measured_pairs": 1,
-    "attempted_pairs": 26,
-    "excluded_pairs": 25,
+    "attempted_pairs": 30,
+    "excluded_pairs": 29,
     "sim_p50_lua_ms": 30.99235,
     "sim_p50_rust_ms": 26.783363,
     "sim_p50_paired_rust_change_pct": -13.580728792750463,
@@ -628,15 +711,23 @@
       "flove-combat-10x-lua-rust-w1/flove-24-lua",
       "flove-combat-10x-lua-rust-w1/flove-24-wasm",
       "flove-combat-10x-lua-rust-w1/flove-25-lua",
-      "flove-combat-10x-lua-rust-w1/flove-25-wasm"
+      "flove-combat-10x-lua-rust-w1/flove-25-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-26-lua",
+      "flove-combat-10x-lua-rust-w1/flove-26-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-27-lua",
+      "flove-combat-10x-lua-rust-w1/flove-27-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-28-lua",
+      "flove-combat-10x-lua-rust-w1/flove-28-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-29-lua",
+      "flove-combat-10x-lua-rust-w1/flove-29-wasm"
     ]
   },
   {
     "campaign": "fire-1-lua-rust-w4",
     "game": "gravitas",
     "measured_pairs": 1,
-    "attempted_pairs": 3,
-    "excluded_pairs": 2,
+    "attempted_pairs": 7,
+    "excluded_pairs": 6,
     "sim_p50_lua_ms": 0.132736,
     "sim_p50_rust_ms": 0.038033000000000004,
     "sim_p50_paired_rust_change_pct": -71.34688404050145,
@@ -706,7 +797,15 @@
       "fire-1-lua-rust-w4/gravitas-00-wasm",
       "fire-1-lua-rust-w4/gravitas-01-lua",
       "fire-1-lua-rust-w4/gravitas-01-wasm",
-      "fire-1-lua-rust-w4/gravitas-02-lua"
+      "fire-1-lua-rust-w4/gravitas-02-lua",
+      "fire-1-lua-rust-w4/gravitas-02-wasm",
+      "fire-1-lua-rust-w4/gravitas-03-lua",
+      "fire-1-lua-rust-w4/gravitas-03-wasm",
+      "fire-1-lua-rust-w4/gravitas-04-lua",
+      "fire-1-lua-rust-w4/gravitas-04-wasm",
+      "fire-1-lua-rust-w4/gravitas-05-lua",
+      "fire-1-lua-rust-w4/gravitas-05-wasm",
+      "fire-1-lua-rust-w4/gravitas-06-lua"
     ]
   }
 ]
