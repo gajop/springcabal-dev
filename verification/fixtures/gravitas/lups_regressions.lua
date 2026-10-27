@@ -123,7 +123,9 @@ local probeEnv=setmetatable({math=perfMath,Spring={
     GetModOptions=function() return {fire_perf=1,fire_perf_emitters=2} end,
     GetViewGeometry=function() return 1024,736,0,0 end,
     GetGameFrame=function() return frame end,
-    WarpMouse=noop,SetCameraState=noop,SendCommands=noop,
+    WarpMouse=function(x,y)
+        assert(x>20 and x<1004 and y>20 and y<716, 'probe cursor triggers viewport edge scrolling')
+    end,SetCameraState=noop,SendCommands=noop,
 },gl={},VFS={}}, {__index=_G})
 local function record(list)
     list[#list+1]={probeEnv.thisGameFrame,perfMath.random()}

@@ -115,7 +115,7 @@ local function advance(n)
 end
 
 function Update()
-    Spring.WarpMouse(1100, 500)
+    Spring.WarpMouse(200, 500)
     Spring.SetCameraState({name="ta", mode=1, px=4288, py=0, pz=600,
         height=650, angle=0.464, fov=45}, 0)
     if perf then
