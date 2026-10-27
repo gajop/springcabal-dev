@@ -603,21 +603,30 @@
     "adopted": null,
     "change": "Trial: intern float32 palette values without formatting every channel; retain unchanged shader palettes and skip natural-expiry masks. Preserve ordinary particle arrays and uploads. Candidateb3b548a vs8a095ad.",
     "backend": "lua",
-    "measured_rounds": 3,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 8,
+    "attempted_phase_pairs": 14,
     "wall_before_ms": 0.6140783333333333,
     "wall_after_ms": 0.5948216666666669,
-    "wall_change_pct": -3.1358648598033945,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.034815,
-    "sim_after_ms": 0.034631,
-    "sim_change_pct": -0.538388842750348,
-    "sim_mean_ratio_95ci": null,
+    "wall_change_pct": -3.2994069214226096,
+    "wall_mean_ratio_95ci": [
+      0.9621960118483386,
+      0.9695333462178054
+    ],
+    "sim_before_ms": 0.034919,
+    "sim_after_ms": 0.034608,
+    "sim_change_pct": -0.8731868447508173,
+    "sim_mean_ratio_95ci": [
+      0.9820968270058378,
+      0.9945812146842832
+    ],
     "draw_before_ms": 0.525073,
     "draw_after_ms": 0.495594,
-    "draw_change_pct": -5.373859880589393,
-    "draw_mean_ratio_95ci": null
+    "draw_change_pct": -5.379575575437279,
+    "draw_mean_ratio_95ci": [
+      0.9409569827805243,
+      0.9475558106059881
+    ]
   },
   {
     "id": "hunted-order-cache-1x",
