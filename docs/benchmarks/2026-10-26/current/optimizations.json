@@ -245,40 +245,14 @@
     ]
   },
   {
-    "id": "gravitas-upload-100",
+    "id": "gravitas-expiry-upload-100",
     "title": "Gravitas fire",
     "load": "100 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: combine contiguous dirty particle entries into one VBO upload per range before drawing, and upload unchanged shader palettes only once. Includes visibility changes, ring wraps and buffer growth; candidate d33bc73.",
-    "backend": "lua",
-    "measured_rounds": 1,
-    "planned_rounds": 5,
-    "attempted_phase_pairs": 4,
-    "wall_before_ms": 34.84460833333333,
-    "wall_after_ms": 35.488958333333336,
-    "wall_change_pct": 1.8492100523443078,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.269551,
-    "sim_after_ms": 0.27945,
-    "sim_change_pct": 3.672403367080812,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 31.48591,
-    "draw_after_ms": 32.248065,
-    "draw_change_pct": 2.420622430795216,
-    "draw_mean_ratio_95ci": null
-  },
-  {
-    "id": "gravitas-upload-10",
-    "title": "Gravitas fire",
-    "load": "10 emitters",
-    "backends": [
-      "lua"
-    ],
-    "adopted": null,
-    "change": "Trial: combine contiguous dirty particle entries into one VBO upload per range before drawing, and upload unchanged shader palettes only once. Includes visibility changes, ring wraps and buffer growth; candidate d33bc73.",
+    "change": "Trial: coalesce contiguous particle uploads; cache unchanged shader palettes; skip invisible mask uploads after natural expiry while preserving early-removal masks. Candidate941d09a vs public8a095ad.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -297,14 +271,40 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "gravitas-upload-1",
+    "id": "gravitas-expiry-upload-10",
+    "title": "Gravitas fire",
+    "load": "10 emitters",
+    "backends": [
+      "lua"
+    ],
+    "adopted": null,
+    "change": "Trial: coalesce contiguous particle uploads; cache unchanged shader palettes; skip invisible mask uploads after natural expiry while preserving early-removal masks. Candidate941d09a vs public8a095ad.",
+    "backend": "lua",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "gravitas-expiry-upload-1",
     "title": "Gravitas fire",
     "load": "1 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: combine contiguous dirty particle entries into one VBO upload per range before drawing, and upload unchanged shader palettes only once. Includes visibility changes, ring wraps and buffer growth; candidate d33bc73.",
+    "change": "Trial: coalesce contiguous particle uploads; cache unchanged shader palettes; skip invisible mask uploads after natural expiry while preserving early-removal masks. Candidate941d09a vs public8a095ad.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
