@@ -510,8 +510,8 @@
     "campaign": "flove-combat-10x-lua-rust-w1",
     "game": "flove",
     "measured_pairs": 1,
-    "attempted_pairs": 15,
-    "excluded_pairs": 14,
+    "attempted_pairs": 20,
+    "excluded_pairs": 19,
     "sim_p50_lua_ms": 30.99235,
     "sim_p50_rust_ms": 26.783363,
     "sim_p50_paired_rust_change_pct": -13.580728792750463,
@@ -605,7 +605,17 @@
       "flove-combat-10x-lua-rust-w1/flove-12-wasm",
       "flove-combat-10x-lua-rust-w1/flove-13-lua",
       "flove-combat-10x-lua-rust-w1/flove-13-wasm",
-      "flove-combat-10x-lua-rust-w1/flove-14-lua"
+      "flove-combat-10x-lua-rust-w1/flove-14-lua",
+      "flove-combat-10x-lua-rust-w1/flove-14-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-15-lua",
+      "flove-combat-10x-lua-rust-w1/flove-15-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-16-lua",
+      "flove-combat-10x-lua-rust-w1/flove-16-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-17-lua",
+      "flove-combat-10x-lua-rust-w1/flove-17-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-18-lua",
+      "flove-combat-10x-lua-rust-w1/flove-18-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-19-wasm"
     ]
   }
 ]

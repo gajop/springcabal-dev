@@ -135,10 +135,10 @@
     "game": "Gravitas.sdd",
     "branch": "master",
     "public_branch": "master",
-    "head": "28f46bf874131e7b05efe293fe97df870c4bc0f5",
-    "frozen_expected": "28f46bf874131e7b05efe293fe97df870c4bc0f5",
+    "head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+    "frozen_expected": "8a095ada488347d2b22b3d83bbe37094c394eb20",
     "remote": "git@github.com:SpringCabal/Gravitas.git",
-    "remote_head": "28f46bf874131e7b05efe293fe97df870c4bc0f5",
+    "remote_head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
     "dirty": "",
     "committed_and_pushed": true
   },
