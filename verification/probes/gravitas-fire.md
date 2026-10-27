@@ -56,3 +56,10 @@ cd spring-linux/games/Gravitas-wasm.sdd/wasm-src
 cargo build -p gravitas-ui-wasm --release
 cp target/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm ../LuaUI/wasm/gravitas-ui.wasm
 ```
+# Frozen source comparisons
+
+Set `VF_EFFECTS_MODULE=/absolute/path/to/fire-probe.wasm` when running the
+Wasm fixture to compare already-built revisions from the same compiler path.
+The usual build remains the default. The five fixed frames and fire-region
+comparison are unchanged.
+

@@ -7,8 +7,14 @@ variant=${1:-wasm}
 source_game="$GAMES_DIR/Gravitas.sdd"
 wasm_game="$GAMES_DIR/Gravitas-wasm.sdd"
 if [[ $variant == wasm ]]; then
-    (cd "$wasm_game/wasm-src" && cargo build -p gravitas-ui-wasm --features fire-probe --release \
-        --target wasm32-unknown-unknown --target-dir "$BUILD_CACHE/gravitas-fire-probe")
+    fire_module=${VF_EFFECTS_MODULE:-}
+    if [[ -n $fire_module ]]; then
+        [[ -f $fire_module ]] || vf_die "missing frozen fire probe: $fire_module"
+    else
+        (cd "$wasm_game/wasm-src" && cargo build -p gravitas-ui-wasm --features fire-probe --release \
+            --target wasm32-unknown-unknown --target-dir "$BUILD_CACHE/gravitas-fire-probe")
+        fire_module="$BUILD_CACHE/gravitas-fire-probe/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm"
+    fi
 fi
 vf_workspace "gravitas-fire-$variant" stable
 # The archive index stores platform-specific paths (POSIX versus Wine Z:).
@@ -24,7 +30,7 @@ if [[ $variant == lua ]]; then
 else
     mv "$staged/LuaUI" "$staged/LuaUI-reference"
     cp -a "$wasm_game/LuaUI" "$staged/LuaUI"
-    cp "$BUILD_CACHE/gravitas-fire-probe/wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm" "$staged/LuaUI/wasm/gravitas-ui.wasm"
+    cp "$fire_module" "$staged/LuaUI/wasm/gravitas-ui.wasm"
 fi
 vf_link_map "$MAPS_DIR/Gravitas-map.sdd"
 vf_start_file "$(vf_launch_script gravitas)"
