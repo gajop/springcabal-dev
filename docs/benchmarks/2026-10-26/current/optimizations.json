@@ -343,7 +343,7 @@
     "backend": "wasm",
     "measured_rounds": 2,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 13,
+    "attempted_phase_pairs": 14,
     "wall_before_ms": 4.776127499999999,
     "wall_after_ms": 2.947716666666666,
     "wall_change_pct": -38.246793609574326,
@@ -543,7 +543,7 @@
     "backend": "lua",
     "measured_rounds": 2,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 4,
+    "attempted_phase_pairs": 6,
     "wall_before_ms": 2.5861725,
     "wall_after_ms": 2.3843258333333335,
     "wall_change_pct": -7.80238226812453,
@@ -593,21 +593,30 @@
     "adopted": null,
     "change": "Trial: cache sorted rabbit IDs by roster revision as Lua does; remove the unshared per-frame surroundings Rc allocation. Preserve immutable lists across synchronous unit callbacks. Candidate 437b97b vs af9c0b3.",
     "backend": "wasm",
-    "measured_rounds": 4,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 12,
-    "wall_before_ms": 0.882325,
-    "wall_after_ms": 0.8744324999999997,
-    "wall_change_pct": -0.8938541421990243,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.213179,
-    "sim_after_ms": 0.21129550000000002,
-    "sim_change_pct": -0.7961057080204892,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 0.6251774999999999,
-    "draw_after_ms": 0.6186510000000001,
-    "draw_change_pct": -1.307006981884129,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 13,
+    "wall_before_ms": 0.88494,
+    "wall_after_ms": 0.8745399999999999,
+    "wall_change_pct": -1.1157065262428767,
+    "wall_mean_ratio_95ci": [
+      0.9748502532052775,
+      0.9980186678953407
+    ],
+    "sim_before_ms": 0.213952,
+    "sim_after_ms": 0.211452,
+    "sim_change_pct": -0.9116849428133511,
+    "sim_mean_ratio_95ci": [
+      0.9705742445743759,
+      0.9931956478630658
+    ],
+    "draw_before_ms": 0.627396,
+    "draw_after_ms": 0.619488,
+    "draw_change_pct": -1.0867488871659226,
+    "draw_mean_ratio_95ci": [
+      0.9839312611555192,
+      0.9938340993018431
+    ]
   },
   {
     "id": "hunted-order-cache-10x",
