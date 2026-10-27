@@ -343,7 +343,7 @@
     "backend": "wasm",
     "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 1,
+    "attempted_phase_pairs": 3,
     "wall_before_ms": null,
     "wall_after_ms": null,
     "wall_change_pct": null,
