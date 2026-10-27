@@ -1,0 +1,178 @@
+{
+  "frame": 299,
+  "note": "GL call inspection only; traced runs are excluded from timing (extension-query warnings and contention).",
+  "groups": {
+    "flame": {
+      "lua_visible": 223,
+      "rust_visible": 223,
+      "lua_ranges": [
+        [
+          382,
+          113
+        ],
+        [
+          0,
+          288
+        ]
+      ],
+      "rust_ranges": [
+        [
+          0,
+          324
+        ]
+      ],
+      "max_difference_per_field": [
+        0.0,
+        0.0,
+        6.103515625e-05,
+        0.0,
+        1.9073486328125e-06,
+        1.9073486328125e-06,
+        1.9073486328125e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.8612896496582607e-07,
+        3.0434871067797076e-08,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0
+      ],
+      "first_different_record": null
+    },
+    "distortion": {
+      "lua_visible": 15,
+      "rust_visible": 15,
+      "lua_ranges": [
+        [
+          84,
+          24
+        ]
+      ],
+      "rust_ranges": [
+        [
+          84,
+          24
+        ]
+      ],
+      "max_difference_per_field": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.76837158203125e-07,
+        0.0,
+        1.1920928955078125e-07,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0
+      ],
+      "first_different_record": null
+    },
+    "smoke": {
+      "lua_visible": 295,
+      "rust_visible": 295,
+      "lua_ranges": [
+        [
+          385,
+          125
+        ],
+        [
+          0,
+          330
+        ]
+      ],
+      "rust_ranges": [
+        [
+          0,
+          391
+        ]
+      ],
+      "max_difference_per_field": [
+        0.0,
+        0.0,
+        6.103515625e-05,
+        0.0,
+        3.814697265625e-06,
+        3.814697265625e-06,
+        3.814697265625e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.8442708988052345e-07,
+        6.60304697586156e-08,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0
+      ],
+      "first_different_record": null
+    }
+  },
+  "lua_source": "8a095ad",
+  "rust_source": "60ccf45",
+  "engine": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
+  "camera_fix": {
+    "passed": true,
+    "rows": [
+      {
+        "frame": 300,
+        "rmse": 0.0
+      },
+      {
+        "frame": 600,
+        "rmse": 4.1337e-05
+      },
+      {
+        "frame": 897,
+        "rmse": 0.0
+      }
+    ],
+    "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-27-gravitas-fire-camera",
+    "rust_source": "c735a4f"
+  },
+  "diagnostic_root": "perf-runs/2026-10-27-gravitas-fire-gl"
+}
