@@ -364,11 +364,83 @@
     ]
   },
   {
+    "campaign": "flove-combat-10x-jobs-w1",
+    "game": "flove",
+    "measured_pairs": 0,
+    "attempted_pairs": 2,
+    "excluded_pairs": 2,
+    "worker_threads": 1,
+    "on_active_runs": 0,
+    "state_matched_pairs": 0,
+    "events_matched_pairs": 0,
+    "sim_p50_off_ms": null,
+    "sim_p50_on_ms": null,
+    "sim_p50_paired_jobs_change_pct": null,
+    "sim_p50_mean_ratio_95ci_lo": null,
+    "sim_p50_mean_ratio_95ci_hi": null,
+    "sim_p95_off_ms": null,
+    "sim_p95_on_ms": null,
+    "sim_p95_paired_jobs_change_pct": null,
+    "sim_p95_mean_ratio_95ci_lo": null,
+    "sim_p95_mean_ratio_95ci_hi": null,
+    "draw_p50_off_ms": null,
+    "draw_p50_on_ms": null,
+    "draw_p50_paired_jobs_change_pct": null,
+    "draw_p50_mean_ratio_95ci_lo": null,
+    "draw_p50_mean_ratio_95ci_hi": null,
+    "draw_p95_off_ms": null,
+    "draw_p95_on_ms": null,
+    "draw_p95_paired_jobs_change_pct": null,
+    "draw_p95_mean_ratio_95ci_lo": null,
+    "draw_p95_mean_ratio_95ci_hi": null,
+    "cpu_p50_off_ms": null,
+    "cpu_p50_on_ms": null,
+    "cpu_p50_paired_jobs_change_pct": null,
+    "cpu_p50_mean_ratio_95ci_lo": null,
+    "cpu_p50_mean_ratio_95ci_hi": null,
+    "cpu_p95_off_ms": null,
+    "cpu_p95_on_ms": null,
+    "cpu_p95_paired_jobs_change_pct": null,
+    "cpu_p95_mean_ratio_95ci_lo": null,
+    "cpu_p95_mean_ratio_95ci_hi": null,
+    "wall_mean_off_ms": null,
+    "wall_mean_on_ms": null,
+    "wall_mean_paired_jobs_change_pct": null,
+    "wall_mean_mean_ratio_95ci_lo": null,
+    "wall_mean_mean_ratio_95ci_hi": null,
+    "off_units_p50": null,
+    "on_units_p50": null,
+    "runtime": {
+      "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
+      "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+    },
+    "game_content": {
+      "wasm": {
+        "commit": null,
+        "content_sha256": "a8f43a53345ee78e729ef13bfcbed9afd5556a9dc15f977ada61809285db724c",
+        "modules": {
+          "LuaUI/wasm/flove-ui.wasm": "619dd7063512795260de27bb0b8d0f3b53077b1ca29069cb1534a1d9c768d0fd",
+          "LuaRules/wasm/flove-jobs.wasm": "8e5c33e6e6946517d7ff40971b65f41de7d91a5b5d4c4890752298d2395b6a23",
+          "LuaRules/wasm/flove-rules.wasm": "1aa384dbe7aff84896e27a6c7eddd4ff2fac603cbdb9176cc6984c8b7c9ae267"
+        },
+        "jobs_api": true,
+        "source_commit": "889fc7c9f9f5418839ea0bdee7b5e1636e86a28d",
+        "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981"
+      }
+    },
+    "run_ids": [
+      "flove-combat-10x-jobs-w1/flove-00-wasm-off",
+      "flove-combat-10x-jobs-w1/flove-00-wasm-on",
+      "flove-combat-10x-jobs-w1/flove-01-wasm-on"
+    ]
+  },
+  {
     "campaign": "flove-combat-jobs-w1",
     "game": "flove",
     "measured_pairs": 2,
-    "attempted_pairs": 6,
-    "excluded_pairs": 4,
+    "attempted_pairs": 9,
+    "excluded_pairs": 7,
     "worker_threads": 1,
     "on_active_runs": 2,
     "state_matched_pairs": 2,
@@ -441,7 +513,12 @@
       "flove-combat-jobs-w1/flove-04-wasm-off",
       "flove-combat-jobs-w1/flove-04-wasm-on",
       "flove-combat-jobs-w1/flove-05-wasm-off",
-      "flove-combat-jobs-w1/flove-05-wasm-on"
+      "flove-combat-jobs-w1/flove-05-wasm-on",
+      "flove-combat-jobs-w1/flove-06-wasm-off",
+      "flove-combat-jobs-w1/flove-06-wasm-on",
+      "flove-combat-jobs-w1/flove-07-wasm-off",
+      "flove-combat-jobs-w1/flove-07-wasm-on",
+      "flove-combat-jobs-w1/flove-08-wasm-off"
     ]
   }
 ]

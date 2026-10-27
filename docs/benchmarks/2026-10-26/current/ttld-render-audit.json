@@ -1,0 +1,345 @@
+{
+  "scope": "Saved matched 10x diagnostic GL capture; not timing or GPU timestamp data. Dumped matrices have limited decimal precision.",
+  "engine": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
+  "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
+  "source": {
+    "lua": "62471b1",
+    "rust": "036dadb"
+  },
+  "capture": "perf-runs/2026-10-26-ttld-matched-gl/ttld-10x",
+  "last_frame": {
+    "lua": {
+      "modelviews": [
+        [
+          "{0.9999913, 6.117835e-08, -0, 0, -3.66137e-08, 0.5984644, 0.8011401, 0, 4.901286e-08, -0.8011332, 0.5984696, 0, -5624.29, 5691.46, -5332.536, 1}",
+          15
+        ],
+        [
+          "{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -512, -352, -1706.667, 1}",
+          5
+        ],
+        [
+          "{6.681112e-05, -0.0003290141, -5.391117e-05, 0, -0.0003940987, 0.0002541977, -3.369448e-05, 0, -0.0003589995, -0.0003402812, 2.695558e-05, 0, 2.405272, 4.233654, 0.6198921, 1}",
+          3
+        ],
+        [
+          "{0.9999956, 0, -0, 0, 0, -0, 0.9999956, 0, -0, -0.9999913, -0, 0, -5624.314, 7751.058, -865.9166, 1}",
+          2
+        ],
+        [
+          "{0.9999913, -8.858578e-09, -0, 0, 5.301676e-09, 0.598469, -0.8011367, 0, 7.096994e-09, 0.8011297, 0.5984742, 0, -5624.29, -5691.43, -5332.569, 1}",
+          1
+        ],
+        [
+          "{0.03125, 0, 0, 0, 0, 0.04347826, 0, 0, 0, 0, 1, 0, 0.5, 0.4565217, 0, 1}",
+          1
+        ]
+      ],
+      "draw_calls": {
+        "glDrawElements": 5562,
+        "glDrawArrays": 5,
+        "glMultiDrawElementsIndirect": 11
+      },
+      "instanced_total": {},
+      "count_total": {
+        "glDrawElements": 13340271,
+        "glDrawArrays": 324
+      }
+    },
+    "wasm": {
+      "modelviews": [
+        [
+          "{0.9999913, 6.117835e-08, -0, 0, -3.66137e-08, 0.5984644, 0.8011401, 0, 4.901286e-08, -0.8011332, 0.5984696, 0, -5624.29, 5691.46, -5332.536, 1}",
+          12
+        ],
+        [
+          "{6.681112e-05, -0.0003290141, -5.391117e-05, 0, -0.0003940987, 0.0002541977, -3.369448e-05, 0, -0.0003589995, -0.0003402812, 2.695558e-05, 0, 2.405272, 4.233654, 0.6198921, 1}",
+          3
+        ],
+        [
+          "{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -512, -352, -1706.667, 1}",
+          3
+        ],
+        [
+          "{0.9999956, 0, -0, 0, 0, -0, 0.9999956, 0, -0, -0.9999913, -0, 0, -5624.314, 7751.058, -865.9166, 1}",
+          2
+        ],
+        [
+          "{0.9999913, -8.858578e-09, -0, 0, 5.301676e-09, 0.598469, -0.8011367, 0, 7.096994e-09, 0.8011297, 0.5984742, 0, -5624.29, -5691.43, -5332.569, 1}",
+          1
+        ],
+        [
+          "{0.03125, 0, 0, 0, 0, 0.04347826, 0, 0, 0, 0, 1, 0, 0.5, 0.4565217, 0, 1}",
+          1
+        ]
+      ],
+      "draw_calls": {
+        "glDrawElements": 5564,
+        "glDrawArrays": 5,
+        "glMultiDrawElementsIndirect": 11
+      },
+      "instanced_total": {},
+      "count_total": {
+        "glDrawElements": 13340532,
+        "glDrawArrays": 328
+      }
+    }
+  },
+  "indirect_models": {
+    "lua": [
+      [
+        [
+          36165,
+          10,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          20340,
+          444,
+          419625,
+          0,
+          0
+        ],
+        [
+          15012,
+          120,
+          135873,
+          0,
+          444
+        ]
+      ],
+      [
+        [
+          9126,
+          125,
+          108495,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          15144,
+          100,
+          374193,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          27408,
+          4,
+          209745,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          36165,
+          10,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          20340,
+          330,
+          419625,
+          0,
+          0
+        ],
+        [
+          15012,
+          80,
+          135873,
+          0,
+          330
+        ]
+      ],
+      [
+        [
+          9126,
+          107,
+          108495,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          36165,
+          10,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          20340,
+          330,
+          419625,
+          0,
+          0
+        ],
+        [
+          15012,
+          80,
+          135873,
+          0,
+          330
+        ]
+      ],
+      [
+        [
+          9126,
+          107,
+          108495,
+          0,
+          0
+        ]
+      ]
+    ],
+    "wasm": [
+      [
+        [
+          36165,
+          10,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          20340,
+          444,
+          419625,
+          0,
+          0
+        ],
+        [
+          15012,
+          120,
+          135873,
+          0,
+          444
+        ]
+      ],
+      [
+        [
+          9126,
+          125,
+          108495,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          15144,
+          100,
+          374193,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          27408,
+          4,
+          209745,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          36165,
+          10,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          20340,
+          330,
+          419625,
+          0,
+          0
+        ],
+        [
+          15012,
+          80,
+          135873,
+          0,
+          330
+        ]
+      ],
+      [
+        [
+          9126,
+          107,
+          108495,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          36165,
+          10,
+          0,
+          0,
+          0
+        ]
+      ],
+      [
+        [
+          20340,
+          330,
+          419625,
+          0,
+          0
+        ],
+        [
+          15012,
+          80,
+          135873,
+          0,
+          330
+        ]
+      ],
+      [
+        [
+          9126,
+          107,
+          108495,
+          0,
+          0
+        ]
+      ]
+    ]
+  },
+  "rng": {
+    "finding": "An explicit seed still selects an unsynced PCG stream using the object address. ASLR changes that stream across processes. Native script random calls also consume the engine effect stream, unlike Lua math.random, which has its own stream. A fixed seed alone cannot make these captures identical.",
+    "stream_selection": "https://github.com/gajop/spring-rust/blob/4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2/rts/System/GlobalRNG.h#L120",
+    "native_random": "https://github.com/gajop/spring-rust/blob/4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2/rts/NativeInterface/api/UnsyncedCtrl.cpp#L1910",
+    "lua_random": "https://github.com/gajop/spring-rust/blob/4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2/rts/lib/lua/include/LuaUser.cpp#L38"
+  },
+  "wind_api": {
+    "finding": "The native API exposes minimum, maximum and current strength; Lua additionally returns the current velocity and direction. TTLD Rust previously used current strength as vertical force.",
+    "native": "https://github.com/gajop/spring-rust/blob/4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2/rts/NativeInterface/api/Game.cpp#L300",
+    "lua": "https://github.com/gajop/spring-rust/blob/4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2/rts/Lua/LuaSyncedRead.cpp#L992"
+  }
+}
