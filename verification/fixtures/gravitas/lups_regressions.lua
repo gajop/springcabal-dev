@@ -65,7 +65,9 @@ gl.GetVAO = function()
     }
 end
 local batchEnv=setmetatable({gl=gl,GL={ARRAY_BUFFER=1,TRIANGLES=4},
-    VFS={LoadFile=function() return '' end},Spring={Echo=error}}, {__index=_G})
+    VFS={LoadFile=function() return '' end},Spring={Echo=function(message)
+        assert(message=='LUPS: shared flat particle ring',message)
+    end}}, {__index=_G})
 local batchChunk=assert(loadfile(root..'/lups/headers/particle_batch.lua'))
 local Batch=setfenv(batchChunk,batchEnv)()
 local palette={{1,1,1,1}}
@@ -74,18 +76,21 @@ local function effect(id,count)
     for i=1,count do for j=1,28 do fx.gpuParticles[#fx.gpuParticles+1]=id*10000+i*100+j end end
     return fx
 end
-local function flush(batch,effects)
+local function flush(batch,effects,retained)
     expected,seen={},{}
-    for _,fx in ipairs(effects) do
-        local entry=fx.gpuEntry
+    local required={}
+    local function remember(fx,entry,visible)
         for i=0,entry[3]-1 do
             local values={}
             for j=1,28 do values[j]=fx.gpuParticles[i*28+j] end
             expected[entry[2]+i]=values
+            if visible then required[entry[2]+i]=true end
         end
     end
+    for _,fx in ipairs(effects) do remember(fx,fx.gpuEntry,true) end
+    for _,r in ipairs(retained or {}) do remember(r.fx,r.entry,false) end
     batch:flush(0)
-    for i in pairs(expected) do assert(seen[i], 'allocated particle was omitted from the draw: '..i) end
+    for i in pairs(required) do assert(seen[i], 'allocated particle was omitted from the draw: '..i) end
 end
 local batch=assert(Batch.new(false))
 local a,b,c=effect(1,100),effect(2,100),effect(3,80)
@@ -113,6 +118,84 @@ flush(batch,{b,c,d})
 assert(old.deleted, 'growth retained the replaced VBO')
 batch:delete()
 print('PASS Lups batch: exact draw-time VBO values, ring wrap, hidden/repeated effects, growth; initial uploads='..firstUploads)
+
+local function removedInterior(deadline)
+    local ring=assert(Batch.new(false))
+    local left,middle,right=effect(10,80),effect(11,80),effect(12,80)
+    middle.frame,middle.dieGameFrame=1,deadline
+    for at=1,#middle.gpuParticles,28 do
+        middle.gpuParticles[at+7],middle.gpuParticles[at+11]=deadline,0
+    end
+    ring:begin(1);ring:queue(left);ring:queue(middle);ring:queue(right)
+    flush(ring,{left,middle,right})
+    local oldEntry=middle.gpuEntry
+    local before=uploads
+    batchEnv.thisGameFrame=2
+    Batch.release(middle)
+    ring:begin(2);ring:queue(left);ring:queue(right)
+    flush(ring,{left,right},{{fx=middle,entry=oldEntry}})
+    local changed=uploads-before
+    if deadline>2 then
+        assert(changed==1,'early removal did not upload its visibility change')
+        for at=20,#middle.gpuParticles,28 do
+            assert(middle.gpuParticles[at]==-1,'early removal left a visible particle')
+        end
+    elseif arg[2]=='skip-expired-uploads' or arg[2]=='flat-particle-ring' then
+        assert(changed==0,'natural expiry uploaded already invisible particles')
+    end
+    ring:delete()
+    batchEnv.thisGameFrame=nil
+    return changed
+end
+local expiredUploads=removedInterior(1)
+removedInterior(100)
+print('PASS Lups expiry: retained interior records, exact early-removal masks; natural expiry uploads='..expiredUploads)
+
+-- Exercise the real attribute-writer entry point as well as late registration.
+-- Local-space effects keep the ordinary table; world-space data can share the
+-- backing ring, including its per-effect read/write view used by diagnostics.
+local writer=assert(Batch.new(false))
+local function prepared(gpu)
+    return {texture='test',layer=0,count=2,frame=0,gpuOnly=gpu,colormap=palette,
+        force={1,2,3},speedExp=1,sizeExp=1,rotExp=1,forceExp=1,ncolors=0}
+end
+local pooled,legacy=prepared(true),prepared(false)
+batchEnv.thisGameFrame=7
+Batch.prepare(pooled,writer);Batch.prepare(legacy,writer)
+for _,fx in ipairs({pooled,legacy}) do
+    for i=1,2 do Batch.pack(fx,20+i,i,1,2,3,4,5,6,7,8,9,10,0,0) end
+end
+assert(#pooled.gpuParticles==56 and #legacy.gpuParticles==56,'attribute view length changed')
+if arg[2]=='flat-particle-ring' then
+    assert(type(pooled.gpuParticles)=='userdata','world-space attributes were not written into the shared ring')
+    assert(type(legacy.gpuParticles)=='table','local-space fallback lost its particle table')
+end
+writer:begin(7);writer:queue(pooled);flush(writer,{pooled})
+for i=1,56 do
+    if (i-4)%28~=0 then
+        assert(pooled.gpuParticles[i]==legacy.gpuParticles[i],'shared writer changed particle field '..i)
+    end
+end
+writer:delete();batchEnv.thisGameFrame=nil
+print('PASS Lups attribute writer: pooled/local records and per-effect views')
+
+local function preparedPalette(colors)
+    local fx={colormap=colors,gpuOnly=false}
+    Batch.prepare(fx)
+    return fx.gpuPalette
+end
+local ca={{0.1,0.2,0.3,0.4},{0,0,0,0}}
+local cb={{0.1,0.2,0.3,0.4},{0,0,0,0}}
+local canonical=preparedPalette(ca)
+assert(preparedPalette(cb)==canonical,'equal color values were not interned')
+cb[1][1]=0.25
+assert(preparedPalette(cb)~=canonical and canonical[1][1]==0.1,'changed input reused an old palette')
+assert(preparedPalette({{'0.1','0.2','0.3','0.4'},{0,0,0,0}})==canonical,
+    'numeric channel strings lost their existing palette identity')
+local zero=0
+assert(preparedPalette({{zero,0.6,0.7,0.8}})~=preparedPalette({{-zero,0.6,0.7,0.8}}),
+    'signed zero changed palette identity')
+print('PASS Lups palettes: exact values, changed inputs, numeric strings and signed zero')
 
 -- The performance harness must emit once per simulation step in UI Update,
 -- including skipped UI polls, without introducing synced message callbacks.
