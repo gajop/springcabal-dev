@@ -85,6 +85,22 @@ def pressure(sample):
   m=re.search(r'some avg10=([0-9.]+)',text or '')
   values.append(float(m[1]) if m else math.inf)
  return max(values)
+def campaign_completion(results,variants,games,clean_pair_target=0):
+ """Rejected attempts remain evidence; reaching the clean target succeeds."""
+ expected={(backend,mode if backend=='wasm' else 'off') for backend,mode in variants}
+ groups={game:{} for game in games}
+ for result in results:
+  groups[result['game']].setdefault(result['repeat'],[]).append(result)
+ def clean(pair):
+  keys={(r['backend'],r.get('rust_jobs','off')) for r in pair}
+  return len(pair)==len(expected) and keys==expected and all(r['ok'] and not r['contended'] for r in pair)
+ counts={game:sum(clean(pair) for pair in repeats.values()) for game,repeats in groups.items()}
+ complete=(all(count>=clean_pair_target for count in counts.values()) if clean_pair_target else
+  all(repeats and all(clean(pair) for pair in repeats.values()) for repeats in groups.values()))
+ return {'complete':bool(results) and complete,'runs':len(results),
+  'clean_pairs_by_game':counts,'requested_clean_pairs':clean_pair_target,
+  'failed_attempts':sum(not r['ok'] for r in results),
+  'contended_attempts':sum(r['contended'] for r in results)}
 def pool_width(log):
  wanted=None
  for line in log.splitlines():
@@ -607,11 +623,12 @@ def run_locked(a,lease):
     left,right=('off','on') if jobs_comparison else ('lua','wasm')
     lua,wasm=by_backend[left],by_backend[right]
     x=lua['metrics']['sim.elapsed_us']['p50'];y=wasm['metrics']['sim.elapsed_us']['p50']
-    if lua['ok'] and wasm['ok'] and x and y:ratios.append(y/x)
+    if lua['ok'] and wasm['ok'] and not lua['contended'] and not wasm['contended'] and x and y:ratios.append(y/x)
    save(output/f'{game}-summary.json',{'status':'diagnostic','whole_sim_p50_ratio':statistics.mean(ratios) if ratios else None,
     'paired_bootstrap_95ci':confidence(ratios),'acceptance':'pending full E1 counters, contention review, overhead and hot-pair attribution'})
- save(output/'baseline-status.json',{'status':'diagnostic','complete':all(r['ok'] for r in results),'runs':len(results)})
- return 0 if all(r['ok'] for r in results) else 1
+ status={'status':'diagnostic',**campaign_completion(results,variants,games,a.clean_pairs)}
+ save(output/'baseline-status.json',status)
+ return 0 if status['complete'] else 1
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('game',choices=['all','comparison',*GAMES]);p.add_argument('scenario',choices=['autonomous','scripted','effects'],default='autonomous',nargs='?')

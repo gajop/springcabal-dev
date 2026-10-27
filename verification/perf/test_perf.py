@@ -14,6 +14,23 @@ from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_clean_target_succeeds_after_interrupted_attempt_without_accepting_partial_pairs(self):
+        variants=[('lua','off'),('wasm','off')]
+        results=[{'game':'hunted','repeat':repeat,'backend':backend,'rust_jobs':'off',
+                  'ok':not (repeat==0 and backend=='lua'),
+                  'contended':repeat==0 and backend=='lua'}
+                 for repeat in (0,1) for backend in ('lua','wasm')]
+        status=run.campaign_completion(results,variants,['hunted'],1)
+        self.assertTrue(status['complete'])
+        self.assertEqual(status['clean_pairs_by_game'],{'hunted':1})
+        self.assertEqual(status['failed_attempts'],1)
+        self.assertEqual(status['contended_attempts'],1)
+        self.assertFalse(run.campaign_completion(results,variants,['hunted'],2)['complete'])
+        self.assertFalse(run.campaign_completion(results,variants,['hunted'])['complete'])
+        self.assertFalse(run.campaign_completion(results[:-1],variants,['hunted'],1)['complete'])
+        self.assertFalse(run.campaign_completion(results,variants,['hunted','flove'],1)['complete'])
+        self.assertFalse(run.campaign_completion([],variants,['hunted'],1)['complete'])
+
     def test_saved_global_pressure_excludes_old_cgroup_only_acceptance_without_rewriting(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
