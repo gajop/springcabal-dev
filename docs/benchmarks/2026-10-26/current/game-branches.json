@@ -80,10 +80,10 @@
     "game": "Area17-wasm.sdd",
     "branch": "rust",
     "public_branch": "rust",
-    "head": "a73592cc51f36322e7b03024ab1439ef73e88893",
-    "frozen_expected": "a73592cc51f36322e7b03024ab1439ef73e88893",
+    "head": "c688a1fda1092e46bf0634d629bcddd9c045011d",
+    "frozen_expected": "c688a1fda1092e46bf0634d629bcddd9c045011d",
     "remote": "git@github.com:SpringCabal/Area-17.git",
-    "remote_head": "a73592cc51f36322e7b03024ab1439ef73e88893",
+    "remote_head": "c688a1fda1092e46bf0634d629bcddd9c045011d",
     "dirty": "",
     "committed_and_pushed": true
   },

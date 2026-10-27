@@ -510,8 +510,8 @@
     "campaign": "area17-1x-w1",
     "game": "area17",
     "measured_pairs": 3,
-    "attempted_pairs": 9,
-    "excluded_pairs": 6,
+    "attempted_pairs": 10,
+    "excluded_pairs": 7,
     "sim_p50_lua_ms": 1.515838,
     "sim_p50_rust_ms": 1.263494,
     "sim_p50_paired_rust_change_pct": -16.63783934696481,
@@ -593,7 +593,9 @@
       "area17-1x-w1/area17-07-lua",
       "area17-1x-w1/area17-07-wasm",
       "area17-1x-w1/area17-08-lua",
-      "area17-1x-w1/area17-08-wasm"
+      "area17-1x-w1/area17-08-wasm",
+      "area17-1x-w1/area17-09-lua",
+      "area17-1x-w1/area17-09-wasm"
     ]
   },
   {
@@ -733,8 +735,8 @@
     "campaign": "fire-1-lua-rust-w4",
     "game": "gravitas",
     "measured_pairs": 1,
-    "attempted_pairs": 8,
-    "excluded_pairs": 7,
+    "attempted_pairs": 10,
+    "excluded_pairs": 9,
     "sim_p50_lua_ms": 0.132736,
     "sim_p50_rust_ms": 0.038033000000000004,
     "sim_p50_paired_rust_change_pct": -71.34688404050145,
@@ -814,7 +816,12 @@
       "fire-1-lua-rust-w4/gravitas-05-wasm",
       "fire-1-lua-rust-w4/gravitas-06-lua",
       "fire-1-lua-rust-w4/gravitas-06-wasm",
-      "fire-1-lua-rust-w4/gravitas-07-wasm"
+      "fire-1-lua-rust-w4/gravitas-07-lua",
+      "fire-1-lua-rust-w4/gravitas-07-wasm",
+      "fire-1-lua-rust-w4/gravitas-08-lua",
+      "fire-1-lua-rust-w4/gravitas-08-wasm",
+      "fire-1-lua-rust-w4/gravitas-09-lua",
+      "fire-1-lua-rust-w4/gravitas-09-wasm"
     ]
   }
 ]
