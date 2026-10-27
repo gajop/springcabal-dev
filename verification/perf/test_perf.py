@@ -14,6 +14,20 @@ from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_frozen_effects_module_avoids_rebuilding_from_mutable_sources(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);module=root/'probe.wasm'
+            module.write_bytes(b'\0asm\x01\0\0\0')
+            with patch.object(run, 'build_effects_probe') as build:
+                self.assertEqual(run.effects_probe(root, module), module.resolve())
+                build.assert_not_called()
+                build.return_value=module
+                self.assertEqual(run.effects_probe(root), module)
+                build.assert_called_once_with(root)
+            module.write_bytes(b'not wasm')
+            with self.assertRaisesRegex(ValueError, 'core Wasm'):
+                run.effects_probe(root, module)
+
     def test_clean_target_succeeds_after_interrupted_attempt_without_accepting_partial_pairs(self):
         variants=[('lua','off'),('wasm','off')]
         results=[{'game':'hunted','repeat':repeat,'backend':backend,'rust_jobs':'off',

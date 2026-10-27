@@ -236,6 +236,13 @@ def build_effects_probe(games_dir):
  subprocess.run(['cargo','build','-p','gravitas-ui-wasm','--features','fire-probe',
   '--release','--locked','--target','wasm32-unknown-unknown','--target-dir',str(target)],cwd=source,check=True)
  return target/'wasm32-unknown-unknown/release/gravitas_ui_wasm.wasm'
+def effects_probe(games_dir,prebuilt=None):
+ # Freeze both revisions from the same compiler path for source A/B runs.
+ if prebuilt is None:return build_effects_probe(games_dir)
+ module=prebuilt.resolve()
+ with module.open('rb') as stream:header=stream.read(8)
+ if header!=b'\0asm\x01\0\0\0':raise ValueError(f'Expected a core Wasm effects module: {module}')
+ return module
 def stage_map(isolation,game):
  maps=PROJECT/'spring-linux/maps'
  if game=='area17':
@@ -402,7 +409,10 @@ def run_locked(a,lease):
   'effective_input_sha256':sha(effective_input) if effective_input else None,
   'args':{k:str(v) if isinstance(v,Path) else v for k,v in vars(a).items()},'status':'diagnostic'}
  save(output/'provenance.json',stamp)
- probe=build_effects_probe(a.games_dir) if a.scenario=='effects' and 'wasm' in backends else None
+ probe=effects_probe(a.games_dir,a.effects_module) if a.scenario=='effects' and 'wasm' in backends else None
+ if probe:
+  stamp['effects_probe_sha256']=sha(probe)
+  save(output/'provenance.json',stamp)
  start=time.monotonic();deadline=start+a.max_minutes*60
  results=[]
  games=list(GAMES) if a.game=='all' else list(COMPARISON_GAMES) if a.game=='comparison' else [a.game]
@@ -645,6 +655,7 @@ def main():
  p.add_argument('--scale-frame',type=int,default=60,help='frame at which the initial scene is cloned')
  p.add_argument('--frame-step',action='store_true',help='one simulation step per draw, using the gallery capture mechanism')
  p.add_argument('--effects-multiplier',type=int,default=1,help='Gravitas fire emitter pairs (0 gives the empty renderer baseline)')
+ p.add_argument('--effects-module',type=Path,help='frozen Gravitas fire-probe Wasm module; otherwise build the existing probe')
  p.add_argument('--fire-renderer',choices=['gpu','cpu'],default='gpu',help='Gravitas particle updates: GPU default or CPU reference for jobs; both render with OpenGL on the GPU')
  p.add_argument('--worker-threads',type=int,default=1,help='total engine ThreadPool width, including the main thread')
  p.add_argument('--cpu-affinity',help='Linux CPU list for the engine and its threads; useful to hold core type constant on hybrid CPUs')
@@ -673,6 +684,7 @@ def main():
  if a.scenario=='effects' and (a.game!='gravitas' or a.unit_multiplier!=1 or a.effects_multiplier<0):p.error('effects supports only Gravitas, without unit scaling')
  if a.mode=='headless' and (a.frame_step or a.scenario=='effects'):p.error('frame stepping and effects require GPU rendering')
  if not 1<=a.worker_threads<=64:p.error('worker-threads must be between 1 and 64')
+ if a.effects_module and (a.scenario!='effects' or a.backend=='lua'):p.error('effects-module requires Gravitas effects with a Wasm backend')
  if a.rust_jobs=='compare' and a.backend!='wasm':p.error('rust-jobs compare requires --backend wasm')
  if a.record_every<1:p.error('record-every must be positive')
  if a.record_details and not a.record_world:p.error('record-details requires record-world')

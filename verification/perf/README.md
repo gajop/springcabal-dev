@@ -104,6 +104,12 @@ Source A/B manifests default to both languages; set `"backends": ["lua"]`
 or `["wasm"]` for a change affecting only that language. Only its complete,
 clean before/after rounds enter the optimization table.
 
+For Rust fire changes, build each `--features fire-probe` revision from the
+same checkout/compiler path, then preserve the two Wasm files separately.
+Use `--effects-module /absolute/frozen-probe.wasm` to measure those exact
+artifacts instead of rebuilding from a source tree that may have changed.
+The probe SHA-256 and staged module hashes remain in the saved provenance.
+
 The mushroom combat input used for the optimization campaign is included:
 
 ```bash
