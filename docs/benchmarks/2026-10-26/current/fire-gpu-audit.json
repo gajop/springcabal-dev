@@ -174,5 +174,27 @@
     "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-27-gravitas-fire-camera",
     "rust_source": "c735a4f"
   },
-  "diagnostic_root": "perf-runs/2026-10-27-gravitas-fire-gl"
+  "diagnostic_root": "perf-runs/2026-10-27-gravitas-fire-gl",
+  "effect_lifetime_candidate": {
+    "source": "e070fde6dc9803c14a6cd02b9de8b680a5d470d7",
+    "status": "10 host tests and release Clippy passed; fixed-frame images and timings pending",
+    "continuous_images": {
+      "passed": true,
+      "rows": [
+        {
+          "frame": 300,
+          "rmse": 0.0
+        },
+        {
+          "frame": 600,
+          "rmse": 4.1337e-05
+        },
+        {
+          "frame": 897,
+          "rmse": 0.0
+        }
+      ],
+      "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-27-gravitas-fire-lifetimes"
+    }
+  }
 }
