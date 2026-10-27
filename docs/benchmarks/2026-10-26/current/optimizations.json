@@ -254,21 +254,30 @@
     "adopted": null,
     "change": "Trial: coalesce contiguous particle uploads; cache unchanged shader palettes; skip invisible mask uploads after natural expiry while preserving early-removal masks. Candidate941d09a vs public8a095ad.",
     "backend": "lua",
-    "measured_rounds": 3,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 8,
-    "wall_before_ms": 33.821891666666666,
+    "attempted_phase_pairs": 12,
+    "wall_before_ms": 34.088865,
     "wall_after_ms": 33.72799,
     "wall_change_pct": 0.11144979009833911,
-    "wall_mean_ratio_95ci": null,
+    "wall_mean_ratio_95ci": [
+      0.9637904674595943,
+      1.012806228291724
+    ],
     "sim_before_ms": 0.27121100000000004,
     "sim_after_ms": 0.264776,
     "sim_change_pct": 4.436004117075698,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 30.542876,
+    "sim_mean_ratio_95ci": [
+      0.9531443622897603,
+      1.0627470357019557
+    ],
+    "draw_before_ms": 30.955446,
     "draw_after_ms": 30.271509,
-    "draw_change_pct": -0.6313411819102943,
-    "draw_mean_ratio_95ci": null
+    "draw_change_pct": -0.8884788714723535,
+    "draw_mean_ratio_95ci": [
+      0.9591950111428209,
+      1.008189989754325
+    ]
   },
   {
     "id": "gravitas-expiry-upload-10",
@@ -334,7 +343,7 @@
     "backend": "wasm",
     "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
+    "attempted_phase_pairs": 1,
     "wall_before_ms": null,
     "wall_after_ms": null,
     "wall_change_pct": null,
