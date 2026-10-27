@@ -90,8 +90,8 @@
     "campaign": "hunted-10x-jobs-w4",
     "game": "hunted",
     "measured_pairs": 0,
-    "attempted_pairs": 2,
-    "excluded_pairs": 2,
+    "attempted_pairs": 3,
+    "excluded_pairs": 3,
     "worker_threads": 4,
     "on_active_runs": 0,
     "state_matched_pairs": 0,
@@ -156,7 +156,9 @@
       "hunted-10x-jobs-w4/hunted-00-wasm-off",
       "hunted-10x-jobs-w4/hunted-00-wasm-on",
       "hunted-10x-jobs-w4/hunted-01-wasm-off",
-      "hunted-10x-jobs-w4/hunted-01-wasm-on"
+      "hunted-10x-jobs-w4/hunted-01-wasm-on",
+      "hunted-10x-jobs-w4/hunted-02-wasm-off",
+      "hunted-10x-jobs-w4/hunted-02-wasm-on"
     ]
   },
   {
