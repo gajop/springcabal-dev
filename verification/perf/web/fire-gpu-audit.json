@@ -269,5 +269,25 @@
       }
     },
     "trace_note": "Both NVIDIA traces had no contention. Tracer extension/client-array warnings exclude them from timing and replay claims; these numbers inspect recorded instanced draw calls only."
+  },
+  "aligned_shader": {
+    "lua": "159f0e8cf81873e31689e22bba39ca275f08312c",
+    "rust": "e7e88c7",
+    "vertex_shader_sha256": "e67da23933f39e1038701f8f4751d0c2a323e678125cd54276303748fe01ba58",
+    "fixed_max_normalized_rmse": 1.80409e-05,
+    "continuous": [
+      {
+        "frame": 300,
+        "rmse": 0.0
+      },
+      {
+        "frame": 600,
+        "rmse": 0.0
+      },
+      {
+        "frame": 897,
+        "rmse": 0.0
+      }
+    ]
   }
 }
