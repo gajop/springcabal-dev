@@ -6,7 +6,8 @@
     "backends": [
       "wasm"
     ],
-    "change": "Candidate, not adopted: build static target lists in one pass through the Lua swap-removal order; remove repeated per-category sorting.",
+    "change": "Adopted: build static target lists in one pass through the Lua swap-removal order; remove repeated per-category sorting.",
+    "adopted": true,
     "backend": "wasm",
     "measured_rounds": 5,
     "planned_rounds": 5,
@@ -40,7 +41,8 @@
     "backends": [
       "wasm"
     ],
-    "change": "Candidate, not adopted: build static target lists in one pass through the Lua swap-removal order; remove repeated per-category sorting.",
+    "change": "Adopted: build static target lists in one pass through the Lua swap-removal order; remove repeated per-category sorting.",
+    "adopted": true,
     "backend": "wasm",
     "measured_rounds": 5,
     "planned_rounds": 5,
@@ -74,23 +76,33 @@
     "backends": [
       "lua"
     ],
-    "change": "Candidate, not adopted: reuse the existing type multiplier when evaluating target falloff; avoid repeated table lookups and a helper call.",
+    "change": "Rejected: reuse the target multiplier and inline falloff. Five clean before/after rounds at each load showed no overall frame-time gain; production Lua is unchanged.",
+    "adopted": false,
     "backend": "lua",
-    "measured_rounds": 0,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 12,
+    "wall_before_ms": 1.0104916666666672,
+    "wall_after_ms": 1.0062233333333337,
+    "wall_change_pct": 0.7654202300600543,
+    "wall_mean_ratio_95ci": [
+      0.9922869634139106,
+      1.0755609346789892
+    ],
+    "sim_before_ms": 0.285066,
+    "sim_after_ms": 0.283587,
+    "sim_change_pct": -0.34772417858495164,
+    "sim_mean_ratio_95ci": [
+      0.9818852702190838,
+      0.9974509833901936
+    ],
+    "draw_before_ms": 0.668962,
+    "draw_after_ms": 0.668948,
+    "draw_change_pct": 0.2847131295004246,
+    "draw_mean_ratio_95ci": [
+      0.9953753136029072,
+      1.0053396134799064
+    ]
   },
   {
     "id": "hunted-lua-multiplier-10x",
@@ -99,22 +111,32 @@
     "backends": [
       "lua"
     ],
-    "change": "Candidate, not adopted: reuse the existing type multiplier when evaluating target falloff; avoid repeated table lookups and a helper call.",
+    "change": "Rejected: reuse the target multiplier and inline falloff. Five clean before/after rounds at each load showed no overall frame-time gain; production Lua is unchanged.",
+    "adopted": false,
     "backend": "lua",
-    "measured_rounds": 0,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 13,
+    "wall_before_ms": 7.228463333333334,
+    "wall_after_ms": 7.231213333333334,
+    "wall_change_pct": 0.30138070426322106,
+    "wall_mean_ratio_95ci": [
+      0.9988226800884377,
+      1.0198029091624505
+    ],
+    "sim_before_ms": 3.175828,
+    "sim_after_ms": 3.180875,
+    "sim_change_pct": 0.5897109853277627,
+    "sim_mean_ratio_95ci": [
+      0.9931860394813345,
+      1.0179506799559472
+    ],
+    "draw_before_ms": 3.9664119999999996,
+    "draw_after_ms": 4.0106779999999995,
+    "draw_change_pct": 1.8547639146657247,
+    "draw_mean_ratio_95ci": [
+      1.0115024910214891,
+      1.027150623945489
+    ]
   }
 ]

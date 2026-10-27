@@ -21,6 +21,12 @@ Use `dashboard.py --supplemental-timings /path/to/replacement-root` to replace
 named campaigns with fresh runs while retaining earlier evidence. Later roots
 take precedence; their own provenance, traces and game hashes are used.
 
+The scene lab compares exclusive sampled CPU costs from a complete profile
+pair with matching engine, game code, renderer, jobs setting and worker count.
+Main-thread and other-thread totals stay separate from elapsed frame times.
+Frozen game copies carry `source-commits.json`; replay/video selection checks
+these revisions and module hashes so newer timings cannot select older code.
+
 World recordings are stored as `world.jsonl.gz`, with a verified uncompressed
 SHA-256 in `result.json`. The dashboard accepts both this format and older raw
 JSONL. It streams snapshots rather than retaining all diagnostic fields in RAM.

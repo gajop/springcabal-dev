@@ -14,10 +14,10 @@
     "game": "Hunted-wasm.sdd",
     "branch": "rust",
     "public_branch": "rust",
-    "head": "bfd28b8be617b4bcf6289cddf263079ccdd714ff",
-    "frozen_expected": "bfd28b8be617b4bcf6289cddf263079ccdd714ff",
+    "head": "af9c0b37ad94c0cfeb672c31bc2a90681d4f44a8",
+    "frozen_expected": "af9c0b37ad94c0cfeb672c31bc2a90681d4f44a8",
     "remote": "git@github.com:SpringCabal/Hunted.git",
-    "remote_head": "bfd28b8be617b4bcf6289cddf263079ccdd714ff",
+    "remote_head": "af9c0b37ad94c0cfeb672c31bc2a90681d4f44a8",
     "dirty": "",
     "committed_and_pushed": true
   },

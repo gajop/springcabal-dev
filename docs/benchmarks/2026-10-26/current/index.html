@@ -41,6 +41,10 @@
   <p id="scene-runtime" class="caption mono"></p>
   <div class="scene-numbers" id="scene-numbers"></div>
   <div class="two"><div><h3>Every paired repeat</h3><div id="repeat-chart" class="chart"></div></div><div><h3>Where the scoped time goes</h3><div id="cost-chart" class="chart"></div><p class="caption">Simulation and drawing are separate scopes. Callback/import counters are listed below; CUS imports can occur outside the dispatch timer, so their times are not subtracted.</p></div></div>
+  <h3>Paired CPU captures</h3>
+  <p id="cpu-cost-note" class="caption"></p>
+  <div class="table-scroll"><table><thead><tr><th>Sampled CPU ms / step</th><th id="cpu-left-label"></th><th id="cpu-right-label"></th><th>Right − left</th></tr></thead><tbody id="cpu-cost-rows"></tbody></table></div>
+  <details><summary>Largest sampled leaf costs in these captures</summary><div id="cpu-leaves" class="two"></div></details>
   <details><summary>Individual run records, counters and acceptance</summary><div class="table-scroll"><table><thead><tr><th>Pair</th><th>Version</th><th>Whole ms/frame</th><th>Sim p50</th><th>Draw p50</th><th>Median units</th><th>Draw imports</th><th>Included?</th></tr></thead><tbody id="run-rows"></tbody></table></div></details>
   <div class="toolbar"><h3>Frame-by-frame trace</h3><label>Pair <select id="repeat"></select></label><label>Trace <select id="trace-metric"><option value="cpu">Sim + draw · ms</option><option value="sim">Simulation · ms</option><option value="draw">Drawing · ms</option><option value="units">Units · count</option><option value="projectiles">Projectiles · count</option></select></label></div>
   <div id="trace-chart" class="chart"></div><p class="caption" id="trace-detail">Exact frame samples, 300–899. Hover or tap for both versions. The thin line shows every frame; a heavy line shows a 15-frame mean.</p>
