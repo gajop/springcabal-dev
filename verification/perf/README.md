@@ -200,8 +200,15 @@ the test UI module. Each emitter pair burns every frame and emits the original
 flame/distortion effect every 15 frames, starting at frame 30. No units or
 scenario run. The Lua particle classes and Rust renderer use the parity probe's
 fixed inputs and seeds. The empty case measures each renderer's background
-cost (the Rust gallery also draws map edges). This measures the isolated fire
-renderer, rather than message transport or the entire Gravitas port.
+cost. Both emit locally in UI Update and use the same stepped frame schedule;
+the performance fixture disables map borders and Rust gallery walls. This
+measures the isolated fire renderer, rather than message transport or the entire
+Gravitas port.
+
+The current report uses `--require-current-effects-fixtures` to exclude older
+fire harnesses. Their captures remain historical evidence. Source A/B rounds
+require identical saved fixture hashes, and fire videos must match those hashes
+as well as the engine, game revision and Wasm modules.
 
 The per-frame simulation/draw distributions are **CPU-side elapsed milliseconds**,
 not GPU timestamps or FPS. Stepped GPU runs also record
@@ -210,9 +217,8 @@ start and end of the measured window, divided by its frame count. This includes
 main-loop work, buffer swaps and waits outside the simulation/draw scopes;
 it excludes loading and shutdown. The existing engine input/echo commands
 supply these markers, and the effective input and its hash are preserved.
-`frame.cpu_us` joins simulation and drawing for the same frame; it matters for
-Gravitas because Lua emits inside simulation and the Rust probe emits during
-UI update. The log also separates inclusive Lua/Wasm callin time and Wasm
+`frame.cpu_us` joins simulation and drawing for the same frame.
+The log also separates inclusive Lua/Wasm callin time and Wasm
 import time/counts; those nested times must not be added together. Sampled peak
 RSS includes loading and belongs to the whole engine process, not just the
 language runtime. p50/p95 values in the campaign summary are medians of the

@@ -44,7 +44,7 @@ gl.GetVBO = function()
         Delete=function(self) self.deleted=true end,
     }
 end
-local expected
+local expected,seen
 gl.GetVAO = function()
     return {
         AttachVertexBuffer=function() end,
@@ -54,6 +54,8 @@ gl.GetVAO = function()
             draws=draws+1
             for i=offset,offset+count-1 do
                 local want=assert(expected[i], 'draw includes unallocated particle')
+                assert(not seen[i], 'particle was drawn twice')
+                seen[i]=true
                 for j=1,28 do
                     assert(self.buffer.data[i*28+j]==want[j],
                         'VBO content changed before drawing: particle '..i..' field '..j)
@@ -73,7 +75,7 @@ local function effect(id,count)
     return fx
 end
 local function flush(batch,effects)
-    expected={}
+    expected,seen={},{}
     for _,fx in ipairs(effects) do
         local entry=fx.gpuEntry
         for i=0,entry[3]-1 do
@@ -83,6 +85,7 @@ local function flush(batch,effects)
         end
     end
     batch:flush(0)
+    for i in pairs(expected) do assert(seen[i], 'allocated particle was omitted from the draw: '..i) end
 end
 local batch=assert(Batch.new(false))
 local a,b,c=effect(1,100),effect(2,100),effect(3,80)
@@ -110,3 +113,50 @@ flush(batch,{b,c,d})
 assert(old.deleted, 'growth retained the replaced VBO')
 batch:delete()
 print('PASS Lups batch: exact draw-time VBO values, ring wrap, hidden/repeated effects, growth; initial uploads='..firstUploads)
+
+-- The performance harness must emit once per simulation step in UI Update,
+-- including skipped UI polls, without introducing synced message callbacks.
+local frame,burns,flames=29,{},{}
+local perfMath=setmetatable({}, {__index=math})
+local noop=function() end
+local probeEnv=setmetatable({math=perfMath,Spring={
+    GetModOptions=function() return {fire_perf=1,fire_perf_emitters=2} end,
+    GetViewGeometry=function() return 1024,736,0,0 end,
+    GetGameFrame=function() return frame end,
+    WarpMouse=noop,SetCameraState=noop,SendCommands=noop,
+},gl={},VFS={}}, {__index=_G})
+local function record(list)
+    list[#list+1]={probeEnv.thisGameFrame,perfMath.random()}
+end
+probeEnv.VFS.Include=function(path)
+    if path:find('ParticleClasses') then
+        return {Initialize=noop,ViewResize=noop}
+    elseif path:find('lups_flame_jitter') then
+        probeEnv.EmitFlame=function() record(flames) end
+        probeEnv.gadget.GameFrame=noop
+    elseif path:find('gfx_lups_units_on_fire') then
+        probeEnv.onFireUnit=function() record(burns) end
+        probeEnv.widget.Update=noop
+    end
+end
+local fixtures=assert(arg[0]:match('(.*/)'))
+setfenv(assert(loadfile(fixtures..'fire_probe_ui.lua')),probeEnv)()
+probeEnv.Update();assert(#burns==0 and #flames==0)
+frame=30;probeEnv.Update();probeEnv.Update()
+assert(#burns==2 and #flames==2, 'same-frame UI polls repeated an emission')
+frame=45;probeEnv.Update()
+assert(#burns==32 and #flames==4, 'skipped UI polls changed the fixed emission schedule')
+for i,row in ipairs(burns) do
+    local n=29+math.ceil(i/2)
+    assert(row[1]==n and row[2]==((n*20*251+1)%65521)/65521, 'burn frame or seed changed')
+end
+for i,row in ipairs(flames) do
+    local n=i<=2 and 30 or 45
+    assert(row[1]==n and row[2]==((n*10*251+1)%65521)/65521, 'flame frame or seed changed')
+end
+assert(not pcall(probeEnv.FireProbe,'GRAVITAS_FX|burn'), 'unexpected performance transport was accepted')
+local rulesEnv=setmetatable({Spring={GetModOptions=probeEnv.Spring.GetModOptions,Echo=noop},
+    SendToUnsynced=function() error('performance fixture sent a synced emission') end}, {__index=_G})
+setfenv(assert(loadfile(fixtures..'fire_probe_rules.lua')),rulesEnv)()
+rulesEnv.GameFrame(30);rulesEnv.GameFrame(45)
+print('PASS fire harness: local UI emissions, exact skipped-poll frames/seeds, no synced emissions')

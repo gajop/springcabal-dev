@@ -7,15 +7,8 @@ if SendToUnsynced then
     function GameFrame(n)
         if perf then
             if n == 1 then Spring.Echo("[FirePerf] emitters=" .. emitters) end
-            if n >= 30 then
-                for i = 1, emitters do
-                    -- Same burn + flame schedule as the existing parity probe.
-                    SendToUnsynced("GRAVITAS_FX|burn|4400|144.25|531|25|1|0.5|-0.25")
-                    if n % 15 == 0 then
-                        SendToUnsynced("GRAVITAS_FX|flame|4288|144.25|531|500")
-                    end
-                end
-            end
+            -- Both performance fixtures advance and emit locally in UI Update.
+            -- Transport is unrelated to the particle renderer being measured.
             return
         end
         if n == 1 then
@@ -32,7 +25,10 @@ if SendToUnsynced then
 else
     -- This is a raw LuaRules entry point, without the gadget loader that
     -- invokes gadget:Initialize. Enable stepping during chunk loading.
-    if perf then Spring.SetVideoCapturingMode(true) end
+    if perf then
+        Spring.SetVideoCapturingMode(true)
+        Spring.SendCommands("mapborder 0")
+    end
     function Update()
         if perf then
             Spring.SetCameraState({name="ta", mode=1, px=4288, py=0, pz=600,

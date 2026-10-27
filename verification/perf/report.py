@@ -170,6 +170,8 @@ def source_optimization_summary(manifest, project):
             # A guard/framework update during a campaign needs a fresh pair.
             if before[1].get('runner_sha256') != after[1].get('runner_sha256'):
                 continue
+            if before[1].get('fixtures', {}) != after[1].get('fixtures', {}):
+                raise ValueError('Source A/B must use the same verification fixtures')
             for key in ('input_sha256', 'effective_input_sha256'):
                 if before[1].get(key) != after[1].get(key):
                     raise ValueError(f'Source A/B has different {key}')

@@ -44,6 +44,16 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def effects_fixtures(stamp):
+    return {name: stamp.get('fixtures', {}).get('verification/fixtures/gravitas/'+name)
+            for name in ('fire_probe_rules.lua', 'fire_probe_ui.lua')}
+
+
+def current_effects_fixtures():
+    return {name: report.runner.sha(PROJECT/'verification/fixtures/gravitas'/name)
+            for name in ('fire_probe_rules.lua', 'fire_probe_ui.lua')}
+
+
 def capture_identity(campaign, game, backend):
     """Identify the frozen game, independently of added recording observers."""
     stamp = read(campaign/'provenance.json')
@@ -54,8 +64,11 @@ def capture_identity(campaign, game, backend):
     if not source_commit and manifest.is_file():
         folders = ('Gravitas.sdd', 'Gravitas-wasm.sdd') if game == 'gravitas' and stamp['args']['scenario'] == 'effects' else report.runner.GAMES[game]
         source_commit = read(manifest).get(folders[backend == 'wasm'])
-    return {'source_commit': source_commit, 'modules': content.get('modules', {}),
-            'engine_sha256': stamp['engine_sha256']}
+    identity = {'source_commit': source_commit, 'modules': content.get('modules', {}),
+                'engine_sha256': stamp['engine_sha256']}
+    if game == 'gravitas' and stamp['args']['scenario'] == 'effects':
+        identity['effects_fixtures'] = effects_fixtures(stamp)
+    return identity
 
 
 def cpu_costs(profile):
@@ -167,6 +180,8 @@ def main():
     parser.add_argument('--optimizations', type=Path, help='same-behavior source A/B experiment manifest')
     parser.add_argument('--allow-incomplete', action='store_true',
                         help='Show pending scenes while a campaign is running; never fill missing measurements')
+    parser.add_argument('--require-current-effects-fixtures', action='store_true',
+                        help='Exclude fire comparisons made with older emission/draw harnesses')
     args = parser.parse_args()
     args.timings = args.timings.resolve()
     timing_roots = [args.timings, *(p.resolve() for p in args.supplemental_timings)]
@@ -184,6 +199,10 @@ def main():
     for timing_root in timing_roots:
         for target, is_jobs in ((language, False), (jobs, True)):
             for row in report.paired_summary(timing_root, jobs=is_jobs):
+                if row['game'] == 'gravitas' and args.require_current_effects_fixtures:
+                    stamp = read(timing_root/row['campaign']/'provenance.json')
+                    if effects_fixtures(stamp) != current_effects_fixtures():
+                        continue
                 target[row['campaign']] = row
                 campaign_roots[row['campaign']] = timing_root
     for sid, game, title, load, control, job, capture in SCENES:

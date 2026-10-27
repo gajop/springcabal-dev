@@ -264,6 +264,26 @@ class EquivalenceTests(unittest.TestCase):
             path.write_text(json.dumps(stamp))
             self.assertTrue(all(r['measured_rounds']==0 for r in report.source_optimization_summary(manifest, root)))
 
+    def test_source_ab_rejects_changed_verification_fixtures(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);manifest=self.optimization_fixture(root)
+            path=root/'after/provenance.json';stamp=json.loads(path.read_text())
+            stamp['fixtures']={'fire_probe_ui.lua':'changed'}
+            path.write_text(json.dumps(stamp))
+            with self.assertRaisesRegex(ValueError, 'same verification fixtures'):
+                report.source_optimization_summary(manifest, root)
+
+    def test_fire_capture_identity_preserves_the_emission_harness(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            fixtures={'verification/fixtures/gravitas/fire_probe_rules.lua':'rules',
+                      'verification/fixtures/gravitas/fire_probe_ui.lua':'ui'}
+            (root/'provenance.json').write_text(json.dumps({'engine_sha256':'engine',
+                'args':{'games_dir':str(root),'scenario':'effects'},'fixtures':fixtures}))
+            (root/'gravitas-content.json').write_text(json.dumps({'lua':{'commit':'source'}}))
+            self.assertEqual(dashboard.capture_identity(root,'gravitas','lua')['effects_fixtures'],
+                             {'fire_probe_rules.lua':'rules','fire_probe_ui.lua':'ui'})
+
     def test_lua_only_source_change_uses_its_clean_runs_without_a_rust_counterpart(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);manifest=self.optimization_fixture(root)
