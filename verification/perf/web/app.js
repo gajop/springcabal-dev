@@ -80,7 +80,7 @@ function optimizationTable(){
   for(const r of DATA.optimization??[]){
     const tr=document.createElement('tr');
     const interval=r.wall_mean_ratio_95ci?.map(v=>pct((v-1)*100)).join(' to ')??'—';
-    for(const value of [r.title+' · '+r.load,r.backend==='lua'?'Lua':'Rust',fmt(r.wall_before_ms)+' → '+fmt(r.wall_after_ms),pct(r.wall_change_pct),interval,fmt(r.sim_before_ms)+' → '+fmt(r.sim_after_ms),fmt(r.draw_before_ms)+' → '+fmt(r.draw_after_ms),r.measured_rounds+' / '+r.planned_rounds]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);
+    for(const value of [r.title+' · '+r.load,r.backend==='lua'?'Lua':'Rust',r.adopted===true?'Adopted':r.adopted===false?'Not adopted':'Trial',fmt(r.wall_before_ms)+' → '+fmt(r.wall_after_ms),pct(r.wall_change_pct),interval,fmt(r.sim_before_ms)+' → '+fmt(r.sim_after_ms),fmt(r.draw_before_ms)+' → '+fmt(r.draw_after_ms),r.measured_rounds+' / '+r.planned_rounds]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);
     const details=document.createElement('details'), heading=document.createElement('summary');heading.textContent=r.title+' · '+r.load+' · '+(r.backend==='lua'?'Lua':'Rust');details.append(heading);
     const note=document.createElement('p');note.textContent=r.change;details.append(note);
     const paths=document.createElement('pre');paths.textContent=r.evidence.map((p,i)=>'Round '+(i+1)+'\n'+p.before+'\n'+p.after).join('\n\n');details.append(paths);evidence.append(details);
