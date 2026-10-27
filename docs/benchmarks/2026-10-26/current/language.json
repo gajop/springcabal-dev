@@ -510,8 +510,8 @@
     "campaign": "area17-1x-w1",
     "game": "area17",
     "measured_pairs": 1,
-    "attempted_pairs": 12,
-    "excluded_pairs": 11,
+    "attempted_pairs": 14,
+    "excluded_pairs": 13,
     "sim_p50_lua_ms": 1.554078,
     "sim_p50_rust_ms": 1.2512729999999999,
     "sim_p50_paired_rust_change_pct": -19.48454324686407,
@@ -599,7 +599,10 @@
       "area17-1x-w1/area17-10-lua",
       "area17-1x-w1/area17-10-wasm",
       "area17-1x-w1/area17-11-lua",
-      "area17-1x-w1/area17-11-wasm"
+      "area17-1x-w1/area17-11-wasm",
+      "area17-1x-w1/area17-12-lua",
+      "area17-1x-w1/area17-12-wasm",
+      "area17-1x-w1/area17-13-wasm"
     ]
   },
   {
@@ -818,8 +821,8 @@
     "campaign": "fire-1-lua-rust-w4",
     "game": "gravitas",
     "measured_pairs": 2,
-    "attempted_pairs": 15,
-    "excluded_pairs": 13,
+    "attempted_pairs": 16,
+    "excluded_pairs": 14,
     "sim_p50_lua_ms": 0.13194650000000002,
     "sim_p50_rust_ms": 0.0378775,
     "sim_p50_paired_rust_change_pct": -71.29296671203234,
@@ -914,15 +917,16 @@
       "fire-1-lua-rust-w4/gravitas-13-lua",
       "fire-1-lua-rust-w4/gravitas-13-wasm",
       "fire-1-lua-rust-w4/gravitas-14-lua",
-      "fire-1-lua-rust-w4/gravitas-14-wasm"
+      "fire-1-lua-rust-w4/gravitas-14-wasm",
+      "fire-1-lua-rust-w4/gravitas-15-wasm"
     ]
   },
   {
     "campaign": "mycube-1x-w1",
     "game": "mycube",
     "measured_pairs": 1,
-    "attempted_pairs": 4,
-    "excluded_pairs": 3,
+    "attempted_pairs": 5,
+    "excluded_pairs": 4,
     "sim_p50_lua_ms": 0.33015,
     "sim_p50_rust_ms": 0.084647,
     "sim_p50_paired_rust_change_pct": -74.361048008481,
@@ -994,7 +998,8 @@
       "mycube-1x-w1/mycube-02-lua",
       "mycube-1x-w1/mycube-02-wasm",
       "mycube-1x-w1/mycube-03-lua",
-      "mycube-1x-w1/mycube-03-wasm"
+      "mycube-1x-w1/mycube-03-wasm",
+      "mycube-1x-w1/mycube-04-lua"
     ]
   }
 ]
