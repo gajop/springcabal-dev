@@ -367,8 +367,8 @@
     "campaign": "flove-combat-10x-jobs-w1",
     "game": "flove",
     "measured_pairs": 0,
-    "attempted_pairs": 10,
-    "excluded_pairs": 10,
+    "attempted_pairs": 12,
+    "excluded_pairs": 12,
     "worker_threads": 1,
     "on_active_runs": 0,
     "state_matched_pairs": 0,
@@ -448,7 +448,11 @@
       "flove-combat-10x-jobs-w1/flove-07-wasm-on",
       "flove-combat-10x-jobs-w1/flove-08-wasm-off",
       "flove-combat-10x-jobs-w1/flove-08-wasm-on",
-      "flove-combat-10x-jobs-w1/flove-09-wasm-on"
+      "flove-combat-10x-jobs-w1/flove-09-wasm-off",
+      "flove-combat-10x-jobs-w1/flove-09-wasm-on",
+      "flove-combat-10x-jobs-w1/flove-10-wasm-off",
+      "flove-combat-10x-jobs-w1/flove-10-wasm-on",
+      "flove-combat-10x-jobs-w1/flove-11-wasm-on"
     ]
   },
   {
