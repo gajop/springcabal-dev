@@ -138,5 +138,110 @@
       1.0115024910214891,
       1.027150623945489
     ]
+  },
+  {
+    "id": "gravitas-batch-scan-100",
+    "title": "Gravitas fire",
+    "load": "100 emitters",
+    "backends": [
+      "lua"
+    ],
+    "adopted": true,
+    "change": "Adopted: collect ring draw ranges during the visibility scan, removing the second pass over effect entries. All visibility uploads still precede drawing; blend order is unchanged. Existing fire-region controls and candidate images match exactly.",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 19,
+    "wall_before_ms": 40.06310666666666,
+    "wall_after_ms": 39.11322499999999,
+    "wall_change_pct": -1.8268422484455704,
+    "wall_mean_ratio_95ci": [
+      0.9681136778325014,
+      0.9912132489901964
+    ],
+    "sim_before_ms": 9.917466000000001,
+    "sim_after_ms": 9.882018,
+    "sim_change_pct": 0.1197021015104216,
+    "sim_mean_ratio_95ci": [
+      0.9873952531042377,
+      1.0073625336401635
+    ],
+    "draw_before_ms": 28.574299,
+    "draw_after_ms": 27.519938999999997,
+    "draw_change_pct": -3.7349649779161886,
+    "draw_mean_ratio_95ci": [
+      0.9569630382430614,
+      0.9822954140819589
+    ]
+  },
+  {
+    "id": "gravitas-batch-scan-10",
+    "title": "Gravitas fire",
+    "load": "10 emitters",
+    "backends": [
+      "lua"
+    ],
+    "adopted": true,
+    "change": "Adopted: collect ring draw ranges during the visibility scan, removing the second pass over effect entries. All visibility uploads still precede drawing; blend order is unchanged. Existing fire-region controls and candidate images match exactly.",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 13,
+    "wall_before_ms": 2.8853083333333327,
+    "wall_after_ms": 2.8640449999999995,
+    "wall_change_pct": -0.5672277416779448,
+    "wall_mean_ratio_95ci": [
+      0.9882674860072004,
+      1.0021726021209592
+    ],
+    "sim_before_ms": 0.916959,
+    "sim_after_ms": 0.9222079999999999,
+    "sim_change_pct": 1.3191429496847817,
+    "sim_mean_ratio_95ci": [
+      0.9822295512352355,
+      1.0195194350421266
+    ],
+    "draw_before_ms": 1.566212,
+    "draw_after_ms": 1.5535409999999998,
+    "draw_change_pct": -0.7168415143957829,
+    "draw_mean_ratio_95ci": [
+      0.9855279844188004,
+      1.0023915139208472
+    ]
+  },
+  {
+    "id": "gravitas-batch-scan-1",
+    "title": "Gravitas fire",
+    "load": "1 emitters",
+    "backends": [
+      "lua"
+    ],
+    "adopted": true,
+    "change": "Adopted: collect ring draw ranges during the visibility scan, removing the second pass over effect entries. All visibility uploads still precede drawing; blend order is unchanged. Existing fire-region controls and candidate images match exactly.",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 12,
+    "wall_before_ms": 0.6447450000000002,
+    "wall_after_ms": 0.6429216666666666,
+    "wall_change_pct": -0.09202604647314816,
+    "wall_mean_ratio_95ci": [
+      0.9958107974307261,
+      1.0202544459639808
+    ],
+    "sim_before_ms": 0.13403800000000002,
+    "sim_after_ms": 0.133222,
+    "sim_change_pct": -0.39593017093887406,
+    "sim_mean_ratio_95ci": [
+      0.9862613824411463,
+      1.0111462017399324
+    ],
+    "draw_before_ms": 0.46577199999999996,
+    "draw_after_ms": 0.464902,
+    "draw_change_pct": -0.01781987753664005,
+    "draw_mean_ratio_95ci": [
+      0.9936663638780228,
+      1.01085084528789
+    ]
   }
 ]
