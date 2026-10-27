@@ -341,21 +341,30 @@
     "adopted": null,
     "change": "Trial: match Lua effect lifetimes and per-effect GPU packet retention. Keep birth times instead of updating and compacting every particle each frame. The CPU reference and jobs compute ages only when drawing.",
     "backend": "wasm",
-    "measured_rounds": 2,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 14,
-    "wall_before_ms": 4.776127499999999,
-    "wall_after_ms": 2.947716666666666,
-    "wall_change_pct": -38.246793609574326,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.0479,
-    "sim_after_ms": 0.037902,
-    "sim_change_pct": -20.785620549810524,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 1.743112,
-    "draw_after_ms": 1.20736,
-    "draw_change_pct": -30.61953396167909,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 20,
+    "wall_before_ms": 4.722245,
+    "wall_after_ms": 2.8307283333333326,
+    "wall_change_pct": -39.64600903958676,
+    "wall_mean_ratio_95ci": [
+      0.5939169768922676,
+      0.6298506860907117
+    ],
+    "sim_before_ms": 0.046045,
+    "sim_after_ms": 0.037359,
+    "sim_change_pct": -19.097070397901184,
+    "sim_mean_ratio_95ci": [
+      0.7863099463091051,
+      0.8283948558222582
+    ],
+    "draw_before_ms": 1.675173,
+    "draw_after_ms": 1.2120309999999999,
+    "draw_change_pct": -27.64741313285256,
+    "draw_mean_ratio_95ci": [
+      0.6710418765187967,
+      0.764124100952028
+    ]
   },
   {
     "id": "gravitas-effect-lifetimes-10",
@@ -369,7 +378,7 @@
     "backend": "wasm",
     "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
+    "attempted_phase_pairs": 1,
     "wall_before_ms": null,
     "wall_after_ms": null,
     "wall_change_pct": null,
