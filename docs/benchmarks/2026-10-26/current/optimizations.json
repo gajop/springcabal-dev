@@ -1022,21 +1022,30 @@
     "adopted": null,
     "change": "Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
     "backend": "lua",
-    "measured_rounds": 4,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 11,
-    "wall_before_ms": 69.16269333333334,
-    "wall_after_ms": 67.23572750000001,
-    "wall_change_pct": 2.048489289751343,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 43.0970315,
-    "sim_after_ms": 42.4350965,
-    "sim_change_pct": 2.002839446163862,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 11.4196805,
-    "draw_after_ms": 11.2489335,
-    "draw_change_pct": 2.411834612715813,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 13,
+    "wall_before_ms": 68.348905,
+    "wall_after_ms": 67.75641500000002,
+    "wall_change_pct": 2.8644891511424797,
+    "wall_mean_ratio_95ci": [
+      0.9801275077659786,
+      1.048986410895982
+    ],
+    "sim_before_ms": 42.414307,
+    "sim_after_ms": 42.505361,
+    "sim_change_pct": 4.1223258529865525,
+    "sim_mean_ratio_95ci": [
+      0.9952379696847764,
+      1.0560759962178607
+    ],
+    "draw_before_ms": 11.298998,
+    "draw_after_ms": 11.317364,
+    "draw_change_pct": 1.1868220527165407,
+    "draw_mean_ratio_95ci": [
+      0.9843052712343571,
+      1.050294800201681
+    ]
   },
   {
     "id": "ttld-scalar-births-1",
@@ -1050,7 +1059,7 @@
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
+    "attempted_phase_pairs": 1,
     "wall_before_ms": null,
     "wall_after_ms": null,
     "wall_change_pct": null,
@@ -1109,29 +1118,29 @@
     "adopted": null,
     "change": "Confirmation: five new alternating source pairs, combined with the original five. Same seeded engine244, frozen modules, settings and GPU/CPU idle guards. UI/jobs bytecode identical in before/after.",
     "backend": "wasm",
-    "measured_rounds": 8,
+    "measured_rounds": 9,
     "planned_rounds": 10,
-    "attempted_phase_pairs": 17,
-    "wall_before_ms": 4.125755,
-    "wall_after_ms": 3.847126666666667,
-    "wall_change_pct": -5.021865373777712,
+    "attempted_phase_pairs": 19,
+    "wall_before_ms": 4.012216666666667,
+    "wall_after_ms": 3.8486,
+    "wall_change_pct": -0.035793914605308785,
     "wall_mean_ratio_95ci": [
-      0.8428629446207991,
-      0.9855104820907844
+      0.8664210961258196,
+      1.0276634836030307
     ],
-    "sim_before_ms": 1.966418,
-    "sim_after_ms": 1.8565019999999999,
-    "sim_change_pct": -3.922567602742788,
+    "sim_before_ms": 1.906194,
+    "sim_after_ms": 1.8566099999999999,
+    "sim_change_pct": 0.5553617742473982,
     "sim_mean_ratio_95ci": [
-      0.8944595843310704,
-      1.0002026823596684
+      0.9115001516890227,
+      1.0457782923579968
     ],
-    "draw_before_ms": 2.016003,
-    "draw_after_ms": 1.880426,
-    "draw_change_pct": -5.599742692061637,
+    "draw_before_ms": 1.9806780000000002,
+    "draw_after_ms": 1.8807349999999998,
+    "draw_change_pct": -1.7582888890196102,
     "draw_mean_ratio_95ci": [
-      0.88593334445638,
-      0.982107881363691
+      0.9018628414383576,
+      1.0317750935688728
     ]
   },
   {
@@ -1146,7 +1155,7 @@
     "backend": "lua",
     "measured_rounds": 1,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 2,
+    "attempted_phase_pairs": 4,
     "wall_before_ms": 23.836059999999996,
     "wall_after_ms": 24.64916666666667,
     "wall_change_pct": 3.411246097998877,
