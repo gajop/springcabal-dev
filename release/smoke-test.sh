@@ -96,7 +96,7 @@ for script in "${scripts[@]}"; do
     config "$run/spring.conf" "$project_root/launch/games/$game/graphics.cfg"
 
     env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
-        timeout --signal=TERM "${seconds}s" "$engine" \
+        timeout --foreground --signal=TERM "${seconds}s" "$engine" \
         --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
         --config "$run/spring.conf" "$run/start.txt" > "$run/stdout.txt" 2>&1
     status=$?
@@ -122,7 +122,7 @@ run="$work/menu"
 mkdir -p "$run"
 config "$run/spring.conf"
 env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
-    timeout --signal=TERM 90s "$engine" \
+    timeout --foreground --signal=TERM 90s "$engine" \
     --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
     --config "$run/spring.conf" > "$run/stdout.txt" 2>&1
 status=$?
