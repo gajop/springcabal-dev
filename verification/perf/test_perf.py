@@ -10,10 +10,85 @@ import threading
 import subprocess
 import struct
 import storage
+import activity
 from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_cpu_activity_excludes_own_work_but_detects_work_without_pressure(self):
+        counters=iter([(1000,100),(1300,300),(1500,500),(1800,500)])
+        times=iter([0,1,2,3])
+        monitor=activity.CpuActivity(read=lambda:next(counters),now=lambda:next(times),ticks=100)
+        sample=monitor.sample()
+        self.assertEqual(sample['total_busy_cores'],3)
+        self.assertEqual(sample['own_process_tree_cores'],2)
+        self.assertEqual(sample['background_cpu_cores'],1)
+        self.assertTrue(activity.busy(sample,.5))
+        self.assertEqual(monitor.sample()['background_cpu_cores'],0)
+        self.assertTrue(activity.busy(monitor.sample(),.5))
+
+    def test_cpu_activity_fails_closed_on_counter_changes_or_missing_samples(self):
+        counters=iter([(1000,100),(1100,50),(1200,150)])
+        times=iter([0,1,2])
+        monitor=activity.CpuActivity(read=lambda:next(counters),now=lambda:next(times),ticks=100)
+        self.assertTrue(activity.busy(monitor.sample(),.5))
+        self.assertFalse(activity.busy(monitor.sample(),.5))
+        self.assertTrue(activity.busy(None,.5))
+        self.assertFalse(activity.busy(None,None))
+        self.assertFalse(activity.busy({'valid':True,'background_cpu_cores':.5},.5))
+
+    def test_cpu_process_tree_counts_children_from_all_threads_and_reaped_time(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            def process(pid,values,children):
+                path=root/str(pid);path.mkdir(exist_ok=True)
+                fields=['R']+['0']*45
+                for index,value in zip((11,12,13,14),values):fields[index]=str(value)
+                (path/'stat').write_text(f'{pid} (name with ) parentheses) '+' '.join(fields))
+                for tid,ids in children.items():
+                    task=path/'task'/str(tid);task.mkdir(parents=True,exist_ok=True)
+                    (task/'children').write_text(' '.join(map(str,ids)))
+            process(100,[10,20,30,40],{100:[200],101:[300]})
+            process(200,[5,6,7,8],{200:[300]})
+            process(300,[2,3,0,0],{300:[]})
+            self.assertEqual(activity.own_cpu_ticks(100,root),131)
+            (root/'100/task/100/children').write_text('')
+            process(100,[10,20,56,40],{100:[],101:[300]})
+            self.assertEqual(activity.own_cpu_ticks(100,root),131)
+            (root/'stat').write_text('cpu 100 20 30 999 888 4 5 6 70 80\n')
+            self.assertEqual(activity.snapshot(root,100),(165,131))
+
+    def test_cpu_idle_gate_waits_for_quiet_background_activity_without_gpu(self):
+        from types import SimpleNamespace
+        class Lease:
+            held=True
+            def release(self):self.held=False
+            def try_acquire(self):self.held=True;return True
+        clock=[0];samples=[]
+        def cpu():
+            value={'valid':True,'background_cpu_cores':1 if len(samples)<4 else 0}
+            samples.append(value);return value
+        options=SimpleNamespace(wait_for_idle=True,wait_for_gpu_idle=False,max_background_cpu_cores=.5)
+        before,_,_=run.wait_for_resources(options,None,100,'fixture',Lease(),
+            host_sample=lambda _: {'cpu_pressure':'some avg10=0.00'},cpu_sample=cpu,
+            now=lambda:clock[0],sleep=lambda duration:clock.__setitem__(0,clock[0]+duration))
+        self.assertGreaterEqual(clock[0],14)
+        self.assertEqual(before['cpu_activity']['background_cpu_cores'],0)
+
+    def test_saved_background_cpu_activity_excludes_a_run_without_rewriting_it(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);path=root/'result.json'
+            original={'ok':True,'contended':False,'background_cpu_guard':True,'max_background_cpu_cores':.5}
+            path.write_text(json.dumps(original))
+            samples=[{'cpu_pressure':'some avg10=0.00','cpu_activity':{'valid':True,'background_cpu_cores':2}}]
+            (root/'host-samples.json').write_text(json.dumps(samples))
+            reviewed=report.read_result(path)
+            self.assertTrue(reviewed['contended'])
+            self.assertEqual(reviewed['background_cpu_review'],{'max_cores':2,'passed':False})
+            self.assertEqual(json.loads(path.read_text()),original)
+            (root/'host-samples.json').unlink()
+            self.assertTrue(report.read_result(path)['contended'])
+
     def test_normal_and_stress_jobs_captures_resolve_to_their_scene(self):
         for name, scene in [('hunted-1x-jobs', 'hunted'),
                             ('hunted-10x-jobs', 'hunted10'),

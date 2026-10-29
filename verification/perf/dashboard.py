@@ -234,7 +234,7 @@ def main():
                 continue
             stamp = read(campaign_root/'provenance.json')
             summary['runtime'] = {key: stamp.get(key) for key in
-                                  ('engine_commit', 'engine_sha256', 'engine_source')}
+                                  ('engine_commit', 'engine_sha256', 'engine_source', 'cpu_activity_policy', 'resource_guard_sha256')}
             summary['game_content'] = read(campaign_root/f'{game}-content.json')
             for backend, content in summary['game_content'].items():
                 content.update(capture_identity(campaign_root, game, backend))
@@ -343,6 +343,7 @@ def main():
         'attempted_pairs': sum(r['attempted_pairs'] for r in [*language.values(), *jobs.values()]),
         'contended': sum(r['contended'] for r in saved),
         'gpu_overlap_runs': sum(r.get('gpu_contended', False) for r in saved),
+        'background_cpu_overlap_runs': sum(r.get('background_cpu_contended', False) for r in saved),
         'renderers': sorted({r['renderer'] for r in saved if r.get('renderer')}),
         'rendered_frame_counts': sorted({r['rendered_measurement_frames'] for r in saved}),
         'engine_commits': sorted({p['engine_commit'] for p in provenance}),

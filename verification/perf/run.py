@@ -25,6 +25,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import activity
 import storage
 import time
 
@@ -334,8 +335,11 @@ class VerificationLease:
   if self.inherited and not self.held:fcntl.flock(self.fd,fcntl.LOCK_EX)
   os.close(self.fd)
 
-def wait_for_resources(a,pressure_path,deadline,game,lease,host_sample=host,gpu_sample=gpu_processes,now=time.monotonic,sleep=time.sleep):
+def wait_for_resources(a,pressure_path,deadline,game,lease,host_sample=host,gpu_sample=gpu_processes,now=time.monotonic,sleep=time.sleep,cpu_sample=None):
  before=None;gpu_before=None;quiet_since=None;notice=0;preflight=[]
+ background_limit=getattr(a,'max_background_cpu_cores',None)
+ cpu_activity=activity.CpuActivity() if a.wait_for_idle and background_limit is not None and cpu_sample is None else None
+ if cpu_activity:cpu_sample=cpu_activity.sample
  if a.wait_for_idle or a.wait_for_gpu_idle:
   lease.release()
   # Give already-blocked verification/export work a chance before this same
@@ -350,18 +354,19 @@ def wait_for_resources(a,pressure_path,deadline,game,lease,host_sample=host,gpu_
    sleep(1);continue
   before=host_sample(pressure_path)
   gpu_before=gpu_sample() if a.wait_for_gpu_idle else None
+  if cpu_sample:before['cpu_activity']=cpu_sample()
   if gpu_before:
    preflight.append(gpu_before)
    if len(preflight)>16:preflight.pop(0)
-  cpu_busy=a.wait_for_idle and pressure(before)>5
+  cpu_busy=a.wait_for_idle and (pressure(before)>5 or activity.busy(before.get('cpu_activity'),background_limit))
   gpu_busy=bool(gpu_before and gpu_before['foreign'])
   if cpu_busy or gpu_busy:
    quiet_since=None;lease.release()
   else:
    quiet_since=now() if quiet_since is None else quiet_since
-   if not a.wait_for_gpu_idle or now()-quiet_since>=10:break
+   if (not a.wait_for_gpu_idle and cpu_sample is None) or now()-quiet_since>=10:break
   if now()-notice>=30:
-   print(f'{game}: waiting for CPU/GPU idle (CPU avg10={pressure(before):.2f}, GPU clients={gpu_before["foreign"] if gpu_before else []})',flush=True);notice=now()
+   print(f'{game}: waiting for CPU/GPU idle (CPU avg10={pressure(before):.2f}, background cores={before.get("cpu_activity",{}).get("background_cpu_cores")}, GPU clients={gpu_before["foreign"] if gpu_before else []})',flush=True);notice=now()
   sleep(1)
  return before,gpu_before,preflight
 
@@ -398,6 +403,8 @@ def run_locked(a,lease):
  stamp={'engine':str(binary),'engine_sha256':sha(binary),'engine_commit':revision(ENGINE),
   'cpu_pressure_source':str(pressure_path),
   'cpu_pressure_policy':'maximum of global and selected scope, avg10 <= 5',
+  'cpu_activity_policy':{'max_background_cpu_cores':a.max_background_cpu_cores,'quiet_seconds':10,'excludes':'runner process tree including live and reaped children'} if a.wait_for_idle else None,
+  'resource_guard_sha256':sha(Path(activity.__file__)),
   'engine_source':str(ENGINE.resolve()),
   'framework_commit':revision(PROJECT),'runner_sha256':sha(Path(__file__)),
   'shared_commit':revision(a.games_dir.parents[1]/'springcabal-rs'),
@@ -499,6 +506,7 @@ def run_locked(a,lease):
       command=['taskset','--cpu-list',','.join(map(str,a.cpu_affinity)),*command]
      disk_error=None;resource_interruption=None
      launched=time.monotonic()
+     cpu_activity=activity.CpuActivity() if a.wait_for_idle else None
      with (directory/'engine.log').open('wb') as log:
       process=subprocess.Popen(command,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
       gpu_monitor=GpuMonitor(process.pid) if a.wait_for_gpu_idle else None
@@ -511,8 +519,11 @@ def run_locked(a,lease):
          if shutil.disk_usage(output).free < 20*1024**3:
           disk_error='Free disk space fell below the 20 GiB emergency floor';break
          sample=host(pressure_path);sample['sample_monotonic']=time.monotonic();samples.append(sample)
+         if cpu_activity:sample['cpu_activity']=cpu_activity.sample()
          if a.wait_for_idle and pressure(sample)>5:
           resource_interruption='CPU pressure interrupted capture';break
+         if a.wait_for_idle and activity.busy(sample.get('cpu_activity'),a.max_background_cpu_cores):
+          resource_interruption='Background CPU activity interrupted capture';break
          pid=engine_pid(process.pid,binary)
          value=process_memory(pid) if pid else None
          if value:memory.append(value)
@@ -567,7 +578,8 @@ def run_locked(a,lease):
      ok=process.returncode==0 and frames==list(range(a.frames+1)) and not errors
      if not ok and frames!=list(range(a.frames+1)):errors.append('Required frame window was not completed; timeout or early exit')
      gpu_contended=any(s['foreign'] for s in gpu_samples)
-     contended=any(pressure(s)>5 for s in samples) or gpu_contended
+     background_contended=a.wait_for_idle and any(activity.busy(s.get('cpu_activity'),a.max_background_cpu_cores) for s in samples)
+     contended=any(pressure(s)>5 for s in samples) or gpu_contended or background_contended
      metrics={}
      for kind in ('sim','draw'):
       for field in ('elapsed_us','lua_us','wasm_us','import_us','lua_calls','wasm_calls','imports'):
@@ -599,6 +611,9 @@ def run_locked(a,lease):
      result['gpu_process_guard']=a.wait_for_gpu_idle
      result['gpu_quiet_seconds']=10 if a.wait_for_gpu_idle else None
      result['gpu_contended']=gpu_contended
+     result['background_cpu_guard']=a.wait_for_idle
+     result['max_background_cpu_cores']=a.max_background_cpu_cores
+     result['background_cpu_contended']=background_contended
      if a.record_world:
       recording=write/'perf-world.jsonl'
       if not recording.is_file():errors.append('World recording was not written');result['ok']=False
@@ -660,7 +675,8 @@ def main():
  p.add_argument('--worker-threads',type=int,default=1,help='total engine ThreadPool width, including the main thread')
  p.add_argument('--cpu-affinity',help='Linux CPU list for the engine and its threads; useful to hold core type constant on hybrid CPUs')
  p.add_argument('--rust-jobs',choices=['off','on','check','compare'],default='off',help='Rust pure jobs; check validates output, compare alternates off/on pairs')
- p.add_argument('--wait-for-idle',action='store_true',help='wait before each run while CPU pressure exceeds the existing contention threshold')
+ p.add_argument('--wait-for-idle',action='store_true',help='require low CPU pressure and ten seconds of low background CPU use before each run')
+ p.add_argument('--max-background-cpu-cores',type=float,default=.5,help='maximum background CPU use in logical core equivalents, excluding this runner and its children (default: 0.5)')
  p.add_argument('--cpu-pressure-scope',choices=['global','cgroup'],default='global',help='additional CPU pressure scope; the guard checks both global and selected pressure')
  p.add_argument('--record-world',action='store_true',help='separate diagnostic run: save observed unit/projectile positions for dots playback (never a timing baseline)')
  p.add_argument('--record-every',type=int,default=6,help='world recording interval in simulation frames')
@@ -678,6 +694,7 @@ def main():
   except ValueError as error:p.error(str(error))
  a.games_dir=a.games_dir.resolve()
  if a.min_free_gib<20:p.error('disk reserve must be at least 20 GiB')
+ if not math.isfinite(a.max_background_cpu_cores) or a.max_background_cpu_cores<0:p.error('background CPU limit must be finite and non-negative')
  if a.speed<=0 or a.frames<=a.warmup or a.warmup<0 or a.repeats<1 or a.clean_pairs<0 or a.timeout<=0 or a.max_minutes<=0:p.error('invalid frame window, repeat count or timeout')
  if a.scenario=='scripted' and not a.input:p.error('scripted requires --input')
  if a.unit_multiplier<1 or a.scale_frame<1 or (a.unit_multiplier>1 and a.warmup<=a.scale_frame):p.error('scaling must finish before warmup ends')

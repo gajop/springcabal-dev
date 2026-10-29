@@ -49,6 +49,15 @@ removes their redundant write-directory copies, and drops reproducible profile
 intermediates. New runs require 40 GiB free by default (`--min-free-gib`), and
 stop their own engine if free space falls below 20 GiB during capture.
 
+The idle gate checks both CPU pressure and actual background CPU utilization.
+Pressure alone can stay low when other work has available cores. New captures
+require ten quiet seconds with at most 0.5 logical cores of background CPU use
+(`--max-background-cpu-cores`), and abort if that limit is exceeded while running.
+The runner and its child processes are excluded using Linux process CPU counters,
+including live children and reaped-child time. Samples and the guard's source
+hash are recorded; missing or inconsistent counters reject a capture. Older
+runs without this guard remain labeled with their original pressure policy.
+
 `profile_export.py --buildid-dir ...` resolves the pinned engine's matching debug
 symbols and injects Wasmtime JIT names. Its flame graph retains actual sampled
 stacks and explicit unresolved frames. It does not invent a complete call hierarchy

@@ -26,7 +26,15 @@ def read_result(path):
             'passed': peak <= 5,
         }
         result['contended'] = result['contended'] or peak > 5
-    elif result.get('gpu_process_guard'):
+        if result.get('background_cpu_guard'):
+            limit = result['max_background_cpu_cores']
+            passed = bool(samples) and all(not runner.activity.busy(sample.get('cpu_activity'), limit)
+                                          for sample in samples)
+            values = [sample['cpu_activity']['background_cpu_cores'] for sample in samples
+                      if sample.get('cpu_activity', {}).get('valid')]
+            result['background_cpu_review'] = {'max_cores': max(values, default=None), 'passed': passed}
+            result['contended'] = result['contended'] or not passed
+    elif result.get('gpu_process_guard') or result.get('background_cpu_guard'):
         result['recorded_contended'] = result['contended']
         result['global_cpu_pressure_review'] = {'max_avg10': None, 'passed': False}
         result['contended'] = True
@@ -170,12 +178,15 @@ def source_optimization_summary(manifest, project):
             # A guard/framework update during a campaign needs a fresh pair.
             if before[1].get('runner_sha256') != after[1].get('runner_sha256'):
                 continue
+            if before[1].get('resource_guard_sha256') != after[1].get('resource_guard_sha256'):
+                continue
             if before[1].get('fixtures', {}) != after[1].get('fixtures', {}):
                 raise ValueError('Source A/B must use the same verification fixtures')
             for key in ('input_sha256', 'effective_input_sha256'):
                 if before[1].get(key) != after[1].get(key):
                     raise ValueError(f'Source A/B has different {key}')
-            for key in ('worker_threads', 'unit_multiplier', 'effects_multiplier', 'warmup', 'frames', 'rust_jobs'):
+            for key in ('worker_threads', 'unit_multiplier', 'effects_multiplier', 'warmup', 'frames', 'rust_jobs',
+                        'wait_for_idle', 'wait_for_gpu_idle', 'max_background_cpu_cores'):
                 if before[1].get('args', {}).get(key) != after[1].get('args', {}).get(key):
                     raise ValueError(f'Source A/B has different {key}')
             if before[1]['engine_sha256'] != after[1]['engine_sha256']:
