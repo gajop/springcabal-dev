@@ -227,6 +227,7 @@ def main():
             else:
                 stage_development(args, run, transport)
                 engine = args.engine.resolve()
+            (run / "fontcache").mkdir(exist_ok=True)
             (run / "fonts.conf").write_text('<fontconfig><dir prefix="relative">fonts</dir><cachedir prefix="relative">fontcache</cachedir></fontconfig>')
             write = run if args.packaged else run / "write"
             write.mkdir(exist_ok=True)
