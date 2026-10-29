@@ -114,12 +114,18 @@ class SmokeScriptTests(unittest.TestCase):
         (self.bundle / "springsettings.cfg").write_text("Shadows = 0\n")
         self.ready, self.resume, self.calls = [self.root / name for name in
                                              ["ready", "resume", "calls.jsonl"]]
+        scratch = self.root / "scratch"
+        scratch.mkdir()
         self.env = dict(os.environ, SMOKE_TEST_READY=str(self.ready),
-                        SMOKE_TEST_RESUME=str(self.resume), SMOKE_TEST_CALLS=str(self.calls))
+                        SMOKE_TEST_RESUME=str(self.resume), SMOKE_TEST_CALLS=str(self.calls),
+                        TMPDIR=str(scratch))
         # Model the worker contract; these are shell-control tests, never GPU
         # measurements. Real hardware smoke cases exercise the actual worker.
         (release / "smoke-run.py").write_text('''import json,os,sys,time
 from pathlib import Path
+import xml.etree.ElementTree as ET
+cache=Path(ET.parse(os.environ['FONTCONFIG_FILE']).findtext('cachedir'))
+assert cache.is_dir() and os.access(cache,os.W_OK), 'font cache must exist before first Wine startup'
 calls=Path(os.environ['SMOKE_TEST_CALLS'])
 first=not calls.exists()
 with calls.open('a') as stream:stream.write(json.dumps(sys.argv[1:])+'\\n')

@@ -84,6 +84,7 @@ from pathlib import Path
 import sys
 from xml.sax.saxutils import escape
 fonts, work = map(Path, sys.argv[1:])
+(work / "fontcache").mkdir(exist_ok=True)
 (work / "fonts.conf").write_text(
     f'<fontconfig><dir>{escape(str(fonts))}</dir>'
     f'<cachedir>{escape(str(work / "fontcache"))}</cachedir></fontconfig>\n'
