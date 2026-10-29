@@ -1,0 +1,170 @@
+{
+  "before": {
+    "retained": 1000.0,
+    "before_kib": 6045.859,
+    "after_kib": 6029.797,
+    "reclaimed_kib": 16.062,
+    "entries": 1001.0
+  },
+  "after": {
+    "retained": 0.0,
+    "before_kib": 6045.918,
+    "after_kib": 3279.855,
+    "reclaimed_kib": 2766.062,
+    "entries": 1001.0
+  },
+  "base_commit": "9b87777608f992aa47ec0bea904bdf027f121409",
+  "source_change": "Clear entry[FX] after final visibility update in Batch.release; keep all numeric ring entries and native GPU attributes.",
+  "gpu_verified": true,
+  "candidate_commit": "0b931960b7083089d9037c5648cc15f0a432bd20",
+  "ttld": {
+    "base": "69c5fe45c9647010fd12ce07246553d5f3a832e1",
+    "candidate": "e03526a1c7ca54687b47bf70522a1906e6f4be55",
+    "batch_sha256": "9bfd6611b7b31f53b92130b142573e4a784928ff64bbcb917d32c1f5c61b5b7b",
+    "same_batch_as_gravitas": true,
+    "host_checks_passed": true
+  },
+  "gpu": {
+    "gravitas_comparisons": 10,
+    "ttld_comparisons": 15,
+    "max_comparison_region_rmse": 0,
+    "ttld_wind_bit_exact": true,
+    "engine": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10",
+    "gravitas_images": [
+      {
+        "phase": "repeat",
+        "shot": 0,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 1,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 2,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 3,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 4,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 0,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 1,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 2,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 3,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 4,
+        "rmse": 0.0
+      }
+    ],
+    "ttld_images": [
+      {
+        "phase": "repeat",
+        "shot": 0,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 1,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 2,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 3,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 4,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 0,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 1,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 2,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 3,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 4,
+        "rmse": 0.0
+      },
+      {
+        "phase": "rust",
+        "shot": 0,
+        "rmse": 0.0
+      },
+      {
+        "phase": "rust",
+        "shot": 1,
+        "rmse": 0.0
+      },
+      {
+        "phase": "rust",
+        "shot": 2,
+        "rmse": 0.0
+      },
+      {
+        "phase": "rust",
+        "shot": 3,
+        "rmse": 0.0
+      },
+      {
+        "phase": "rust",
+        "shot": 4,
+        "rmse": 0.0
+      }
+    ]
+  },
+  "host_case": {
+    "effects": 1000,
+    "particles_per_effect": 4,
+    "ring_entries": 1001,
+    "command": "lua5.1 verification/fixtures/gravitas/lups_regressions.lua GAME skip-expired-uploads retire-models",
+    "framework_commit": "fb64a87"
+  }
+}
