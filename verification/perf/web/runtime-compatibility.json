@@ -1,0 +1,688 @@
+{
+  "version": "1.0.3-rc.3-runtime-check",
+  "published": false,
+  "final_release": false,
+  "scope": "Current public game sources with the official new engine. Lua performance choices remain pending; this is not the final rc3 source snapshot.",
+  "framework_commit_at_packaging": "20de2be0f675106234c5b2386e86020e582cf1ff",
+  "engine_tag": "2026.10.3001",
+  "engine_commit": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10",
+  "engine_release": "https://github.com/gajop/spring-rust/releases/tag/2026.10.3001",
+  "verification": "Existing release/smoke-test.sh (14 game entries and menu) plus verification/sdk-menu/run.py --packaged (no arguments, external working directory, keyboard navigation, Lua Gravitas launch/return, clean quit).",
+  "not_performance_data": true,
+  "packaged_module_equivalence": {
+    "all_byte_identical": true,
+    "module_count": 18,
+    "reference": "verification/perf/web/normal-build-equivalence.json",
+    "modules": [
+      {
+        "archive": "Area17-wasm.sdz",
+        "module": "LuaRules/wasm/area17-rules.wasm",
+        "sha256": "43c44a575222fae7786d7114498642de72f714c6002326be3198d04488020317"
+      },
+      {
+        "archive": "Area17-wasm.sdz",
+        "module": "LuaUI/wasm/area17-ui.wasm",
+        "sha256": "606f399682d80ec0d092db4b25929c262a86e29052cce999fd006eb148d30559"
+      },
+      {
+        "archive": "Flove-wasm.sdz",
+        "module": "LuaRules/wasm/flove-jobs.wasm",
+        "sha256": "567c4db1651eb750ea1b58a306f838da552ce7fa014affa7e324052697e8eec3"
+      },
+      {
+        "archive": "Flove-wasm.sdz",
+        "module": "LuaRules/wasm/flove-rules.wasm",
+        "sha256": "96a6475ac79889141d0e45a6cc7e421cd2c85adda4a717d7e56a84f1ce647995"
+      },
+      {
+        "archive": "Flove-wasm.sdz",
+        "module": "LuaUI/wasm/flove-ui.wasm",
+        "sha256": "f153a3a25503ef7cc3c4a9d32bbed6ffedfcdefb8acf506b5022a053236ae7d9"
+      },
+      {
+        "archive": "Gravitas-wasm.sdz",
+        "module": "LuaRules/wasm/gravitas-rules.wasm",
+        "sha256": "c32ba7441fc35a2251fa2eb4c3b84b30548d463d4379fa060cdee010133920c2"
+      },
+      {
+        "archive": "Gravitas-wasm.sdz",
+        "module": "LuaUI/wasm/gravitas-jobs.wasm",
+        "sha256": "2c9c1bf6c18c5cf8e4b44a4bb360ba8673142a798a8f2f521eb5d5f02b18a9bc"
+      },
+      {
+        "archive": "Gravitas-wasm.sdz",
+        "module": "LuaUI/wasm/gravitas-ui.wasm",
+        "sha256": "703129ed1e3c10941e251f3b91221d79738d4f3119e0ef73bc16e62451b3249c"
+      },
+      {
+        "archive": "Hunted-wasm.sdz",
+        "module": "LuaRules/wasm/hunted-rules.wasm",
+        "sha256": "ff78b81f86a3ca3e46c53badc4fa529b294e9b8405fbd06c6c04713e77875455"
+      },
+      {
+        "archive": "Hunted-wasm.sdz",
+        "module": "LuaRules/wasm/hunted-jobs.wasm",
+        "sha256": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
+      },
+      {
+        "archive": "Hunted-wasm.sdz",
+        "module": "LuaUI/wasm/hunted-ui.wasm",
+        "sha256": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d"
+      },
+      {
+        "archive": "MyCube-wasm.sdz",
+        "module": "LuaRules/wasm/mycube-rules.wasm",
+        "sha256": "698230a53a617aafbfbefad22005ae0e66243582363a702baccd5d485b7d9517"
+      },
+      {
+        "archive": "MyCube-wasm.sdz",
+        "module": "LuaUI/wasm/mycube-ui.wasm",
+        "sha256": "5fe29534244654fe276d76f781fff466990a4ce17734365a25e5f6d9ba11c4ec"
+      },
+      {
+        "archive": "PartsNeeded-wasm.sdz",
+        "module": "LuaRules/wasm/partsneeded-rules.wasm",
+        "sha256": "35d246a04dc6e2d5c025e907d2803483c17e470f77f25b250a6d4ca578078d67"
+      },
+      {
+        "archive": "PartsNeeded-wasm.sdz",
+        "module": "LuaUI/wasm/partsneeded-ui.wasm",
+        "sha256": "c583ba6cec3a74f0e21b2d352d8de59fc7d045d4e58ed0a1333a681c1c44760f"
+      },
+      {
+        "archive": "ToTheLastDrop-wasm.sdz",
+        "module": "LuaRules/wasm/ttld-rules-unsynced.wasm",
+        "sha256": "a13c9d7063a014515cd5e14abed4d149c0dc0e04ec27c65eb36078f02f47314d"
+      },
+      {
+        "archive": "ToTheLastDrop-wasm.sdz",
+        "module": "LuaRules/wasm/ttld-rules.wasm",
+        "sha256": "b8ef4e7dbd5c2b22bae5754b108a06d441a9062fc6354a9447a6a65d26a30890"
+      },
+      {
+        "archive": "ToTheLastDrop-wasm.sdz",
+        "module": "LuaUI/wasm/ttld-ui.wasm",
+        "sha256": "5dd3acddc1cbefc2fb1b2f09b496039dcf61e7c9513b5a6df19f1eb17cb51e51"
+      }
+    ]
+  },
+  "platforms": {
+    "linux": {
+      "runtime": "Linux/NVIDIA",
+      "engine_sha256": "84267b736136968fceaceb251a72457f8995edcfdcb2318ea7eb4ad66d923d96",
+      "game_archives": {
+        "Area-17.sdz": "3693ab7704ac18e6efa8c08fd3b7c2627ea82c7a94295c03b582bb9299b7f86f",
+        "Scenario-Editor-Gravitas.sdz": "dc2ed8f95f6708895589b0417d884b4bb49a04ddd77d253bd1bf58047e22f899",
+        "Area17-wasm.sdz": "053a761d48149bdca6284e285334d2c1eff035e155c7f1e03887cf5765518add",
+        "Hunted-wasm.sdz": "cefa1ce185ce160897527ea3474b58a3d4897d012aff9bb27690b06139a8d24b",
+        "Gravitas.sdz": "72a9091f1fd979f9fd4566536f80337633573cc5cc2ef4470470f61b5891e951",
+        "MyCube-wasm.sdz": "7de66643cdfaf49f72fa46e7a5759e3042dd5a3cecfd607d2c4a37d98c91cba3",
+        "Flove-wasm.sdz": "ca3269cd869d675b67c6bdc03c5ffc67654dd4b59a8ddcd07011705e9adecc84",
+        "PartsNeeded.sdz": "92dfb7776050dad09baccbc768ce38d90733bf049d2d773deef63c16ade4cdcd",
+        "Scenario-Editor-Core.sdz": "4189962697a5503aa634b272c5f6438537f2a4fb5ea14d14eee919cf473249d7",
+        "Gravitas-wasm.sdz": "83a42fee2b1cc366846b30c688d381afd2a554fb3a404e5cd15e00ff6a1d95c5",
+        "ToTheLastDrop-wasm.sdz": "f536b23ed1ca06c37fa285ccdbeae4cb1e847699e16b93a4c7b2a65780466215",
+        "ToTheLastDrop.sdz": "d80c854e0050404926d69e4e03b35bb00c24cb8614b98d502c1b1d4a307ce777",
+        "Hunted.sdz": "2b6efe27c6768390c5e9b9c66f1d59658b42f890b273b410a53bceb4f46d0a8e",
+        "PartsNeeded-wasm.sdz": "b4dd20417d2a2ba3769387fa2ed42f10f341839b491abaa45d21bb8b42f11cf3",
+        "MyCube.sdz": "7bfee7a8325ed02206c75334e25c540c5f207e12d87b61db136142c9bc1c82be",
+        "WasmMenu.sdz": "7e8c947d8c10d3fd84b06bbc61aece9e1826baa7f455f277a2d06d0d618d5c9d",
+        "Flove.sdz": "8f2dc4d1bfc608105a1a09f81cffbd50514f4baa8a89595ff68253c07f96661d"
+      },
+      "packaged_menu": {
+        "ok": true,
+        "initial": "8735a13f061c6f5840a8b9abd0fdb947dd29122083330f636591b525a2c597f2",
+        "selected": "d5dbc7d4ef45aae0edbbac16c719310cf90e52582c6a701dc28ac1949bee1404",
+        "returned": "8735a13f061c6f5840a8b9abd0fdb947dd29122083330f636591b525a2c597f2",
+        "exit": 0,
+        "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "command": [
+          "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/runtime-check/linux/menu-attempt-0/wasm/SpringCabal"
+        ],
+        "cwd": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/runtime-check/linux/menu-attempt-0",
+        "isolation": true
+      },
+      "startup_cases": {
+        "area17/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 249,
+          "max_cpu_pressure": 0.51,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "1b35be52c9f6249427349248f9134e066ee072cf9389ff8436b8089107fe4c76",
+          "guard_sha256": "25e2ec8e527cc0650617b2bbb18ea1f8f71f73dbc717b3e4507eee3015928fa4",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/area17-lua"
+        },
+        "area17/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 254,
+          "max_cpu_pressure": 0.46,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "d492f511e361f45abc8e523e9bc0b1189d269805ed35212ff59cfe50b927f28e",
+          "guard_sha256": "e37899cb892b5f018ac70daf3aba7be4ed5253093dc1493f52c49ebd7f5e0f66",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/area17-wasm"
+        },
+        "flove/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 265,
+          "max_cpu_pressure": 1.14,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "8ea2925d3bcc777e6faae3b339b65371192f7e5316d1f8932f5cdf94bf6d7d3d",
+          "guard_sha256": "fa9c902e6c44d7ae4364739b1bea8583bf566fd530c37bc12859e1a09d53f42c",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/flove-lua"
+        },
+        "flove/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 267,
+          "max_cpu_pressure": 0.18,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "97445d102b564dcebed341de86e654e6db27ee3fd415e46279009b3836199086",
+          "guard_sha256": "ab2a71ae77fd64e44d106798b92ebe71c6c40c52eaad4481724e6517db7b4524",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/flove-wasm"
+        },
+        "gravitas/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 265,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "c179e1f9aba5b8c489c6d29198362c014476cc2723983553af58f0fdd18b0518",
+          "guard_sha256": "e64f66808ca0445cf940c3a7147037240fdfddf451829036d9d9118fc64b2031",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/gravitas-lua"
+        },
+        "mycube/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 262,
+          "max_cpu_pressure": 0.39,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "19bbdc1507e647dc1fab124db39efa6022205e26237d3ded87bc6e00bcdd0d15",
+          "guard_sha256": "a25ecf3be1386a21c56fdd6bb0c19854e686fd8609347bf6c1f5026db9e1fd94",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/mycube-lua"
+        },
+        "mycube/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 262,
+          "max_cpu_pressure": 0.67,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "b673657b7a2201ae2aa82af467012c36dfc2ddf9cd51ed6eebf8615666f6c155",
+          "guard_sha256": "5d2610e22281f47c304771a2ed4f742f9f68481730f59f6e2d743638f36915bf",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/mycube-wasm"
+        },
+        "partsneeded/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 265,
+          "max_cpu_pressure": 0.33,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "261b05239b2e52ed23ea794b206f48aad6628e06989a62fc8222407131ff85a4",
+          "guard_sha256": "caa7316e77dacf5fbf590647dac8ff0dfc94fc116478affe1939744dd2f0eadb",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/partsneeded-lua"
+        },
+        "partsneeded/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 264,
+          "max_cpu_pressure": 0.37,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "fe3219fd189784c58769c3b47ff7ae707f5db458a424aa683ef59c66d873b6be",
+          "guard_sha256": "bc1d86fce19566f8e0a25b43671dabc4454f7734d4ec221460325beaf92b6825",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/partsneeded-wasm"
+        },
+        "ttld/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 259,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "b34316a00a2ab648e54f736b09f5976afe8f87476773274895511af1398b0484",
+          "guard_sha256": "e15c73167a5954461f0fdf63d0564b132f9699e4eebd69810c7ab2c967e90972",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/ttld-lua"
+        },
+        "ttld/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 257,
+          "max_cpu_pressure": 0.18,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "e91da4f5c7036eb4f9860cca3a84a8b8157c77549b2d42293e30cfd9fded4738",
+          "guard_sha256": "cdaa8f0ea60e6fd02f464985f3924a743aedbebaea540210b7ad4e12b1c5d962",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/ttld-wasm"
+        },
+        "menu": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 516,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "28e8b23977fe1d09774293b00cf94214a2ee2c960312f2741012d40cdf062493",
+          "guard_sha256": "ea7025d92597aa414b0095534e2e39107a5e396231aafdb2e002e27ed21f1745",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/menu"
+        },
+        "gravitas/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 270,
+          "max_cpu_pressure": 0.38,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "3e74e2aa6eba0daec70117588df42968eb093e71f9cde86016fbc08f56b373c5",
+          "guard_sha256": "c79f5f4b1d4df5db4c6f5620b18da25fe4b2923b815a4d560b3fe17b9ad9bc91",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-1/springcabal-smoke.m5UYwE/gravitas-wasm"
+        },
+        "hunted/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 263,
+          "max_cpu_pressure": 0.27,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "d1a5890f0e252a4edace926c7f53fa987d33223b5ca4022cb73ab704e63e81d4",
+          "guard_sha256": "646bfe7a2f9ea7e8a788b55da77797e73f20cb5c15d5c7797fbcd299bd70ed41",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-3/springcabal-smoke.83y1Am/hunted-lua"
+        },
+        "hunted/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 261,
+          "max_cpu_pressure": 1.4,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "3f6d20a858ebf04fc6cb44a3a1f17e71d2385059f8e605a728b19ecba93e54ab",
+          "guard_sha256": "977db8951e2db05f593b3c07e9c1ea48aab2015552629925cbdf5991c38c07ff",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-6/springcabal-smoke.SaGRZq/hunted-wasm"
+        }
+      },
+      "images": {
+        "initial": "runtime-linux-initial.png",
+        "game": "runtime-linux-game.png"
+      }
+    },
+    "windows": {
+      "runtime": "Wine on Linux/NVIDIA, not native Windows",
+      "engine_sha256": "8c1416af553761a16ecde3fca2db90b1387a6c2b273dece433ec483ff85430bd",
+      "game_archives": {
+        "Area-17.sdz": "3693ab7704ac18e6efa8c08fd3b7c2627ea82c7a94295c03b582bb9299b7f86f",
+        "Scenario-Editor-Gravitas.sdz": "dc2ed8f95f6708895589b0417d884b4bb49a04ddd77d253bd1bf58047e22f899",
+        "Area17-wasm.sdz": "053a761d48149bdca6284e285334d2c1eff035e155c7f1e03887cf5765518add",
+        "Hunted-wasm.sdz": "cefa1ce185ce160897527ea3474b58a3d4897d012aff9bb27690b06139a8d24b",
+        "Gravitas.sdz": "72a9091f1fd979f9fd4566536f80337633573cc5cc2ef4470470f61b5891e951",
+        "MyCube-wasm.sdz": "7de66643cdfaf49f72fa46e7a5759e3042dd5a3cecfd607d2c4a37d98c91cba3",
+        "Flove-wasm.sdz": "ca3269cd869d675b67c6bdc03c5ffc67654dd4b59a8ddcd07011705e9adecc84",
+        "PartsNeeded.sdz": "92dfb7776050dad09baccbc768ce38d90733bf049d2d773deef63c16ade4cdcd",
+        "Scenario-Editor-Core.sdz": "4189962697a5503aa634b272c5f6438537f2a4fb5ea14d14eee919cf473249d7",
+        "Gravitas-wasm.sdz": "83a42fee2b1cc366846b30c688d381afd2a554fb3a404e5cd15e00ff6a1d95c5",
+        "ToTheLastDrop-wasm.sdz": "f536b23ed1ca06c37fa285ccdbeae4cb1e847699e16b93a4c7b2a65780466215",
+        "ToTheLastDrop.sdz": "d80c854e0050404926d69e4e03b35bb00c24cb8614b98d502c1b1d4a307ce777",
+        "Hunted.sdz": "2b6efe27c6768390c5e9b9c66f1d59658b42f890b273b410a53bceb4f46d0a8e",
+        "PartsNeeded-wasm.sdz": "b4dd20417d2a2ba3769387fa2ed42f10f341839b491abaa45d21bb8b42f11cf3",
+        "MyCube.sdz": "7bfee7a8325ed02206c75334e25c540c5f207e12d87b61db136142c9bc1c82be",
+        "WasmMenu.sdz": "7e8c947d8c10d3fd84b06bbc61aece9e1826baa7f455f277a2d06d0d618d5c9d",
+        "Flove.sdz": "8f2dc4d1bfc608105a1a09f81cffbd50514f4baa8a89595ff68253c07f96661d"
+      },
+      "packaged_menu": {
+        "ok": true,
+        "initial": "23ec037c3f3156901373bc437cf3bf6edab5daf0a8cb894b08bce62d11ef2e24",
+        "selected": "0383737e2d2e89b05ddb399d8d2bc37f9390af43e3be86171a45ba498a3997e0",
+        "returned": "23ec037c3f3156901373bc437cf3bf6edab5daf0a8cb894b08bce62d11ef2e24",
+        "exit": 0,
+        "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "command": [
+          "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-20261021/wine-runtime/root/usr/lib/wine/wine64",
+          "Z:\\home\\gajop\\projects\\spring-projects\\springcabal-games\\codex-work\\release-1.0.3-rc.3\\runtime-check\\windows\\menu-attempt-0\\wasm\\SpringCabal.exe"
+        ],
+        "cwd": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/runtime-check/windows/menu-attempt-0",
+        "isolation": true
+      },
+      "startup_cases": {
+        "area17/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 235,
+          "max_cpu_pressure": 3.28,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "1f2b21b23ef1609373c525eda704b1fe2b8f1ea2b7986bc0dc0b7c16acec692d",
+          "guard_sha256": "7f584ba41f13ea8f48a9ff83a3fdc1afd3b6888e90c310a11cc9e9fa9795ffbe",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/area17-wasm"
+        },
+        "flove/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 237,
+          "max_cpu_pressure": 2.53,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "30e01c3238dc70694a0f1ebbc12f8f6153c4fe82556f7db13a4caa7954fba79d",
+          "guard_sha256": "cd77676107523cc0050d183b7d7f9eaa86a145b36de3de6605bf5745739a4ca9",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/flove-lua"
+        },
+        "flove/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 251,
+          "max_cpu_pressure": 2.36,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "6f50693574a788d896137e78cfc4c836bc2f40b8ddabce4760caed2ee63adb33",
+          "guard_sha256": "03faf059bcb7a18d3ada5f94362cd45e35d22539c3fdc421dec4e1be3b447d27",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/flove-wasm"
+        },
+        "gravitas/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 247,
+          "max_cpu_pressure": 2.29,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "3684ff656ac346ea6b27d00483dd09f631c1f6e4011c295c67bea8cca62b2b61",
+          "guard_sha256": "cc501adb1d054b68cd3d42db27e05815afdfce6325e1de79be86cdd3b7000765",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/gravitas-lua"
+        },
+        "gravitas/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 252,
+          "max_cpu_pressure": 2.82,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "cd312706342895d560a6407e26b9307bddefdb1823f6dbfc81f599d01a839df3",
+          "guard_sha256": "a6b3f006582a96a1eb67d0f5bf98c256cd4d248413cb974d5cfb3947cb331812",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/gravitas-wasm"
+        },
+        "hunted/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 251,
+          "max_cpu_pressure": 3.3,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "1359ff51eb8f8b42a387c7718dc3f3d06ec7bd8a78bed1b48f5965de497b4d9e",
+          "guard_sha256": "a8c300117043ceb712532abc7cc6eed620646ab45fb771f1dbf5a66321363c0b",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/hunted-lua"
+        },
+        "hunted/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 252,
+          "max_cpu_pressure": 2.71,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "586fe3238eec31486788eeeb537ace840681de286fa04fd65dd338769ea4d751",
+          "guard_sha256": "44fee55e7b01a64512596153996c30b90601c4c9df48807d220869a7deadb048",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/hunted-wasm"
+        },
+        "mycube/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 247,
+          "max_cpu_pressure": 2.07,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "77c52d58fe05fa6bdc4ff8a890c9f734967165fde8a928fee044a78a4da6b1a9",
+          "guard_sha256": "d8be459238854662fce56d04b7a028fdde34a07967057dd9641cc81c82b56828",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/mycube-lua"
+        },
+        "mycube/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 254,
+          "max_cpu_pressure": 1.84,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "340e775da1aaced8688ed276fade4c0bec905bc9d40dc2aa39941361ea5896ac",
+          "guard_sha256": "ffd33d720f7cda5a6c73575d3f54286ed64ba4e4433e0f969f314dffcb2d8885",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/mycube-wasm"
+        },
+        "partsneeded/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 249,
+          "max_cpu_pressure": 2.18,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "3264c93e6611aebdd00ab7c71c1846e386a8dbe67a672a9c41a425b1a997c8a6",
+          "guard_sha256": "4aeb003666115d501f58229c2807ab4182315ebac0fbd2d0668eee221d7dd318",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/partsneeded-lua"
+        },
+        "menu": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 498,
+          "max_cpu_pressure": 2.3,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "aee07a806719dcc934ac7e6363dcc3bcd5f04826de47e6ff458681062f8017f5",
+          "guard_sha256": "867620f4d134bd16661780e25a0da52907bd9ee5a2776f8ba3cb47dfe3e526f3",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/menu"
+        },
+        "partsneeded/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 252,
+          "max_cpu_pressure": 2.54,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "655cdba072871c368f58161382ff1b6f1b0709db7cc324db12c92146fd445f0b",
+          "guard_sha256": "a632c6fe7f7e0354d7bd9a703453a0519c382be290ca9b0d28272008536e13b5",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-1/springcabal-smoke.bIRTsd/partsneeded-wasm"
+        },
+        "ttld/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 256,
+          "max_cpu_pressure": 0.88,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "22d656283a936d03d5f3288ef3b89592797add74d1cb091b4ea228786b5dbae0",
+          "guard_sha256": "b5b77c100aac3d2e3eb1b1eb7c0021b900f56203ec3987345f54d8c499e4c896",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-1/springcabal-smoke.bIRTsd/ttld-lua"
+        },
+        "ttld/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 255,
+          "max_cpu_pressure": 1.34,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "1bdcd1394f17629a59317dce73e8c66002e2c257fcd41e411e13c122ddc6d580",
+          "guard_sha256": "3545c4caa5adc669973b8d28c1eb56854922e7dfa2ccd7c86a81e0ee735d4a39",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-1/springcabal-smoke.bIRTsd/ttld-wasm"
+        },
+        "area17/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 252,
+          "max_cpu_pressure": 1.24,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "eb12cb9c93bcc08d2f7755f38f8c1a89289655e9101e9593cea8ed365fe05e50",
+          "guard_sha256": "525be2b896dd7a4254be733d9174579cb9905c6826d0771b08d2f53c170884eb",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-3/springcabal-smoke.6RvbXb/area17-lua"
+        }
+      },
+      "images": {
+        "initial": "runtime-windows-initial.png",
+        "game": "runtime-windows-game.png"
+      }
+    }
+  },
+  "public_game_sources": [
+    {
+      "game": "Hunted.sdd",
+      "branch": "master",
+      "public_branch": "master",
+      "head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+      "remote": "git@github.com:SpringCabal/Hunted.git",
+      "remote_head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:21.476918+00:00"
+    },
+    {
+      "game": "Hunted-wasm.sdd",
+      "branch": "rust",
+      "public_branch": "rust",
+      "head": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+      "remote": "git@github.com:SpringCabal/Hunted.git",
+      "remote_head": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:21.460197+00:00"
+    },
+    {
+      "game": "ToTheLastDrop.sdd",
+      "branch": "master",
+      "public_branch": "master",
+      "head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+      "remote": "git@github.com:SpringCabal/LD43.git",
+      "remote_head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:21.450552+00:00"
+    },
+    {
+      "game": "ToTheLastDrop-wasm.sdd",
+      "branch": "ttld-wasm-port",
+      "public_branch": "rust",
+      "head": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+      "remote": "git@github.com:SpringCabal/LD43.git",
+      "remote_head": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:21.450779+00:00"
+    },
+    {
+      "game": "Flove.sdd",
+      "branch": "main",
+      "public_branch": "master",
+      "head": "ff06007e58303e169a7a39d301f70b479d745625",
+      "remote": "git@github.com:SpringCabal/Flove.git",
+      "remote_head": "ff06007e58303e169a7a39d301f70b479d745625",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:23.400174+00:00"
+    },
+    {
+      "game": "Flove-wasm.sdd",
+      "branch": "rust",
+      "public_branch": "rust",
+      "head": "369749aa3c00f35cac3443302a46e8230dde9b90",
+      "remote": "git@github.com:SpringCabal/Flove.git",
+      "remote_head": "369749aa3c00f35cac3443302a46e8230dde9b90",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:23.398796+00:00"
+    },
+    {
+      "game": "Area-17.sdd",
+      "branch": "master",
+      "public_branch": "master",
+      "head": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+      "remote": "git@github.com:SpringCabal/Area-17.git",
+      "remote_head": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:23.396862+00:00"
+    },
+    {
+      "game": "Area17-wasm.sdd",
+      "branch": "rust",
+      "public_branch": "rust",
+      "head": "bef0f959a8141b7d68f2f8b0c851b5965438d3fd",
+      "remote": "git@github.com:SpringCabal/Area-17.git",
+      "remote_head": "bef0f959a8141b7d68f2f8b0c851b5965438d3fd",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:23.461606+00:00"
+    },
+    {
+      "game": "MyCube.sdd",
+      "branch": "master",
+      "public_branch": "master",
+      "head": "4698657d927b4eac083319f86b177195e1ef7480",
+      "remote": "git@github.com:SpringCabal/LD42.git",
+      "remote_head": "4698657d927b4eac083319f86b177195e1ef7480",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:25.329820+00:00"
+    },
+    {
+      "game": "MyCube-wasm.sdd",
+      "branch": "mycube-wasm-port",
+      "public_branch": "rust",
+      "head": "9d7c1fccd382cbc74a8b4e3915da002bd62590bc",
+      "remote": "git@github.com:SpringCabal/LD42.git",
+      "remote_head": "9d7c1fccd382cbc74a8b4e3915da002bd62590bc",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:25.360650+00:00"
+    },
+    {
+      "game": "PartsNeeded.sdd",
+      "branch": "master",
+      "public_branch": "master",
+      "head": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+      "remote": "git@github.com:SpringCabal/LD35.git",
+      "remote_head": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:25.366931+00:00"
+    },
+    {
+      "game": "PartsNeeded-wasm.sdd",
+      "branch": "partsneeded-wasm-port",
+      "public_branch": "rust",
+      "head": "de726c4238a2edd827c74d4347702f009d32f0bb",
+      "remote": "git@github.com:SpringCabal/LD35.git",
+      "remote_head": "de726c4238a2edd827c74d4347702f009d32f0bb",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:25.462399+00:00"
+    },
+    {
+      "game": "Gravitas.sdd",
+      "branch": "master",
+      "public_branch": "master",
+      "head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+      "remote": "git@github.com:SpringCabal/Gravitas.git",
+      "remote_head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:27.296616+00:00"
+    },
+    {
+      "game": "Gravitas-wasm.sdd",
+      "branch": "gravitas-wasm-port",
+      "public_branch": "rust",
+      "head": "9e073d8309923156d1ca49af03bb86f9aab64a02",
+      "remote": "git@github.com:SpringCabal/Gravitas.git",
+      "remote_head": "9e073d8309923156d1ca49af03bb86f9aab64a02",
+      "dirty": "",
+      "committed_and_pushed": true,
+      "checked_utc": "2026-10-29T22:28:27.334545+00:00"
+    }
+  ],
+  "verification_source_sha256": {
+    "release/smoke-test.sh": "4eca4e20d3640cd238977ea3c89cc4b2ef06862ff9a9693894867511f21ebf18",
+    "release/smoke-run.py": "f1d787617278faaf8a5ab19811c6b5a4b48b3626c7933833b3df9376312e5947",
+    "verification/sdk-menu/run.py": "771b9fb95030227be56cb1f919056f01e64c2df6681d702b5a0a2956554d0a60",
+    "verification/lib/failures.sh": "59d8cba6260bc1a1e73fe70aa9629cde276e06d57cfb3ce0f1c6ef6e5e2e5316"
+  }
+}
