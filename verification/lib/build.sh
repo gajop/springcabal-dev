@@ -133,14 +133,16 @@ vf_build() {
 
 # vf_installed_matches_source GAME_DIR: the modules `just copy` installs in
 # the game (its justfile's copy recipe) match a fresh build of wasm-src/,
-# made outside the checkout (see vf_same_length_target).  Custom sections
+# made outside the build directory (see vf_same_length_target). CARGO_TARGET_DIR
+# selects the reference directory when builds share a Cargo cache. Custom sections
 # (names, producers) are ignored: ThinLTO suffixes local symbol names with a
 # hash of the object file's path, so they change with the target directory
 # even when the code does not.
 vf_installed_matches_source() {
     local game_dir=${1:?game dir} source_root reference target line crate dest installed fresh count=0
     source_root="$game_dir/wasm-src"
-    reference="$source_root/target"
+    reference=${CARGO_TARGET_DIR:-"$source_root/target"}
+    reference=$(cd "$source_root" && realpath -m -s -- "$reference")
     target=$(vf_same_length_target "$reference" "$(basename "$game_dir" -wasm.sdd)")
     vf_build "$source_root" '' "$target"
     while read -r line; do

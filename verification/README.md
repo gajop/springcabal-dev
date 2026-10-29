@@ -48,7 +48,8 @@ just probe gravitas-fire lua     # a debugging probe
 - `host tests` runs the host unit tests: `springcabal-rs` and every game's
   `shared` (and Hunted's `ai`) crate.
 - `installed` checks that the modules installed in each game folder match a
-  fresh build of its `wasm-src/`.
+  fresh build of its `wasm-src/`. Set `CARGO_TARGET_DIR` to the original build
+  directory when checking modules built with a shared Cargo target.
 - `perf tests` checks the performance runner's equivalence, render-window and
   aggregation logic and is included in `verify all`. Benchmark campaigns are
   opt-in; [perf/README.md](perf/README.md) covers the four game pairs, 10×
