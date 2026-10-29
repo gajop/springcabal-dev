@@ -1057,20 +1057,20 @@
     "adopted": null,
     "change": "Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
     "backend": "lua",
-    "measured_rounds": 0,
+    "measured_rounds": 1,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 1,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
+    "attempted_phase_pairs": 4,
+    "wall_before_ms": 5.7267883333333325,
+    "wall_after_ms": 5.608189999999998,
+    "wall_change_pct": -2.0709397035511445,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
+    "sim_before_ms": 2.105024,
+    "sim_after_ms": 2.0318430000000003,
+    "sim_change_pct": -3.476492429539968,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
+    "draw_before_ms": 2.844329,
+    "draw_after_ms": 2.807426,
+    "draw_change_pct": -1.2974237509092656,
     "draw_mean_ratio_95ci": null
   },
   {
@@ -1083,29 +1083,29 @@
     "adopted": null,
     "change": "Confirmation: five new alternating source pairs, combined with the original five. Same seeded engine244, frozen modules, settings and GPU/CPU idle guards. UI/jobs bytecode identical in before/after.",
     "backend": "wasm",
-    "measured_rounds": 5,
+    "measured_rounds": 6,
     "planned_rounds": 10,
-    "attempted_phase_pairs": 14,
-    "wall_before_ms": 1.0302950000000004,
-    "wall_after_ms": 1.0634466666666669,
-    "wall_change_pct": 6.465409849680315,
+    "attempted_phase_pairs": 17,
+    "wall_before_ms": 1.0584841666666667,
+    "wall_after_ms": 1.0793958333333336,
+    "wall_change_pct": -0.11803442651068252,
     "wall_mean_ratio_95ci": [
-      0.9584106029117095,
-      1.2333388124084996
+      0.7945287681669448,
+      1.183279879169247
     ],
-    "sim_before_ms": 0.248635,
-    "sim_after_ms": 0.262717,
-    "sim_change_pct": 8.311517766540732,
+    "sim_before_ms": 0.2562255,
+    "sim_after_ms": 0.2668605,
+    "sim_change_pct": 2.357942807496638,
     "sim_mean_ratio_95ci": [
-      0.9825897089818424,
-      1.240934170791972
+      0.7987064237014767,
+      1.1945310939698464
     ],
-    "draw_before_ms": 0.71634,
-    "draw_after_ms": 0.751366,
-    "draw_change_pct": 7.243120675148074,
+    "draw_before_ms": 0.7257735,
+    "draw_after_ms": 0.7625124999999999,
+    "draw_change_pct": 1.1541685243829924,
     "draw_mean_ratio_95ci": [
-      0.9743690740670364,
-      1.207590095242893
+      0.826780259195426,
+      1.1645008990450227
     ]
   },
   {
@@ -1118,29 +1118,29 @@
     "adopted": null,
     "change": "Confirmation: five new alternating source pairs, combined with the original five. Same seeded engine244, frozen modules, settings and GPU/CPU idle guards. UI/jobs bytecode identical in before/after.",
     "backend": "wasm",
-    "measured_rounds": 9,
+    "measured_rounds": 10,
     "planned_rounds": 10,
-    "attempted_phase_pairs": 19,
-    "wall_before_ms": 4.012216666666667,
-    "wall_after_ms": 3.8486,
-    "wall_change_pct": -0.035793914605308785,
+    "attempted_phase_pairs": 21,
+    "wall_before_ms": 4.1427708333333335,
+    "wall_after_ms": 3.865275833333334,
+    "wall_change_pct": -0.034899227942686295,
     "wall_mean_ratio_95ci": [
-      0.8664210961258196,
-      1.0276634836030307
+      0.8806023103686842,
+      1.0282596457221074
     ],
-    "sim_before_ms": 1.906194,
-    "sim_after_ms": 1.8566099999999999,
-    "sim_change_pct": 0.5553617742473982,
+    "sim_before_ms": 1.966418,
+    "sim_after_ms": 1.8681115,
+    "sim_change_pct": 1.0690746277398189,
     "sim_mean_ratio_95ci": [
-      0.9115001516890227,
-      1.0457782923579968
+      0.9231921774597275,
+      1.045496222615047
     ],
-    "draw_before_ms": 1.9806780000000002,
-    "draw_after_ms": 1.8807349999999998,
-    "draw_change_pct": -1.7582888890196102,
+    "draw_before_ms": 2.028772,
+    "draw_after_ms": 1.88076,
+    "draw_change_pct": -1.1353129034795684,
     "draw_mean_ratio_95ci": [
-      0.9018628414383576,
-      1.0317750935688728
+      0.9111522845776542,
+      1.0276015947764334
     ]
   },
   {
