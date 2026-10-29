@@ -202,6 +202,7 @@ checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 [[package]]
 name = "spring-native-sys"
 version = "0.1.0"
+source = "git+https://github.com/gajop/spring-rust?rev=0f0ee80fa0ee620bc2988c64559feb3cbd163e10#0f0ee80fa0ee620bc2988c64559feb3cbd163e10"
 dependencies = [
  "bindgen",
  "libc",
@@ -210,6 +211,7 @@ dependencies = [
 [[package]]
 name = "spring-sdk"
 version = "0.1.0"
+source = "git+https://github.com/gajop/spring-rust?rev=0f0ee80fa0ee620bc2988c64559feb3cbd163e10#0f0ee80fa0ee620bc2988c64559feb3cbd163e10"
 dependencies = [
  "spring-native-sys",
  "spring-sdk-internal",
@@ -218,6 +220,7 @@ dependencies = [
 [[package]]
 name = "spring-sdk-internal"
 version = "0.1.0"
+source = "git+https://github.com/gajop/spring-rust?rev=0f0ee80fa0ee620bc2988c64559feb3cbd163e10#0f0ee80fa0ee620bc2988c64559feb3cbd163e10"
 dependencies = [
  "libm",
 ]
@@ -251,7 +254,3 @@ name = "windows-link"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f0805222e57f7521d6a62e36fa9163bc891acd422f971defe97d64e70d0a4fe5"
-
-[[patch.unused]]
-name = "spring-addons"
-version = "0.1.0"
