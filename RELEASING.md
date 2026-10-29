@@ -62,6 +62,10 @@ build and install for all WASM games and the menu), downloads the selected
 engine binaries, assembles both platforms, archives the committed sources and
 writes checksums. It checks that the sources have not changed during packaging.
 Engine downloads are cached in `release/cache/`.
+`just build-all` shares `verification/cache/target/normal` across games and the
+menu. Set `CARGO_TARGET_DIR` to reuse a different Cargo cache; the game copy
+recipes install from that directory too. The cache is rebuildable, while
+installed game modules, source snapshots and release archives stay separate.
 
 The five upload assets are written to `release/out/`:
 

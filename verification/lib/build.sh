@@ -146,7 +146,7 @@ vf_installed_matches_source() {
     target=$(vf_same_length_target "$reference" "$(basename "$game_dir" -wasm.sdd)")
     vf_build "$source_root" '' "$target"
     while read -r line; do
-        crate=$(sed -E 's|.*release/([^ ]+)\.wasm .*|\1|' <<<"$line")
+        crate=$(sed -E 's|.*release/([^ "]+)\.wasm"? .*|\1|' <<<"$line")
         dest=$(sed -E 's|.* \.\./([^ ]+)$|\1|' <<<"$line")
         installed="$game_dir/$dest"
         fresh="$VF_OUT_DIR/$crate.wasm"
@@ -159,7 +159,7 @@ vf_installed_matches_source() {
         cmp -s "$fresh" "$fresh.installed" ||
             vf_die "$installed does not match its source; rebuild it with \`just copy\` in $source_root"
         count=$((count + 1))
-    done < <(grep -E '^[[:space:]]+cp target/wasm32-unknown-unknown/release/[^ ]+\.wasm \.\./' "$source_root/justfile")
+    done < <(grep -E '^[[:space:]]+cp (target/|"\$\{CARGO_TARGET_DIR:-target\}/)wasm32-unknown-unknown/release/[^ "]+\.wasm"? \.\./' "$source_root/justfile")
     [[ $count -gt 0 ]] || vf_die "no module copies found in $source_root/justfile"
     printf 'installed modules match the source: %s (%s modules)\n' "$(basename "$game_dir")" "$count"
 }

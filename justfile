@@ -51,7 +51,8 @@ check-all:
 # Build (fmt, clippy, release) and install the modules of every WASM game and the menu
 [group('build')]
 build-all:
-    @for g in {{wasm_games}} wasm-menu; do \
+    @export CARGO_TARGET_DIR="$(realpath -m "${CARGO_TARGET_DIR:-$PWD/verification/cache/target/normal}")"; \
+    for g in {{wasm_games}} wasm-menu; do \
         echo "=== Building $g ==="; \
         (cd "$g/wasm-src" && just copy) || exit 1; \
     done
