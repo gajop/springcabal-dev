@@ -28,7 +28,12 @@ def capture(window, path):
 def keys(args, *values):
     if args.wine:
         codes = {"Down": 40, "Right": 39, "Up": 38, "Return": 13, "Escape": 27}
-        subprocess.run([str(args.wine), "Z:" + str(args.output.resolve() / "wine-input.exe").replace("/", chr(92)), *[str(codes[value]) for value in values]], check=True)
+        env = os.environ.copy()
+        # Development checks keep the helper outside the engine directory.
+        # Wine's USER32 can require zlib1.dll from that engine's bundled DLLs.
+        directory = "Z:" + str(args.engine.resolve().parent).replace("/", chr(92))
+        env["WINEPATH"] = directory + (";" + env["WINEPATH"] if env.get("WINEPATH") else "")
+        subprocess.run([str(args.wine), "Z:" + str(args.output.resolve() / "wine-input.exe").replace("/", chr(92)), *[str(codes[value]) for value in values]], env=env, check=True)
         return
     for value in values:
         subprocess.run(["xdotool", "keydown", value], check=True)
