@@ -96,6 +96,11 @@ aggregates; attempted/completed counts retain the failures. Individual logs
 and results preserve the reasons. Run directories must be empty to prevent
 mixing old and new evidence.
 
+`--repeats` is a minimum number of attempted pairs, rather than an attempt
+limit. For five clean pairs, use `--repeats 5 --clean-pairs 5`; the runner can
+retry interrupted pairs. Separate profiles or world captures need
+`--repeats 1 --clean-pairs 1` when one complete matching pair is sufficient.
+
 
 For a before/after optimization comparison within one backend, use
 `--backend lua` or `--backend wasm` and `--games-dir /path/to/frozen/games`.
