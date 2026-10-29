@@ -5,21 +5,30 @@
 # Games must load and remain running until the timeout; frame counts are
 # informational because some games start paused or stop logging frames.
 #
-# Usage: release/smoke-test.sh BUNDLE [seconds] [--wine WINE]
+# Usage: release/smoke-test.sh BUNDLE [seconds] [--wine WINE] [--case GAME/lua|GAME/wasm|menu]
 set -uo pipefail
 
+# Parse the whole job before running it. A long check must not read another
+# fragment of this file after an editor changes it underneath the process.
+main() {
 bundle="$(cd "${1:?bundle directory}" && pwd)"
 shift
 seconds=45
 wine_loader=''
+selected_cases=()
 if [[ ${1:-} != --* && $# -gt 0 ]]; then seconds=$1; shift; fi
-if [[ $# -gt 0 ]]; then
-    [[ $# -eq 2 && $1 == --wine ]] || { echo 'Usage: smoke-test.sh BUNDLE [seconds] [--wine WINE]' >&2; exit 2; }
-    wine_loader=$(command -v "$2") || exit 2
-fi
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --wine) wine_loader=$(command -v "${2:?Wine loader}") || exit 2; shift 2 ;;
+        --case) selected_cases+=("${2:?case name}"); shift 2 ;;
+        *) echo "Unknown option: $1" >&2; exit 2 ;;
+    esac
+done
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 if [[ -n $wine_loader && ${SPRINGCABAL_SMOKE_XVFB:-} != 1 ]]; then
-    exec xvfb-run -a env SPRINGCABAL_SMOKE_XVFB=1 "$project_root/release/smoke-test.sh" "$bundle" "$seconds" --wine "$wine_loader"
+    case_args=()
+    for name in "${selected_cases[@]}"; do case_args+=(--case "$name"); done
+    exec xvfb-run -a env SPRINGCABAL_SMOKE_XVFB=1 "$project_root/release/smoke-test.sh" "$bundle" "$seconds" --wine "$wine_loader" "${case_args[@]}"
 fi
 work="$(mktemp -d "${TMPDIR:-/tmp}/springcabal-smoke.XXXXXX")"
 
@@ -135,12 +144,33 @@ clean_log() {
 
 # The exact start scripts the menu launches (it compiles these files in).
 mapfile -t scripts < <(ls "$project_root"/launch/games/*/{wasm,lua}.txt)
+case_ids=(menu)
+for script in "${scripts[@]}"; do
+    case_ids+=("$(basename "$(dirname "$script")")/$(basename "$script" .txt)")
+done
+for name in "${selected_cases[@]}"; do
+    found=0
+    for known in "${case_ids[@]}"; do [[ $name != "$known" ]] || found=1; done
+    (( found )) || { echo "Unknown smoke case: $name" >&2; exit 2; }
+done
+selected() {
+    [[ ${#selected_cases[@]} -gt 0 ]] || return 0
+    local name
+    for name in "${selected_cases[@]}"; do [[ $name != "$1" ]] || return 0; done
+    return 1
+}
+if [[ ${#selected_cases[@]} -gt 0 ]]; then
+    printf 'Selected cases: %s\n' "${selected_cases[*]}"
+else
+    printf 'All %s game entries and the menu\n' "${#scripts[@]}"
+fi
 
 failures=0
 printf '%-36s %-10s %-8s %-8s %s\n' GAME RESULT FRAMES ERRORS WARNINGS
 for script in "${scripts[@]}"; do
     game=$(basename "$(dirname "$script")")
     game_type="$game/$(basename "$script" .txt)"
+    selected "$game_type" || continue
     run="$work/${game}-$(basename "$script" .txt)"
     mkdir -p "$run"
     sed -E "s/([Hh]ost[Pp]ort)=[0-9]+;/\1=$(shuf -i 20000-60000 -n 1);/" "$script" > "$run/start.txt"
@@ -166,6 +196,10 @@ for script in "${scripts[@]}"; do
     printf '%-36s %-10s %-8s %-8s %s\n' "$game_type" "$result" "${last_frame:-0}" "${errors:-0}" "${warnings:-0}"
 done
 
+if ! selected menu; then
+    echo "Logs: $work"
+    exit $(( failures > 0 ))
+fi
 run="$work/menu"
 mkdir -p "$run"
 config "$run/spring.conf"
@@ -188,3 +222,6 @@ fi
 echo ""
 echo "Logs: $work"
 exit $(( failures > 0 ))
+}
+
+main "$@"

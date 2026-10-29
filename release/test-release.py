@@ -9,6 +9,7 @@ import shutil
 import subprocess
 import tarfile
 import tempfile
+import time
 import unittest
 from unittest.mock import patch
 
@@ -89,6 +90,90 @@ class SmokeRunTests(unittest.TestCase):
         except (FileNotFoundError, ProcessLookupError):
             return
         self.assertEqual(state, "Z")
+
+
+class SmokeScriptTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="springcabal-smoke-script-")
+        self.addCleanup(self.temporary.cleanup)
+        self.root = Path(self.temporary.name) / "workspace with spaces"
+        release = self.root / "release"
+        release.mkdir(parents=True)
+        self.script = release / "smoke-test.sh"
+        shutil.copy2(SCRIPTS / "smoke-test.sh", self.script)
+        failures = self.root / "verification/lib/failures.sh"
+        failures.parent.mkdir(parents=True)
+        shutil.copy2(SCRIPTS.parent / "verification/lib/failures.sh", failures)
+        game = self.root / "launch/games/one"
+        game.mkdir(parents=True)
+        for variant in ["lua", "wasm"]:
+            (game / (variant + ".txt")).write_text("[GAME] { HostPort=8452; }\n")
+        self.bundle = self.root / "bundle with spaces"
+        (self.bundle / "fonts").mkdir(parents=True)
+        (self.bundle / "SpringCabal").touch()
+        (self.bundle / "springsettings.cfg").write_text("Shadows = 0\n")
+        self.ready, self.resume, self.calls = [self.root / name for name in
+                                             ["ready", "resume", "calls.jsonl"]]
+        self.env = dict(os.environ, SMOKE_TEST_READY=str(self.ready),
+                        SMOKE_TEST_RESUME=str(self.resume), SMOKE_TEST_CALLS=str(self.calls))
+        # Model the worker contract; these are shell-control tests, never GPU
+        # measurements. Real hardware smoke cases exercise the actual worker.
+        (release / "smoke-run.py").write_text('''import json,os,sys,time
+from pathlib import Path
+calls=Path(os.environ['SMOKE_TEST_CALLS'])
+first=not calls.exists()
+with calls.open('a') as stream:stream.write(json.dumps(sys.argv[1:])+'\\n')
+if first and os.environ.get('SMOKE_TEST_PAUSE'):
+ Path(os.environ['SMOKE_TEST_READY']).touch()
+ deadline=time.monotonic()+10
+ while not Path(os.environ['SMOKE_TEST_RESUME']).exists():
+  if time.monotonic()>deadline:raise RuntimeError('test did not resume worker')
+  time.sleep(.01)
+Path(sys.argv[sys.argv.index('--guard')+1]).write_text('{}')
+print('GL renderer : NVIDIA mock for shell control test')
+print('[GR::LogDisplayMode] display-mode set to 1280x720x24bpp.')
+print('finished loading and is now ingame')
+print('Wasm manifest loaded from WasmMenu/manifest.json')
+raise SystemExit(124)
+''')
+
+    def command(self, *options):
+        return ["bash", str(self.script), str(self.bundle), ".01", *options]
+
+    def test_running_script_survives_source_edit_and_keeps_selected_menu(self):
+        self.env["SMOKE_TEST_PAUSE"] = "1"
+        with subprocess.Popen(self.command("--case", "one/lua", "--case", "menu"),
+                              env=self.env, stdout=subprocess.PIPE,
+                              stderr=subprocess.PIPE, text=True) as process:
+            try:
+                deadline = time.monotonic() + 5
+                while not self.ready.exists() and process.poll() is None and time.monotonic() < deadline:
+                    time.sleep(.01)
+                self.assertTrue(self.ready.exists(), "smoke job did not reach its first case")
+                text = self.script.read_text()
+                self.script.write_text(text.replace("#!/usr/bin/env bash\n",
+                    "#!/usr/bin/env bash\n" + "# edited while the case was running\n" * 31, 1))
+            finally:
+                self.resume.touch()
+            out, err = process.communicate(timeout=10)
+        self.assertEqual(process.returncode, 0, out + err)
+        self.assertIn("one/lua", out)
+        self.assertIn("WasmMenu", out)
+        self.assertNotIn("one/wasm", out)
+        self.assertEqual(len(self.calls.read_text().splitlines()), 2)
+
+    def test_default_runs_every_entry_and_menu(self):
+        result = subprocess.run(self.command(), env=self.env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("All 2 game entries and the menu", result.stdout)
+        self.assertEqual(len(self.calls.read_text().splitlines()), 3)
+
+    def test_unknown_case_cannot_pass_without_running_checks(self):
+        result = subprocess.run(self.command("--case", "missing/wasm"),
+                                env=self.env, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 2, result.stdout + result.stderr)
+        self.assertIn("Unknown smoke case", result.stderr)
+        self.assertFalse(self.calls.exists())
 
 MOCK_GH = r'''#!/usr/bin/env python3
 import hashlib, json, os, pathlib, sys

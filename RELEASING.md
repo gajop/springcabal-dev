@@ -152,6 +152,9 @@ waits; contention during a case fails it. `VF_MAX_IDLE_MINUTES` controls the wai
 fail the case. Windows smoke checks stop their own Wine server and remove their
 temporary prefix after success, retaining it for failed-run debugging. Set
 `WINESERVER` to the matching server when using a separate Wine installation.
+To rerun interrupted entries, repeat `--case`, for example
+`--case flove/lua --case mycube/wasm --case menu`. The output names the selected
+subset; omit this option for the full release check.
 The packaged-menu harness launches the actual
 executable with no arguments from outside the bundle directory and checks
 isolation, navigation, Lua Gravitas launch/return and clean exit. `--wine` takes
