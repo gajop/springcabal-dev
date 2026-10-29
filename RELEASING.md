@@ -24,12 +24,12 @@ Cargo dependencies must be cached: provenance inspection uses
 Choose a published release from
 [gajop/spring-rust](https://github.com/gajop/spring-rust/releases) containing both
 `recoil_<TAG>_amd64-linux.7z` and `recoil_<TAG>_amd64-windows.7z`. The SDK crates
-used to build the games must match that engine release. For example, use an
-engine checkout at `2026.10.21` and point Cargo at it:
+used to build the games must match that engine release. The current SDK pins
+match `2026.10.3001`. Use the pinned Git crates when preparing a public release:
 
 ```bash
-gh release view 2026.10.21 -R gajop/spring-rust
-just setup-dev-engine ../spring-bar
+gh release view 2026.10.3001 -R gajop/spring-rust
+./setup.sh --no-dev-engine
 ```
 
 The [2026.10.25 compatibility review](docs/engine-compatibility-2026-10-25.md)
@@ -49,12 +49,12 @@ When adding content, update `content.tsv`, `launch/games/` and the menu first.
 
 ## Prepare all five assets
 
-Use a new version for each public release; the examples below use `1.0.2`:
+Use a new version for each public release; the examples below use `1.0.3-rc.3`:
 
 ```bash
-just release-prepare 1.0.2 2026.10.21
+just release-prepare 1.0.3-rc.3 2026.10.3001
 # Equivalent:
-./release/release.sh prepare 1.0.2 --engine-tag 2026.10.21
+./release/release.sh prepare 1.0.3-rc.3 --engine-tag 2026.10.3001
 ```
 
 This runs `just build-all` through the existing packager (fmt, Clippy, release
@@ -121,7 +121,7 @@ For a local development package without source archives or publishing, the
 lower-level command remains available:
 
 ```bash
-just package 2026.10.21 --version test --platform linux
+just package 2026.10.3001 --version test --platform linux
 ./release/package.sh --platform linux --no-archive --version test \
     --engine-dir linux=../spring-bar/build-amd64-linux/install
 ```
@@ -129,13 +129,13 @@ just package 2026.10.21 --version test --platform linux
 ## Use the existing checks
 
 ```bash
-just smoke-test release/out/SpringCabal-1.0.2-linux
+just smoke-test release/out/SpringCabal-1.0.3-rc.3-linux
 python3 verification/sdk-menu/run.py --packaged \
-    --engine release/out/SpringCabal-1.0.2-linux/SpringCabal \
-    --output verification/out/packaged-menu-1.0.2-linux
+    --engine release/out/SpringCabal-1.0.3-rc.3-linux/SpringCabal \
+    --output verification/out/packaged-menu-1.0.3-rc.3-linux
 python3 verification/sdk-menu/run.py --packaged --wine wine \
-    --engine release/out/SpringCabal-1.0.2-windows/SpringCabal.exe \
-    --output verification/out/packaged-menu-1.0.2-windows
+    --engine release/out/SpringCabal-1.0.3-rc.3-windows/SpringCabal.exe \
+    --output verification/out/packaged-menu-1.0.3-rc.3-windows
 ```
 
 The smoke test runs all fourteen game entries and the menu offscreen on the
@@ -167,16 +167,16 @@ From the framework's clean `main` branch:
 
 ```bash
 # Check assets/revisions and preview publication without changing Git or GitHub:
-just release-publish 1.0.2 /tmp/springcabal-1.0.2-notes.md --dry-run
+just release-publish 1.0.3-rc.3 /tmp/springcabal-1.0.3-rc.3-notes.md --dry-run --prerelease
 
-# Push framework main + v1.0.2, upload, verify checksums, and publish:
-just release-publish 1.0.2 /tmp/springcabal-1.0.2-notes.md
+# Push framework main + v1.0.3-rc.3, upload, verify checksums, and publish:
+just release-publish 1.0.3-rc.3 /tmp/springcabal-1.0.3-rc.3-notes.md --prerelease
 
 # Or upload and keep a draft for review:
-./release/release.sh publish 1.0.2 --notes /tmp/springcabal-1.0.2-notes.md --draft
+./release/release.sh publish 1.0.3-rc.3 --notes /tmp/springcabal-1.0.3-rc.3-notes.md --draft --prerelease
 
 # Publish a prerelease, leaving the latest stable release unchanged:
-./release/release.sh publish 1.0.3-rc.1 --notes /tmp/springcabal-1.0.3-rc.1-notes.md --prerelease
+./release/release.sh publish 1.0.3-rc.3 --notes /tmp/springcabal-1.0.3-rc.3-notes.md --prerelease
 ```
 
 The default title is `SpringCabal <version>`; pass `--title "..."` to change it.
