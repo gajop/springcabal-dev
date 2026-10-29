@@ -71,6 +71,9 @@ def capture_identity(campaign, game, backend):
         source_commit = read(manifest).get(folders[backend == 'wasm'])
     identity = {'source_commit': source_commit, 'modules': content.get('modules', {}),
                 'engine_sha256': stamp['engine_sha256']}
+    if stamp.get('resource_guard_sha256'):
+        identity.update(resource_guard_sha256=stamp['resource_guard_sha256'],
+                        cpu_activity_policy=stamp.get('cpu_activity_policy'))
     if game == 'gravitas' and stamp['args']['scenario'] == 'effects':
         identity['effects_fixtures'] = effects_fixtures(stamp)
         if backend == 'wasm':
