@@ -181,7 +181,8 @@ function overviewTable(){
     const r=scene.language,tr=document.createElement('tr');tr.className='click-row';
     const cells=[scene.title+' · '+scene.load,fmt(r.wall_mean_lua_ms),fmt(r.wall_mean_rust_ms),pct(r.wall_mean_paired_rust_change_pct),
       fmt(r.sim_p50_lua_ms)+' / '+fmt(r.sim_p50_rust_ms),fmt(r.draw_p50_lua_ms)+' / '+fmt(r.draw_p50_rust_ms),
-      fmt(r.lua_units_p50,0)+' / '+fmt(r.wasm_units_p50,0),r.measured_pairs+' / 5'];
+      fmt(r.lua_units_p50,0)+' / '+fmt(r.wasm_units_p50,0),r.measured_pairs+' / 5',
+      r.runtime?.cpu_activity_policy?'≤ '+r.runtime.cpu_activity_policy.max_background_cpu_cores+' background cores':r.measured_pairs?'Pressure only · historical':'Pending'];
     for(const value of cells){const td=document.createElement('td');td.textContent=value;tr.append(td);}
     tr.onclick=()=>{selectScene(scene.id);location.hash='lab';};body.append(tr);
   }
@@ -195,5 +196,6 @@ $('theme').onclick=()=>{document.documentElement.dataset.theme=document.document
 $('video-play').onclick=()=>{const videos=[...$('video-grid').querySelectorAll('video')],play=videos.some(v=>v.paused);for(const v of videos){if(play){v.currentTime=videos[0].currentTime;v.play().catch(()=>{});}else v.pause();}};
 $('identities').textContent=JSON.stringify(DATA.audit,null,2);
 let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{overview();repeats();costs();drawTrace();drawWorlds();if(state.profile){drawFlame();profileCategories();}},100);}).observe(document.querySelector('main'));
-$('campaign-status').textContent=`Snapshot ${DATA.audit.generated_at??'unknown time'} · ${DATA.audit.primary_scenes_at_five_pairs??'—'} / ${DATA.scenes.length} primary scenes have five clean pairs · callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
+const cpuIdleComplete=DATA.scenes.filter(s=>s.language.measured_pairs>=5&&s.language.runtime?.cpu_activity_policy?.max_background_cpu_cores<=.5).length;
+$('campaign-status').textContent=`Snapshot ${DATA.audit.generated_at??'unknown time'} · New CPU+GPU-idle method: ${cpuIdleComplete} / ${DATA.scenes.length} primary scenes have five clean pairs. Pressure-only results remain visible as historical evidence. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
 $('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();overview();selectScene(DATA.scenes[0].id);requestAnimationFrame(animate);
