@@ -515,7 +515,7 @@ def run_locked(a,lease):
         if time.monotonic()>=min(deadline,launched+a.timeout):break
         time.sleep(.02 if capture else .5)
         if capture:capture.poll(directory/'engine.log')
-        if not samples or time.monotonic()-samples[-1].get('sample_monotonic',0)>.5:
+        if time.monotonic()-(samples[-1].get('sample_monotonic',launched) if samples else launched)>.5:
          if shutil.disk_usage(output).free < 20*1024**3:
           disk_error='Free disk space fell below the 20 GiB emergency floor';break
          sample=host(pressure_path);sample['sample_monotonic']=time.monotonic();samples.append(sample)
