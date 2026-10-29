@@ -410,5 +410,163 @@
         }
       ]
     }
+  },
+  "fire_parity_candidate": {
+    "sources": {
+      "lua": "75a952bd7595011e3548e9a850df4573c57c564c",
+      "rust": "4648c2d166826b63bd4d976a2c7c5d16b1782a30",
+      "shared": "3439911460e25f062573136e5b368820032164c3",
+      "engine": "24442826058d59db0e9637cad179f01392308db7",
+      "proof": "v4",
+      "probe_sha256": "3142f126a8db32380175afe01770039e355e8ee6f3d89e6cab37d435fab6c945",
+      "fixture_sha256": "a86e2469b52ed9890186eb365b7cc5ce5653580a6eb1ba0fd72d302ddd696950",
+      "engine_sha256": "4ed73f271e3258a75230d1a106b9aa8dfdd0178252198a2da9dfaf923f0247e2"
+    },
+    "held_ages": [
+      9,
+      10,
+      45,
+      60,
+      90
+    ],
+    "images": [
+      {
+        "phase": "repeat",
+        "shot": 0,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 1,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 2,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 3,
+        "rmse": 0.0
+      },
+      {
+        "phase": "repeat",
+        "shot": 4,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 0,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 1,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 2,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 3,
+        "rmse": 0.0
+      },
+      {
+        "phase": "candidate",
+        "shot": 4,
+        "rmse": 0.0
+      }
+    ],
+    "wind": {
+      "passed": true,
+      "vectors_f32": [
+        {
+          "0": [
+            "4a1e2941",
+            "00000000",
+            "062e2a41"
+          ],
+          "1": [
+            "00622441",
+            "00000000",
+            "e99d2e41"
+          ],
+          "2": [
+            "79101d41",
+            "00000000",
+            "60793541"
+          ],
+          "3": [
+            "eaa11341",
+            "00000000",
+            "c44f3e41"
+          ],
+          "4": [
+            "908e0841",
+            "00000000",
+            "70b04841"
+          ]
+        },
+        {
+          "0": [
+            "4a1e2941",
+            "00000000",
+            "062e2a41"
+          ],
+          "1": [
+            "00622441",
+            "00000000",
+            "e99d2e41"
+          ],
+          "2": [
+            "79101d41",
+            "00000000",
+            "60793541"
+          ],
+          "3": [
+            "eaa11341",
+            "00000000",
+            "c44f3e41"
+          ],
+          "4": [
+            "908e0841",
+            "00000000",
+            "70b04841"
+          ]
+        },
+        {
+          "0": [
+            "4a1e2941",
+            "00000000",
+            "062e2a41"
+          ],
+          "1": [
+            "00622441",
+            "00000000",
+            "e99d2e41"
+          ],
+          "2": [
+            "79101d41",
+            "00000000",
+            "60793541"
+          ],
+          "3": [
+            "eaa11341",
+            "00000000",
+            "c44f3e41"
+          ],
+          "4": [
+            "908e0841",
+            "00000000",
+            "70b04841"
+          ]
+        }
+      ]
+    },
+    "opaque_endpoint": "Visible at age9; removed at age10 while its GPU allocation remains between surviving effects. Both cropped image pairs are pixel-identical."
   }
 }
