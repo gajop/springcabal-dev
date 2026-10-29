@@ -119,10 +119,11 @@ assert(old.deleted, 'growth retained the replaced VBO')
 batch:delete()
 print('PASS Lups batch: exact draw-time VBO values, ring wrap, hidden/repeated effects, growth; initial uploads='..firstUploads)
 
-local function removedInterior(deadline)
+local function removedInterior(deadline,lastParticle)
     local ring=assert(Batch.new(false))
     local left,middle,right=effect(10,80),effect(11,80),effect(12,80)
     middle.frame,middle.dieGameFrame=1,deadline
+    middle.gpuLastParticle=lastParticle
     for at=1,#middle.gpuParticles,28 do
         middle.gpuParticles[at+7],middle.gpuParticles[at+11]=deadline,0
     end
@@ -135,7 +136,7 @@ local function removedInterior(deadline)
     ring:begin(2);ring:queue(left);ring:queue(right)
     flush(ring,{left,right},{{fx=middle,entry=oldEntry}})
     local changed=uploads-before
-    if deadline>2 then
+    if deadline>2 or (deadline==2 and lastParticle==2) then
         assert(changed==1,'early removal did not upload its visibility change')
         for at=20,#middle.gpuParticles,28 do
             assert(middle.gpuParticles[at]==-1,'early removal left a visible particle')
@@ -149,6 +150,8 @@ local function removedInterior(deadline)
 end
 local expiredUploads=removedInterior(1)
 removedInterior(100)
+removedInterior(2,2) -- An opaque endpoint at the exact deadline needs a mask.
+removedInterior(2,1) -- An already-clipped endpoint needs no upload.
 print('PASS Lups expiry: retained interior records, exact early-removal masks; natural expiry uploads='..expiredUploads)
 
 -- Exercise the real attribute-writer entry point as well as late registration.
@@ -196,6 +199,25 @@ local zero=0
 assert(preparedPalette({{zero,0.6,0.7,0.8}})~=preparedPalette({{-zero,0.6,0.7,0.8}}),
     'signed zero changed palette identity')
 print('PASS Lups palettes: exact values, changed inputs, numeric strings and signed zero')
+if Batch.options then
+    setfenv(assert(loadfile(root..'/lups/headers/general.lua')),batchEnv)()
+    local colors={{0.2,0.3,0.4,0.5}}
+    local defaults={colormap=colors,force={1,2,3},speed=2}
+    local input={colormap=colors,force={[2]=9}}
+    local mutable=Batch.options(input,defaults)
+    assert(mutable.colormap~=colors and mutable.force~=input.force)
+    assert(mutable.force[1]==1 and mutable.force[2]==9 and mutable.force[3]==3)
+    mutable.colormap[1][1]=0.8
+    assert(colors[1][1]==0.2,'mutable input lost its copy')
+    input.immutableColormap=true
+    local a,b=Batch.options(input,defaults),Batch.options(input,defaults)
+    assert(a.colormap==colors and b.colormap==colors,'immutable palette was copied')
+    assert(a.force~=b.force and a.force~=input.force,'mutable vectors were shared')
+    Batch.prepare(a);Batch.prepare(b)
+    assert(a.gpuPalette==b.gpuPalette,'immutable palette did not reuse its identity')
+    print('PASS Lups options: immutable palettes shared, mutable palettes/vectors copied')
+end
+
 
 -- The performance harness must emit once per simulation step in UI Update,
 -- including skipped UI polls, without introducing synced message callbacks.

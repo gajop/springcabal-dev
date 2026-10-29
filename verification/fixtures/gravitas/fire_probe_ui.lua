@@ -107,7 +107,7 @@ local function advance(n)
             local p=group[i]
             local fx=p.fx
             fx.frame=n-fx.firstGameFrame
-            if n>fx.dieGameFrame then fx:Destroy()
+            if n>=fx.dieGameFrame then fx:Destroy()
             else kept=kept+1;group[kept]=p end
         end
         for i=#group,kept+1,-1 do group[i]=nil end
