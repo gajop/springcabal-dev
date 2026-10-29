@@ -775,8 +775,8 @@
     "backends": [
       "wasm"
     ],
-    "adopted": null,
-    "change": "Trial: live incremental food/mines grid, direct ID ranks and reserved-carrot lookup. Remove full target snapshot/grid rebuild after each pickup. Keep Lua main-list tie order; compare against 437b97b on seeded engine2444282.",
+    "adopted": false,
+    "change": "Not selected: this incremental-index trial includes the regressing rabbit-cache parent437b97b. Superseded by the isolated public-baseline d9522c1 trial and its confirmation.",
     "backend": "wasm",
     "measured_rounds": 5,
     "planned_rounds": 5,
@@ -810,8 +810,8 @@
     "backends": [
       "wasm"
     ],
-    "adopted": null,
-    "change": "Trial: live incremental food/mines grid, direct ID ranks and reserved-carrot lookup. Remove full target snapshot/grid rebuild after each pickup. Keep Lua main-list tie order; compare against 437b97b on seeded engine2444282.",
+    "adopted": false,
+    "change": "Not selected: this incremental-index trial includes the regressing rabbit-cache parent437b97b. Superseded by the isolated public-baseline d9522c1 trial and its confirmation.",
     "backend": "wasm",
     "measured_rounds": 5,
     "planned_rounds": 5,
@@ -1022,20 +1022,20 @@
     "adopted": null,
     "change": "Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
     "backend": "lua",
-    "measured_rounds": 2,
+    "measured_rounds": 3,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 7,
-    "wall_before_ms": 71.16400833333333,
-    "wall_after_ms": 73.03184416666667,
-    "wall_change_pct": 2.491828786468231,
+    "attempted_phase_pairs": 8,
+    "wall_before_ms": 69.97648166666667,
+    "wall_after_ms": 67.75641500000002,
+    "wall_change_pct": -0.8668609979925579,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 44.8781595,
-    "sim_after_ms": 45.829218,
-    "sim_change_pct": 2.002839446163862,
+    "sim_before_ms": 43.779756,
+    "sim_after_ms": 42.505361,
+    "sim_change_pct": -0.11664696065881719,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 11.722685,
-    "draw_after_ms": 12.159997,
-    "draw_change_pct": 3.6075636652439957,
+    "draw_before_ms": 11.571637,
+    "draw_after_ms": 11.317364,
+    "draw_change_pct": 0.44055037201833347,
     "draw_mean_ratio_95ci": null
   },
   {
@@ -1065,17 +1065,17 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "hunted-live-food-1x",
+    "id": "hunted-live-food-confirm-1x",
     "title": "Hunted",
     "load": "1\u00d7",
     "backends": [
       "wasm"
     ],
     "adopted": null,
-    "change": "Trial: incremental food/mines buckets and direct target ranks, without the regressing rabbit-order cache. Compare directly with public af9c0b3 on seeded engine2444282.",
+    "change": "Confirmation: five new alternating source pairs, combined with the original five. Same seeded engine244, frozen modules, settings and GPU/CPU idle guards. UI/jobs bytecode identical in before/after.",
     "backend": "wasm",
     "measured_rounds": 5,
-    "planned_rounds": 5,
+    "planned_rounds": 10,
     "attempted_phase_pairs": 14,
     "wall_before_ms": 1.0302950000000004,
     "wall_after_ms": 1.0634466666666669,
@@ -1100,38 +1100,38 @@
     ]
   },
   {
-    "id": "hunted-live-food-10x",
+    "id": "hunted-live-food-confirm-10x",
     "title": "Hunted",
     "load": "10\u00d7",
     "backends": [
       "wasm"
     ],
     "adopted": null,
-    "change": "Trial: incremental food/mines buckets and direct target ranks, without the regressing rabbit-order cache. Compare directly with public af9c0b3 on seeded engine2444282.",
+    "change": "Confirmation: five new alternating source pairs, combined with the original five. Same seeded engine244, frozen modules, settings and GPU/CPU idle guards. UI/jobs bytecode identical in before/after.",
     "backend": "wasm",
-    "measured_rounds": 5,
-    "planned_rounds": 5,
-    "attempted_phase_pairs": 11,
+    "measured_rounds": 7,
+    "planned_rounds": 10,
+    "attempted_phase_pairs": 16,
     "wall_before_ms": 4.273325,
-    "wall_after_ms": 3.845653333333334,
+    "wall_after_ms": 3.8486,
     "wall_change_pct": -10.007936832950126,
     "wall_mean_ratio_95ci": [
-      0.7979787432383425,
-      0.9863517440397764
+      0.8283815440748997,
+      0.9759005027128679
     ],
     "sim_before_ms": 2.026642,
-    "sim_after_ms": 1.856394,
+    "sim_after_ms": 1.8566099999999999,
     "sim_change_pct": -8.400496979732964,
     "sim_mean_ratio_95ci": [
-      0.8778348241614711,
-      0.9998282659957101
+      0.8858516605483608,
+      0.9912247969843254
     ],
     "draw_before_ms": 2.076866,
     "draw_after_ms": 1.8807349999999998,
     "draw_change_pct": -9.441196495103664,
     "draw_mean_ratio_95ci": [
-      0.8734144054674589,
-      0.9753911609476635
+      0.8779874014835597,
+      0.9756134472135496
     ]
   }
 ]
