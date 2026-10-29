@@ -34,8 +34,11 @@ local function anchors()
         force={0,0,0},speed=0,size=0,sizeSpread=0,sizeGrowth=0,
         rotSpeed=0,rotSpeedSpread=0,rotSpread=0,startRadius=0,
         colormap={{0,0,0,0}},pos={9000,144.25,531},random=function() return 0.5 end},options)
+    -- MergeTable recursively overlays arrays; replace the entire probe palette.
+    anchor.colormap={{0,0,0,0}}
     particles[#particles+1]=simple.Create(anchor)
     local marker=MergeTable({life=10,size=100,colormap={{1,1,1,1}},pos={4320,170,531}},anchor)
+    marker.colormap={{1,1,1,1}}
     particles[#particles+1]=simple.Create(marker)
 end
 function Update()
