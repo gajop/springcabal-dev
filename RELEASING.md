@@ -130,6 +130,7 @@ just package 2026.10.3001 --version test --platform linux
 
 ```bash
 just smoke-test release/out/SpringCabal-1.0.3-rc.3-linux
+./release/smoke-test.sh release/out/SpringCabal-1.0.3-rc.3-windows --wine wine
 python3 verification/sdk-menu/run.py --packaged \
     --engine release/out/SpringCabal-1.0.3-rc.3-linux/SpringCabal \
     --output verification/out/packaged-menu-1.0.3-rc.3-linux
@@ -138,9 +139,16 @@ python3 verification/sdk-menu/run.py --packaged --wine wine \
     --output verification/out/packaged-menu-1.0.3-rc.3-windows
 ```
 
-The smoke test runs all fourteen game entries and the menu offscreen on the
-real GPU with the shipped settings. Errors, warnings, missing renderer identity
-or software rendering fail it. The packaged-menu harness launches the actual
+The smoke test runs all fourteen game entries and the menu on the real GPU
+with the shipped settings. Linux uses SDL's offscreen driver; Windows uses
+Wine and VirtualGL in Xvfb. Each case uses the existing verification lock and
+GPU/CPU-pressure guards and saves `guard.json` beside its log. A busy system
+waits; contention during a case fails it. `VF_MAX_IDLE_MINUTES` controls the wait
+(default 1440). Errors, warnings, missing renderer identity or software rendering
+fail the case. Windows smoke checks stop their own Wine server and remove their
+temporary prefix after success, retaining it for failed-run debugging. Set
+`WINESERVER` to the matching server when using a separate Wine installation.
+The packaged-menu harness launches the actual
 executable with no arguments from outside the bundle directory and checks
 isolation, navigation, Lua Gravitas launch/return and clean exit. `--wine` takes
 the Wine loader command or path; set `WINEPREFIX` for a dedicated prefix.

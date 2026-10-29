@@ -1,21 +1,72 @@
 #!/usr/bin/env bash
 # Smoke-test every menu entry and the menu on the real GPU through SDL's
-# offscreen driver, with no desktop window. Runs use the shipped graphics
+# offscreen driver (Linux) or Wine/VirtualGL in Xvfb (Windows). Runs use the shipped graphics
 # profile and per-game overrides. Any warning, error or runtime failure fails.
 # Games must load and remain running until the timeout; frame counts are
 # informational because some games start paused or stop logging frames.
 #
-# Usage: release/smoke-test.sh release/out/SpringCabal-<ver>-linux [seconds]
+# Usage: release/smoke-test.sh BUNDLE [seconds] [--wine WINE]
 set -uo pipefail
 
 bundle="$(cd "${1:?bundle directory}" && pwd)"
-seconds="${2:-45}"
+shift
+seconds=45
+wine_loader=''
+if [[ ${1:-} != --* && $# -gt 0 ]]; then seconds=$1; shift; fi
+if [[ $# -gt 0 ]]; then
+    [[ $# -eq 2 && $1 == --wine ]] || { echo 'Usage: smoke-test.sh BUNDLE [seconds] [--wine WINE]' >&2; exit 2; }
+    wine_loader=$(command -v "$2") || exit 2
+fi
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ -n $wine_loader && ${SPRINGCABAL_SMOKE_XVFB:-} != 1 ]]; then
+    exec xvfb-run -a env SPRINGCABAL_SMOKE_XVFB=1 "$project_root/release/smoke-test.sh" "$bundle" "$seconds" --wine "$wine_loader"
+fi
 work="$(mktemp -d "${TMPDIR:-/tmp}/springcabal-smoke.XXXXXX")"
 
 engine="$bundle/SpringCabal"
-[[ -x "$engine" ]] || { echo "no SpringCabal in $bundle" >&2; exit 1; }
+launch=()
+if [[ -n $wine_loader ]]; then
+    engine="$bundle/SpringCabal.exe"
+    vglrun=${VF_VGLRUN:-$(command -v vglrun)}
+    [[ -x $vglrun ]] || { echo 'Windows GPU smoke checks require VF_VGLRUN or vglrun' >&2; exit 2; }
+    wine_server=${WINESERVER:-$(command -v wineserver)}
+    [[ -x $wine_server ]] || { echo 'Set WINESERVER for this Wine installation' >&2; exit 2; }
+    # Own this prefix and its server; never stop another task's Wine runtime.
+    export WINEPREFIX="$work/wineprefix" WINEARCH=win64 WINEDEBUG=-all
+    export WINELOADER="$wine_loader" WINESERVER="$wine_server"
+    cleanup_wine() {
+        local smoke_status=$?
+        trap - EXIT
+        timeout 15s "$wine_server" -k || smoke_status=1
+        timeout 30s "$wine_server" -w || smoke_status=1
+        if (( smoke_status == 0 )); then rm -rf -- "$work/wineprefix"; fi
+        exit "$smoke_status"
+    }
+    trap cleanup_wine EXIT
+    launch=("$vglrun" -d "${VF_VGL_DISPLAY:-egl}" -c proxy "$wine_loader")
+fi
+[[ -f "$engine" ]] || { echo "no SpringCabal executable in $bundle" >&2; exit 1; }
 [[ -f "$bundle/springsettings.cfg" ]] || { echo "no springsettings.cfg in $bundle" >&2; exit 1; }
+path_arg() {
+    if [[ -n $wine_loader ]]; then printf 'Z:%s' "${1//\//\\}"; else printf '%s' "$1"; fi
+}
+run_engine() {
+    local duration=$1 directory=$2
+    shift 2
+    local environment=(env -u LIBGL_ALWAYS_SOFTWARE)
+    if [[ -n $wine_loader ]]; then
+        environment+=(-u SDL_VIDEODRIVER)
+    else
+        environment+=(SDL_VIDEODRIVER=offscreen)
+    fi
+    "${environment[@]}" python3 "$project_root/release/smoke-run.py" \
+        --seconds "$duration" --guard "$directory/guard.json" \
+        --max-minutes "${VF_MAX_IDLE_MINUTES:-1440}" -- \
+        "${launch[@]}" "$(path_arg "$engine")" \
+        --window --isolation --isolation-dir "$(path_arg "$bundle")" \
+        --write-dir "$(path_arg "$directory")" \
+        --config "$(path_arg "$directory/spring.conf")" "$@"
+}
 # Use the bundled fonts, as verification/sdk-menu/run.py does. The engine's
 # bundled Fontconfig can predate the host configuration syntax; each fresh
 # write directory otherwise scans the host fonts and reports parser warnings.
@@ -95,10 +146,7 @@ for script in "${scripts[@]}"; do
     sed -E "s/([Hh]ost[Pp]ort)=[0-9]+;/\1=$(shuf -i 20000-60000 -n 1);/" "$script" > "$run/start.txt"
     config "$run/spring.conf" "$project_root/launch/games/$game/graphics.cfg"
 
-    env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
-        timeout --foreground --signal=TERM "${seconds}s" "$engine" \
-        --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
-        --config "$run/spring.conf" "$run/start.txt" > "$run/stdout.txt" 2>&1
+    run_engine "$seconds" "$run" "$(path_arg "$run/start.txt")" > "$run/stdout.txt" 2>&1
     status=$?
 
     # infolog.txt is only flushed on a clean exit; stdout has the same log.
@@ -121,10 +169,7 @@ done
 run="$work/menu"
 mkdir -p "$run"
 config "$run/spring.conf"
-env -u LIBGL_ALWAYS_SOFTWARE SDL_VIDEODRIVER=offscreen \
-    timeout --foreground --signal=TERM 90s "$engine" \
-    --window --isolation --isolation-dir "$bundle" --write-dir "$run" \
-    --config "$run/spring.conf" > "$run/stdout.txt" 2>&1
+run_engine 90 "$run" > "$run/stdout.txt" 2>&1
 status=$?
 log="$run/stdout.txt"
 errors="$(grep -ciE '\bError:' "$log")"
@@ -134,9 +179,9 @@ clean_log "$log" || log_ok=1
 # The engine prefers the native SDK menu when the bundle contains both backends.
 if grep -Eq 'Wasm manifest loaded from WasmMenu/manifest.json|Successfully loaded native module WasmMenu/libNativeMenu.so' "$log" \
     && (( status == 0 || status == 124 )) && (( log_ok == 0 )); then
-    printf '%-36s %-10s %-8s %-8s %s\n' 'WasmMenu (offscreen)' ok - "${errors:-0}" "${warnings:-0}"
+    printf '%-36s %-10s %-8s %-8s %s\n' 'WasmMenu' ok - "${errors:-0}" "${warnings:-0}"
 else
-    printf '%-36s %-10s %-8s %-8s %s\n' 'WasmMenu (offscreen)' "FAIL($status)" - "${errors:-0}" "${warnings:-0}"
+    printf '%-36s %-10s %-8s %-8s %s\n' 'WasmMenu' "FAIL($status)" - "${errors:-0}" "${warnings:-0}"
     failures=$((failures + 1))
 fi
 

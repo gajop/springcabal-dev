@@ -2,6 +2,7 @@
 """Exercise release orchestration with tiny Git repos and a fake GitHub CLI."""
 
 import json
+import importlib.util
 import os
 from pathlib import Path
 import shutil
@@ -9,9 +10,85 @@ import subprocess
 import tarfile
 import tempfile
 import unittest
+from unittest.mock import patch
 
 SCRIPTS = Path(__file__).resolve().parent
 VERSION = "1.2.3"
+
+spec = importlib.util.spec_from_file_location("smoke_run", SCRIPTS / "smoke-run.py")
+smoke = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(smoke)
+
+
+class SmokeRunTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="springcabal-smoke-test-")
+        self.addCleanup(self.temporary.cleanup)
+        self.directory = Path(self.temporary.name)
+        self.guard = self.directory / "guard.json"
+        self.lock_held = False
+        test = self
+
+        class Lease:
+            def __enter__(self):
+                test.lock_held = True
+                return self
+
+            def __exit__(self, *_):
+                test.lock_held = False
+
+        class Monitor:
+            error = None
+
+            def __init__(self, *_args, **_kwargs):
+                self.samples = [{"foreign": [], "cpu_pressure": 0}]
+
+            def stop(self):
+                test.assertTrue(test.lock_held, "monitor stopped after releasing engine lease")
+
+        self.monitor = Monitor
+        for name, value in [("VerificationLease", Lease), ("GpuMonitor", Monitor),
+                            ("wait_for_resources", lambda *_args: (None, None, ["preflight"]))]:
+            replacement = patch.object(smoke.verification, name, value)
+            replacement.start()
+            self.addCleanup(replacement.stop)
+
+    def execute(self, code, seconds=5):
+        return smoke.execute([os.sys.executable, "-c", code], seconds, self.guard)
+
+    def test_timeout_is_distinct_from_clean_nonzero_exit(self):
+        self.assertEqual(self.execute("import time; time.sleep(30)", seconds=.1), 124)
+        self.assertIsNone(json.loads(self.guard.read_text())["error"])
+        self.assertEqual(self.execute("raise SystemExit(7)"), 7)
+        self.assertEqual(json.loads(self.guard.read_text())["exit"], 7)
+
+    def test_contention_stops_process_before_unlock(self):
+        self.monitor.error = RuntimeError("guard unavailable")
+        actual_stop = smoke.stop
+
+        def stop(process):
+            self.assertTrue(self.lock_held, "engine stopped after releasing lease")
+            actual_stop(process)
+            self.assertIsNotNone(process.poll())
+
+        with patch.object(smoke, "stop", stop):
+            self.assertEqual(self.execute("import time; time.sleep(30)"), 125)
+        self.assertIn("contention", json.loads(self.guard.read_text())["error"])
+
+    def test_exited_launcher_does_not_leave_child_running(self):
+        child_pid = self.directory / "child.pid"
+        code = ("import subprocess,time,pathlib; "
+                "p=subprocess.Popen(['sleep','30']); "
+                f"pathlib.Path({str(child_pid)!r}).write_text(str(p.pid))")
+        self.assertEqual(self.execute(code), 0)
+        pid = int(child_pid.read_text())
+        # A killed orphan can briefly remain as a zombie until init reaps it.
+        stat = Path(f"/proc/{pid}/stat")
+        try:
+            state = stat.read_text().rsplit(")", 1)[1].split()[0]
+        except (FileNotFoundError, ProcessLookupError):
+            return
+        self.assertEqual(state, "Z")
 
 MOCK_GH = r'''#!/usr/bin/env python3
 import hashlib, json, os, pathlib, sys
