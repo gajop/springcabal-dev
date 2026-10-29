@@ -563,8 +563,8 @@
     "campaign": "area17-2x-w1",
     "game": "area17",
     "measured_pairs": 4,
-    "attempted_pairs": 4,
-    "excluded_pairs": 0,
+    "attempted_pairs": 7,
+    "excluded_pairs": 3,
     "sim_p50_lua_ms": 6.6048115,
     "sim_p50_rust_ms": 6.266171,
     "sim_p50_paired_rust_change_pct": -8.38053504308116,
@@ -636,7 +636,12 @@
       "area17-2x-w1/area17-02-lua",
       "area17-2x-w1/area17-02-wasm",
       "area17-2x-w1/area17-03-lua",
-      "area17-2x-w1/area17-03-wasm"
+      "area17-2x-w1/area17-03-wasm",
+      "area17-2x-w1/area17-04-lua",
+      "area17-2x-w1/area17-04-wasm",
+      "area17-2x-w1/area17-05-lua",
+      "area17-2x-w1/area17-05-wasm",
+      "area17-2x-w1/area17-06-lua"
     ]
   },
   {

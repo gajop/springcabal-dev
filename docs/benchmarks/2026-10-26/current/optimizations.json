@@ -1083,29 +1083,29 @@
     "adopted": null,
     "change": "Confirmation: five new alternating source pairs, combined with the original five. Same seeded engine244, frozen modules, settings and GPU/CPU idle guards. UI/jobs bytecode identical in before/after.",
     "backend": "wasm",
-    "measured_rounds": 6,
+    "measured_rounds": 10,
     "planned_rounds": 10,
-    "attempted_phase_pairs": 18,
-    "wall_before_ms": 1.0584841666666667,
-    "wall_after_ms": 1.0793958333333336,
-    "wall_change_pct": -0.11803442651068252,
+    "attempted_phase_pairs": 26,
+    "wall_before_ms": 1.0220691666666668,
+    "wall_after_ms": 1.0256600000000002,
+    "wall_change_pct": 1.3583294096805698,
     "wall_mean_ratio_95ci": [
-      0.7945287681669448,
-      1.183279879169247
+      0.8704767550224493,
+      1.1132067601803706
     ],
-    "sim_before_ms": 0.2562255,
-    "sim_after_ms": 0.2668605,
-    "sim_change_pct": 2.357942807496638,
+    "sim_before_ms": 0.248586,
+    "sim_after_ms": 0.2543495,
+    "sim_change_pct": 2.2402159105299635,
     "sim_mean_ratio_95ci": [
-      0.7987064237014767,
-      1.1945310939698464
+      0.8766980515690185,
+      1.1209594098184563
     ],
-    "draw_before_ms": 0.7257735,
-    "draw_after_ms": 0.7625124999999999,
-    "draw_change_pct": 1.1541685243829924,
+    "draw_before_ms": 0.7113645,
+    "draw_after_ms": 0.721082,
+    "draw_change_pct": 1.5490000855007846,
     "draw_mean_ratio_95ci": [
-      0.826780259195426,
-      1.1645008990450227
+      0.8906696160891364,
+      1.1009498841486622
     ]
   },
   {
@@ -1153,20 +1153,20 @@
     "adopted": null,
     "change": "Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
     "backend": "lua",
-    "measured_rounds": 2,
+    "measured_rounds": 3,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 8,
-    "wall_before_ms": 23.452494166666664,
-    "wall_after_ms": 25.065336666666667,
-    "wall_change_pct": 6.934687655887339,
+    "attempted_phase_pairs": 10,
+    "wall_before_ms": 23.068928333333332,
+    "wall_after_ms": 24.64916666666667,
+    "wall_change_pct": 3.411246097998877,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.1910305,
-    "sim_after_ms": 0.1848265,
-    "sim_change_pct": -3.465385585268288,
+    "sim_before_ms": 0.18630000000000002,
+    "sim_after_ms": 0.163463,
+    "sim_change_pct": 5.3274145514172755,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 21.746492500000002,
-    "draw_after_ms": 22.7360495,
-    "draw_change_pct": 4.676925749700156,
+    "draw_before_ms": 21.236159,
+    "draw_after_ms": 22.097973000000003,
+    "draw_change_pct": -0.7137271055630223,
     "draw_mean_ratio_95ci": null
   },
   {
