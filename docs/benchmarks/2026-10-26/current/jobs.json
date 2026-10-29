@@ -49,7 +49,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {
@@ -136,7 +138,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {
@@ -227,7 +231,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {
@@ -322,7 +328,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {
@@ -413,7 +421,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {
@@ -509,7 +519,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {
@@ -606,7 +618,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {
@@ -692,7 +706,9 @@
     "runtime": {
       "engine_commit": "4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2",
       "engine_sha256": "1459369197fe489549c745fe75f553010147333532551d324b16eb9c9c65e981",
-      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25"
+      "engine_source": "/home/gajop/projects/spring-projects/engine-spatial-parity-2026.10.25",
+      "cpu_activity_policy": null,
+      "resource_guard_sha256": null
     },
     "game_content": {
       "wasm": {

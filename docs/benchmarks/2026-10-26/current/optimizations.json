@@ -1013,64 +1013,55 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "ttld-scalar-births-10",
+    "id": "ttld-scalar-births-10-cpu-idle",
     "title": "To the Last Drop",
     "load": "10\u00d7",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
     "backend": "lua",
-    "measured_rounds": 5,
+    "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 13,
-    "wall_before_ms": 68.348905,
-    "wall_after_ms": 67.75641500000002,
-    "wall_change_pct": 2.8644891511424797,
-    "wall_mean_ratio_95ci": [
-      0.9801275077659786,
-      1.048986410895982
-    ],
-    "sim_before_ms": 42.414307,
-    "sim_after_ms": 42.505361,
-    "sim_change_pct": 4.1223258529865525,
-    "sim_mean_ratio_95ci": [
-      0.9952379696847764,
-      1.0560759962178607
-    ],
-    "draw_before_ms": 11.298998,
-    "draw_after_ms": 11.317364,
-    "draw_change_pct": 1.1868220527165407,
-    "draw_mean_ratio_95ci": [
-      0.9843052712343571,
-      1.050294800201681
-    ]
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
   },
   {
-    "id": "ttld-scalar-births-1",
+    "id": "ttld-scalar-births-1-cpu-idle",
     "title": "To the Last Drop",
     "load": "1\u00d7",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
     "backend": "lua",
-    "measured_rounds": 2,
+    "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 6,
-    "wall_before_ms": 5.607362499999999,
-    "wall_after_ms": 5.715712499999999,
-    "wall_change_pct": 2.019397156529301,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 1.96842,
-    "sim_after_ms": 2.111917,
-    "sim_change_pct": 8.092844899184692,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 2.8976325000000003,
-    "draw_after_ms": 2.858263,
-    "draw_change_pct": -1.3575717084025496,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
     "draw_mean_ratio_95ci": null
   },
   {
@@ -1144,40 +1135,40 @@
     ]
   },
   {
-    "id": "gravitas-packet-metadata-100",
+    "id": "gravitas-packet-metadata-100-cpu-idle",
     "title": "Gravitas fire",
     "load": "100 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
     "backend": "lua",
-    "measured_rounds": 4,
+    "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 13,
-    "wall_before_ms": 23.414976666666664,
-    "wall_after_ms": 23.9212675,
-    "wall_change_pct": 0.511110887451971,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.19072450000000002,
-    "sim_after_ms": 0.1845205,
-    "sim_change_pct": 5.335768111275296,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 21.6128575,
-    "draw_after_ms": 21.754501,
-    "draw_change_pct": -1.6723221277522793,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "gravitas-packet-metadata-10",
+    "id": "gravitas-packet-metadata-10-cpu-idle",
     "title": "Gravitas fire",
     "load": "10 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1196,14 +1187,14 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "gravitas-packet-metadata-1",
+    "id": "gravitas-packet-metadata-1-cpu-idle",
     "title": "Gravitas fire",
     "load": "1 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1222,14 +1213,14 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "gravitas-particle-packer-100",
+    "id": "gravitas-particle-packer-100-cpu-idle",
     "title": "Gravitas fire",
     "load": "100 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1248,14 +1239,14 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "gravitas-particle-packer-10",
+    "id": "gravitas-particle-packer-10-cpu-idle",
     "title": "Gravitas fire",
     "load": "10 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1274,14 +1265,14 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "gravitas-particle-packer-1",
+    "id": "gravitas-particle-packer-1-cpu-idle",
     "title": "Gravitas fire",
     "load": "1 emitters",
     "backends": [
       "lua"
     ],
     "adopted": null,
-    "change": "Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
