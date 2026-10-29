@@ -1220,5 +1220,83 @@
     "draw_after_ms": null,
     "draw_change_pct": null,
     "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "gravitas-particle-packer-100",
+    "title": "Gravitas fire",
+    "load": "100 emitters",
+    "backends": [
+      "lua"
+    ],
+    "adopted": null,
+    "change": "Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "backend": "lua",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "gravitas-particle-packer-10",
+    "title": "Gravitas fire",
+    "load": "10 emitters",
+    "backends": [
+      "lua"
+    ],
+    "adopted": null,
+    "change": "Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "backend": "lua",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "gravitas-particle-packer-1",
+    "title": "Gravitas fire",
+    "load": "1 emitters",
+    "backends": [
+      "lua"
+    ],
+    "adopted": null,
+    "change": "Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "backend": "lua",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
   }
 ]
