@@ -312,7 +312,7 @@ vf_run_visual() {
     VF_ENGINE_STATUS=$?
     set -e
     local actual
-    actual=$(grep -m1 -oE 'GL renderer : .*' "$VF_WRITE_DIR/stdout.txt" | sed 's/GL renderer : //')
+    actual=$(grep -m1 -oE 'GL renderer : .*' "$VF_WRITE_DIR/stdout.txt" | sed 's/GL renderer : //' || true)
     printf 'renderer: %s (%s)\n' "$renderer" "${actual:-unknown}"
     vf_check_leaks
     return 0
@@ -325,21 +325,29 @@ vf_run_visual() {
 # (vf_x_* below), usually waiting for markers the game logs.  When the driver
 # returns, the engine is stopped if it is still running.  The run's status is
 # the driver's; VF_ENGINE_STATUS is the engine's (124 when stopped).
+# GPU input runs use VirtualGL's EGL backend for rendering into the X display.
 vf_run_driven() {
     local seconds=${1:?seconds} driver=${2:?driver} screen=${3:-1280x720x24}
     local engine width height display='' n xvfb_pid engine_pid status
     command -v xdotool >/dev/null || vf_die 'driven runs need xdotool'
     engine=$(vf_engine_bin visual)
     local renderer=${VF_RENDERER:-software}
-    local -a graphics_env=()
+    local -a graphics_env=() graphics_command=()
     case "$renderer" in
         software) graphics_env+=(LIBGL_ALWAYS_SOFTWARE=1) ;;
-        gpu|screen) ;;
+        gpu|screen)
+            local vglrun=${VF_VGLRUN:-}
+            [[ -n $vglrun ]] || vglrun=$(command -v vglrun || true)
+            [[ -n $vglrun && -x $vglrun ]] ||
+                vf_die 'GPU input runs require VirtualGL; install vglrun or set VF_VGLRUN'
+            graphics_command=("$vglrun" -d "${VF_VGL_DISPLAY:-egl}" -c proxy)
+            ;;
         *) vf_die "driven runs need software, gpu or screen rendering: $renderer" ;;
     esac
     VF_RUN_RENDERER=$renderer
     width=${screen%%x*}
     height=${screen#*x}; height=${height%%x*}
+    VF_RUN_SIZE="${width}x${height}"
     vf_default_speed 1
     rm -f -- "$VF_WRITE_DIR/infolog.txt"
     vf_sanitizer_env
@@ -367,7 +375,7 @@ vf_run_driven() {
     done
 
     env -u LIBGL_ALWAYS_SOFTWARE "${graphics_env[@]}" SDL_VIDEODRIVER=x11 WAYLAND_DISPLAY= DISPLAY=$display \
-        timeout --kill-after=5s --signal=TERM "${seconds}s" "$engine" --window \
+        timeout --foreground --kill-after=5s --signal=TERM "${seconds}s" "${graphics_command[@]}" "$engine" --window \
         --write-dir "$VF_WRITE_DIR" --isolation --isolation-dir "$VF_ISOLATION" \
         --config "$VF_CONFIG_FILE" "$VF_START_FILE" >"$VF_WRITE_DIR/stdout.txt" 2>&1 &
     engine_pid=$!
@@ -384,6 +392,15 @@ vf_run_driven() {
     kill "$xvfb_pid" 2>/dev/null
     wait "$xvfb_pid" 2>/dev/null
     set -e
+    local actual
+    actual=$(grep -m1 -oE 'GL renderer : .*' "$VF_WRITE_DIR/stdout.txt" | sed 's/GL renderer : //' || true)
+    printf 'renderer: %s (%s)\n' "$renderer" "${actual:-unknown}"
+    if [[ $renderer != software ]]; then
+        [[ -n $actual ]] || vf_die 'GPU input run did not report its renderer'
+        if [[ ${actual,,} =~ llvmpipe|softpipe|swrast|swiftshader|software\ rasterizer ]]; then
+            vf_die "GPU input run selected a software renderer: $actual"
+        fi
+    fi
     vf_check_leaks
     return "$status"
 }
