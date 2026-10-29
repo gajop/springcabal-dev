@@ -6,10 +6,11 @@ and run `SpringCabal` (Linux) or `SpringCabal.exe` (Windows) to open the menu.
 
 `release/release.sh` automates the process used for 1.0.1: prepare all assets
 locally, run the existing checks, then explicitly publish them. Preparation
-does not push or upload anything. Publication pushes only this framework
-repository; game, map and shared-crate repositories stay local. Their committed
-sources are included in the source archive even when their branches are not
-available on GitHub.
+does not push or upload anything. Publication pushes this framework repository.
+Push the selected game commits separately to the public SpringCabal repositories:
+Lua to `master`, Rust to `rust`, as listed in `content.tsv`. Push the shared crate
+to `gajop/springcabal-rs` `main` too. The source archive includes their exact
+committed revisions; publishing the framework does not push those repositories.
 
 ## Prerequisites
 
@@ -39,6 +40,9 @@ for the subsequent runtime, query, velocity, RNG, wind and rendering changes.
 
 Commit the framework/menu, shared crate, games and maps before preparing a
 release. Preparation refuses dirty source checkouts, including untracked files.
+For a public release, confirm that each selected game revision is also the head
+of its public branch. Keep game and shared-crate SDK pins consistent when pushing
+them, since the games use the shared crate from the surrounding workspace.
 The engine's released tag is resolved to its full commit; the source snapshot
 links that public engine revision instead of copying a development engine tree.
 When adding content, update `content.tsv`, `launch/games/` and the menu first.
@@ -148,6 +152,9 @@ rendering. `--max-minutes` controls how long they wait for an idle system.
 Windows needs a working Wine installation or a native Windows play check. Check freshly
 extracted archives too, and play at least one WASM and one Lua game on each
 platform. See `verification/README.md` for the existing game-specific suites.
+Packaged menu checks share read-only `.sdz` and `.sd7` files with their source
+bundle when the filesystem supports hard links. Settings and other writable
+files are copied separately, so testing does not change the prepared bundle.
 
 ## Publish
 
