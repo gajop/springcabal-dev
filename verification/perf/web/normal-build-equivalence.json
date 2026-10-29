@@ -1,0 +1,104 @@
+{
+  "checked_utc": "2026-10-29T18:08:49.864407+00:00",
+  "sdk_commit": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10",
+  "engine_release": "2026.10.3001",
+  "all_byte_identical": true,
+  "module_count": 18,
+  "games": [
+    {
+      "game": "Area17",
+      "benchmark_runtime_source": "ac9dff6a91582bf76dfe92e4964866eaf5a7a8a8",
+      "public_rust_head": "bef0f959a8141b7d68f2f8b0c851b5965438d3fd",
+      "source_diff": [
+        "wasm-src/justfile"
+      ],
+      "installed_source_check_passed": true,
+      "modules": {
+        "LuaRules/wasm/area17-rules.wasm": "43c44a575222fae7786d7114498642de72f714c6002326be3198d04488020317",
+        "LuaUI/wasm/area17-ui.wasm": "606f399682d80ec0d092db4b25929c262a86e29052cce999fd006eb148d30559"
+      }
+    },
+    {
+      "game": "Flove",
+      "benchmark_runtime_source": "86b3bed3acdccc8ec7fe550e78cb041ec4fcfc6c",
+      "public_rust_head": "369749aa3c00f35cac3443302a46e8230dde9b90",
+      "source_diff": [
+        "wasm-src/justfile"
+      ],
+      "installed_source_check_passed": true,
+      "modules": {
+        "LuaRules/wasm/flove-jobs.wasm": "567c4db1651eb750ea1b58a306f838da552ce7fa014affa7e324052697e8eec3",
+        "LuaRules/wasm/flove-rules.wasm": "96a6475ac79889141d0e45a6cc7e421cd2c85adda4a717d7e56a84f1ce647995",
+        "LuaUI/wasm/flove-ui.wasm": "f153a3a25503ef7cc3c4a9d32bbed6ffedfcdefb8acf506b5022a053236ae7d9"
+      }
+    },
+    {
+      "game": "Gravitas",
+      "benchmark_runtime_source": "ca3f01ecdccb82f6970e2e85dbf3bb84192281de",
+      "public_rust_head": "9e073d8309923156d1ca49af03bb86f9aab64a02",
+      "source_diff": [
+        "wasm-src/justfile"
+      ],
+      "installed_source_check_passed": true,
+      "modules": {
+        "LuaRules/wasm/gravitas-rules.wasm": "c32ba7441fc35a2251fa2eb4c3b84b30548d463d4379fa060cdee010133920c2",
+        "LuaUI/wasm/gravitas-jobs.wasm": "2c9c1bf6c18c5cf8e4b44a4bb360ba8673142a798a8f2f521eb5d5f02b18a9bc",
+        "LuaUI/wasm/gravitas-ui.wasm": "703129ed1e3c10941e251f3b91221d79738d4f3119e0ef73bc16e62451b3249c"
+      }
+    },
+    {
+      "game": "Hunted",
+      "benchmark_runtime_source": "7683369ea0ec59e3d79be17854052e83d98b183b",
+      "public_rust_head": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+      "source_diff": [
+        "wasm-src/justfile"
+      ],
+      "installed_source_check_passed": true,
+      "modules": {
+        "LuaRules/wasm/hunted-rules.wasm": "ff78b81f86a3ca3e46c53badc4fa529b294e9b8405fbd06c6c04713e77875455",
+        "LuaRules/wasm/hunted-jobs.wasm": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959",
+        "LuaUI/wasm/hunted-ui.wasm": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d"
+      }
+    },
+    {
+      "game": "MyCube",
+      "benchmark_runtime_source": "353bb396f0248eeed563bbb0c50f32c2db63608d",
+      "public_rust_head": "9d7c1fccd382cbc74a8b4e3915da002bd62590bc",
+      "source_diff": [
+        "wasm-src/justfile"
+      ],
+      "installed_source_check_passed": true,
+      "modules": {
+        "LuaRules/wasm/mycube-rules.wasm": "698230a53a617aafbfbefad22005ae0e66243582363a702baccd5d485b7d9517",
+        "LuaUI/wasm/mycube-ui.wasm": "5fe29534244654fe276d76f781fff466990a4ce17734365a25e5f6d9ba11c4ec"
+      }
+    },
+    {
+      "game": "PartsNeeded",
+      "benchmark_runtime_source": "96b8e3c47eb358da3fe5bc3846ed0e159f3391db",
+      "public_rust_head": "de726c4238a2edd827c74d4347702f009d32f0bb",
+      "source_diff": [
+        "wasm-src/justfile"
+      ],
+      "installed_source_check_passed": true,
+      "modules": {
+        "LuaRules/wasm/partsneeded-rules.wasm": "35d246a04dc6e2d5c025e907d2803483c17e470f77f25b250a6d4ca578078d67",
+        "LuaUI/wasm/partsneeded-ui.wasm": "c583ba6cec3a74f0e21b2d352d8de59fc7d045d4e58ed0a1333a681c1c44760f"
+      }
+    },
+    {
+      "game": "ToTheLastDrop",
+      "benchmark_runtime_source": "b722add97431f2b950a0e32de7b9f63ee60e83ba",
+      "public_rust_head": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+      "source_diff": [
+        "wasm-src/justfile"
+      ],
+      "installed_source_check_passed": true,
+      "modules": {
+        "LuaRules/wasm/ttld-rules-unsynced.wasm": "a13c9d7063a014515cd5e14abed4d149c0dc0e04ec27c65eb36078f02f47314d",
+        "LuaRules/wasm/ttld-rules.wasm": "b8ef4e7dbd5c2b22bae5754b108a06d441a9062fc6354a9447a6a65d26a30890",
+        "LuaUI/wasm/ttld-ui.wasm": "5dd3acddc1cbefc2fb1b2f09b496039dcf61e7c9513b5a6df19f1eb17cb51e51"
+      }
+    }
+  ]
+}
