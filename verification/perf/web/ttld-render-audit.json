@@ -341,5 +341,74 @@
     "finding": "The native API exposes minimum, maximum and current strength; Lua additionally returns the current velocity and direction. TTLD Rust previously used current strength as vertical force.",
     "native": "https://github.com/gajop/spring-rust/blob/4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2/rts/NativeInterface/api/Game.cpp#L300",
     "lua": "https://github.com/gajop/spring-rust/blob/4defddb47aad2b4fe2c0a9ddc982d39b1dd26ef2/rts/Lua/LuaSyncedRead.cpp#L992"
+  },
+  "seed_fix_candidate": {
+    "engine_commit": "24442826058d59db0e9637cad179f01392308db7",
+    "engine_sha256": "4ed73f271e3258a75230d1a106b9aa8dfdd0178252198a2da9dfaf923f0247e2",
+    "native_counts": {
+      "reference": "ttld-01-wasm",
+      "runs": [
+        {
+          "run": "ttld-03-lua",
+          "compared_frames": 901,
+          "different_frames": 0,
+          "first_different_frames": []
+        },
+        {
+          "run": "ttld-03-wasm",
+          "compared_frames": 901,
+          "different_frames": 0,
+          "first_different_frames": []
+        },
+        {
+          "run": "ttld-04-wasm",
+          "compared_frames": 901,
+          "different_frames": 0,
+          "first_different_frames": []
+        },
+        {
+          "run": "ttld-05-lua",
+          "compared_frames": 901,
+          "different_frames": 0,
+          "first_different_frames": []
+        },
+        {
+          "run": "ttld-05-wasm",
+          "compared_frames": 901,
+          "different_frames": 0,
+          "first_different_frames": []
+        }
+      ]
+    },
+    "status": "Private game candidates; exact-expiry images and new timings pending. Existing headless/visual/lua-visual/pose-parity suites pass.",
+    "suites": {
+      "passed": true,
+      "cases": [
+        {
+          "case": "headless",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/ttld-fire-parity/check-headless-1",
+          "workers": 1,
+          "jobs": "off"
+        },
+        {
+          "case": "visual",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/ttld-fire-parity/check-visual-3",
+          "workers": 1,
+          "jobs": "off"
+        },
+        {
+          "case": "lua-visual",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/ttld-fire-parity/check-lua-visual-3",
+          "workers": 1,
+          "jobs": "off"
+        },
+        {
+          "case": "pose-parity",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/ttld-fire-parity/check-pose-parity-1",
+          "workers": 1,
+          "jobs": "off"
+        }
+      ]
+    }
   }
 }
