@@ -1,6 +1,7 @@
 The menu uses `spring-sdk` on both backends. Its RML, navigation, launch settings
-and game catalogue are shared. This port branch currently points Cargo at the
-sibling `spring-sdk-unified` worktree; use its engine build for these checks.
+and game catalogue are shared. Cargo pins the public engine SDK revision in
+`wasm-menu/wasm-src/Cargo.toml`. Run `./setup.sh --no-dev-engine` before a release
+build so a local engine path patch cannot replace that revision.
 
 Build `wasm-menu/wasm-src` with `just build` and `just build-native`.
 `just copy` installs Wasm; `just copy-native` installs the Linux native menu.
@@ -25,6 +26,17 @@ test window/sound settings, then runs its executable with no arguments from a
 different working directory. Menu selection, Lua Gravitas launch/return and
 Escape-to-quit are checked using the packaged WASM menu and content. This mode
 does not need `--target-dir`. Add `--wine` for a Windows `SpringCabal.exe` bundle.
+Game and map archives are hardlinked when possible; settings, caches and logs
+remain separate for each attempt. The harness creates its Fontconfig cache
+before starting the engine, including the first launch in a fresh Wine prefix.
+
+The official `2026.10.3001` Linux and Windows binaries passed this packaged
+check with the public game sources in the local
+`1.0.3-rc.3-runtime-check` bundles: NVIDIA rendering, no-argument launch from
+outside the bundle, keyboard navigation, Lua Gravitas launch, return to the
+same menu image, and exit status zero. Windows was checked under Wine, not on
+native Windows. These bundles are unpublished compatibility checks; final Lua
+performance choices are still pending.
 
 Passed on 2026-10-17 against SDK commit `81cfe66192`: both backends launched and
 returned from Gravitas, rendered identical initial/navigation/return screenshots,
