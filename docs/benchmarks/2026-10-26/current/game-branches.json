@@ -8,7 +8,7 @@
     "remote_head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:00.224168+00:00"
+    "checked_utc": "2026-10-29T17:31:23.543024+00:00"
   },
   {
     "game": "Hunted-wasm.sdd",
@@ -19,7 +19,7 @@
     "remote_head": "7683369ea0ec59e3d79be17854052e83d98b183b",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:00.232810+00:00"
+    "checked_utc": "2026-10-29T17:31:23.535018+00:00"
   },
   {
     "game": "ToTheLastDrop.sdd",
@@ -30,7 +30,7 @@
     "remote_head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:00.271720+00:00"
+    "checked_utc": "2026-10-29T17:31:23.534842+00:00"
   },
   {
     "game": "ToTheLastDrop-wasm.sdd",
@@ -41,7 +41,7 @@
     "remote_head": "b722add97431f2b950a0e32de7b9f63ee60e83ba",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:00.236422+00:00"
+    "checked_utc": "2026-10-29T17:31:23.536549+00:00"
   },
   {
     "game": "Flove.sdd",
@@ -52,7 +52,7 @@
     "remote_head": "ff06007e58303e169a7a39d301f70b479d745625",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:02.202235+00:00"
+    "checked_utc": "2026-10-29T17:31:25.522058+00:00"
   },
   {
     "game": "Flove-wasm.sdd",
@@ -63,7 +63,7 @@
     "remote_head": "86b3bed3acdccc8ec7fe550e78cb041ec4fcfc6c",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:02.184604+00:00"
+    "checked_utc": "2026-10-29T17:31:25.509401+00:00"
   },
   {
     "game": "Area-17.sdd",
@@ -74,7 +74,7 @@
     "remote_head": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:02.197465+00:00"
+    "checked_utc": "2026-10-29T17:31:25.510151+00:00"
   },
   {
     "game": "Area17-wasm.sdd",
@@ -85,7 +85,7 @@
     "remote_head": "ac9dff6a91582bf76dfe92e4964866eaf5a7a8a8",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:02.229704+00:00"
+    "checked_utc": "2026-10-29T17:31:25.508024+00:00"
   },
   {
     "game": "MyCube.sdd",
@@ -96,7 +96,7 @@
     "remote_head": "4698657d927b4eac083319f86b177195e1ef7480",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:04.157112+00:00"
+    "checked_utc": "2026-10-29T17:31:27.477865+00:00"
   },
   {
     "game": "MyCube-wasm.sdd",
@@ -107,7 +107,7 @@
     "remote_head": "353bb396f0248eeed563bbb0c50f32c2db63608d",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:04.145446+00:00"
+    "checked_utc": "2026-10-29T17:31:27.465739+00:00"
   },
   {
     "game": "PartsNeeded.sdd",
@@ -118,18 +118,18 @@
     "remote_head": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:04.168434+00:00"
+    "checked_utc": "2026-10-29T17:31:27.524302+00:00"
   },
   {
     "game": "PartsNeeded-wasm.sdd",
     "branch": "partsneeded-wasm-port",
     "public_branch": "rust",
-    "head": "73696165153a69d71f0899174196389008a31a77",
+    "head": "96b8e3c47eb358da3fe5bc3846ed0e159f3391db",
     "remote": "git@github.com:SpringCabal/LD35.git",
-    "remote_head": "73696165153a69d71f0899174196389008a31a77",
+    "remote_head": "96b8e3c47eb358da3fe5bc3846ed0e159f3391db",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:04.150332+00:00"
+    "checked_utc": "2026-10-29T17:31:27.485047+00:00"
   },
   {
     "game": "Gravitas.sdd",
@@ -140,7 +140,7 @@
     "remote_head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:06.092869+00:00"
+    "checked_utc": "2026-10-29T17:31:29.525517+00:00"
   },
   {
     "game": "Gravitas-wasm.sdd",
@@ -151,6 +151,6 @@
     "remote_head": "ca3f01ecdccb82f6970e2e85dbf3bb84192281de",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T15:46:06.066332+00:00"
+    "checked_utc": "2026-10-29T17:31:29.457404+00:00"
   }
 ]
