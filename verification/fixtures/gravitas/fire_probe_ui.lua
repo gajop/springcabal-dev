@@ -21,6 +21,8 @@ simple:Initialize()
 jitter:Initialize()
 post.Initialize()
 post.ViewResize()
+-- Match production LUPS class groups: store effects directly and call the
+-- known class callback, without a harness-only wrapper or method lookup.
 local drawGroups = {{},{},{}}
 local particleId = 0
 local seed = 1
@@ -32,9 +34,8 @@ local countParticles = tonumber((Spring.GetModOptions() or {}).fire_diagnostic_c
 local countedFrame = -1
 if perf then Spring.SendCommands("hideinterface 1") end
 local function addParticle(class,fx)
-    local p={class=class,fx=fx}
     local group=drawGroups[class==jitter and 2 or (fx.layer==1 and 3 or 1)]
-    group[#group+1]=p
+    group[#group+1]=fx
     particleId=particleId+1
     return particleId
 end
@@ -74,8 +75,9 @@ function FireProbe(message)
         error('performance emissions must run locally in UI Update')
     end
     if fields[2] == "probe" then
-        for _,group in ipairs(drawGroups) do
-            for _,p in ipairs(group) do p.fx:Destroy() end
+        for index,group in ipairs(drawGroups) do
+            local destroy = index==2 and jitter.Destroy or simple.Destroy
+            for _,fx in ipairs(group) do destroy(fx) end
         end
         drawGroups = {{},{},{}}
         target = tonumber(fields[3])
@@ -101,14 +103,14 @@ end
 local function advance(n)
     -- Compact once. Removing every expired effect separately shifted the
     -- entire surviving list repeatedly at high emitter counts.
-    for _,group in ipairs(drawGroups) do
+    for index,group in ipairs(drawGroups) do
+        local destroy = index==2 and jitter.Destroy or simple.Destroy
         local kept=0
         for i=1,#group do
-            local p=group[i]
-            local fx=p.fx
+            local fx=group[i]
             fx.frame=n-fx.firstGameFrame
-            if n>=fx.dieGameFrame then fx:Destroy()
-            else kept=kept+1;group[kept]=p end
+            if n>=fx.dieGameFrame then destroy(fx)
+            else kept=kept+1;group[kept]=fx end
         end
         for i=#group,kept+1,-1 do group[i]=nil end
     end
@@ -142,12 +144,12 @@ function Update()
     if countParticles and n ~= countedFrame and (n==300 or n==600 or n==899) then
         countedFrame = n
         local normal, distortion = 0,0
-        for _,group in ipairs(drawGroups) do for _,p in ipairs(group) do
-            local data = assert(p.fx.gpuParticles, "diagnostic particle records")
+        for index,group in ipairs(drawGroups) do for _,fx in ipairs(group) do
+            local data = assert(fx.gpuParticles, "diagnostic particle records")
             for at=0,#data-1,28 do
-                local age = p.fx.frame - data[at+12]
+                local age = fx.frame - data[at+12]
                 if age>0 and age<=data[at+8] then
-                    if p.class==jitter then distortion=distortion+1 else normal=normal+1 end
+                    if index==2 then distortion=distortion+1 else normal=normal+1 end
                 end
             end
         end end
@@ -160,8 +162,8 @@ function DrawWorld()
     gl.DepthMask(false)
     gl.AlphaTest(GL.GREATER, 0)
     simple.BeginDraw()
-    for _, p in ipairs(drawGroups[1]) do
-        p.fx:Draw()
+    for _,fx in ipairs(drawGroups[1]) do
+        simple.Draw(fx)
     end
     simple.EndDraw()
     gl.AlphaTest(false)
@@ -172,16 +174,16 @@ function DrawWorld()
         Spring.GetGameFrame = function() return target end
         jitter.BeginDrawDistortion()
         Spring.GetGameFrame = getFrame
-        for _, p in ipairs(drawGroups[2]) do
-            p.fx:DrawDistortion()
+        for _,fx in ipairs(drawGroups[2]) do
+            jitter.DrawDistortion(fx)
         end
         jitter.EndDrawDistortion()
     end)
     post.EndDraw()
     gl.AlphaTest(GL.GREATER, 0)
     simple.BeginDraw()
-    for _, p in ipairs(drawGroups[3]) do
-        p.fx:Draw()
+    for _,fx in ipairs(drawGroups[3]) do
+        simple.Draw(fx)
     end
     simple.EndDraw()
     gl.AlphaTest(false)
