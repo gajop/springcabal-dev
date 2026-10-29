@@ -3,15 +3,17 @@
 # These instrumented runs are excluded from timing aggregates.
 set -euo pipefail
 project=$(cd -- "$(dirname -- "$0")/../.." && pwd)
-out=${1:?Usage: capture-video.sh OUTPUT [--encode-only] [--case NAME]}
+out=${1:?Usage: capture-video.sh OUTPUT [--encode-only] [--case NAME] [--games-dir PATH]}
 shift
 mkdir -p "$out"
 python3 - "$project" "$(realpath -- "$out")" "$@" <<'PY'
-import argparse, hashlib, json
+import argparse, hashlib, json, os
 from pathlib import Path
 import subprocess, sys
 project, root = map(Path, sys.argv[1:3])
 p=argparse.ArgumentParser();p.add_argument('--encode-only',action='store_true');p.add_argument('--case',action='append');p.add_argument('--keep-frames',action='store_true',help='retain source PNGs after the MP4 is verified')
+p.add_argument('--games-dir',type=Path,default=Path(os.environ.get('VF_GAMES_DIR',str(project/'spring-linux/games'))),help='frozen game roots to record, also accepted through VF_GAMES_DIR')
+p.add_argument('--max-minutes',type=int,default=30,help='resource-wait limit for each capture')
 a=p.parse_args(sys.argv[3:])
 manifest=root/'videos.json'
 clips=json.loads(manifest.read_text()) if manifest.exists() else []
@@ -34,10 +36,10 @@ for name,game,scene,options in cases:
             i=options.index('--input');original=Path(options[i+1]).read_text();del options[i:i+2]
         requests=root/(name+'-input.txt')
         requests.write_text(original+'\n'+''.join(f'{f}: local screenshot png\n' for f in range(300,900,3)))
-        subprocess.run([str(project/'verification/verify'),'perf',game,scene,'--mode','gpu','--frame-step','--diagnostic','--repeats','1',
+        subprocess.run([str(project/'verification/verify'),'perf',game,scene,'--mode','gpu','--callback-timers','off','--frame-step','--diagnostic','--repeats','1',
             '--wait-for-idle','--wait-for-gpu-idle','--clean-pairs','1',
-            '--worker-threads','1','--cpu-affinity','0,2,4,6,8,10,12,14','--timeout','300','--max-minutes','30',
-            '--input',str(requests),'--output',str(directory),*options],check=True)
+            '--worker-threads','1','--cpu-affinity','0,2,4,6,8,10,12,14','--timeout','300','--max-minutes',str(a.max_minutes),
+            '--input',str(requests),'--output',str(directory),'--games-dir',str(a.games_dir.resolve()),*options],check=True)
     for backend in ['lua','wasm']:
         candidates=[]
         for candidate in directory.glob(f'{game}-*-{backend}'):

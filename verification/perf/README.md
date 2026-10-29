@@ -755,7 +755,10 @@ in normal gameplay. GPU runs require an acknowledgement from the UI.
 1/10/100 emitter pairs and normal My Cube/Parts Needed scenes with the existing
 screenshot action. Each clip is 200 real GPU PNGs at three-frame intervals,
 encoded at 10 fps; ffprobe checks the output count. `--case NAME` selects one
-scene and `--encode-only` reuses saved PNGs. Never include these runs in timings.
+scene and `--encode-only` reuses saved PNGs. `--games-dir PATH` (or
+`VF_GAMES_DIR`) selects the frozen game roots and is forwarded to every runner
+invocation. Captures disable callback timers; `--max-minutes N` controls the
+idle-wait limit. Never include these runs in timings.
 
 For a same-behavior source comparison, pass `dashboard.py --optimizations
 /path/to/experiments.json`. Each experiment lists five rounds with `before` and
