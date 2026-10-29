@@ -320,7 +320,7 @@ vf_run_visual() {
 
 # vf_run_driven SECONDS DRIVER [SCREEN]
 # A visual run played through real input: the engine renders on its own Xvfb
-# display (software GL by default) in a window at 0,0. DRIVER runs
+# display (GPU rendering by default) in a window at 0,0. DRIVER runs
 # alongside it with DISPLAY set and presses keys and buttons with xdotool
 # (vf_x_* below), usually waiting for markers the game logs.  When the driver
 # returns, the engine is stopped if it is still running.  The run's status is
@@ -331,7 +331,8 @@ vf_run_driven() {
     local engine width height display='' n xvfb_pid engine_pid status
     command -v xdotool >/dev/null || vf_die 'driven runs need xdotool'
     engine=$(vf_engine_bin visual)
-    local renderer=${VF_RENDERER:-software}
+    local renderer
+    renderer=$(vf_renderer)
     local -a graphics_env=() graphics_command=()
     case "$renderer" in
         software) graphics_env+=(LIBGL_ALWAYS_SOFTWARE=1) ;;
