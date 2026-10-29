@@ -182,6 +182,34 @@ end
 writer:delete();batchEnv.thisGameFrame=nil
 print('PASS Lups attribute writer: pooled/local records and per-effect views')
 
+if Batch.makePacker then
+    for _,strength in ipairs({false,0,2}) do
+        local direct,captured=prepared(false),prepared(false)
+        for _,fx in ipairs({direct,captured}) do
+            fx.strength=strength or nil
+            fx.heat=0.25
+            fx.scale=0.75
+            fx.rotExp=0
+            fx.animSpeed=0
+            Batch.prepare(fx)
+        end
+        local pack=Batch.makePacker(captured)
+        for i=1,32 do
+            local life,delay=20+i%7,i%3
+            Batch.pack(direct,life,delay,i,2,3,4,5,6,7,8,9,10,-1,1)
+            pack(life,delay,i,2,3,4,5,6,7,8,9,10,-1,1)
+        end
+        assert(direct.gpuLastParticle==captured.gpuLastParticle,'captured packer changed expiry')
+        assert(#direct.gpuParticles==#captured.gpuParticles,'captured packer changed record count')
+        for i,value in ipairs(direct.gpuParticles) do
+            local other=captured.gpuParticles[i]
+            assert(value==other or (value~=value and other~=other),
+                'captured packer changed particle field '..i)
+        end
+    end
+    print('PASS Lups coefficient packer: every field and maximum lifetime match direct packing')
+end
+
 local function preparedPalette(colors)
     local fx={colormap=colors,gpuOnly=false}
     Batch.prepare(fx)
