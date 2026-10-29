@@ -14,6 +14,16 @@ from unittest.mock import patch
 
 
 class EquivalenceTests(unittest.TestCase):
+    def test_normal_and_stress_jobs_captures_resolve_to_their_scene(self):
+        for name, scene in [('hunted-1x-jobs', 'hunted'),
+                            ('hunted-10x-jobs', 'hunted10'),
+                            ('flove-combat-1x-jobs', 'flove'),
+                            ('flove-combat-10x-jobs', 'flove10'),
+                            ('fire-10-jobs', 'fire10')]:
+            with self.subTest(name=name):
+                self.assertEqual(dashboard.capture_scene(name), scene)
+        self.assertIsNone(dashboard.capture_scene('unknown-jobs'))
+
     def test_frozen_effects_module_avoids_rebuilding_from_mutable_sources(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);module=root/'probe.wasm'

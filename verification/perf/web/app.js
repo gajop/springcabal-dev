@@ -124,7 +124,7 @@ let worldToken=0,worldBounds=null;
 async function loadWorlds(){
   const token=++worldToken;state.playing=false;$('play').textContent='Play';state.worlds=[];worldBounds=null;$('world-legend').replaceChildren();
   const wanted=isLanguage()?[['lua','off'],['wasm','off']]:[['wasm','off'],['wasm','on']];
-  const width=isLanguage()?(runs()[0]?.worker_threads??1):4;
+  const width=runs()[0]?.worker_threads??(state.comparison==='jobs4'?4:1);
   const available=wanted.map(([backend,jobs])=>DATA.recordings.find(r=>r.scene===state.scene.id&&r.backend===backend&&r.jobs===jobs&&r.worker_threads===width&&matchesGame(r,backend)));
   const isFire=state.scene.game==='gravitas';$('worlds').hidden=isFire;$('fire-videos').hidden=!(DATA.videos??[]).some(v=>v.scene===state.scene.id);
   for(const id of['play','frame','fit','speed'])$(id).disabled=isFire||available.some(r=>!r);

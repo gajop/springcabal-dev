@@ -34,6 +34,9 @@ Profiling uses perf's native compression. After export, the derived
 `cpu.injected.data` is removed; the raw capture and JIT inputs remain available.
 Video capture removes PNGs after verifying the 200-frame MP4; use `--keep-frames`
 to retain them.
+When recording a frozen effects campaign, pass its `--games-dir`,
+`--effects-module` and `--worker-threads` to `capture-video.sh` so the video
+uses the same game code, probe module and worker count as its timings.
 
 To compact completed older runs without removing measurements or logs:
 

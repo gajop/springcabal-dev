@@ -44,6 +44,11 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def capture_scene(name):
+    name = name.removesuffix('-jobs')
+    return next((sid for sid, *_, capture in SCENES if capture == name), None)
+
+
 def effects_fixtures(stamp):
     return {name: stamp.get('fixtures', {}).get('verification/fixtures/gravitas/'+name)
             for name in ('fire_probe_rules.lua', 'fire_probe_ui.lua')}
@@ -270,9 +275,7 @@ def main():
     capture_to_scene = {s['capture']: s['id'] for s in data['scenes'] if s['capture']}
     for path in sorted([*args.recordings.glob('**/world.jsonl'), *args.recordings.glob('**/world.jsonl.gz')]):
         case = path.parent.parent.name
-        sid = capture_to_scene.get(case)
-        if not sid:
-            sid = {'hunted-10x-jobs': 'hunted10', 'flove-combat-10x-jobs': 'flove10'}.get(case)
+        sid = capture_scene(case)
         if not sid:
             continue
         result = report.read_result(path.parent/'result.json')
@@ -286,9 +289,7 @@ def main():
             renderer=result['renderer'], source=str(path.relative_to(PROJECT))))
     for path in sorted(args.profiles.glob('**/profile.json')):
         case = path.parent.parent.name
-        sid = capture_to_scene.get(case)
-        if not sid:
-            sid = {'hunted-10x-jobs': 'hunted10', 'flove-combat-10x-jobs': 'flove10', 'fire-10-jobs': 'fire10'}.get(case)
+        sid = capture_scene(case)
         if not sid:
             continue
         result = report.read_result(path.parent/'result.json')
