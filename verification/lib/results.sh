@@ -151,15 +151,33 @@ vf_source_line() {
     fi
 }
 
-# vf_crates_line: where the shared springcabal crates came from.  With the
-# [patch] that setup-dev-engine writes into .cargo/config.toml, the local
-# springcabal-rs checkout; otherwise the git revision in each game's Cargo.lock.
+# vf_crates_line: resolve the game's path dependency before the legacy patch.
 vf_crates_line() {
-    local checkout="$PROJECT_ROOT/springcabal-rs"
+    local checkout="$PROJECT_ROOT/springcabal-rs" game manifest dependency top
+    game=$(vf_run_game)
+    manifest="$game/wasm-src/Cargo.toml"
+    if [[ -f $manifest ]]; then
+        dependency=$(python3 - "$manifest" <<'PY'
+from pathlib import Path
+import sys,tomllib
+manifest=Path(sys.argv[1])
+data=tomllib.loads(manifest.read_text())
+dependency=data.get('workspace',{}).get('dependencies',{}).get('springcabal',{})
+if isinstance(dependency,dict) and dependency.get('path'):
+    print((manifest.parent/dependency['path']).resolve())
+PY
+        )
+        if [[ -n $dependency ]] && top=$(git -C "$dependency" rev-parse --show-toplevel 2>/dev/null); then
+            vf_source_line "springcabal" "$top"
+            return
+        fi
+    fi
     if [[ -d $checkout ]] && grep -qs 'springcabal-rs' "$PROJECT_ROOT/.cargo/config.toml"; then
         vf_source_line "springcabal" "$checkout"
-    else
+    elif [[ -f $manifest ]]; then
         printf '%-10s %s\n' "springcabal" "git dependency (revision in the game's wasm-src/Cargo.lock)"
+    else
+        printf '%-10s %s\n' "springcabal" "not used (Lua game)"
     fi
 }
 

@@ -1,12 +1,14 @@
-recorded   2026-09-25T03:59:55Z
-dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 56f0fe43f71676c2b95bb8e910b38a646b707aaa  +24 uncommitted files
-game       spring-linux/games/Gravitas-wasm.sdd  gravitas-wasm-port 2c9e7f94e37d6de8cf382035d08ec9ee2dd9a26c
-map        spring-linux/maps/Gravitas-map.sdd  master bcd4d95d488c60ff9aaefd9a6c649d454d517afa  +1 uncommitted files
-springcabal springcabal-rs  main 9fe685eaa33978e4c1a1c0fe334ee3afaa3d0a8e
-engine     /home/gajop/projects/spring-projects/spring-bar/build-amd64-linux/install  spring version 2026.09.23-46-ge2262a1 rust-wip
-engine src /home/gajop/projects/spring-projects/spring-bar  rust-wip e2262a19feafd1bde494036b11940d864c5719e7
-version    Spring Engine Version: 2026.09.23-46-ge2262a1 rust-wip
-renderer   software
-gpu        llvmpipe (LLVM 20.1.2, 256 bits)
-gl         4.5 (Compatibility Profile) Mesa 25.2.8-0ubuntu0.24.04.2
+recorded   2026-10-29T17:06:07Z
+dev repo   /home/gajop/projects/spring-projects/springcabal-games  main 134f0ca259bc9207f702b16062d949b26527cc35  +2 uncommitted files
+game       spring-linux/engine-current-check-games/Gravitas-wasm.sdd  (not version-controlled)
+map        spring-linux/maps/Gravitas-map.sdd  master 4da8953f075b2ba49ea69c310bf10a8196676be1
+springcabal springcabal-rs  main 0fb75bc0c5df841a6e649fc3e96b4f19a4df9a04
+engine     codex-work/game-bugfixes-20261025/engine-linux-2026.10.25  spring version 2026.10.25
+version    Spring Engine Version: 2026.10.25
+renderer   gpu
+gpu        NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2
+gl         4.6.0 NVIDIA 580.178.04
 settings   launch/springsettings.cfg sha1 a487bc4da703
+reference engine released in SpringCabal 1.0.3-rc.2: dd05f8647458ff5541a8aee8d43b6218a64eaef8
+reference engine sha256: d28e6c2f0cb889f7b7ab148ae9c80e1c3480d1c6b5c3425aec284f783af0193d
+frozen game source: e41a41b5fe659903c2d703ca53ebc6b68860126d (SDK0f build)
