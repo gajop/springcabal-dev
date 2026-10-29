@@ -708,21 +708,30 @@
     "adopted": null,
     "change": "Trial: cache sorted rabbit IDs by roster revision as Lua does; remove the unshared per-frame surroundings Rc allocation. Preserve immutable lists across synchronous unit callbacks. Candidate 437b97b vs af9c0b3. Repeat with stable PCG stream and isolated script RNG (engine2444282), eliminating old native-particle variation.",
     "backend": "wasm",
-    "measured_rounds": 1,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 3,
-    "wall_before_ms": 1.0279416666666668,
-    "wall_after_ms": 1.1485200000000004,
-    "wall_change_pct": 11.730075474451397,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.253769,
-    "sim_after_ms": 0.285814,
-    "sim_change_pct": 12.627625911754393,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 0.713129,
-    "draw_after_ms": 0.785102,
-    "draw_change_pct": 10.092563897976369,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 0.9591083333333332,
+    "wall_after_ms": 0.9970550000000001,
+    "wall_change_pct": 4.068454078722161,
+    "wall_mean_ratio_95ci": [
+      1.0338868388064992,
+      1.086211863351814
+    ],
+    "sim_before_ms": 0.23736000000000002,
+    "sim_after_ms": 0.24197300000000002,
+    "sim_change_pct": 2.4086520418955315,
+    "sim_mean_ratio_95ci": [
+      1.0202613516663626,
+      1.0853007878994472
+    ],
+    "draw_before_ms": 0.675933,
+    "draw_after_ms": 0.708053,
+    "draw_change_pct": 4.981797159419399,
+    "draw_mean_ratio_95ci": [
+      1.0373249319959754,
+      1.0791298689446185
+    ]
   },
   {
     "id": "hunted-seeded-order-10x",
@@ -769,21 +778,30 @@
     "adopted": null,
     "change": "Trial: live incremental food/mines grid, direct ID ranks and reserved-carrot lookup. Remove full target snapshot/grid rebuild after each pickup. Keep Lua main-list tie order; compare against 437b97b on seeded engine2444282.",
     "backend": "wasm",
-    "measured_rounds": 4,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 11,
-    "wall_before_ms": 0.9717166666666666,
-    "wall_after_ms": 0.9684883333333334,
-    "wall_change_pct": 0.333782247673442,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.2385715,
-    "sim_after_ms": 0.23715999999999998,
-    "sim_change_pct": -0.02431463532668321,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 0.691531,
-    "draw_after_ms": 0.685464,
-    "draw_change_pct": 0.23489938810110633,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 12,
+    "wall_before_ms": 0.9692099999999996,
+    "wall_after_ms": 0.9673433333333332,
+    "wall_change_pct": -0.7062035741291717,
+    "wall_mean_ratio_95ci": [
+      0.9628121652568243,
+      1.0118924621120682
+    ],
+    "sim_before_ms": 0.237339,
+    "sim_after_ms": 0.236974,
+    "sim_change_pct": -1.6870328335173546,
+    "sim_mean_ratio_95ci": [
+      0.9563867921137762,
+      1.014362523394532
+    ],
+    "draw_before_ms": 0.689492,
+    "draw_after_ms": 0.683519,
+    "draw_change_pct": -0.8883025505716957,
+    "draw_mean_ratio_95ci": [
+      0.9624035551509447,
+      1.0122922270233548
+    ]
   },
   {
     "id": "hunted-incremental-food-10x",
@@ -830,21 +848,30 @@
     "adopted": null,
     "change": "Trial a444891 vs b3b548a: opt in to sharing immutable fire palettes; exact expiry masks; skip no-op world-space matrix saves. Mutable inputs keep deep-copy semantics.",
     "backend": "lua",
-    "measured_rounds": 4,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 10,
-    "wall_before_ms": 35.2208325,
-    "wall_after_ms": 33.79363416666666,
-    "wall_change_pct": -7.991313094279384,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.2623265,
-    "sim_after_ms": 0.2239375,
-    "sim_change_pct": -12.798492815303874,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 31.844128999999995,
-    "draw_after_ms": 31.022160000000003,
-    "draw_change_pct": -6.800575205958692,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 35.11714,
+    "wall_after_ms": 32.501461666666664,
+    "wall_change_pct": -7.738534953009591,
+    "wall_mean_ratio_95ci": [
+      0.912548781736151,
+      1.0257035292566683
+    ],
+    "sim_before_ms": 0.259679,
+    "sim_after_ms": 0.22659200000000002,
+    "sim_change_pct": -10.039701445132598,
+    "sim_mean_ratio_95ci": [
+      0.8517363100511994,
+      0.9395326691149942
+    ],
+    "draw_before_ms": 31.677367999999998,
+    "draw_after_ms": 29.679954000000002,
+    "draw_change_pct": -7.29565811217836,
+    "draw_mean_ratio_95ci": [
+      0.9185551424952378,
+      1.04175753068025
+    ]
   },
   {
     "id": "gravitas-immutable-palette-10",
