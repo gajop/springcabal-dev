@@ -267,3 +267,29 @@ local rulesEnv=setmetatable({Spring={GetModOptions=probeEnv.Spring.GetModOptions
 setfenv(assert(loadfile(fixtures..'fire_probe_rules.lua')),rulesEnv)()
 rulesEnv.GameFrame(30);rulesEnv.GameFrame(45)
 print('PASS fire harness: local UI emissions, exact skipped-poll frames/seeds, no synced emissions')
+
+if arg[3]=='retire-models' then
+    -- A live prefix can keep dead ring slots allocated. It must not also
+    -- keep the removed effects' Lua objects and attribute tables alive.
+    local ring=assert(Batch.new(false))
+    local anchor=effect(9000,4)
+    ring:begin(1);ring:queue(anchor)
+    local models,weak={},setmetatable({},{__mode='v'})
+    for i=1,1000 do
+        local fx=effect(i,4)
+        models[i],weak[i]=fx,fx
+        ring:queue(fx)
+    end
+    collectgarbage('collect')
+    local before=collectgarbage('count')
+    for i=1,1000 do Batch.release(models[i]);models[i]=nil end
+    models=nil
+    collectgarbage('collect');collectgarbage('collect')
+    local after,retained=collectgarbage('count'),0
+    for i=1,1000 do if weak[i] then retained=retained+1 end end
+    assert(retained==0,'GPU ring kept removed particle models alive: '..retained)
+    assert(#anchor.gpuGroup.entries==1001,'retirement changed ring allocation')
+    ring:delete()
+    print(string.format('PASS Lups retirement: 1,000 removed models collected; '
+        ..'ring allocation retained; %.1f KiB reclaimed',before-after))
+end

@@ -59,6 +59,19 @@ just probe gravitas-fire lua     # a debugging probe
 
 `verify all` runs every in-game assertion suite, Lua/Rust pose comparison, host test and static check. Engine runs use the real GPU through SDL offscreen without opening desktop windows. Most integration runs simulate at 100x; scenarios that require real-time input retain their timing. Input-driven checks use a private X display because SDL offscreen has no OS input window. `verify visual` runs every golden comparison. Both take their run lists from `verify`; the first mode per suite is its default.
 
+The LUPS host regression can also check that retired particle models are
+collected while their numeric GPU ring entries remain allocated:
+
+```bash
+lua5.1 verification/fixtures/gravitas/lups_regressions.lua \
+  /path/to/Lua-game.sdd skip-expired-uploads retire-models
+```
+
+This uses the actual particle batch implementation and checks weak references
+after collection, alongside the existing VBO, expiry, palette and expression
+checks. Use a game revision containing the retirement fix; it applies to both
+Gravitas and To the Last Drop. GPU image checks remain separate.
+
 Every engine log is checked for errors and warnings. Either fails verification, and GPU runs also fail if the driver silently selects a software renderer. Logs are saved before these checks fail.
 
 Only one `verify` runs at a time: it takes a `flock` on
