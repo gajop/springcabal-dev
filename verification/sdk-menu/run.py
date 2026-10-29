@@ -19,6 +19,18 @@ sys.path.insert(0, str(ROOT / "verification/perf"))
 import run as perf_runner
 
 
+def copy_bundle_file(source, destination):
+    # Game and map archives are read-only inputs. Share their storage between
+    # menu checks; settings, logs and other writable files remain separate.
+    if Path(source).suffix in {".sdz", ".sd7"}:
+        try:
+            os.link(source, destination)
+            return destination
+        except OSError:
+            pass
+    return shutil.copy2(source, destination)
+
+
 def capture(window, path):
     subprocess.run(["import", "-window", window, str(path)], check=True)
     with Image.open(path) as image:
@@ -209,7 +221,8 @@ def main():
         run = args.output.resolve() / transport
         with perf_runner.VerificationLease():
             if args.packaged:
-                shutil.copytree(args.engine.resolve().parent, run, symlinks=True)
+                shutil.copytree(args.engine.resolve().parent, run, symlinks=True,
+                                copy_function=copy_bundle_file)
                 engine = run / args.engine.name
             else:
                 stage_development(args, run, transport)
