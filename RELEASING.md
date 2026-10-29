@@ -34,6 +34,8 @@ just setup-dev-engine ../spring-bar
 The [2026.10.25 compatibility review](docs/engine-compatibility-2026-10-25.md)
 records all engine changes since 1.0.2, including the weapon-number and module
 startup changes applied for 1.0.3-rc.2.
+The [next compatibility review](docs/engine-compatibility-2026-10-29.md) accounts
+for the subsequent runtime, query, velocity, RNG, wind and rendering changes.
 
 Commit the framework/menu, shared crate, games and maps before preparing a
 release. Preparation refuses dirty source checkouts, including untracked files.
@@ -138,6 +140,11 @@ or software rendering fail it. The packaged-menu harness launches the actual
 executable with no arguments from outside the bundle directory and checks
 isolation, navigation, Lua Gravitas launch/return and clean exit. `--wine` takes
 the Wine loader command or path; set `WINEPREFIX` for a dedicated prefix.
+The keyboard menu checks require VirtualGL, Xvfb, xdotool and ImageMagick.
+Set `VF_VGLRUN` if its launcher is outside `PATH`, and `VF_VGL_DISPLAY` to the
+GPU's EGL device when needed (default: `egl`). These checks use the existing
+verification lock and CPU/GPU idle guards, save `guard.json`, and reject software
+rendering. `--max-minutes` controls how long they wait for an idle system.
 Windows needs a working Wine installation or a native Windows play check. Check freshly
 extracted archives too, and play at least one WASM and one Lua game on each
 platform. See `verification/README.md` for the existing game-specific suites.
