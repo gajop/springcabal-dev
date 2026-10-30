@@ -530,7 +530,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial: intern float32 palette values without formatting every channel; retain unchanged shader palettes and skip natural-expiry masks. Preserve ordinary particle arrays and uploads. Candidateb3b548a vs8a095ad.",
     "backend": "lua",
     "measured_rounds": 5,
@@ -565,7 +565,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial: intern float32 palette values without formatting every channel; retain unchanged shader palettes and skip natural-expiry masks. Preserve ordinary particle arrays and uploads. Candidateb3b548a vs8a095ad.",
     "backend": "lua",
     "measured_rounds": 5,
@@ -600,7 +600,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial: intern float32 palette values without formatting every channel; retain unchanged shader palettes and skip natural-expiry masks. Preserve ordinary particle arrays and uploads. Candidateb3b548a vs8a095ad.",
     "backend": "lua",
     "measured_rounds": 5,
@@ -845,7 +845,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial a444891 vs b3b548a: opt in to sharing immutable fire palettes; exact expiry masks; skip no-op world-space matrix saves. Mutable inputs keep deep-copy semantics.",
     "backend": "lua",
     "measured_rounds": 5,
@@ -880,7 +880,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial a444891 vs b3b548a: opt in to sharing immutable fire palettes; exact expiry masks; skip no-op world-space matrix saves. Mutable inputs keep deep-copy semantics.",
     "backend": "lua",
     "measured_rounds": 0,
@@ -906,7 +906,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial a444891 vs b3b548a: opt in to sharing immutable fire palettes; exact expiry masks; skip no-op world-space matrix saves. Mutable inputs keep deep-copy semantics.",
     "backend": "lua",
     "measured_rounds": 0,
@@ -932,7 +932,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial: scalar particle births; explicit disc and rounded velocity inputs replace per-particle expression tables. Keep generic expressions and RNG order. Compare against immutable-palette a444891.",
     "backend": "lua",
     "measured_rounds": 5,
@@ -967,7 +967,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial: scalar particle births; explicit disc and rounded velocity inputs replace per-particle expression tables. Keep generic expressions and RNG order. Compare against immutable-palette a444891.",
     "backend": "lua",
     "measured_rounds": 0,
@@ -993,7 +993,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Trial: scalar particle births; explicit disc and rounded velocity inputs replace per-particle expression tables. Keep generic expressions and RNG order. Compare against immutable-palette a444891.",
     "backend": "lua",
     "measured_rounds": 0,
@@ -1289,21 +1289,30 @@
     "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
     "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
     "backend": "wasm",
-    "measured_rounds": 0,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 10,
+    "wall_before_ms": 0.8708333333333333,
+    "wall_after_ms": 0.8684633333333337,
+    "wall_change_pct": -0.33814928296279634,
+    "wall_mean_ratio_95ci": [
+      0.9902574819300097,
+      1.0032784761518028
+    ],
+    "sim_before_ms": 0.209007,
+    "sim_after_ms": 0.207178,
+    "sim_change_pct": -1.2512796095702994,
+    "sim_mean_ratio_95ci": [
+      0.9748613854074027,
+      1.0007683052041454
+    ],
+    "draw_before_ms": 0.618096,
+    "draw_after_ms": 0.6159589999999999,
+    "draw_change_pct": -0.27546291048184957,
+    "draw_mean_ratio_95ci": [
+      0.9866136570852211,
+      1.0035426096441464
+    ]
   },
   {
     "id": "hunted-incremental-incremental-10x",
@@ -1317,20 +1326,20 @@
     "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
     "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
     "backend": "wasm",
-    "measured_rounds": 0,
+    "measured_rounds": 3,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
+    "attempted_phase_pairs": 6,
+    "wall_before_ms": 3.6340133333333333,
+    "wall_after_ms": 3.4501033333333333,
+    "wall_change_pct": -5.94232822480929,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
+    "sim_before_ms": 1.4845350000000002,
+    "sim_after_ms": 1.474561,
+    "sim_change_pct": -1.933871549003563,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
+    "draw_before_ms": 2.021512,
+    "draw_after_ms": 1.860691,
+    "draw_change_pct": -7.955480847998919,
     "draw_mean_ratio_95ci": null
   },
   {
@@ -1410,7 +1419,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 5,
@@ -1445,7 +1454,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 5,
@@ -1480,7 +1489,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": true,
     "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 5,

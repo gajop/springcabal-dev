@@ -135,12 +135,12 @@
     "game": "Gravitas.sdd",
     "branch": "master",
     "public_branch": "master",
-    "head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+    "head": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
     "remote": "git@github.com:SpringCabal/Gravitas.git",
-    "remote_head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+    "remote_head": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T22:28:27.296616+00:00"
+    "checked_utc": "2026-10-30T19:29:33.289620+00:00"
   },
   {
     "game": "Gravitas-wasm.sdd",
