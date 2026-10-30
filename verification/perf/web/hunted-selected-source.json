@@ -164,5 +164,223 @@
       ]
     }
   ],
-  "decision": "Match incremental food indexing and sorted roster caching; publish matching state and cache native movement changes as Lua already does. Source A/B whole-frame differences are inconclusive; no speed gain claimed."
+  "decision": "Match incremental food indexing and sorted roster caching; publish matching state and cache native movement changes as Lua already does. Source A/B whole-frame differences are inconclusive; no speed gain claimed.",
+  "lua_selection": {
+    "utc": "2026-10-30T21:18:15.978701+00:00",
+    "reviewed": true,
+    "selected_lua": "02009c4793e6de5e0dcb20517e126244626ebbef",
+    "reason": "Pass known frame/definition without an all-unit cache. Five strict stress pairs improve whole-frame time, normal whole-frame interval crosses one. Existing controls and both401-sample full-detail world comparisons pass. Reject the all-unit-cache variant; no demonstrated stress gain and a normal regression.",
+    "source_results": [
+      {
+        "id": "hunted-lua-known-definition-queries-1x",
+        "title": "Hunted",
+        "load": "1\u00d7",
+        "backends": [
+          "lua"
+        ],
+        "adopted": null,
+        "change": "Pass the known AI frame and immutable rabbit definition directly; remove repeated validity/definition/frame queries without an all-unit cache table. Rust already owns its rabbit definition and frame. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+        "candidate": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "base": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+        "backend": "lua",
+        "measured_rounds": 5,
+        "planned_rounds": 5,
+        "attempted_phase_pairs": 11,
+        "evidence": [
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-0-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-0-block-0/after/hunted-00-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-1-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-1-block-0/after/hunted-00-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-2-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-2-block-0/after/hunted-00-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-3-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-3-block-0/after/hunted-01-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-4-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/1x-round-4-block-0/after/hunted-00-lua"
+          }
+        ],
+        "wall_before_ms": 0.9852783333333334,
+        "wall_after_ms": 0.9899899999999998,
+        "wall_change_pct": -0.07997709130772579,
+        "wall_mean_ratio_95ci": [
+          0.9987673370364034,
+          1.0097514614145564
+        ],
+        "sim_before_ms": 0.276692,
+        "sim_after_ms": 0.278783,
+        "sim_change_pct": 0.9680924269312996,
+        "sim_mean_ratio_95ci": [
+          0.9947119159689886,
+          1.01465186459735
+        ],
+        "draw_before_ms": 0.654573,
+        "draw_after_ms": 0.6570349999999999,
+        "draw_change_pct": 0.3608002088035134,
+        "draw_mean_ratio_95ci": [
+          0.9919980943984386,
+          1.008973300610182
+        ]
+      },
+      {
+        "id": "hunted-lua-known-definition-queries-10x",
+        "title": "Hunted",
+        "load": "10\u00d7",
+        "backends": [
+          "lua"
+        ],
+        "adopted": null,
+        "change": "Pass the known AI frame and immutable rabbit definition directly; remove repeated validity/definition/frame queries without an all-unit cache table. Rust already owns its rabbit definition and frame. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+        "candidate": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "base": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+        "backend": "lua",
+        "measured_rounds": 5,
+        "planned_rounds": 5,
+        "attempted_phase_pairs": 11,
+        "evidence": [
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-0-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-0-block-0/after/hunted-00-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-1-block-0/before/hunted-01-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-1-block-0/after/hunted-00-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-2-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-2-block-0/after/hunted-00-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-3-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-3-block-0/after/hunted-00-lua"
+          },
+          {
+            "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-4-block-0/before/hunted-00-lua",
+            "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition/queries/10x-round-4-block-0/after/hunted-00-lua"
+          }
+        ],
+        "wall_before_ms": 6.915445,
+        "wall_after_ms": 6.8913899999999995,
+        "wall_change_pct": -1.1243372015760533,
+        "wall_mean_ratio_95ci": [
+          0.9877241378331743,
+          0.9958551127581727
+        ],
+        "sim_before_ms": 2.993011,
+        "sim_after_ms": 2.976864,
+        "sim_change_pct": -1.1166658582641875,
+        "sim_mean_ratio_95ci": [
+          0.9874234284593602,
+          0.9975711475251342
+        ],
+        "draw_before_ms": 3.828351,
+        "draw_after_ms": 3.8047310000000003,
+        "draw_change_pct": -0.6838455527209297,
+        "draw_mean_ratio_95ci": [
+          0.9884205760299412,
+          0.9979263998799869
+        ]
+      }
+    ],
+    "controls": {
+      "passed": true,
+      "cases": [
+        {
+          "case": "controls",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-lua-known-definition/check-controls-0",
+          "workers": 1,
+          "jobs": "off"
+        }
+      ]
+    },
+    "worlds": {
+      "passed": true,
+      "results": [
+        {
+          "load": 1,
+          "recordings": {
+            "wasm": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition-worlds/1x-r0/hunted-00-wasm",
+            "lua": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition-worlds/1x-r0/hunted-00-lua"
+          },
+          "comparison": {
+            "sample_count": 401,
+            "first_differences": {},
+            "different_samples": {},
+            "examples": {}
+          }
+        },
+        {
+          "load": 10,
+          "recordings": {
+            "wasm": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition-worlds/10x-r0/hunted-00-wasm",
+            "lua": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-known-definition-worlds/10x-r0/hunted-00-lua"
+          },
+          "comparison": {
+            "sample_count": 401,
+            "first_differences": {},
+            "different_samples": {},
+            "examples": {}
+          }
+        }
+      ]
+    },
+    "public_heads": {
+      "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+      "Hunted-wasm.sdd": "557bda6a5cca611363f665c0ca00687cc51748ad"
+    },
+    "normal_modules": {
+      "LuaRules/wasm/hunted-rules.wasm": "86bacda5532ef90d3d6c3c676a401bf7e45278afb03afb9f49dac4867a36d85f",
+      "LuaUI/wasm/hunted-ui.wasm": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d",
+      "LuaRules/wasm/hunted-jobs.wasm": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
+    },
+    "normal_modules_identical_to_tested_source": true
+  },
+  "baseline_source_audit": {
+    "utc": "2026-10-30T21:04:47.803256+00:00",
+    "commit": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "checked_blobs": 484,
+    "missing": [],
+    "different": [],
+    "passed": true
+  },
+  "staging_exclusion": {
+    "utc": "2026-10-30T21:03:31.428730+00:00",
+    "incident": "Known-definition staging followed a baseline Lua-directory symlink. Exactly two frozen baseline files were overwritten. Both restored byte-for-byte from public577 before resuming; all captures from the affected staging interval are excluded. No game source repository was changed.",
+    "repairs": [
+      {
+        "file": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/final-pinned-hunted-games/Hunted.sdd/LuaRules/Gadgets/rabbit_ai.lua",
+        "was": "6470ead06619e94dcb56a85c1c02115a3ffda7b833246ba503ccc124ddc6e96e",
+        "restored": "a19e69ff2241f00fd97a7ffee7268661e5fd5ceafae143c5ee8d032611a3399a"
+      },
+      {
+        "file": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/final-pinned-hunted-games/Hunted.sdd/LuaRules/Gadgets/unit_attributes.lua",
+        "was": "5ce0e07f9cd4debd3180af051f69918838fb943419ba4d4742f64334d50d575b",
+        "restored": "f3d9f344e00ce8adb6c3d094495bcf207f07d970f77fd2ff679882ac5c240df7"
+      }
+    ],
+    "excluded_manifest_rounds": [
+      {
+        "id": "hunted-lua-queries-v2-queries-10x",
+        "round": 3,
+        "pair": {
+          "after": [
+            "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-queries-v2/queries/10x-round-3-block-1/after"
+          ],
+          "before": [
+            "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-queries-v2/queries/10x-round-3-block-1/before"
+          ]
+        }
+      }
+    ],
+    "invalid_raw_prefix": "perf-runs/2026-10-30-night-v4-attempts/hunted-lua-queries-v2/queries/10x-round-3-block-1",
+    "candidate_fixed_full_copy": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-lua-known-definition/queries/after-games/Hunted.sdd"
+  }
 }
