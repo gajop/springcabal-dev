@@ -1020,7 +1020,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1046,7 +1046,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1142,7 +1142,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1168,7 +1168,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1194,7 +1194,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1220,7 +1220,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1246,7 +1246,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1272,7 +1272,7 @@
       "lua"
     ],
     "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs.",
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
