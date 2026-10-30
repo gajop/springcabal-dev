@@ -25,12 +25,12 @@
     "game": "ToTheLastDrop.sdd",
     "branch": "master",
     "public_branch": "master",
-    "head": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
+    "head": "15c0e01991d48720407c2db574c8195fb9ece14f",
     "remote": "git@github.com:SpringCabal/LD43.git",
-    "remote_head": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
+    "remote_head": "15c0e01991d48720407c2db574c8195fb9ece14f",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-30T20:39:50.028232+00:00"
+    "checked_utc": "2026-10-30T23:03:46.874550+00:00"
   },
   {
     "game": "ToTheLastDrop-wasm.sdd",
