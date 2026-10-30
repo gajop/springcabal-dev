@@ -58,6 +58,12 @@ including live children and reaped-child time. Samples and the guard's source
 hash are recorded; missing or inconsistent counters reject a capture. Older
 runs without this guard remain labeled with their original pressure policy.
 
+CPU activity is guarded from launch through the first CPU sample after the
+recorded final-frame marker, including the interval that straddles that marker.
+Later shutdown samples remain saved but do not reject already completed frames.
+A missing or incomplete marker retains the full-process CPU guard. Complete
+frames, draws, timing markers and a clean engine exit are still required.
+
 `profile_export.py --buildid-dir ...` resolves the pinned engine's matching debug
 symbols and injects Wasmtime JIT names. Its flame graph retains actual sampled
 stacks and explicit unresolved frames. It does not invent a complete call hierarchy

@@ -1,0 +1,102 @@
+{
+  "policy": "CPU background use guarded from launch through first CPU sample after the recorded final-frame marker. The straddling sample stays guarded. Missing or malformed markers keep the full-process guard. GPU and CPU-pressure checks remain full-process. Raw shutdown activity remains saved.",
+  "limit_cores": 0.5,
+  "quiet_seconds": 10,
+  "framework_tests_passed": 56,
+  "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+  "guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+  "old_rejections_unchanged": [
+    {
+      "capture": "perf-runs/2026-10-30-night-v3-attempts/sources/ttld-scalar-births/10x-round-0-block-0/after/ttld-00-lua",
+      "recorded_ok": false,
+      "end_marker": [
+        "[t=00:00:53.065650][f=0000900] [PerfWindow] end frame=900"
+      ],
+      "busy_samples": [
+        {
+          "time": "2026-10-30T19:35:07.709470+00:00",
+          "valid": true,
+          "interval_seconds": 0.5029808309627697,
+          "total_busy_cores": 1.3519401896457823,
+          "own_process_tree_cores": 0.8151404084628981,
+          "background_cpu_cores": 0.5367997811828842
+        }
+      ]
+    },
+    {
+      "capture": "perf-runs/2026-10-30-night-v3-attempts/sources/ttld-scalar-births/10x-round-0-block-0/after/ttld-01-lua",
+      "recorded_ok": false,
+      "end_marker": [
+        "[t=00:00:53.024028][f=0000900] [PerfWindow] end frame=900"
+      ],
+      "busy_samples": [
+        {
+          "time": "2026-10-30T19:37:00.523238+00:00",
+          "valid": true,
+          "interval_seconds": 0.5031323510920629,
+          "total_busy_cores": 1.3515330479625112,
+          "own_process_tree_cores": 0.7353929819796016,
+          "background_cpu_cores": 0.6161400659829095
+        }
+      ]
+    },
+    {
+      "capture": "perf-runs/2026-10-30-night-v3-attempts/sources/ttld-scalar-births/10x-round-0-block-0/after/ttld-02-lua",
+      "recorded_ok": false,
+      "end_marker": [
+        "[t=00:00:52.765353][f=0000900] [PerfWindow] end frame=900"
+      ],
+      "busy_samples": [
+        {
+          "time": "2026-10-30T19:38:06.249431+00:00",
+          "valid": true,
+          "interval_seconds": 0.5036534699611366,
+          "total_busy_cores": 0.9133263790190803,
+          "own_process_tree_cores": 0.3772435043774462,
+          "background_cpu_cores": 0.5360828746416341
+        }
+      ]
+    },
+    {
+      "capture": "perf-runs/2026-10-30-night-v3-attempts/sources/ttld-scalar-births/10x-round-0-block-0/after/ttld-03-lua",
+      "recorded_ok": false,
+      "end_marker": [
+        "[t=00:00:53.105107][f=0000900] [PerfWindow] end frame=900"
+      ],
+      "busy_samples": [
+        {
+          "time": "2026-10-30T19:39:11.487341+00:00",
+          "valid": true,
+          "interval_seconds": 0.5086233189795166,
+          "total_busy_cores": 1.101011257453873,
+          "own_process_tree_cores": 0.5308447134152603,
+          "background_cpu_cores": 0.5701665440386129
+        }
+      ]
+    }
+  ],
+  "clean_diagnostic": {
+    "capture": "perf-runs/2026-10-30-cpu-window-clean-diagnostic/ttld-00-lua",
+    "ok": true,
+    "contended": false,
+    "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+    "cpu_guard_window": {
+      "policy": "launch through first CPU sample after final frame marker",
+      "end_frame": 900,
+      "end_marker": "[t=00:00:52.807502][f=0000900] [PerfWindow] end frame=900",
+      "closed_after_sample_index": 106
+    }
+  },
+  "in_window_cpu_rejection": {
+    "capture": "perf-runs/2026-10-30-cpu-window-contended-diagnostic/ttld-00-lua",
+    "passed": true,
+    "errors": [
+      "Background CPU activity interrupted capture",
+      "Frame stepping failed: expected exactly one draw for every measured simulation frame",
+      "Expected exactly two wall-time window markers",
+      "Required frame window was not completed; timeout or early exit"
+    ],
+    "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2"
+  },
+  "diagnostics_are_timing_baselines": false
+}

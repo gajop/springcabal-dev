@@ -28,9 +28,10 @@ def read_result(path):
         result['contended'] = result['contended'] or peak > 5
         if result.get('background_cpu_guard'):
             limit = result['max_background_cpu_cores']
-            passed = bool(samples) and all(not runner.activity.busy(sample.get('cpu_activity'), limit)
-                                          for sample in samples)
-            values = [sample['cpu_activity']['background_cpu_cores'] for sample in samples
+            guarded = runner.activity.cpu_guard_samples(samples, result.get('cpu_guard_window'))
+            passed = bool(guarded) and all(not runner.activity.busy(sample.get('cpu_activity'), limit)
+                                         for sample in guarded)
+            values = [sample['cpu_activity']['background_cpu_cores'] for sample in guarded
                       if sample.get('cpu_activity', {}).get('valid')]
             result['background_cpu_review'] = {'max_cores': max(values, default=None), 'passed': passed}
             result['contended'] = result['contended'] or not passed

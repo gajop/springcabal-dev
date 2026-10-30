@@ -90,6 +90,48 @@ class EquivalenceTests(unittest.TestCase):
             (root/'host-samples.json').unlink()
             self.assertTrue(report.read_result(path)['contended'])
 
+    def test_cpu_window_requires_a_complete_matching_marker_and_guards_crossing_sample(self):
+        with tempfile.TemporaryDirectory() as directory:
+            log=Path(directory)/'engine.log'
+            window=activity.CaptureWindow(900)
+            log.write_text('[t=00:00:53.000000][f=0000899] [PerfWindow] end frame=899\n')
+            window.poll(log);window.after_sample(0)
+            self.assertTrue(window.guarded)
+            marker='[t=00:00:54.000000][f=0000900] [PerfWindow] end frame=900'
+            with log.open('a') as stream:stream.write(marker)
+            window.poll(log);window.after_sample(1)
+            self.assertTrue(window.guarded,'a partial log line cannot close the guard')
+            with log.open('a') as stream:stream.write('\n')
+            window.poll(log)
+            self.assertTrue(window.guarded,'the CPU interval straddling the marker is still guarded')
+            samples=[{'cpu_activity':{'valid':True,'background_cpu_cores':cores}}
+                     for cores in [.1,.2,.8,3]]
+            window.after_sample(2)
+            self.assertFalse(window.guarded)
+            guarded=activity.cpu_guard_samples(samples,window.metadata())
+            self.assertEqual(guarded,samples[:3])
+            self.assertTrue(any(activity.busy(s['cpu_activity'],.5) for s in guarded))
+
+    def test_post_window_cpu_is_retained_without_rejecting_already_completed_frames(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);path=root/'result.json'
+            samples=[{'cpu_pressure':'some avg10=0.00','cpu_activity':{'valid':True,'background_cpu_cores':cores}}
+                     for cores in [.1,.3,2]]
+            marker='[t=00:00:54.000000][f=0000900] [PerfWindow] end frame=900'
+            window={'policy':activity.WINDOW_POLICY,'end_frame':900,'end_marker':marker,'closed_after_sample_index':1}
+            original={'ok':True,'contended':False,'background_cpu_guard':True,'max_background_cpu_cores':.5,'cpu_guard_window':window}
+            path.write_text(json.dumps(original));telemetry=root/'host-samples.json';telemetry.write_text(json.dumps(samples))
+            reviewed=report.read_result(path)
+            self.assertFalse(reviewed['contended'])
+            self.assertEqual(reviewed['background_cpu_review'],{'max_cores':.3,'passed':True})
+            self.assertEqual(json.loads(telemetry.read_text()),samples)
+            self.assertEqual(json.loads(path.read_text()),original)
+            # Missing or malformed boundary evidence retains the old full-process guard.
+            for bad in [None,dict(window,end_marker=None),dict(window,end_frame=899),
+                        dict(window,closed_after_sample_index=99),dict(window,policy='unknown')]:
+                original['cpu_guard_window']=bad;path.write_text(json.dumps(original))
+                self.assertTrue(report.read_result(path)['contended'])
+
     def test_normal_and_stress_jobs_captures_resolve_to_their_scene(self):
         for name, scene in [('hunted-1x-jobs', 'hunted'),
                             ('hunted-10x-jobs', 'hunted10'),

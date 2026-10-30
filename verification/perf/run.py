@@ -403,7 +403,7 @@ def run_locked(a,lease):
  stamp={'engine':str(binary),'engine_sha256':sha(binary),'engine_commit':revision(ENGINE),
   'cpu_pressure_source':str(pressure_path),
   'cpu_pressure_policy':'maximum of global and selected scope, avg10 <= 5',
-  'cpu_activity_policy':{'max_background_cpu_cores':a.max_background_cpu_cores,'quiet_seconds':10,'excludes':'runner process tree including live and reaped children'} if a.wait_for_idle else None,
+  'cpu_activity_policy':{'max_background_cpu_cores':a.max_background_cpu_cores,'quiet_seconds':10,'excludes':'runner process tree including live and reaped children','window':activity.WINDOW_POLICY} if a.wait_for_idle else None,
   'resource_guard_sha256':sha(Path(activity.__file__)),
   'engine_source':str(ENGINE.resolve()),
   'framework_commit':revision(PROJECT),'runner_sha256':sha(Path(__file__)),
@@ -507,6 +507,7 @@ def run_locked(a,lease):
      disk_error=None;resource_interruption=None
      launched=time.monotonic()
      cpu_activity=activity.CpuActivity() if a.wait_for_idle else None
+     cpu_window=activity.CaptureWindow(a.frames) if cpu_activity else None
      with (directory/'engine.log').open('wb') as log:
       process=subprocess.Popen(command,env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
       gpu_monitor=GpuMonitor(process.pid) if a.wait_for_gpu_idle else None
@@ -515,6 +516,7 @@ def run_locked(a,lease):
         if time.monotonic()>=min(deadline,launched+a.timeout):break
         time.sleep(.02 if capture else .5)
         if capture:capture.poll(directory/'engine.log')
+        if cpu_window:cpu_window.poll(directory/'engine.log')
         if time.monotonic()-(samples[-1].get('sample_monotonic',launched) if samples else launched)>.5:
          if shutil.disk_usage(output).free < 20*1024**3:
           disk_error='Free disk space fell below the 20 GiB emergency floor';break
@@ -522,8 +524,9 @@ def run_locked(a,lease):
          if cpu_activity:sample['cpu_activity']=cpu_activity.sample()
          if a.wait_for_idle and pressure(sample)>5:
           resource_interruption='CPU pressure interrupted capture';break
-         if a.wait_for_idle and activity.busy(sample.get('cpu_activity'),a.max_background_cpu_cores):
+         if a.wait_for_idle and cpu_window.guarded and activity.busy(sample.get('cpu_activity'),a.max_background_cpu_cores):
           resource_interruption='Background CPU activity interrupted capture';break
+         if cpu_window:cpu_window.after_sample(len(samples)-1)
          pid=engine_pid(process.pid,binary)
          value=process_memory(pid) if pid else None
          if value:memory.append(value)
@@ -578,7 +581,8 @@ def run_locked(a,lease):
      ok=process.returncode==0 and frames==list(range(a.frames+1)) and not errors
      if not ok and frames!=list(range(a.frames+1)):errors.append('Required frame window was not completed; timeout or early exit')
      gpu_contended=any(s['foreign'] for s in gpu_samples)
-     background_contended=a.wait_for_idle and any(activity.busy(s.get('cpu_activity'),a.max_background_cpu_cores) for s in samples)
+     cpu_window_metadata=cpu_window.metadata() if cpu_window else None
+     background_contended=a.wait_for_idle and any(activity.busy(s.get('cpu_activity'),a.max_background_cpu_cores) for s in activity.cpu_guard_samples(samples,cpu_window_metadata))
      contended=any(pressure(s)>5 for s in samples) or gpu_contended or background_contended
      metrics={}
      for kind in ('sim','draw'):
@@ -612,6 +616,7 @@ def run_locked(a,lease):
      result['gpu_quiet_seconds']=10 if a.wait_for_gpu_idle else None
      result['gpu_contended']=gpu_contended
      result['background_cpu_guard']=a.wait_for_idle
+     result['cpu_guard_window']=cpu_window_metadata
      result['max_background_cpu_cores']=a.max_background_cpu_cores
      result['background_cpu_contended']=background_contended
      if a.record_world:

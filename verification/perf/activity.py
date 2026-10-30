@@ -1,7 +1,69 @@
 """Measure background CPU use, excluding this runner and its child processes."""
 import os
 from pathlib import Path
+import re
 import time
+
+
+WINDOW_POLICY = 'launch through first CPU sample after final frame marker'
+
+
+def end_marker(line, frame):
+    if not isinstance(line, str):
+        return False
+    return bool(re.fullmatch(
+        r'\[t=\d+:\d+:\d+\.\d+\]\[f=0*'+str(frame)+
+        r'\] \[PerfWindow\] end frame='+str(frame), line))
+
+
+class CaptureWindow:
+    """Keep the sample straddling the final marker inside the CPU guard.
+
+    Shutdown remains recorded, but cannot interrupt frames already completed.
+    A missing, partial or wrong-frame marker keeps the whole process guarded.
+    """
+    def __init__(self, frame):
+        self.frame = frame
+        self.offset, self.tail = 0, ''
+        self.marker = None
+        self.closed_after = None
+
+    def poll(self, log):
+        if self.marker is not None:
+            return
+        with log.open(errors='replace') as stream:
+            stream.seek(self.offset)
+            self.tail += stream.read()
+            self.offset = stream.tell()
+        lines = self.tail.split('\n')
+        self.tail = lines.pop()[-4096:]
+        self.marker = next((line for line in lines if end_marker(line, self.frame)), None)
+
+    @property
+    def guarded(self):
+        return self.closed_after is None
+
+    def after_sample(self, index):
+        if self.marker is not None and self.closed_after is None:
+            self.closed_after = index
+
+    def metadata(self):
+        if self.closed_after is None:
+            return None
+        return {'policy': WINDOW_POLICY, 'end_frame': self.frame,
+                'end_marker': self.marker, 'closed_after_sample_index': self.closed_after}
+
+
+def cpu_guard_samples(samples, window=None):
+    """Review old captures in full; require a complete boundary for new ones."""
+    if not isinstance(window, dict) or window.get('policy') != WINDOW_POLICY:
+        return samples
+    frame, index = window.get('end_frame'), window.get('closed_after_sample_index')
+    if (type(frame) is not int or frame < 0 or type(index) is not int or
+            not 0 <= index < len(samples) or not samples[index].get('cpu_activity') or
+            not end_marker(window.get('end_marker', ''), frame)):
+        return samples
+    return samples[:index+1]
 
 
 def own_cpu_ticks(pid=None, proc=Path('/proc')):
