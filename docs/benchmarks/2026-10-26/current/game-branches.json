@@ -36,12 +36,12 @@
     "game": "ToTheLastDrop-wasm.sdd",
     "branch": "ttld-wasm-port",
     "public_branch": "rust",
-    "head": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+    "head": "a913000488cf0d6e36574eafa0ad35c7a0b45d6d",
     "remote": "git@github.com:SpringCabal/LD43.git",
-    "remote_head": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+    "remote_head": "a913000488cf0d6e36574eafa0ad35c7a0b45d6d",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T22:28:21.450779+00:00"
+    "checked_utc": "2026-10-30T22:28:20.649801+00:00"
   },
   {
     "game": "Flove.sdd",

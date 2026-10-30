@@ -124,5 +124,62 @@
       ]
     }
   ],
-  "decision": "Retain common scalar/immutable-palette generation, generic expression compatibility, retirement and metadata fixes. Whole-frame changes are tiny/inconclusive; no substantial game speedup claimed."
+  "decision": "Retain common scalar/immutable-palette generation, generic expression compatibility, retirement and metadata fixes. Whole-frame changes are tiny/inconclusive; no substantial game speedup claimed.",
+  "rust_scale_state_parity": {
+    "utc": "2026-10-30T22:28:20.649801+00:00",
+    "before": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+    "after": "a913000488cf0d6e36574eafa0ad35c7a0b45d6d",
+    "committed": true,
+    "pushed": true,
+    "normal_modules": {
+      "LuaRules/wasm/ttld-rules-unsynced.wasm": "a13c9d7063a014515cd5e14abed4d149c0dc0e04ec27c65eb36078f02f47314d",
+      "LuaRules/wasm/ttld-rules.wasm": "17b542ac5199ec826154dffdddfcaa088b27078d746fa6f29b7b67c53aaac748",
+      "LuaUI/wasm/ttld-ui.wasm": "5dd3acddc1cbefc2fb1b2f09b496039dcf61e7c9513b5a6df19f1eb17cb51e51"
+    },
+    "normal_modules_identical_to_tested_source": true,
+    "worlds": {
+      "passed": true,
+      "comparison": {
+        "sample_count": 151,
+        "first_differences": {},
+        "different_samples": {},
+        "examples": {}
+      },
+      "recordings": {
+        "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-ttld-scale/after-worlds-r0/ttld-00-lua",
+        "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-ttld-scale/after-worlds-r0/ttld-00-wasm"
+      },
+      "burning_house_ids": "78,317,657,1700,2144,2217,2699,3040,3129,3884,3943,3986,4640,4897,5069,5261,5450,5587,5658,6298,6653,7314,7875,7989,8105,9177,9461,9632,10432,10921,11145,11210,11589,11652,11918,12417,12767,12861,12901,13213,13497,14087,14146,14685,15191,15488,15693,15913,15982,16221,16495,16523,16974,17190,17631,18107,18193,18223,18674,18737,19069,19350,19429,19464,20298,20348,20526,20567,20628,20756,21648,22609,22744,23163,23199,23474,23590,23705,25132,26010,26476,26488,26731,27339,27879,27925,28286,28337,28495,28558,28873,28939,29046,29067,29434,29564,30207,30257,30458,30504,30631,30900,30955,31184,31651,31663"
+    },
+    "checks": {
+      "passed": true,
+      "cases": [
+        {
+          "case": "integration",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-scale-params/check-integration-0",
+          "workers": 1,
+          "jobs": "off"
+        },
+        {
+          "case": "visual",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-scale-params/check-visual-0",
+          "workers": 1,
+          "jobs": "off"
+        },
+        {
+          "case": "pose",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-scale-params/check-pose-0",
+          "workers": 1,
+          "jobs": "off"
+        },
+        {
+          "case": "lua-visual",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-scale-params/check-lua-visual-0",
+          "workers": 1,
+          "jobs": "off"
+        }
+      ]
+    },
+    "reason": "Publish the same INLOS scale_horizontal/scale_vertical unit rules parameters as Lua. Rendering was already scaled; this restores the public state contract. Cache immutable definition scales and publish once on unit creation."
+  }
 }
