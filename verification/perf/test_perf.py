@@ -1,4 +1,5 @@
 import unittest
+import csv
 import json
 from pathlib import Path
 import tempfile
@@ -156,6 +157,19 @@ class EquivalenceTests(unittest.TestCase):
             report.write_rows(output, [])
             self.assertEqual(json.loads(output.with_suffix('.json').read_text()), [])
             self.assertEqual(output.with_suffix('.csv').read_text(), '')
+
+    def test_report_exports_optional_source_revision_metadata(self):
+        rows = [{'id': 'earlier', 'measured_rounds': 5},
+                {'id': 'isolated', 'measured_rounds': 0, 'base': 'old', 'candidate': 'new'}]
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)/'optimizations'
+            report.write_rows(output, rows)
+            self.assertEqual(json.loads(output.with_suffix('.json').read_text()), rows)
+            with output.with_suffix('.csv').open() as stream:
+                exported = list(csv.DictReader(stream))
+            self.assertEqual(exported[0]['candidate'], '')
+            self.assertEqual(exported[1]['base'], 'old')
+            self.assertEqual(exported[1]['candidate'], 'new')
 
     def jit_fixture(self, root, loads, flags=0, extra=b''):
         data = struct.pack('<6I2Q', 0x4a695444, 1, 40, 62, 0, 42, 0, flags)

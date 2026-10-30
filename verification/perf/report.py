@@ -227,7 +227,8 @@ def write_rows(path, rows):
         path.with_suffix('.json').write_text('[]\n')
         return
     with path.with_suffix('.csv').open('w') as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator='\n')
+        fields = list(dict.fromkeys(key for row in rows for key in row))
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator='\n')
         writer.writeheader()
         writer.writerows(rows)
     path.with_suffix('.json').write_text(json.dumps(rows, indent=2)+'\n')
