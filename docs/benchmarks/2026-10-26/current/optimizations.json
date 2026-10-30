@@ -1022,21 +1022,30 @@
     "adopted": null,
     "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
-    "measured_rounds": 4,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 10,
-    "wall_before_ms": 58.12654500000001,
-    "wall_after_ms": 57.844575000000006,
-    "wall_change_pct": -0.49098246004648516,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 36.3775105,
-    "sim_after_ms": 36.0729825,
-    "sim_change_pct": -0.8261686339612107,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 10.031695,
-    "draw_after_ms": 9.9798305,
-    "draw_change_pct": -0.3740830275556162,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 12,
+    "wall_before_ms": 58.101598333333335,
+    "wall_after_ms": 57.89651833333335,
+    "wall_change_pct": -0.262906265965579,
+    "wall_mean_ratio_95ci": [
+      0.9933612317963526,
+      1.0008756971433141
+    ],
+    "sim_before_ms": 36.366998,
+    "sim_after_ms": 36.224508,
+    "sim_change_pct": -0.6147374063032562,
+    "sim_mean_ratio_95ci": [
+      0.9903785323050398,
+      1.0017374937355228
+    ],
+    "draw_before_ms": 10.016102,
+    "draw_after_ms": 10.014308000000002,
+    "draw_change_pct": -0.017911159451033942,
+    "draw_mean_ratio_95ci": [
+      0.9889192348695933,
+      1.004444900271713
+    ]
   },
   {
     "id": "ttld-scalar-births-1-cpu-idle-window-v4",
@@ -1048,21 +1057,30 @@
     "adopted": null,
     "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
-    "measured_rounds": 0,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 5.475796666666666,
+    "wall_after_ms": 5.472529999999998,
+    "wall_change_pct": -0.05965646399095359,
+    "wall_mean_ratio_95ci": [
+      0.9991039192155656,
+      0.9997525672142519
+    ],
+    "sim_before_ms": 1.428926,
+    "sim_after_ms": 1.4402080000000002,
+    "sim_change_pct": 0.7895440351704863,
+    "sim_mean_ratio_95ci": [
+      0.986047083457642,
+      1.0165134326709035
+    ],
+    "draw_before_ms": 3.8500569999999996,
+    "draw_after_ms": 3.860296,
+    "draw_change_pct": 0.7492926720775284,
+    "draw_mean_ratio_95ci": [
+      0.9953303553359341,
+      1.0120455558448807
+    ]
   },
   {
     "id": "hunted-isolated-order-only-1x",
@@ -1289,21 +1307,30 @@
     "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
     "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
     "backend": "wasm",
-    "measured_rounds": 0,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 10,
+    "wall_before_ms": 0.8692666666666667,
+    "wall_after_ms": 0.8695850000000002,
+    "wall_change_pct": -0.04085844945063144,
+    "wall_mean_ratio_95ci": [
+      0.9974372831476275,
+      1.0051890566575306
+    ],
+    "sim_before_ms": 0.20802199999999998,
+    "sim_after_ms": 0.20693,
+    "sim_change_pct": 0.6079458473337018,
+    "sim_mean_ratio_95ci": [
+      0.9939963793360744,
+      1.0094210717761176
+    ],
+    "draw_before_ms": 0.6166,
+    "draw_after_ms": 0.616349,
+    "draw_change_pct": 0.7835232906679757,
+    "draw_mean_ratio_95ci": [
+      0.99313529195334,
+      1.0088460086780093
+    ]
   },
   {
     "id": "hunted-incremental-v4-incremental-10x",
@@ -1317,20 +1344,20 @@
     "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
     "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
     "backend": "wasm",
-    "measured_rounds": 0,
+    "measured_rounds": 3,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
+    "attempted_phase_pairs": 6,
+    "wall_before_ms": 3.413515,
+    "wall_after_ms": 3.46525,
+    "wall_change_pct": 1.8506181136999977,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
+    "sim_before_ms": 1.49093,
+    "sim_after_ms": 1.471173,
+    "sim_change_pct": -1.325146049781012,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
+    "draw_before_ms": 1.754421,
+    "draw_after_ms": 1.887933,
+    "draw_change_pct": 9.493543866143227,
     "draw_mean_ratio_95ci": null
   },
   {
