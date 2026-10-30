@@ -3,12 +3,12 @@
     "game": "Hunted.sdd",
     "branch": "master",
     "public_branch": "master",
-    "head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "head": "02009c4793e6de5e0dcb20517e126244626ebbef",
     "remote": "git@github.com:SpringCabal/Hunted.git",
-    "remote_head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "remote_head": "02009c4793e6de5e0dcb20517e126244626ebbef",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T22:28:21.476918+00:00"
+    "checked_utc": "2026-10-30T21:18:15.978701+00:00"
   },
   {
     "game": "Hunted-wasm.sdd",

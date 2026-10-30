@@ -1638,7 +1638,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": false,
     "change": "Pass the known AI frame and cache static unit definitions with creation/death invalidation, as Rust does. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
     "candidate": "a924fd3b01d7cc8d099179848115890f8325b4c3",
     "base": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
@@ -1675,7 +1675,7 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
+    "adopted": false,
     "change": "Pass the known AI frame and cache static unit definitions with creation/death invalidation, as Rust does. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
     "candidate": "a924fd3b01d7cc8d099179848115890f8325b4c3",
     "base": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
@@ -1797,5 +1797,79 @@
     "draw_after_ms": null,
     "draw_change_pct": null,
     "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "hunted-lua-known-definition-queries-1x",
+    "title": "Hunted",
+    "load": "1\u00d7",
+    "backends": [
+      "lua"
+    ],
+    "adopted": true,
+    "change": "Pass the known AI frame and immutable rabbit definition directly; remove repeated validity/definition/frame queries without an all-unit cache table. Rust already owns its rabbit definition and frame. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+    "candidate": "02009c4793e6de5e0dcb20517e126244626ebbef",
+    "base": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 0.9852783333333334,
+    "wall_after_ms": 0.9899899999999998,
+    "wall_change_pct": -0.07997709130772579,
+    "wall_mean_ratio_95ci": [
+      0.9987673370364034,
+      1.0097514614145564
+    ],
+    "sim_before_ms": 0.276692,
+    "sim_after_ms": 0.278783,
+    "sim_change_pct": 0.9680924269312996,
+    "sim_mean_ratio_95ci": [
+      0.9947119159689886,
+      1.01465186459735
+    ],
+    "draw_before_ms": 0.654573,
+    "draw_after_ms": 0.6570349999999999,
+    "draw_change_pct": 0.3608002088035134,
+    "draw_mean_ratio_95ci": [
+      0.9919980943984386,
+      1.008973300610182
+    ]
+  },
+  {
+    "id": "hunted-lua-known-definition-queries-10x",
+    "title": "Hunted",
+    "load": "10\u00d7",
+    "backends": [
+      "lua"
+    ],
+    "adopted": true,
+    "change": "Pass the known AI frame and immutable rabbit definition directly; remove repeated validity/definition/frame queries without an all-unit cache table. Rust already owns its rabbit definition and frame. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+    "candidate": "02009c4793e6de5e0dcb20517e126244626ebbef",
+    "base": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 6.915445,
+    "wall_after_ms": 6.8913899999999995,
+    "wall_change_pct": -1.1243372015760533,
+    "wall_mean_ratio_95ci": [
+      0.9877241378331743,
+      0.9958551127581727
+    ],
+    "sim_before_ms": 2.993011,
+    "sim_after_ms": 2.976864,
+    "sim_change_pct": -1.1166658582641875,
+    "sim_mean_ratio_95ci": [
+      0.9874234284593602,
+      0.9975711475251342
+    ],
+    "draw_before_ms": 3.828351,
+    "draw_after_ms": 3.8047310000000003,
+    "draw_change_pct": -0.6838455527209297,
+    "draw_mean_ratio_95ci": [
+      0.9884205760299412,
+      0.9979263998799869
+    ]
   }
 ]
