@@ -1,0 +1,67 @@
+{
+  "utc": "2026-10-30T21:07:03.048589+00:00",
+  "selected": false,
+  "reason": "Five strict stress pairs regress whole-frame time. Keep public4a per-effect Lua uploads; Rust contiguous packed births remain unchanged. The Lua candidate adds a table copy of every uploaded float; call reduction does not justify that cost.",
+  "stress": {
+    "id": "gravitas-upload-batch-v2-100x",
+    "title": "Gravitas fire",
+    "load": "100 emitters",
+    "backends": [
+      "lua"
+    ],
+    "base": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+    "candidate": "1798e2cdceaddbf8069620aa908503bed8534134",
+    "adopted": false,
+    "change": "Rejected: Combine contiguous Lua effect births into one texture upload per flush, as the Rust stream does. Immediate removal masks and all physical attributes preserved. Five paired current-engine runs under CPU-window guard9d and NVIDIA idle guards; evaluate stress first. Five stress pairs regressed whole-frame time; lower loads intentionally skipped.",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 10,
+    "evidence": [
+      {
+        "before": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-0-block-0/before/gravitas-00-lua",
+        "after": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-0-block-0/after/gravitas-00-lua"
+      },
+      {
+        "before": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-1-block-0/before/gravitas-00-lua",
+        "after": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-1-block-0/after/gravitas-00-lua"
+      },
+      {
+        "before": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-2-block-0/before/gravitas-00-lua",
+        "after": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-2-block-0/after/gravitas-00-lua"
+      },
+      {
+        "before": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-3-block-0/before/gravitas-00-lua",
+        "after": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-3-block-0/after/gravitas-00-lua"
+      },
+      {
+        "before": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-4-block-0/before/gravitas-00-lua",
+        "after": "perf-runs/2026-10-30-night-v4-attempts/gravitas-upload-batch-v2/100x-round-4-block-0/after/gravitas-00-lua"
+      }
+    ],
+    "wall_before_ms": 18.89551833333333,
+    "wall_after_ms": 19.692504999999997,
+    "wall_change_pct": 3.823852058040944,
+    "wall_mean_ratio_95ci": [
+      1.03592657561272,
+      1.0412881303348651
+    ],
+    "sim_before_ms": 0.09506999999999999,
+    "sim_after_ms": 0.11005,
+    "sim_change_pct": 12.402586127651748,
+    "sim_mean_ratio_95ci": [
+      1.0923602449456953,
+      1.303037268001583
+    ],
+    "draw_before_ms": 17.598065,
+    "draw_after_ms": 18.137697,
+    "draw_change_pct": 3.4391146363419,
+    "draw_mean_ratio_95ci": [
+      1.0304422828640618,
+      1.0357794182483124
+    ]
+  },
+  "host_checks_passed": true,
+  "fixed_image_pairs": 10,
+  "fixed_image_max_rmse": 0.0
+}

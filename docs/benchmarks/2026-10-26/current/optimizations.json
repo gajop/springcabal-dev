@@ -1680,20 +1680,122 @@
     "candidate": "a924fd3b01d7cc8d099179848115890f8325b4c3",
     "base": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
     "backend": "lua",
-    "measured_rounds": 3,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 6,
-    "wall_before_ms": 6.932501666666667,
+    "attempted_phase_pairs": 12,
+    "wall_before_ms": 6.9179200000000005,
     "wall_after_ms": 6.8973916666666675,
     "wall_change_pct": -0.29674140974935703,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 3.008699,
+    "wall_mean_ratio_95ci": [
+      0.9868122810448123,
+      1.0129492011752428
+    ],
+    "sim_before_ms": 3.005883,
     "sim_after_ms": 2.986399,
-    "sim_change_pct": -0.8248748046913335,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 3.8398220000000003,
-    "draw_after_ms": 3.814444,
+    "sim_change_pct": 0.04688993066390701,
+    "sim_mean_ratio_95ci": [
+      0.9931795073772047,
+      1.0095594761917357
+    ],
+    "draw_before_ms": 3.8328960000000003,
+    "draw_after_ms": 3.8174520000000003,
     "draw_change_pct": -0.20738436954444994,
+    "draw_mean_ratio_95ci": [
+      0.9872416307365482,
+      1.0094728150787897
+    ]
+  },
+  {
+    "id": "gravitas-upload-batch-v2-100x",
+    "title": "Gravitas fire",
+    "load": "100 emitters",
+    "backends": [
+      "lua"
+    ],
+    "base": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+    "candidate": "1798e2cdceaddbf8069620aa908503bed8534134",
+    "adopted": false,
+    "change": "Rejected: Combine contiguous Lua effect births into one texture upload per flush, as the Rust stream does. Immediate removal masks and all physical attributes preserved. Five paired current-engine runs under CPU-window guard9d and NVIDIA idle guards; evaluate stress first. Five stress pairs regressed whole-frame time; lower loads intentionally skipped.",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 10,
+    "wall_before_ms": 18.89551833333333,
+    "wall_after_ms": 19.692504999999997,
+    "wall_change_pct": 3.823852058040944,
+    "wall_mean_ratio_95ci": [
+      1.03592657561272,
+      1.0412881303348651
+    ],
+    "sim_before_ms": 0.09506999999999999,
+    "sim_after_ms": 0.11005,
+    "sim_change_pct": 12.402586127651748,
+    "sim_mean_ratio_95ci": [
+      1.0923602449456953,
+      1.303037268001583
+    ],
+    "draw_before_ms": 17.598065,
+    "draw_after_ms": 18.137697,
+    "draw_change_pct": 3.4391146363419,
+    "draw_mean_ratio_95ci": [
+      1.0304422828640618,
+      1.0357794182483124
+    ]
+  },
+  {
+    "id": "gravitas-upload-batch-v2-10x",
+    "title": "Gravitas fire",
+    "load": "10 emitters",
+    "backends": [
+      "lua"
+    ],
+    "base": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+    "candidate": "1798e2cdceaddbf8069620aa908503bed8534134",
+    "adopted": false,
+    "change": "Rejected: Combine contiguous Lua effect births into one texture upload per flush, as the Rust stream does. Immediate removal masks and all physical attributes preserved. Five paired current-engine runs under CPU-window guard9d and NVIDIA idle guards; evaluate stress first. Five stress pairs regressed whole-frame time; lower loads intentionally skipped.",
+    "backend": "lua",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "gravitas-upload-batch-v2-1x",
+    "title": "Gravitas fire",
+    "load": "1 emitters",
+    "backends": [
+      "lua"
+    ],
+    "base": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+    "candidate": "1798e2cdceaddbf8069620aa908503bed8534134",
+    "adopted": false,
+    "change": "Rejected: Combine contiguous Lua effect births into one texture upload per flush, as the Rust stream does. Immediate removal masks and all physical attributes preserved. Five paired current-engine runs under CPU-window guard9d and NVIDIA idle guards; evaluate stress first. Five stress pairs regressed whole-frame time; lower loads intentionally skipped.",
+    "backend": "lua",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
     "draw_mean_ratio_95ci": null
   }
 ]
