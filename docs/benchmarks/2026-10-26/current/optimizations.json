@@ -1344,21 +1344,30 @@
     "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
     "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
     "backend": "wasm",
-    "measured_rounds": 3,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 6,
-    "wall_before_ms": 3.413515,
-    "wall_after_ms": 3.46525,
-    "wall_change_pct": 1.8506181136999977,
-    "wall_mean_ratio_95ci": null,
+    "attempted_phase_pairs": 10,
+    "wall_before_ms": 3.4292049999999996,
+    "wall_after_ms": 3.5130699999999995,
+    "wall_change_pct": 1.642949004494687,
+    "wall_mean_ratio_95ci": [
+      0.9970672823342484,
+      1.0229298406728256
+    ],
     "sim_before_ms": 1.49093,
     "sim_after_ms": 1.471173,
     "sim_change_pct": -1.325146049781012,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 1.754421,
-    "draw_after_ms": 1.887933,
-    "draw_change_pct": 9.493543866143227,
-    "draw_mean_ratio_95ci": null
+    "sim_mean_ratio_95ci": [
+      0.9732711687975614,
+      0.9929487367593772
+    ],
+    "draw_before_ms": 1.793798,
+    "draw_after_ms": 1.916952,
+    "draw_change_pct": 4.906348020230045,
+    "draw_mean_ratio_95ci": [
+      1.0145303339165084,
+      1.0997230052158036
+    ]
   },
   {
     "id": "hunted-live-food-confirm-1x",
