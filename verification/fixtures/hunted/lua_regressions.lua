@@ -18,6 +18,9 @@ local function world(file, configure)
     local env = setmetatable({
         gadget = {}, GG = {}, Spring = {},
         gadgetHandler = {IsSyncedCode = function() return true end},
+        -- The engine exposes this alongside UnitDefNames. Rabbit AI caches
+        -- its immutable definition and passes it to the attribute handler.
+        UnitDefs = {[1] = {id = 1}},
         UnitDefNames = {rabbit = {id = 1}, carrot = {id = 2}, carrot_dropped = {id = 3},
             mine = {id = 4}, burrow = {id = 5}, carrot_carried = {id = 6}},
         Game = {mapSizeX = 6144, mapSizeZ = 6144}, CMD = {},
