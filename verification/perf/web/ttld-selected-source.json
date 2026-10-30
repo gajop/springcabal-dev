@@ -1,0 +1,128 @@
+{
+  "utc": "2026-10-30T20:39:50.028232+00:00",
+  "before": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+  "after": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
+  "committed": true,
+  "pushed": true,
+  "checks_passed": true,
+  "image_pairs": 15,
+  "max_rmse": 0,
+  "wind_bit_exact": true,
+  "source_trials": [
+    {
+      "id": "ttld-scalar-births-10-cpu-idle-window-v4",
+      "title": "To the Last Drop",
+      "load": "10\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "adopted": null,
+      "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 12,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-0-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-0-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-1-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-1-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-2-block-0/before/ttld-02-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-2-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-3-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-3-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-4-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/10x-round-4-block-0/after/ttld-00-lua"
+        }
+      ],
+      "wall_before_ms": 58.101598333333335,
+      "wall_after_ms": 57.89651833333335,
+      "wall_change_pct": -0.262906265965579,
+      "wall_mean_ratio_95ci": [
+        0.9933612317963526,
+        1.0008756971433141
+      ],
+      "sim_before_ms": 36.366998,
+      "sim_after_ms": 36.224508,
+      "sim_change_pct": -0.6147374063032562,
+      "sim_mean_ratio_95ci": [
+        0.9903785323050398,
+        1.0017374937355228
+      ],
+      "draw_before_ms": 10.016102,
+      "draw_after_ms": 10.014308000000002,
+      "draw_change_pct": -0.017911159451033942,
+      "draw_mean_ratio_95ci": [
+        0.9889192348695933,
+        1.004444900271713
+      ]
+    },
+    {
+      "id": "ttld-scalar-births-1-cpu-idle-window-v4",
+      "title": "To the Last Drop",
+      "load": "1\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "adopted": null,
+      "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: use scalar birth attributes and share immutable fire palettes; same GPU batch and random sequence. Compare against75a952b. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-0-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-0-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-1-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-1-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-2-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-2-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-3-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-3-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-4-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/sources/ttld-scalar-births/1x-round-4-block-0/after/ttld-01-lua"
+        }
+      ],
+      "wall_before_ms": 5.475796666666666,
+      "wall_after_ms": 5.472529999999998,
+      "wall_change_pct": -0.05965646399095359,
+      "wall_mean_ratio_95ci": [
+        0.9991039192155656,
+        0.9997525672142519
+      ],
+      "sim_before_ms": 1.428926,
+      "sim_after_ms": 1.4402080000000002,
+      "sim_change_pct": 0.7895440351704863,
+      "sim_mean_ratio_95ci": [
+        0.986047083457642,
+        1.0165134326709035
+      ],
+      "draw_before_ms": 3.8500569999999996,
+      "draw_after_ms": 3.860296,
+      "draw_change_pct": 0.7492926720775284,
+      "draw_mean_ratio_95ci": [
+        0.9953303553359341,
+        1.0120455558448807
+      ]
+    }
+  ],
+  "decision": "Retain common scalar/immutable-palette generation, generic expression compatibility, retirement and metadata fixes. Whole-frame changes are tiny/inconclusive; no substantial game speedup claimed."
+}

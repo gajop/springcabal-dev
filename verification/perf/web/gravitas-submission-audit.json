@@ -1,0 +1,215 @@
+{
+  "frame": 299,
+  "sources": {
+    "Gravitas.sdd": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+    "Gravitas-wasm.sdd": "9e073d8309923156d1ca49af03bb86f9aab64a02",
+    "ToTheLastDrop.sdd": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
+    "ToTheLastDrop-wasm.sdd": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba"
+  },
+  "captures": {
+    "lua": {
+      "ranges": {
+        "flame": [
+          [
+            387,
+            108
+          ],
+          [
+            0,
+            288
+          ]
+        ],
+        "distortion": [
+          [
+            84,
+            24
+          ]
+        ],
+        "smoke": [
+          [
+            390,
+            120
+          ],
+          [
+            0,
+            330
+          ]
+        ]
+      },
+      "submitted": {
+        "flame": 396,
+        "distortion": 24,
+        "smoke": 450
+      },
+      "visible": {
+        "flame": 223,
+        "distortion": 15,
+        "smoke": 295
+      },
+      "draw_count": 5,
+      "particle_upload_bytes_through_frame299": 419664,
+      "uploads_by_group": {
+        "flame": 227808,
+        "distortion": 12096,
+        "smoke": 179760
+      }
+    },
+    "wasm": {
+      "ranges": {
+        "flame": [
+          [
+            396,
+            99
+          ],
+          [
+            0,
+            297
+          ]
+        ],
+        "distortion": [
+          [
+            84,
+            24
+          ]
+        ],
+        "smoke": [
+          [
+            390,
+            120
+          ],
+          [
+            0,
+            330
+          ]
+        ]
+      },
+      "submitted": {
+        "flame": 396,
+        "distortion": 24,
+        "smoke": 450
+      },
+      "visible": {
+        "flame": 223,
+        "distortion": 15,
+        "smoke": 295
+      },
+      "draw_count": 5,
+      "particle_upload_bytes_through_frame299": 419664,
+      "uploads_by_group": {
+        "flame": 228144,
+        "distortion": 12096,
+        "smoke": 179424
+      }
+    }
+  },
+  "visible_records": {
+    "flame": {
+      "counts_match": true,
+      "max_difference_per_field": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.9073486328125e-06,
+        1.9073486328125e-06,
+        1.9073486328125e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "first_difference_over_0_001": null
+    },
+    "smoke": {
+      "counts_match": true,
+      "max_difference_per_field": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.814697265625e-06,
+        3.814697265625e-06,
+        3.814697265625e-06,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "first_difference_over_0_001": null
+    },
+    "distortion": {
+      "counts_match": true,
+      "max_difference_per_field": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.76837158203125e-07,
+        0.0,
+        1.1920928955078125e-07,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "first_difference_over_0_001": null
+    }
+  },
+  "scope": "Diagnostic GL call audit, never timing data. Tracer warnings retain failed result status. Ring ranges may differ; same live records and submitted counts are checked explicitly.",
+  "vertex_shader_sha256": "e67da23933f39e1038701f8f4751d0c2a323e678125cd54276303748fe01ba58",
+  "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+  "trace_root": "perf-runs/2026-10-30-night-v4-gravitas-selected-gl",
+  "inspection_script": "codex-work/night-2026-10-30/v4/compare-selected-gl.py",
+  "lua_batch_trial": "Contiguous per-texture upload aggregation is under a separate source A/B trial; this audit describes public4a Lua and9e Rust only."
+}
