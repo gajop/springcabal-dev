@@ -338,8 +338,8 @@
     "backends": [
       "wasm"
     ],
-    "adopted": null,
-    "change": "Trial: match Lua effect lifetimes and per-effect GPU packet retention. Keep birth times instead of updating and compacting every particle each frame. The CPU reference and jobs compute ages only when drawing.",
+    "adopted": true,
+    "change": "Trial: match Lua effect lifetimes and per-effect GPU packet retention. Keep birth times instead of updating and compacting every particle each frame. The CPU reference and jobs compute ages only when drawing. Already present in the public Rust runtime and normal builds; these earlier timing results retain their historical pressure-only policy.",
     "backend": "wasm",
     "measured_rounds": 5,
     "planned_rounds": 5,
@@ -373,8 +373,8 @@
     "backends": [
       "wasm"
     ],
-    "adopted": null,
-    "change": "Trial: match Lua effect lifetimes and per-effect GPU packet retention. Keep birth times instead of updating and compacting every particle each frame. The CPU reference and jobs compute ages only when drawing.",
+    "adopted": true,
+    "change": "Trial: match Lua effect lifetimes and per-effect GPU packet retention. Keep birth times instead of updating and compacting every particle each frame. The CPU reference and jobs compute ages only when drawing. Already present in the public Rust runtime and normal builds; these earlier timing results retain their historical pressure-only policy.",
     "backend": "wasm",
     "measured_rounds": 5,
     "planned_rounds": 5,
@@ -408,8 +408,8 @@
     "backends": [
       "wasm"
     ],
-    "adopted": null,
-    "change": "Trial: match Lua effect lifetimes and per-effect GPU packet retention. Keep birth times instead of updating and compacting every particle each frame. The CPU reference and jobs compute ages only when drawing.",
+    "adopted": true,
+    "change": "Trial: match Lua effect lifetimes and per-effect GPU packet retention. Keep birth times instead of updating and compacting every particle each frame. The CPU reference and jobs compute ages only when drawing. Already present in the public Rust runtime and normal builds; these earlier timing results retain their historical pressure-only policy.",
     "backend": "wasm",
     "measured_rounds": 5,
     "planned_rounds": 5,
@@ -1278,6 +1278,62 @@
     "draw_mean_ratio_95ci": null
   },
   {
+    "id": "hunted-incremental-incremental-1x",
+    "title": "Hunted",
+    "load": "1\u00d7",
+    "backends": [
+      "wasm"
+    ],
+    "adopted": null,
+    "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+    "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
+    "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+    "backend": "wasm",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
+  },
+  {
+    "id": "hunted-incremental-incremental-10x",
+    "title": "Hunted",
+    "load": "10\u00d7",
+    "backends": [
+      "wasm"
+    ],
+    "adopted": null,
+    "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+    "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
+    "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+    "backend": "wasm",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
+  },
+  {
     "id": "hunted-live-food-confirm-1x",
     "title": "Hunted",
     "load": "1\u00d7",
@@ -1459,24 +1515,33 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+    "adopted": false,
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards. Rejected: five strict 100-emitter pairs show +0.833% whole-frame time (mean-ratio 95% interval1.00617\u20131.01050); the existing packer remains. Lower-load trials were skipped after the stress regression.",
     "backend": "lua",
-    "measured_rounds": 4,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 12,
-    "wall_before_ms": 19.136441666666666,
-    "wall_after_ms": 19.291160833333333,
-    "wall_change_pct": 0.7818691295653046,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 0.094756,
-    "sim_after_ms": 0.1781725,
-    "sim_change_pct": 88.35961602318507,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 17.7461505,
-    "draw_after_ms": 17.7481575,
-    "draw_change_pct": 0.013064726152411943,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 14,
+    "wall_before_ms": 19.118713333333332,
+    "wall_after_ms": 19.29027166666667,
+    "wall_change_pct": 0.8327748366233623,
+    "wall_mean_ratio_95ci": [
+      1.0061674687320803,
+      1.0104981187643076
+    ],
+    "sim_before_ms": 0.091203,
+    "sim_after_ms": 0.179748,
+    "sim_change_pct": 93.87941066684233,
+    "sim_mean_ratio_95ci": [
+      1.7762609908806797,
+      2.04661432594667
+    ],
+    "draw_before_ms": 17.745701,
+    "draw_after_ms": 17.714294000000002,
+    "draw_change_pct": -0.17698371002643487,
+    "draw_mean_ratio_95ci": [
+      0.9966327576145209,
+      1.0051674083043516
+    ]
   },
   {
     "id": "gravitas-particle-packer-10-cpu-idle",
@@ -1485,8 +1550,8 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+    "adopted": false,
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards. Rejected: five strict 100-emitter pairs show +0.833% whole-frame time (mean-ratio 95% interval1.00617\u20131.01050); the existing packer remains. Lower-load trials were skipped after the stress regression.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
@@ -1511,8 +1576,8 @@
     "backends": [
       "lua"
     ],
-    "adopted": null,
-    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+    "adopted": false,
+    "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards. Rejected: five strict 100-emitter pairs show +0.833% whole-frame time (mean-ratio 95% interval1.00617\u20131.01050); the existing packer remains. Lower-load trials were skipped after the stress regression.",
     "backend": "lua",
     "measured_rounds": 0,
     "planned_rounds": 5,
