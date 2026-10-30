@@ -1013,7 +1013,7 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "ttld-scalar-births-10-cpu-idle",
+    "id": "ttld-scalar-births-10-cpu-idle-window-v4",
     "title": "To the Last Drop",
     "load": "10\u00d7",
     "backends": [
@@ -1039,7 +1039,7 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "ttld-scalar-births-1-cpu-idle",
+    "id": "ttld-scalar-births-1-cpu-idle-window-v4",
     "title": "To the Last Drop",
     "load": "1\u00d7",
     "backends": [
@@ -1278,68 +1278,59 @@
     "draw_mean_ratio_95ci": null
   },
   {
-    "id": "hunted-incremental-incremental-1x",
+    "id": "hunted-incremental-v4-incremental-1x",
     "title": "Hunted",
     "load": "1\u00d7",
     "backends": [
       "wasm"
     ],
     "adopted": null,
-    "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+    "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required. Fresh CPU-window guard9d: the straddling sample remains guarded, shutdown samples remain recorded; no old rejected capture is reclassified.",
     "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
     "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
     "backend": "wasm",
-    "measured_rounds": 5,
+    "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 10,
-    "wall_before_ms": 0.8708333333333333,
-    "wall_after_ms": 0.8684633333333337,
-    "wall_change_pct": -0.33814928296279634,
-    "wall_mean_ratio_95ci": [
-      0.9902574819300097,
-      1.0032784761518028
-    ],
-    "sim_before_ms": 0.209007,
-    "sim_after_ms": 0.207178,
-    "sim_change_pct": -1.2512796095702994,
-    "sim_mean_ratio_95ci": [
-      0.9748613854074027,
-      1.0007683052041454
-    ],
-    "draw_before_ms": 0.618096,
-    "draw_after_ms": 0.6159589999999999,
-    "draw_change_pct": -0.27546291048184957,
-    "draw_mean_ratio_95ci": [
-      0.9866136570852211,
-      1.0035426096441464
-    ]
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
   },
   {
-    "id": "hunted-incremental-incremental-10x",
+    "id": "hunted-incremental-v4-incremental-10x",
     "title": "Hunted",
     "load": "10\u00d7",
     "backends": [
       "wasm"
     ],
     "adopted": null,
-    "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required.",
+    "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required. Fresh CPU-window guard9d: the straddling sample remains guarded, shutdown samples remain recorded; no old rejected capture is reclassified.",
     "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
     "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
     "backend": "wasm",
-    "measured_rounds": 4,
+    "measured_rounds": 0,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 8,
-    "wall_before_ms": 3.5915508333333332,
-    "wall_after_ms": 3.453833333333333,
-    "wall_change_pct": -4.212656645933199,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
     "wall_mean_ratio_95ci": null,
-    "sim_before_ms": 1.4809700000000001,
-    "sim_after_ms": 1.4715165,
-    "sim_change_pct": -1.2692563974860072,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
     "sim_mean_ratio_95ci": null,
-    "draw_before_ms": 1.984616,
-    "draw_after_ms": 1.8630145,
-    "draw_change_pct": -6.092572124654594,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
     "draw_mean_ratio_95ci": null
   },
   {
