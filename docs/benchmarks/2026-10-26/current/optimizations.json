@@ -1256,21 +1256,30 @@
     "adopted": null,
     "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
     "backend": "lua",
-    "measured_rounds": 0,
+    "measured_rounds": 5,
     "planned_rounds": 5,
-    "attempted_phase_pairs": 0,
-    "wall_before_ms": null,
-    "wall_after_ms": null,
-    "wall_change_pct": null,
-    "wall_mean_ratio_95ci": null,
-    "sim_before_ms": null,
-    "sim_after_ms": null,
-    "sim_change_pct": null,
-    "sim_mean_ratio_95ci": null,
-    "draw_before_ms": null,
-    "draw_after_ms": null,
-    "draw_change_pct": null,
-    "draw_mean_ratio_95ci": null
+    "attempted_phase_pairs": 14,
+    "wall_before_ms": 19.996781666666667,
+    "wall_after_ms": 19.658636666666666,
+    "wall_change_pct": -1.4078936161196043,
+    "wall_mean_ratio_95ci": [
+      0.9791499377903151,
+      0.9869583049468239
+    ],
+    "sim_before_ms": 0.18412,
+    "sim_after_ms": 0.185557,
+    "sim_change_pct": 0.38492892581614147,
+    "sim_mean_ratio_95ci": [
+      0.9883854990694484,
+      1.013516297380307
+    ],
+    "draw_before_ms": 18.444293000000002,
+    "draw_after_ms": 18.031217,
+    "draw_change_pct": -1.9282677290626271,
+    "draw_mean_ratio_95ci": [
+      0.9773567884865643,
+      0.9837484270079532
+    ]
   },
   {
     "id": "gravitas-packet-metadata-10-cpu-idle",
