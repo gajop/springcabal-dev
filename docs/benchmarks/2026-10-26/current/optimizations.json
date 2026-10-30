@@ -1871,5 +1871,79 @@
       0.9884205760299412,
       0.9979263998799869
     ]
+  },
+  {
+    "id": "ttld-production-gpu-clip-1x",
+    "title": "To the Last Drop production fire",
+    "load": "1\u00d7",
+    "backends": [
+      "lua"
+    ],
+    "base": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
+    "candidate": "15c0e01991d48720407c2db574c8195fb9ece14f",
+    "adopted": true,
+    "change": "Use GPU clipping for burning-house effects on globally visible playable teams, matching the Rust production path. Same deterministic public on_fire input; actual LUPS, normal modules and native game scene. Five alternating clean source pairs, current pinned NVIDIA engine and unchanged guard9d. This is an additional production-fire experiment, separate from the historical shadow-only matrix.",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 5.564634999999998,
+    "wall_after_ms": 5.523185,
+    "wall_change_pct": -0.6821351864647385,
+    "wall_mean_ratio_95ci": [
+      0.9899400144596422,
+      0.9947342108633257
+    ],
+    "sim_before_ms": 1.4872049999999999,
+    "sim_after_ms": 1.45089,
+    "sim_change_pct": -2.6416449995434355,
+    "sim_mean_ratio_95ci": [
+      0.9639468631119591,
+      0.9912863587646653
+    ],
+    "draw_before_ms": 3.02222,
+    "draw_after_ms": 3.118795,
+    "draw_change_pct": 6.6026011079314495,
+    "draw_mean_ratio_95ci": [
+      1.005694458828965,
+      1.0775238110179146
+    ]
+  },
+  {
+    "id": "ttld-production-gpu-clip-10x",
+    "title": "To the Last Drop production fire",
+    "load": "10\u00d7",
+    "backends": [
+      "lua"
+    ],
+    "base": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
+    "candidate": "15c0e01991d48720407c2db574c8195fb9ece14f",
+    "adopted": true,
+    "change": "Use GPU clipping for burning-house effects on globally visible playable teams, matching the Rust production path. Same deterministic public on_fire input; actual LUPS, normal modules and native game scene. Five alternating clean source pairs, current pinned NVIDIA engine and unchanged guard9d. This is an additional production-fire experiment, separate from the historical shadow-only matrix.",
+    "backend": "lua",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 60.254476666666655,
+    "wall_after_ms": 59.782828333333335,
+    "wall_change_pct": -0.526467106759354,
+    "wall_mean_ratio_95ci": [
+      0.9895626677127194,
+      0.9953744809687324
+    ],
+    "sim_before_ms": 36.409068,
+    "sim_after_ms": 36.335076,
+    "sim_change_pct": -0.20294536314847678,
+    "sim_mean_ratio_95ci": [
+      0.9913418018796389,
+      1.0101690334957587
+    ],
+    "draw_before_ms": 11.552396,
+    "draw_after_ms": 10.936663000000001,
+    "draw_change_pct": -5.6219403450292305,
+    "draw_mean_ratio_95ci": [
+      0.9399192042019432,
+      0.953258093959911
+    ]
   }
 ]
