@@ -65,7 +65,7 @@
   <div class="toolbar"><button id="flame-back">Back</button><button id="flame-reset">Reset zoom</button><label>Find symbol <input id="flame-search" placeholder="e.g. WaitBuffer, luaH_get, HAPFS"></label></div>
   <div id="flame" class="flame"></div><p id="flame-detail" class="mono caption" aria-live="polite"></p>
   <div class="two"><div><h3>Sampled instruction categories</h3><div id="profile-categories" class="chart"></div></div><div><h3>Hottest sampled instructions</h3><div class="table-scroll"><table><thead><tr><th>Symbol / library</th><th>CPU samples</th></tr></thead><tbody id="profile-leaves"></tbody></table></div></div>
-  <p class="caption">Optimized binary, matching debug symbols, Wasmtime JIT names; no world observer. Sampling is gated to frames 300–899. All graphics use the NVIDIA GPU. These are CPU profiles: driver samples measure CPU submission/waiting, not GPU execution time.</p>
+  <p class="caption">Optimized binary, matching debug symbols, Wasmtime JIT names; no world observer. Sampling is gated to frames 300–899. All graphics use the NVIDIA GPU. These are CPU profiles: driver samples measure CPU submission/waiting, not GPU execution time. Lua’s internal collector/table helpers are classified by their source ownership; the <a href="lua-runtime-label-audit.json">offline label correction</a> preserves all original samples, symbols and stacks.</p>
 </section>
 
 <section id="explanation">
