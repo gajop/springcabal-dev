@@ -1,0 +1,843 @@
+{
+  "utc": "2026-10-30T21:42:47.796875+00:00",
+  "scope": "Offline classification only. Original symbols, all sample weights, complete stack trees, sampling window, JIT records, runtime and run metadata, and original exporter identity are unchanged. Raw perf/JIT inputs are untouched. No timing or acceptance result changes.",
+  "classifier_sha256": "2d239f25c33272eab657f0b3cff7566631e83e857548c6bed8ac3c750becbab9",
+  "framework_commit": "e196e89",
+  "framework_tests_passed": 58,
+  "profiles_relabelled": 116,
+  "source_ownership": [
+    {
+      "file": "rts/lib/lua/src/lgc.cpp",
+      "lines": [
+        69,
+        277,
+        407,
+        556
+      ],
+      "engine_commit": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10"
+    },
+    {
+      "file": "rts/lib/lua/src/ltable.cpp",
+      "lines": [
+        101,
+        298,
+        400
+      ],
+      "engine_commit": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10"
+    }
+  ],
+  "profiles": [
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-10x/hunted-00-lua/profile.json",
+      "samples": 2246,
+      "preserved_content_sha256": "84638e847b1ed121895c2d50e0c931b5f27de622163214e72a7a5c1c5956fd29",
+      "reclassified_sample_weight_ns": 30060120,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-10x/hunted-00-wasm/profile.json",
+      "samples": 1042,
+      "preserved_content_sha256": "834b628c2a0d536e12f11cfccab6e99abc7e761b907541e82f885db36739775f",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-10x-jobs/hunted-00-wasm-off/profile.json",
+      "samples": 1476,
+      "preserved_content_sha256": "13fd141d0e1e8d6370177803757dcc887d124d34140b3c5245f3ed8fe222e82c",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-10x-jobs/hunted-02-wasm-off/profile.json",
+      "samples": 1545,
+      "preserved_content_sha256": "0d581aab51d6df15d2875ae7964f803eee7efabc8aef8100a695af0f4e0944b5",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-10x-jobs/hunted-02-wasm-on/profile.json",
+      "samples": 1453,
+      "preserved_content_sha256": "1ebd92ffcb15c4b5d9883855345cec6dcba5f6d1f216a3b2dd5ec32347e5255f",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-10x-jobs/hunted-04-wasm-off/profile.json",
+      "samples": 1475,
+      "preserved_content_sha256": "29adffeab6f37e7cf019e989b5d59b114df977ade53a9ee8614505ea90832ccd",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-10x-jobs/hunted-04-wasm-on/profile.json",
+      "samples": 1444,
+      "preserved_content_sha256": "f6d4fafa01576eba73bb28d5a7243b6bb5a27a4453a1503671700b2188d27d4a",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-1x/hunted-00-lua/profile.json",
+      "samples": 303,
+      "preserved_content_sha256": "df65ea930238df924e76708572a3bd14ab2df982ba070a67a5fec4c820f62608",
+      "reclassified_sample_weight_ns": 4008016,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/af9c0b3/hunted-1x/hunted-00-wasm/profile.json",
+      "samples": 291,
+      "preserved_content_sha256": "acaf264a0fc96662d3ee02c5fb81b1e62039aee6a7d337fc23235a10cb9f229b",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-1x/area17-00-lua/profile.json",
+      "samples": 826,
+      "preserved_content_sha256": "8eab68724a907d48174b0774eb1419ea1cad1aadf08b55b2f7c21ad52bfef2ce",
+      "reclassified_sample_weight_ns": 48096192,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-1x/area17-00-wasm/profile.json",
+      "samples": 703,
+      "preserved_content_sha256": "af06fbf9f4d9fb8b4f74e8c0476d971c0e83787b9186536d982ae45fbf69037b",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-1x/area17-01-lua/profile.json",
+      "samples": 822,
+      "preserved_content_sha256": "72cbe3932637257c804da92c934869702f19dce2936404c819169615e16faf27",
+      "reclassified_sample_weight_ns": 52104208,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-1x/area17-01-wasm/profile.json",
+      "samples": 710,
+      "preserved_content_sha256": "361891f6a47c212bb1004dd6fde66a38030c6f50575fdf4dcbc3386169e63864",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-2x/area17-00-lua/profile.json",
+      "samples": 2275,
+      "preserved_content_sha256": "1d6d8eeaf7b7ff89304187e5781433b7f40d77b52c62c246c3cfa659bb202265",
+      "reclassified_sample_weight_ns": 186372744,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-2x/area17-00-wasm/profile.json",
+      "samples": 2000,
+      "preserved_content_sha256": "3902f8fdb7cdd463ad75b548c84ddd9265f5ed4b2c67d430a6d64027e6b891ee",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-2x/area17-01-lua/profile.json",
+      "samples": 2301,
+      "preserved_content_sha256": "96a7c2539e0ba1974ba444a595cbfb7ef0b345e4d68da08a5267143e77f35436",
+      "reclassified_sample_weight_ns": 222444888,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-2x/area17-01-wasm/profile.json",
+      "samples": 2007,
+      "preserved_content_sha256": "289929065e69ab6d8e1da34f2d8254c2f24d8a6f4ae2fe8d8990cf16f97343ea",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-2x/area17-02-lua/profile.json",
+      "samples": 2281,
+      "preserved_content_sha256": "749899873ef497c9bf7a442596a02d10f393242937df3da53d6b5fbb62eefebe",
+      "reclassified_sample_weight_ns": 174348696,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-2x/area17-02-wasm/profile.json",
+      "samples": 2022,
+      "preserved_content_sha256": "030f805da9cbb085cc5c5fdf59ce45549c89ea7366f377a23d039e14d7674f73",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-math-camera/area17-1x/area17-00-lua/profile.json",
+      "samples": 863,
+      "preserved_content_sha256": "65488a3a7495d9554d30d87e093fef9d6ee06b1ca00b4e828cee0ae466c7d69d",
+      "reclassified_sample_weight_ns": 44088176,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-math-camera/area17-1x/area17-00-wasm/profile.json",
+      "samples": 750,
+      "preserved_content_sha256": "3fe5f381896b545b3984975f0357a25725de6a733aa3d582944c49b8fe6de784",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-math-camera/area17-2x/area17-00-wasm/profile.json",
+      "samples": 2040,
+      "preserved_content_sha256": "23cdf390206228a57356704246af7c07d293a312179e854d67e030983d8e3090",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-math-camera/area17-2x/area17-02-lua/profile.json",
+      "samples": 2333,
+      "preserved_content_sha256": "44d70e2657225d9fcce8b0449146314f2e3c590eed52688416fef73210b4ef33",
+      "reclassified_sample_weight_ns": 230460920,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/area17-math-camera/area17-2x/area17-02-wasm/profile.json",
+      "samples": 2095,
+      "preserved_content_sha256": "404215d66a09f950a6afee5e030e77a997a9b137a3d9b782cdf703c1709b7145",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-1/gravitas-00-lua/profile.json",
+      "samples": 169,
+      "preserved_content_sha256": "f67d9404e4a75370a205cfcdfd798684619434411ee4b2317744b7577ff76edc",
+      "reclassified_sample_weight_ns": 4008016,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-1/gravitas-00-wasm/profile.json",
+      "samples": 122,
+      "preserved_content_sha256": "7f563a0c40ba65957b722cd1e5622345360c7368fe2d5836764914013f6578d7",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-00-lua/profile.json",
+      "samples": 830,
+      "preserved_content_sha256": "df7bfe8ba1c6fd343be1d937ba7bfb6749d4db23cbd7273ef6ca118cea1ec3bd",
+      "reclassified_sample_weight_ns": 36072144,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-00-wasm/profile.json",
+      "samples": 159,
+      "preserved_content_sha256": "d8a6a4001b7381ae292e6d96f46c15e9ef275adff1b7e1a222293392d26e2da2",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-01-lua/profile.json",
+      "samples": 834,
+      "preserved_content_sha256": "2e7946d2c430a641d92982d34bece8e0f534998dda3cc1529078710e89250b97",
+      "reclassified_sample_weight_ns": 50100200,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-01-wasm/profile.json",
+      "samples": 159,
+      "preserved_content_sha256": "489f9d17ad73239b797a49125b7634399af818958dd94b78c947b5e5d3c4dd4d",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-02-lua/profile.json",
+      "samples": 823,
+      "preserved_content_sha256": "f6ae21ff84daff1a2c8fab9371e3db24505780e9bfd3880b6926795737f6261e",
+      "reclassified_sample_weight_ns": 44088176,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-02-wasm/profile.json",
+      "samples": 172,
+      "preserved_content_sha256": "b00a8584022f1e1834be1651664f76d8cc07b2988d68a5737498c3f973640fa9",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-03-lua/profile.json",
+      "samples": 828,
+      "preserved_content_sha256": "05dc6f292ab5f196bd589bb7ee3ec240122d1aec5521416994f8506d8dcdb568",
+      "reclassified_sample_weight_ns": 40080160,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-03-wasm/profile.json",
+      "samples": 165,
+      "preserved_content_sha256": "99668c780c4812fcd8d3196b711a760208eca1470dece20a6f81edeee1aa19a9",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-04-lua/profile.json",
+      "samples": 814,
+      "preserved_content_sha256": "7f62e54f4a78a19cdac77fb79186c8afab149a0efe2bc27dfb81564d02a4d408",
+      "reclassified_sample_weight_ns": 34068136,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-04-wasm/profile.json",
+      "samples": 158,
+      "preserved_content_sha256": "8dab154485ceb685174bd7e83ca4e06c1c7b6bc7d12acffc57a2843faa9e8533",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-05-lua/profile.json",
+      "samples": 828,
+      "preserved_content_sha256": "68ce41b910396d1dbc2687ae6cdf9a70fcb6ea91f3295a7b0d3860a6e25c5e5f",
+      "reclassified_sample_weight_ns": 40080160,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10/gravitas-05-wasm/profile.json",
+      "samples": 171,
+      "preserved_content_sha256": "6d6e604eededbe8dde89adef0d7db37fa0644c75f18a2641f17703bbcc5148bb",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10-jobs/gravitas-00-wasm-off/profile.json",
+      "samples": 521,
+      "preserved_content_sha256": "de2b9e20c3a26435cadeafcc9bef51be38bd63758828dffe7252d9efdaa5510a",
+      "reclassified_sample_weight_ns": 2004008,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10-jobs/gravitas-00-wasm-on/profile.json",
+      "samples": 641,
+      "preserved_content_sha256": "dbaf2e192030132327316542fb3ccdb489983a1b568a477e22fd9050c745d907",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-10-jobs/gravitas-01-wasm-on/profile.json",
+      "samples": 643,
+      "preserved_content_sha256": "8edcd5ef66c35eba8c0553a97860f0de089a719067743aad3b64bb0b24ee9395",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-00-lua/profile.json",
+      "samples": 12315,
+      "preserved_content_sha256": "0c4d81ec6f967dcc71f72dd8566d47962e8cbc4243d58fd115b6cc06b697bcf8",
+      "reclassified_sample_weight_ns": 667334664,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-00-wasm/profile.json",
+      "samples": 1446,
+      "preserved_content_sha256": "517dd159f5ad33c0332d67b828c05d0eb1efdee15ed2be10cf9ef84a5ed2a9b5",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-01-lua/profile.json",
+      "samples": 12135,
+      "preserved_content_sha256": "eceeff4e443c0e4ba196ec129522855ea4265089edd9a6506bc0bf8ef68d33aa",
+      "reclassified_sample_weight_ns": 587174344,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-01-wasm/profile.json",
+      "samples": 1412,
+      "preserved_content_sha256": "95d5172af15807e11b958c479f58889620e4ffc6ccd0a7a12394eb51f2536f44",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-02-lua/profile.json",
+      "samples": 11962,
+      "preserved_content_sha256": "33858f7c5ff97d8d6cea8a661a029c3847dcde70a9e6bdb8378f439e243a808d",
+      "reclassified_sample_weight_ns": 599198392,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-02-wasm/profile.json",
+      "samples": 1410,
+      "preserved_content_sha256": "070661b603cd6e8f3e725c9014f3b0101f527562db48434c979c276a05d13126",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-03-lua/profile.json",
+      "samples": 12047,
+      "preserved_content_sha256": "ab18c28a03e578a675a6c2b8f907b5a44cf783df11c526b2fd6b2482832a2cbf",
+      "reclassified_sample_weight_ns": 551102200,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/fire-100/gravitas-03-wasm/profile.json",
+      "samples": 1432,
+      "preserved_content_sha256": "3312f1dc7f19f47c3bd82e99d87a1d8ce4250abadd8812b2a10aaf2c283f5543",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-00-lua/profile.json",
+      "samples": 16579,
+      "preserved_content_sha256": "7bcd046c78b3c2c5d847365c24d410c5557ecf842b50bf42a78e46ccfa68c63e",
+      "reclassified_sample_weight_ns": 563126248,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-00-wasm/profile.json",
+      "samples": 14525,
+      "preserved_content_sha256": "6dbb7dc46777adc07e2b8b83dd5b242cf2abdd77dba195cc42ed51fded22cb8c",
+      "reclassified_sample_weight_ns": 8016032,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-01-lua/profile.json",
+      "samples": 16519,
+      "preserved_content_sha256": "7771a5c1d11a34408d97bfc4989c824d819cb6c68b003d6776dac82bf751fd9d",
+      "reclassified_sample_weight_ns": 545090176,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-01-wasm/profile.json",
+      "samples": 14528,
+      "preserved_content_sha256": "ca0816b005098d230a20fa6d1e12a5ef366a83d4faa240f02f123d7ad8f3b80c",
+      "reclassified_sample_weight_ns": 4008016,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-02-lua/profile.json",
+      "samples": 16537,
+      "preserved_content_sha256": "abab32e4bd5e2bca4f8bfa96a620b11b73e20fca5ab344145eb78099f580e53a",
+      "reclassified_sample_weight_ns": 505010016,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-02-wasm/profile.json",
+      "samples": 14546,
+      "preserved_content_sha256": "67ce96b53f394a8b150a6225127fd52b8fc3fc9160c75c4009a0f61d59c69beb",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-03-lua/profile.json",
+      "samples": 16481,
+      "preserved_content_sha256": "7b69bd6e4348cf0e5108461e7777be7edce02eb8bf9a6ab7dfd5511e168de814",
+      "reclassified_sample_weight_ns": 519038072,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-03-wasm/profile.json",
+      "samples": 14508,
+      "preserved_content_sha256": "3aa3113885d54c2edd6d4f2687cfd8b4819b991b7da2c896341441f82566d0ed",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-04-lua/profile.json",
+      "samples": 16548,
+      "preserved_content_sha256": "defb50b4f517e93714a0b88bffe1c35ffd62aded05bfb431adc4c00ba3e68eff",
+      "reclassified_sample_weight_ns": 561122240,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-04-wasm/profile.json",
+      "samples": 14457,
+      "preserved_content_sha256": "122eab4dc6e89fe3eac4830946c0171480d868338090044a889593d8b3bc2504",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-05-lua/profile.json",
+      "samples": 16538,
+      "preserved_content_sha256": "bcb8abca3acb0512e13f93e540f024dd213704c1760e9cb12f69e0cf594282e3",
+      "reclassified_sample_weight_ns": 543086168,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x/flove-05-wasm/profile.json",
+      "samples": 14496,
+      "preserved_content_sha256": "58557f51ca939de35466b014498727c60a754c8a3698d87b183beab76072906c",
+      "reclassified_sample_weight_ns": 2004008,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-00-wasm-off/profile.json",
+      "samples": 19479,
+      "preserved_content_sha256": "a801ed896aae1108c1e1fa17fda3ea7a9f6da03316aecace740c377820d77fb6",
+      "reclassified_sample_weight_ns": 10020040,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-00-wasm-on/profile.json",
+      "samples": 19497,
+      "preserved_content_sha256": "c3fb366e7c800b6e7268256d38ea977778e21542c148621c5fbdf789e4c9af7a",
+      "reclassified_sample_weight_ns": 4008016,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-01-wasm-off/profile.json",
+      "samples": 19450,
+      "preserved_content_sha256": "120c51e7e8d17b2af7cc6ad7908b3e09451620ee5c056d060826e281a0e7ffeb",
+      "reclassified_sample_weight_ns": 8016032,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-01-wasm-on/profile.json",
+      "samples": 19346,
+      "preserved_content_sha256": "1ef858751e6699b905b0769fdd95b0c13a646e668d540ff4fc2584a93f077870",
+      "reclassified_sample_weight_ns": 10020040,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-02-wasm-off/profile.json",
+      "samples": 19402,
+      "preserved_content_sha256": "8d7b70e081c3d20bc16f43b16d45f81c4153d3ef1cd8c0426ec531d150ea39f8",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-02-wasm-on/profile.json",
+      "samples": 19791,
+      "preserved_content_sha256": "bc49f42e24075cd30cb9041ad7d28c91f75781b3132ae5a26f6588bc603cebd0",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-03-wasm-off/profile.json",
+      "samples": 19394,
+      "preserved_content_sha256": "e5491fffd9641ebd08f46cb60a138be27d8a2f730da9efb46c2541c60b7eda51",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-10x-jobs/flove-03-wasm-on/profile.json",
+      "samples": 19681,
+      "preserved_content_sha256": "561afb658c51ba73f5eb649ab912c1b651884247657168095199102290c0241c",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-1x/flove-00-lua/profile.json",
+      "samples": 1504,
+      "preserved_content_sha256": "a05a57fbb104f591219a15112cacbf47c5566864dbc4b15881f16601d738566b",
+      "reclassified_sample_weight_ns": 24048096,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-1x/flove-00-wasm/profile.json",
+      "samples": 1325,
+      "preserved_content_sha256": "b26dd60f95fc402f32a4f3e1837a6ce040e5b3951d0ca6507af9287467dca67a",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-1x/flove-01-lua/profile.json",
+      "samples": 1509,
+      "preserved_content_sha256": "f3ecee92083ae66ce332834661109e2e2b38d5f60cd42a25c93556c443595217",
+      "reclassified_sample_weight_ns": 16032064,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/flove-combat-1x/flove-01-wasm/profile.json",
+      "samples": 1316,
+      "preserved_content_sha256": "31bca93bb7eee1df3ba6f6aa8d72e4e298e742abb0f8f9bcdcb5756fd033c8e2",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-10x/hunted-00-lua/profile.json",
+      "samples": 2197,
+      "preserved_content_sha256": "bd7a0696edc618b594725c28ed786ed8e7e46749ce2863f0d6396e1c772964ad",
+      "reclassified_sample_weight_ns": 14028056,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-10x/hunted-00-wasm/profile.json",
+      "samples": 1119,
+      "preserved_content_sha256": "5b69e28f2c86f0c68b0967c8e07f079712b1ad3cffccaca996dae4cdbbea2ddf",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-10x/hunted-01-lua/profile.json",
+      "samples": 2176,
+      "preserved_content_sha256": "3821efb188409c8660fc6eb6b212a62bbc3d6ee05c827e392c912a4fd07cf511",
+      "reclassified_sample_weight_ns": 22044088,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-10x/hunted-01-wasm/profile.json",
+      "samples": 1130,
+      "preserved_content_sha256": "fbf25b2cc63213c2fcb48c9cb5c81dc5f7a23135826404766e28c2eb995125c0",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-10x/hunted-02-lua/profile.json",
+      "samples": 2184,
+      "preserved_content_sha256": "435e5e644431a7969041a3d5f71b2d919add14d58b6a550fc1969991cdc92bc6",
+      "reclassified_sample_weight_ns": 10020040,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-10x-jobs/hunted-00-wasm-off/profile.json",
+      "samples": 1460,
+      "preserved_content_sha256": "2a0dfff968564c25926b6028e62696d1b7d07091b9013daca5b5b6df37a4f4e1",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-10x-jobs/hunted-00-wasm-on/profile.json",
+      "samples": 1499,
+      "preserved_content_sha256": "b957cca24225faac8b10fb70213458c09ea5841623b4dc7fb47390a701ebe1fc",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-1x/hunted-00-lua/profile.json",
+      "samples": 303,
+      "preserved_content_sha256": "cbec43c5afdc9cc6bf18e09ea6c37adf41f9aa6a58a97eab80c0d76119e559e8",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/hunted-1x/hunted-00-wasm/profile.json",
+      "samples": 271,
+      "preserved_content_sha256": "f92cf42e33fa5bd245d898b80c96f6b9edd557688541039ee9f3effaa0fef573",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/mycube-1x/mycube-00-lua/profile.json",
+      "samples": 606,
+      "preserved_content_sha256": "43233ca3acf3d151b2b2ce772f184dc8ca12eabbe402128b3f56095a53a38f46",
+      "reclassified_sample_weight_ns": 4008016,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/mycube-1x/mycube-00-wasm/profile.json",
+      "samples": 498,
+      "preserved_content_sha256": "23ab71af9d73612cf25df1be4deac1320fa52c5bbbeea75fb5cc323b1fc1c1f7",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/area17-2x-w1/area17-2x/area17-00-lua/profile.json",
+      "samples": 2248,
+      "preserved_content_sha256": "4d2e254367aeda5f4d6ea1600adc922884e007e70b747fd2ca605ab113eb7ee5",
+      "reclassified_sample_weight_ns": 186372744,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/area17-2x-w1/area17-2x/area17-00-wasm/profile.json",
+      "samples": 2002,
+      "preserved_content_sha256": "564d4425f64b3df3abef95ff4dc3cc8bc0e69f05c695eab9e2cb9ff57fd7199e",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-1/area17-1x-w1/area17-1x/area17-00-lua/profile.json",
+      "samples": 792,
+      "preserved_content_sha256": "bf0266c257a286b814ba1258bc8d1ae21a1299b3383ed864af8a334150125cd8",
+      "reclassified_sample_weight_ns": 50100200,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-1/area17-1x-w1/area17-1x/area17-00-wasm/profile.json",
+      "samples": 699,
+      "preserved_content_sha256": "337597a66222a288a8ed49787b36013352e49ed8f184780a37c7af514fa49bd7",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/night-v4-hunted-0f/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-00-lua/profile.json",
+      "samples": 291,
+      "preserved_content_sha256": "c4ecb73b6b618e074256166b0d3badc9b0063b78dbd29f82da3081ae0093d0b7",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/night-v4-hunted-0f/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-00-wasm/profile.json",
+      "samples": 249,
+      "preserved_content_sha256": "cbbe8dddaf74c861e758d4d7404bde883b43af36968a1ebd7b5005a139b5ca68",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/partsneeded-1x/partsneeded-00-wasm/profile.json",
+      "samples": 197,
+      "preserved_content_sha256": "8c747ee14f57e18d8fc27dc8024985469adbe578b874f756854e4f15a1467125",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/partsneeded-1x/partsneeded-01-lua/profile.json",
+      "samples": 562,
+      "preserved_content_sha256": "e382c395d07dbffefe326505fec4c69fa2596316558889986324445182f23d74",
+      "reclassified_sample_weight_ns": 2004008,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/partsneeded-1x/partsneeded-01-wasm/profile.json",
+      "samples": 217,
+      "preserved_content_sha256": "4b74c85e1ef0a7d95b7e5d813132166307fee14883d020c32f95d0f793512761",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/pinned-0f/attempt-0/area17-1x-w1/area17-1x/area17-00-wasm/profile.json",
+      "samples": 1083,
+      "preserved_content_sha256": "5e6f5d5e76ac24eb0e4a280f81a7fc541a48f2519ce008d53a800fb0c459cad9",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/pinned-0f/attempt-0/area17-1x-w1/area17-1x/area17-01-wasm/profile.json",
+      "samples": 1243,
+      "preserved_content_sha256": "77a7bffa3026fa5071cccab99e13c8a0508fdac42d40287736e8b53ce25c32ef",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/pinned-0f/attempt-0/area17-1x-w1/area17-1x/area17-02-lua/profile.json",
+      "samples": 1370,
+      "preserved_content_sha256": "5f84d7de50a447710e61ebb48e2ceef9287de383fc436794ddaa2a4d7b89d0c7",
+      "reclassified_sample_weight_ns": 50100200,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/pinned-0f/attempt-0/area17-1x-w1/area17-1x/area17-02-wasm/profile.json",
+      "samples": 1043,
+      "preserved_content_sha256": "dbd5fe384b1c71147f19a25201161521a858f9ab69c1e5117f4919798476f70f",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/retry-1/hunted-10x/hunted-00-lua/profile.json",
+      "samples": 2173,
+      "preserved_content_sha256": "d68b070aa775740b2b094412e92d6d3642809c1e5f782ade916e8eae54427c87",
+      "reclassified_sample_weight_ns": 24048096,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/retry-1/hunted-10x/hunted-00-wasm/profile.json",
+      "samples": 1112,
+      "preserved_content_sha256": "9ab5bfb14275ab816112ce815a4c87187dcd5f3a987db3901258c9a73366ca51",
+      "reclassified_sample_weight_ns": 2004008,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-00-lua/profile.json",
+      "samples": 17700,
+      "preserved_content_sha256": "dfda32d31251c5f19cad0e58bac367da5ec1a1402962a07be0248dc860b65434",
+      "reclassified_sample_weight_ns": 907815624,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-00-wasm/profile.json",
+      "samples": 16256,
+      "preserved_content_sha256": "bea29e7f7c7d5f6db97eeda2468129e18f2db858b7f44db94c88d376efe99ccb",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-01-lua/profile.json",
+      "samples": 17605,
+      "preserved_content_sha256": "020e720e33a4b8ba51dc07a39873c4c9e582551632b3cf2193c16f54dda0a7d9",
+      "reclassified_sample_weight_ns": 833667328,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-01-wasm/profile.json",
+      "samples": 16218,
+      "preserved_content_sha256": "af5232e3267d043513b84606c0c3a979ab5e82f1b22c2dcf27bcc5a5a7304d35",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-02-lua/profile.json",
+      "samples": 17627,
+      "preserved_content_sha256": "aae83704427a622a26c38eb38fe016fabacf31a12a1b532f508ef97ccb46c8f2",
+      "reclassified_sample_weight_ns": 797595184,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-02-wasm/profile.json",
+      "samples": 16228,
+      "preserved_content_sha256": "da7d3f1f7cf7647c3048b6c6081e0f9c10ae42f8909dcfa5af1a02f577546e1e",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-03-lua/profile.json",
+      "samples": 17703,
+      "preserved_content_sha256": "7ed7097e066dfc17ca0c2a210701c3a16651c694e9dea3193965fc10711fd685",
+      "reclassified_sample_weight_ns": 859719432,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-03-wasm/profile.json",
+      "samples": 16183,
+      "preserved_content_sha256": "9cfd6db7e40264b1599288faf1d4616a7bebba473dd08078ede4b29771ca24cc",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-04-lua/profile.json",
+      "samples": 17636,
+      "preserved_content_sha256": "cba0f053dbd5170f8b9fbc66cdc8da93a3563e51bc5a9b852b015d485b990c5b",
+      "reclassified_sample_weight_ns": 779559112,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-04-wasm/profile.json",
+      "samples": 16227,
+      "preserved_content_sha256": "06aa309c92d660cb6c5a871f91cf78b9b06bd5b2cc13458613545d57d6b09590",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-05-lua/profile.json",
+      "samples": 17972,
+      "preserved_content_sha256": "ddbd5421973af9fea6f36d24c9d53353f92d689a8dc367a9e28491e3e47398be",
+      "reclassified_sample_weight_ns": 863727448,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-10x/ttld-05-wasm/profile.json",
+      "samples": 16154,
+      "preserved_content_sha256": "bf7a1f4b70bb77744eae7640b4f4806753e9d73e4372e7c796c5189c6b208eae",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-1x/ttld-00-lua/profile.json",
+      "samples": 1653,
+      "preserved_content_sha256": "2ad45faa8028e5fd0456169d0b11b552bcf45ab5a29d8014667af41b08e07a85",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/ttld-shadows-1x/ttld-00-wasm/profile.json",
+      "samples": 1571,
+      "preserved_content_sha256": "6f50be4f9f539a28af56b9b9920434cdb557e966368a3a6b378413f82086524d",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/width4/fire-1/gravitas-00-wasm/profile.json",
+      "samples": 133,
+      "preserved_content_sha256": "0623b4e712e1e783dbbc983dd1cdf1b90d9d1cb89c3fe398aa2dd57bd9d87ca0",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/width4/fire-1/gravitas-01-lua/profile.json",
+      "samples": 200,
+      "preserved_content_sha256": "ec7f20ade493167d2c6cf455dac60ef6d37fc39e250cdcd0fde667f13327281e",
+      "reclassified_sample_weight_ns": 6012024,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    },
+    {
+      "profile": "perf-runs/2026-10-26-profiles-production/width4/fire-1/gravitas-01-wasm/profile.json",
+      "samples": 133,
+      "preserved_content_sha256": "dcb9b4a49f54c29f0cb43ac27d6beb768a3fef24df116591059ed79843389fe7",
+      "reclassified_sample_weight_ns": 0,
+      "original_exporter_sha256": "b874b97ec1e1f63fa1708229173ad320e9c59f61ede8f3311eba57aabdc47882"
+    }
+  ]
+}

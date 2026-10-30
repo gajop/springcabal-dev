@@ -805,3 +805,19 @@ address range and a load timestamp preceding the sample. Unsupported clocks,
 moving code and overlapping registrations remain unresolved. This recovers names;
 it does not invent missing unwind parents. Each profile records the dump hashes
 and number of frames resolved this way.
+
+
+Saved CPU profiles can be relabelled after a symbol-ownership correction without
+rerunning `perf` or unwinding against another engine build:
+
+```bash
+python3 verification/perf/profile_export.py /absolute/saved-profiles --relabel-only
+```
+
+This changes category labels and their totals only. It preserves sample weights,
+symbols, complete stack trees, JIT/window/run metadata and the original exporter
+hash. `category_classifier_sha256` records the classifier used. Lua's static GC
+and table helpers lack the usual `lua` prefix; their Lua-typed signatures identify
+them as runtime work. Similar native names and Wasmtime JIT symbols retain their
+own categories. The initial correction is recorded in the HTML report's
+`lua-runtime-label-audit.json`; benchmark execution and acceptance are unchanged.
