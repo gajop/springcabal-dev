@@ -14,23 +14,23 @@
     "game": "Hunted-wasm.sdd",
     "branch": "rust",
     "public_branch": "rust",
-    "head": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+    "head": "557bda6a5cca611363f665c0ca00687cc51748ad",
     "remote": "git@github.com:SpringCabal/Hunted.git",
-    "remote_head": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+    "remote_head": "557bda6a5cca611363f665c0ca00687cc51748ad",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T22:28:21.460197+00:00"
+    "checked_utc": "2026-10-30T20:40:03.898784+00:00"
   },
   {
     "game": "ToTheLastDrop.sdd",
     "branch": "master",
     "public_branch": "master",
-    "head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+    "head": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
     "remote": "git@github.com:SpringCabal/LD43.git",
-    "remote_head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+    "remote_head": "ab2ad87ae99c274f3ac250989dabe629abcbe7b1",
     "dirty": "",
     "committed_and_pushed": true,
-    "checked_utc": "2026-10-29T22:28:21.450552+00:00"
+    "checked_utc": "2026-10-30T20:39:50.028232+00:00"
   },
   {
     "game": "ToTheLastDrop-wasm.sdd",

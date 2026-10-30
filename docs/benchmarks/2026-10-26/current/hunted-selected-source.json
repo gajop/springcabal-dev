@@ -1,0 +1,168 @@
+{
+  "utc": "2026-10-30T20:40:03.898784+00:00",
+  "before": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+  "after": "557bda6a5cca611363f665c0ca00687cc51748ad",
+  "tested_private_source": "62a2b080ba9458732cbb4f86780281101cb1c2c7",
+  "identical_tracked_tree": true,
+  "normal_modules": {
+    "LuaRules/wasm/hunted-rules.wasm": "86bacda5532ef90d3d6c3c676a401bf7e45278afb03afb9f49dac4867a36d85f",
+    "LuaUI/wasm/hunted-ui.wasm": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d",
+    "LuaRules/wasm/hunted-jobs.wasm": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
+  },
+  "normal_modules_identical_to_tested_source": true,
+  "committed": true,
+  "pushed": true,
+  "integration_visual_jobs_passed": true,
+  "worlds": {
+    "passed": true,
+    "results": [
+      {
+        "load": 1,
+        "recordings": {
+          "wasm": "perf-runs/2026-10-30-night-v4-attempts/hunted-matched-worlds/1x-r0/hunted-00-wasm",
+          "lua": "perf-runs/2026-10-30-night-v4-attempts/hunted-matched-worlds/1x-r0/hunted-00-lua"
+        },
+        "comparison": {
+          "sample_count": 401,
+          "first_differences": {},
+          "different_samples": {},
+          "examples": {}
+        }
+      },
+      {
+        "load": 10,
+        "recordings": {
+          "wasm": "perf-runs/2026-10-30-night-v4-attempts/hunted-matched-worlds/10x-r0/hunted-00-wasm",
+          "lua": "perf-runs/2026-10-30-night-v4-attempts/hunted-matched-worlds/10x-r0/hunted-00-lua"
+        },
+        "comparison": {
+          "sample_count": 401,
+          "first_differences": {},
+          "different_samples": {},
+          "examples": {}
+        }
+      }
+    ]
+  },
+  "source_trials": [
+    {
+      "id": "hunted-incremental-v4-incremental-1x",
+      "title": "Hunted",
+      "load": "1\u00d7",
+      "backends": [
+        "wasm"
+      ],
+      "adopted": null,
+      "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required. Fresh CPU-window guard9d: the straddling sample remains guarded, shutdown samples remain recorded; no old rejected capture is reclassified.",
+      "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
+      "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+      "backend": "wasm",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-0-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-0-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-1-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-1-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-2-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-2-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-3-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-3-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-4-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/1x-round-4-block-0/after/hunted-00-wasm"
+        }
+      ],
+      "wall_before_ms": 0.8692666666666667,
+      "wall_after_ms": 0.8695850000000002,
+      "wall_change_pct": -0.04085844945063144,
+      "wall_mean_ratio_95ci": [
+        0.9974372831476275,
+        1.0051890566575306
+      ],
+      "sim_before_ms": 0.20802199999999998,
+      "sim_after_ms": 0.20693,
+      "sim_change_pct": 0.6079458473337018,
+      "sim_mean_ratio_95ci": [
+        0.9939963793360744,
+        1.0094210717761176
+      ],
+      "draw_before_ms": 0.6166,
+      "draw_after_ms": 0.616349,
+      "draw_change_pct": 0.7835232906679757,
+      "draw_mean_ratio_95ci": [
+        0.99313529195334,
+        1.0088460086780093
+      ]
+    },
+    {
+      "id": "hunted-incremental-v4-incremental-10x",
+      "title": "Hunted",
+      "load": "10\u00d7",
+      "backends": [
+        "wasm"
+      ],
+      "adopted": null,
+      "change": "Match Lua incremental food buckets and cached rabbit order; avoid rebuilding static food snapshots after pickups. Isolated current-SDK trial; baseline modules byte-identical to the public benchmark freeze; unchanged UI/jobs modules. Five complete current-engine CPU+GPU-idle before/after blocks required. Fresh CPU-window guard9d: the straddling sample remains guarded, shutdown samples remain recorded; no old rejected capture is reclassified.",
+      "candidate": "a05a0ddf197c34c6f067b0442d391926b244d5f8",
+      "base": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+      "backend": "wasm",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-0-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-0-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-1-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-1-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-2-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-2-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-3-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-3-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-4-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-incremental/incremental/10x-round-4-block-0/after/hunted-00-wasm"
+        }
+      ],
+      "wall_before_ms": 3.4292049999999996,
+      "wall_after_ms": 3.5130699999999995,
+      "wall_change_pct": 1.642949004494687,
+      "wall_mean_ratio_95ci": [
+        0.9970672823342484,
+        1.0229298406728256
+      ],
+      "sim_before_ms": 1.49093,
+      "sim_after_ms": 1.471173,
+      "sim_change_pct": -1.325146049781012,
+      "sim_mean_ratio_95ci": [
+        0.9732711687975614,
+        0.9929487367593772
+      ],
+      "draw_before_ms": 1.793798,
+      "draw_after_ms": 1.916952,
+      "draw_change_pct": 4.906348020230045,
+      "draw_mean_ratio_95ci": [
+        1.0145303339165084,
+        1.0997230052158036
+      ]
+    }
+  ],
+  "decision": "Match incremental food indexing and sorted roster caching; publish matching state and cache native movement changes as Lua already does. Source A/B whole-frame differences are inconclusive; no speed gain claimed."
+}
