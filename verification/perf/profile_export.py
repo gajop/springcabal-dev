@@ -8,6 +8,7 @@ import argparse
 from bisect import bisect_right
 from collections import Counter
 import hashlib
+import inspect
 import json
 from pathlib import Path
 import re
@@ -103,6 +104,17 @@ class JitSymbols:
         return None
 
 
+# Static helpers in Lua's lgc.cpp / ltable.cpp omit the lua prefix.
+# Require a Lua type in the signature, so similarly named native code stays
+# native. GCC clone suffixes follow the signature and need no special case.
+LUA_RUNTIME_HELPERS = re.compile(
+    r'^(?:reallymarkobject|traversetable|traverseproto|traverseclosure|'
+    r'traversestack|propagatemark|propagateall|cleartable|freeobj|sweeplist|'
+    r'checkSizes|markroot|atomic|singlestep|mainposition|findindex|newkey|'
+    r'resize|rehash|numusearray|numusehash|arrayindex|hashnum|unbound_search)'
+    r'\([^)]*\b(?:lua_State|global_State|Table|lua_TValue|GCObject|Proto|Closure)\b')
+
+
 def category(symbol, dso):
     """Mutually exclusive categories of the sampled instruction, not its callers."""
     if 'nvidia' in dso.lower() or re.search(r'lib(?:GL|EGL|drm)', dso):
@@ -113,7 +125,8 @@ def category(symbol, dso):
         return 'Wasmtime runtime'
     if re.search(r'wasm\[|wasm::|^function\[', symbol) or re.fullmatch(r'jit-\d+\.dump', Path(dso).name):
         return 'Wasm guest'
-    if re.search(r'^(lua[A-Z_a-z]|lj_)|spring_lua|LuaMemPool', symbol):
+    if (re.search(r'^(lua[A-Z_a-z]|lj_)|spring_lua|LuaMemPool', symbol)
+            or LUA_RUNTIME_HELPERS.search(symbol)):
         return 'Lua runtime / tables / GC'
     if re.search(r'HAPFS|MoveMath|GroundMove|PathFinder|PathEstimator|MoveDef', symbol):
         return 'Native movement / pathfinding'
@@ -128,6 +141,23 @@ def category(symbol, dso):
     if re.search(r'CUnit|CWeapon|CProjectile|QuadField|Los|Sensor|UnitScript|UnitAnim|Cus', symbol):
         return 'Native simulation / animation'
     return 'Other native code'
+
+
+CATEGORY_CLASSIFIER_SHA = hashlib.sha256(
+    (LUA_RUNTIME_HELPERS.pattern + '\n' + inspect.getsource(category)).encode()).hexdigest()
+
+
+def relabel_categories(profile):
+    """Reclassify saved symbols; retain weights, stacks, JIT and run metadata."""
+    totals = Counter()
+    for leaf in profile['leaves']:
+        leaf['category'] = category(leaf['name'], leaf['dso'])
+        totals[(leaf['thread'], leaf['category'])] += leaf['weight']
+    profile['categories'] = [
+        {'thread': thread, 'category': group, 'weight': weight}
+        for (thread, group), weight in sorted(totals.items())]
+    profile['category_classifier_sha256'] = CATEGORY_CLASSIFIER_SHA
+    return profile
 
 
 def parse(text, jit=None):
@@ -188,8 +218,26 @@ def export(samples):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('captures', type=Path)
-    parser.add_argument('--buildid-dir', type=Path, required=True)
+    parser.add_argument('--buildid-dir', type=Path)
+    parser.add_argument('--relabel-only', action='store_true',
+                        help='reclassify saved symbols without rerunning perf or changing stacks')
     args = parser.parse_args()
+    if args.relabel_only:
+        count = 0
+        for output in sorted(args.captures.glob('**/profile.json')):
+            data = json.loads(output.read_text())
+            if data.get('category_classifier_sha256') == CATEGORY_CLASSIFIER_SHA:
+                continue
+            data.setdefault('category_relabelled_from_exporter_sha256', data.get('exporter_sha256'))
+            relabel_categories(data)
+            temporary = output.with_suffix('.json.relabel-tmp')
+            temporary.write_text(json.dumps(data, separators=(',', ':'))+'\n')
+            temporary.replace(output)
+            count += 1
+        print(f'Reclassified {count} saved profiles; sample weights and stacks unchanged.')
+        return
+    if args.buildid_dir is None:
+        parser.error('--buildid-dir is required when exporting raw perf captures')
     exporter_sha = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
     for result in sorted(args.captures.glob('**/result.json')):
         directory = result.parent
@@ -217,7 +265,7 @@ def main():
                                    '-F', 'comm,pid,tid,time,period,ip,sym,dso'],
                                   stdout=subprocess.PIPE, stderr=log, text=True, check=True)
         jit = JitSymbols(directory) if metadata['backend'] == 'wasm' else None
-        data = export(parse(proc.stdout, jit))
+        data = relabel_categories(export(parse(proc.stdout, jit)))
         if jit:
             data['jit_symbols'] = {'sources': jit.sources, 'resolved_frames': jit.resolved_frames}
         data['exporter_sha256'] = exporter_sha

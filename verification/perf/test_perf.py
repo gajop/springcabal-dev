@@ -737,6 +737,45 @@ class ProfileAndRecordingTests(unittest.TestCase):
         self.assertEqual(sum(n['weight'] for n in tree['leaves']), 5000000)
         self.assertEqual(profile_export.category('[unknown]', 'libnvidia-eglcore.so'), 'CPU time in graphics driver')
 
+    def test_lua_internal_gc_and_table_symbols_keep_their_runtime_ownership(self):
+        for symbol in ['propagatemark(global_State*)', 'singlestep(lua_State*)',
+                       'sweeplist(lua_State*, GCObject**, unsigned long) [clone .isra.0]',
+                       'reallymarkobject(global_State*, GCObject*)',
+                       'mainposition(Table const*, lua_TValue const*)',
+                       'newkey(lua_State*, Table*, lua_TValue const*)']:
+            self.assertEqual(profile_export.category(symbol, 'spring'),
+                             'Lua runtime / tables / GC', symbol)
+        self.assertEqual(profile_export.category('singlestep(NativeState*)', 'spring'),
+                         'Other native code')
+        self.assertEqual(profile_export.category('Menu::mainposition(TableView*)', 'spring'),
+                         'Other native code')
+        self.assertEqual(profile_export.category('singlestep(lua_State*)', 'jit-123.dump'),
+                         'Wasm guest')
+
+    def test_profile_relabelling_preserves_samples_symbols_and_original_exporter(self):
+        data = {'exporter_sha256': 'original', 'samples': 3,
+                'threads': [{'name': 'main', 'weight': 9, 'children': []}],
+                'capture': {'warmup_frame': 300, 'stop_frame': 900},
+                'leaves': [
+                    {'thread': 'main', 'name': 'singlestep(lua_State*)', 'dso': 'spring',
+                     'weight': 4, 'category': 'Other native code'},
+                    {'thread': 'main', 'name': 'propagatemark(global_State*)', 'dso': 'spring',
+                     'weight': 2, 'category': 'Other native code'},
+                    {'thread': 'main', 'name': 'CGame::SimFrame()', 'dso': 'spring',
+                     'weight': 3, 'category': 'Other native code'}]}
+        original = json.loads(json.dumps(data))
+        profile_export.relabel_categories(data)
+        self.assertEqual(data['threads'], original['threads'])
+        self.assertEqual(data['capture'], original['capture'])
+        self.assertEqual(data['exporter_sha256'], 'original')
+        self.assertEqual(data['samples'], 3)
+        self.assertEqual(sum(row['weight'] for row in data['categories']), 9)
+        self.assertEqual({row['category']: row['weight'] for row in data['categories']},
+                         {'Lua runtime / tables / GC': 6, 'Other native code': 3})
+        first = json.loads(json.dumps(data))
+        profile_export.relabel_categories(data)
+        self.assertEqual(data, first)
+
     def test_recording_delta_encoding_preserves_moves_removals_and_id_reuse(self):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary)/'world.jsonl'
