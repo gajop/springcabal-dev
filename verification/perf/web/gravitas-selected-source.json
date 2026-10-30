@@ -1,0 +1,340 @@
+{
+  "published_utc": "2026-10-30T19:29:33.289620+00:00",
+  "before": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+  "after": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+  "branch": "master",
+  "committed": true,
+  "pushed": true,
+  "engine_unchanged": true,
+  "checks": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "rules",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/gravitas-combined/check-rules-3",
+        "workers": 1,
+        "jobs": "off"
+      },
+      {
+        "case": "play",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/gravitas-combined/check-play-1",
+        "workers": 1,
+        "jobs": "off"
+      },
+      {
+        "case": "bob",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/gravitas-combined/check-bob-0",
+        "workers": 1,
+        "jobs": "off"
+      }
+    ]
+  },
+  "image_pairs": [
+    {
+      "phase": "repeat",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "phase": "repeat",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "phase": "repeat",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "phase": "repeat",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "phase": "repeat",
+      "shot": 4,
+      "rmse": 0.0
+    },
+    {
+      "phase": "candidate",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "phase": "candidate",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "phase": "candidate",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "phase": "candidate",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "phase": "candidate",
+      "shot": 4,
+      "rmse": 0.0
+    }
+  ],
+  "lups_batch_sha256": "ca2fbd63c82dc438729fc0a23f08b617f42b31d765e2f329cba6a7354dd7178f",
+  "decision": "Retain retirement, scalar/generic compatibility, palette and metadata fixes; reject closure packer.",
+  "metadata_results": [
+    {
+      "id": "gravitas-packet-metadata-100-cpu-idle",
+      "title": "Gravitas fire",
+      "load": "100 emitters",
+      "backends": [
+        "lua"
+      ],
+      "adopted": null,
+      "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 14,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-0-block-3/before/gravitas-03-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-0-block-3/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-1-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-2-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-2-block-0/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/100x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 19.996781666666667,
+      "wall_after_ms": 19.658636666666666,
+      "wall_change_pct": -1.4078936161196043,
+      "wall_mean_ratio_95ci": [
+        0.9791499377903151,
+        0.9869583049468239
+      ],
+      "sim_before_ms": 0.18412,
+      "sim_after_ms": 0.185557,
+      "sim_change_pct": 0.38492892581614147,
+      "sim_mean_ratio_95ci": [
+        0.9883854990694484,
+        1.013516297380307
+      ],
+      "draw_before_ms": 18.444293000000002,
+      "draw_after_ms": 18.031217,
+      "draw_change_pct": -1.9282677290626271,
+      "draw_mean_ratio_95ci": [
+        0.9773567884865643,
+        0.9837484270079532
+      ]
+    },
+    {
+      "id": "gravitas-packet-metadata-10-cpu-idle",
+      "title": "Gravitas fire",
+      "load": "10 emitters",
+      "backends": [
+        "lua"
+      ],
+      "adopted": null,
+      "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-1-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-2-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-2-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/10x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 1.7447333333333332,
+      "wall_after_ms": 1.7412283333333334,
+      "wall_change_pct": -0.04533225681154773,
+      "wall_mean_ratio_95ci": [
+        0.9939715435227054,
+        1.0021508265563082
+      ],
+      "sim_before_ms": 0.03676,
+      "sim_after_ms": 0.036575,
+      "sim_change_pct": -0.4084411164057111,
+      "sim_mean_ratio_95ci": [
+        0.9841449001130079,
+        0.9987179653570694
+      ],
+      "draw_before_ms": 1.41153,
+      "draw_after_ms": 1.404609,
+      "draw_change_pct": -0.12748976894604303,
+      "draw_mean_ratio_95ci": [
+        0.9930305937411265,
+        1.003378320762699
+      ]
+    },
+    {
+      "id": "gravitas-packet-metadata-1-cpu-idle",
+      "title": "Gravitas fire",
+      "load": "1 emitters",
+      "backends": [
+        "lua"
+      ],
+      "adopted": null,
+      "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: store the packet group with compact metadata and avoid redundant false reset writes; same attributes, uploads and draw ranges. Compare against9b87777 on engine0f and the direct-record fixture. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-1-block-1/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-1-block-1/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-2-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-2-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-packet-metadata/1x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 0.5655649999999998,
+      "wall_after_ms": 0.5634683333333331,
+      "wall_change_pct": -0.8472353605096128,
+      "wall_mean_ratio_95ci": [
+        0.9519757963405341,
+        1.0081455742098147
+      ],
+      "sim_before_ms": 0.034442,
+      "sim_after_ms": 0.034756,
+      "sim_change_pct": 0.8044536419015369,
+      "sim_mean_ratio_95ci": [
+        1.0065250130994898,
+        1.0109535968201144
+      ],
+      "draw_before_ms": 0.453243,
+      "draw_after_ms": 0.455983,
+      "draw_change_pct": 0.47310872038395235,
+      "draw_mean_ratio_95ci": [
+        1.0016654041246498,
+        1.0237965109970548
+      ]
+    }
+  ],
+  "shader_identity": {
+    "vertex_shaders": [
+      {
+        "path": "springcabal-rs/crates/springcabal/src/particles/shaders/fire_instanced.vert",
+        "sha256": "e67da23933f39e1038701f8f4751d0c2a323e678125cd54276303748fe01ba58"
+      },
+      {
+        "path": "spring-linux/games/Gravitas-retirement-candidate.sdd/lups/headers/particle_batch.vert",
+        "sha256": "e67da23933f39e1038701f8f4751d0c2a323e678125cd54276303748fe01ba58"
+      },
+      {
+        "path": "spring-linux/games/Gravitas-metadata-candidate.sdd/lups/headers/particle_batch.vert",
+        "sha256": "e67da23933f39e1038701f8f4751d0c2a323e678125cd54276303748fe01ba58"
+      }
+    ],
+    "byte_identical": true,
+    "scope": "Current checked source vertex shader identity only. Ring ranges, particle attributes and submitted counts need selected-source diagnostic confirmation; image equivalence alone is insufficient."
+  },
+  "rejected_packer": {
+    "reviewed_utc": "2026-10-30T19:28:07.110013+00:00",
+    "selected": false,
+    "reason": "Whole-frame regression; no new closure packer adopted.",
+    "stress_result": {
+      "id": "gravitas-particle-packer-100-cpu-idle",
+      "title": "Gravitas fire",
+      "load": "100 emitters",
+      "backends": [
+        "lua"
+      ],
+      "adopted": null,
+      "change": "Fresh paired trial with background CPU \u22640.5 cores, ten quiet seconds, existing pressure/GPU guards; frozen source inputs unchanged. Trial: capture fixed effect coefficients and positions once during emission, and track maximum spawn radius in a local. Same particle attributes, RNG draws, GPU data and lifetime masks; before0b93196 includes the retirement fix. No measured gain claimed until five clean stress pairs. Current-runtime retry: identical frozen source trees; engine 0f/db57, whole before/after blocks retained only after both phases pass the existing guards.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 14,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-1-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-2-block-0/before/gravitas-02-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-2-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-3-block-0/before/gravitas-01-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-3-block-0/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-4-block-1/before/gravitas-00-lua",
+          "after": "perf-runs/2026-10-30-night-v3-attempts/sources/gravitas-particle-packer/100x-round-4-block-1/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 19.118713333333332,
+      "wall_after_ms": 19.29027166666667,
+      "wall_change_pct": 0.8327748366233623,
+      "wall_mean_ratio_95ci": [
+        1.0061674687320803,
+        1.0104981187643076
+      ],
+      "sim_before_ms": 0.091203,
+      "sim_after_ms": 0.179748,
+      "sim_change_pct": 93.87941066684233,
+      "sim_mean_ratio_95ci": [
+        1.7762609908806797,
+        2.04661432594667
+      ],
+      "draw_before_ms": 17.745701,
+      "draw_after_ms": 17.714294000000002,
+      "draw_change_pct": -0.17698371002643487,
+      "draw_mean_ratio_95ci": [
+        0.9966327576145209,
+        1.0051674083043516
+      ]
+    },
+    "unchanged_sources": true
+  }
+}
