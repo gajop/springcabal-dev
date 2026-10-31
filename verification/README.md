@@ -494,3 +494,12 @@ path, so visual suites use a stable workspace under `out/<suite>/run`.
 - The Lua Gravitas archive can wait at the pre-game boundary under the
   headless engine, and several games start paused or stop logging once
   running. Don't infer progress from the last logged frame number.
+
+
+The existing Area17 music stream check is available as `just probe area17-music`.
+It checks both Lua and WASM after intro shutdown and game start, using real stream
+position and duration. Run `MUSIC_PROBE_SHORT=1 just probe area17-music` for the
+same two-second loop check used during release preparation. The probe mutes
+output while observing playback; set `MUSIC_PROBE_MASTER=60` to hear it. Linux
+and Wine callers must use different `MUSIC_PROBE_PLATFORM` values so their
+stable archive caches cannot retain paths from the other operating system.
