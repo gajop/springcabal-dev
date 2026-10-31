@@ -1,0 +1,362 @@
+{
+  "selected": false,
+  "compiler": "Same pinned compiler/SDK; target-feature=+simd128, explicit system.WasmSimd=true; relaxed SIMD disabled.",
+  "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+  "candidate": "87251863516a4c03b58464fc4262742d50d1fdbd",
+  "scope": "Private compiler-only source trial; current public scalar source remains selected.",
+  "modules": {
+    "LuaRules/wasm/hunted-jobs.wasm": {
+      "normal_sha256": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959",
+      "simd_sha256": "1ad28e086d9bf9139465e406e8f78285e380b36203e2aa7e4d7b3efd516e558e",
+      "normal_bytes": 37505,
+      "simd_bytes": 37924,
+      "normal_vector_operations": {},
+      "simd_vector_operations": {
+        "v128.load": 7,
+        "v128.store": 3,
+        "v128.const": 4,
+        "i8x16.shuffle": 14,
+        "v128.not": 6,
+        "i32x4.shr_u": 12,
+        "v128.or": 6,
+        "v128.and": 6,
+        "i32x4.add": 6,
+        "i32x4.extract_lane": 9,
+        "v128.load64_zero": 2,
+        "v128.load32_zero": 1,
+        "i8x16.gt_s": 1,
+        "i16x8.extend_low_i8x16_s": 1,
+        "i32x4.extend_low_i16x8_s": 1
+      },
+      "simd_functions": {
+        "$_RNvMs0_NtCsgis5MWNmFLl_8dlmalloc8dlmallocINtB5_8DlmallocNtNtB7_3sys6SystemE6mallocCsdl5sGgnNXvY_3std": 2,
+        "$_RNvMsa_NtCsdkdt1aaAg1T_4core3fmtNtB5_9Formatter3pad": 73,
+        "$_RNvXNtCsdkdt1aaAg1T_4core3anyReNtB2_3Any7type_idCsdl5sGgnNXvY_3std": 2,
+        "$_RNvXNtCsdkdt1aaAg1T_4core3anyNtNtCsewWLk9TkM7w_5alloc6string6StringNtB2_3Any7type_idCsdl5sGgnNXvY_3std": 2
+      },
+      "wat": "codex-work/night-2026-10-30/v4/hunted-simd-build/hunted-jobs.wat"
+    },
+    "LuaRules/wasm/hunted-rules.wasm": {
+      "normal_sha256": "86bacda5532ef90d3d6c3c676a401bf7e45278afb03afb9f49dac4867a36d85f",
+      "simd_sha256": "f48a71d33583a8d2be5aeb69c1600ab9b59c3df4df1317c4941b61bd96c9594f",
+      "normal_bytes": 575465,
+      "simd_bytes": 575433,
+      "normal_vector_operations": {},
+      "simd_vector_operations": {
+        "v128.load": 167,
+        "v128.store": 163,
+        "v128.const": 31,
+        "i8x16.ne": 2,
+        "v128.any_true": 6,
+        "i8x16.eq": 5,
+        "i8x16.all_true": 5,
+        "i8x16.shuffle": 18,
+        "i32x4.splat": 8,
+        "i32x4.replace_lane": 12,
+        "i32x4.min_s": 1,
+        "i32x4.max_s": 1,
+        "v128.load32_zero": 2,
+        "v128.load32_lane": 3,
+        "i32x4.add": 9,
+        "i32x4.extract_lane": 10,
+        "i32x4.eq": 16,
+        "v128.and": 22,
+        "i16x8.narrow_i32x4_u": 8,
+        "i8x16.narrow_i16x8_u": 4,
+        "f32x4.splat": 1,
+        "f32x4.replace_lane": 1,
+        "v128.load64_zero": 6,
+        "f32x4.add": 2,
+        "f32x4.mul": 4,
+        "f32x4.sub": 2,
+        "f32x4.extract_lane": 8,
+        "v128.not": 6,
+        "i32x4.shr_u": 13,
+        "v128.or": 7,
+        "i8x16.gt_s": 1,
+        "i16x8.extend_low_i8x16_s": 1,
+        "i32x4.extend_low_i16x8_s": 1,
+        "i32x4.shl": 1
+      },
+      "simd_functions": {
+        "$SPRING_CUS_CALL_NAMED": 2,
+        "$_RNvMs0_NtCsgis5MWNmFLl_8dlmalloc8dlmallocINtB5_8DlmallocNtNtB7_3sys6SystemE6mallocCsdl5sGgnNXvY_3std": 2,
+        "$_RNvXs_NtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6scriptNtB4_16HuntedUnitScriptNtNtNtCs11OJtM1yFBm_10spring_sdk3cus6script10UnitScript10call_named": 12,
+        "$_RNvMs_NtNtCs11OJtM1yFBm_10spring_sdk3cus8instanceINtB4_11CusInstanceNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6script16HuntedUnitScriptE10try_invokeB1a_": 2,
+        "$_RINvCsk9IfqqToMKC_17hunted_rules_wasm19with_gadget_handleruNCINvB2_18with_addon_contextuNCNvMs0_NtNtB2_3cus6scriptNtB1w_16HuntedUnitScript10named_call0E0EB2_": 4,
+        "$_RINvCsk9IfqqToMKC_17hunted_rules_wasm19with_gadget_handleruNCINvB2_18with_addon_contextuNCNvMs0_NtNtB2_3cus6scriptNtB1w_16HuntedUnitScript10named_calls_0E0EB2_": 4,
+        "$_RINvMNtNtCsdl5sGgnNXvY_3std4sync9once_lockINtB3_8OnceLockNtNtCsk9IfqqToMKC_17hunted_rules_wasm4defs4DefsE10initializeNCINvB2_11get_or_initNCNvBV_4defs0E0zEBX_": 2,
+        "$_RINvMs0_NtCs3lgDEixyuPC_11springcabal7messageNtB6_7Encoder2kvlECsk9IfqqToMKC_17hunted_rules_wasm": 2,
+        "$_RINvMsi_NtNtNtCsewWLk9TkM7w_5alloc11collections5btree3mapINtB6_8BTreeMaplNtCscU5mONCCD8K_19spring_sdk_internal6Float3E6removelECsk9IfqqToMKC_17hunted_rules_wasm": 4,
+        "$_RINvNtNtNtCsdkdt1aaAg1T_4core5slice4sort8unstable7ipnsortNtCscU5mONCCD8K_19spring_sdk_internal6UnitIdNCINvMB6_SBT_20sort_unstable_by_keylNCNvMs_NtNtCs11OJtM1yFBm_10spring_sdk3cus8registryINtB2i_11CusRegistryNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6script16HuntedUnitScriptE3due0E0EB3p_": 6,
+        "$_RINvNtNtNtNtCsdkdt1aaAg1T_4core5slice4sort8unstable9quicksort9quicksortNtCscU5mONCCD8K_19spring_sdk_internal6UnitIdNCINvMB8_SB17_20sort_unstable_by_keylNCNvMs_NtNtCs11OJtM1yFBm_10spring_sdk3cus8registryINtB2x_11CusRegistryNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6script16HuntedUnitScriptE3due0E0EB3E_": 20,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus10lighthouse6update0B7_": 6,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus4mine4fuse0B7_": 4,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot5score0B7_": 2,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot5sound0B7_": 4,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot7consume0B7_": 2,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot7dropped0B7_": 4,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot8stealing0B7_": 4,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot5sound": 4,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6rabbit10controller0B7_": 30,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6rabbit10reset_pose": 4,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6rabbit16stop_moving_task0B7_": 4,
+        "$_RNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus7shotgun4fire0B7_": 6,
+        "$_RNCNvXNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets15weapon_handlersNtB4_20WeaponHandlersGadgetINtNtCsllKBBIU1XoX_13spring_addons5rules6GadgetNtNtB8_5state6GlobalE10game_frames_0B8_": 8,
+        "$_RNvMNtCsk9IfqqToMKC_17hunted_rules_wasm12unit_scriptsNtB2_4Call3run": 2,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition10with_stateNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus10lighthouse15LighthouseStateNCNvB1r_6update0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1v_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition10with_stateNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot11CarrotStateNCNvB1r_5sound0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1v_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition10with_stateNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot11CarrotStateNCNvB1r_8stealing0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1v_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition10with_stateNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot12CarriedStateNCNvB1r_7dropped0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1v_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition10with_stateNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6rabbit11RabbitStateNCNvB1r_10controller0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1v_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition10with_stateNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6rabbit11RabbitStateNCNvB1r_16stop_moving_task0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1v_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition10with_stateNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus7shotgun12ShotgunStateNCNvB1r_4fire0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1v_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition3newNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus4mine4fuse0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1p_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition3newNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot5score0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1p_": 4,
+        "$_RNSNvYNCINvMNtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtBa_14TaskDefinition3newNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot7consume0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTNtBa_7UnitCtxEE9call_once6vtableB1p_": 4,
+        "$_RNvNtCsk9IfqqToMKC_17hunted_rules_wasm5units10create_now": 6,
+        "$_RNSNvYNCINvNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets15weapon_handlers10update_gunNCNvXB9_NtB9_20WeaponHandlersGadgetINtNtCsllKBBIU1XoX_13spring_addons5rules6GadgetNtNtBd_5state6GlobalE10game_frames_0E0INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTQINtCs11OJtM1yFBm_10spring_sdk6SpringNtB46_11RulesSyncedEINtNtB3o_6option6OptionlEEE9call_once6vtableBd_": 2,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets8blocking17make_non_blocking": 2,
+        "$_RNSNvYNCNCNvMNtCsk9IfqqToMKC_17hunted_rules_wasm12unit_scriptsNtBb_4Call5queue00INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTQINtCs11OJtM1yFBm_10spring_sdk6SpringNtB25_11RulesSyncedEEE9call_once6vtableBd_": 2,
+        "$_RNSNvYNCNCNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets8ui_input15request_restart00INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTQINtCs11OJtM1yFBm_10spring_sdk6SpringNtB2a_11RulesSyncedEEE9call_once6vtableBe_": 14,
+        "$_RNvNtCsk9IfqqToMKC_17hunted_rules_wasm5units11destroy_now": 2,
+        "$_RNvNtCsk9IfqqToMKC_17hunted_rules_wasm6status4send": 6,
+        "$_RNSNvYNCNCNvXs_NtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets9rabbit_aiNtBd_14RabbitAiGadgetINtNtCsllKBBIU1XoX_13spring_addons5rules6GadgetNtNtBh_5state6GlobalE10game_frame00INtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTQINtCs11OJtM1yFBm_10spring_sdk6SpringNtB3A_11RulesSyncedEEE9call_once6vtableBh_": 39,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets9rabbit_ai13update_rabbit": 83,
+        "$_RNvNtNtCs11OJtM1yFBm_10spring_sdk4wasm4game14get_mod_option": 5,
+        "$_RNvMNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets9rabbit_ai6memoryNtB2_7Rabbits12memory_index": 10,
+        "$_RNvMs2_NtNtCs11OJtM1yFBm_10spring_sdk3cus4hostINtB5_7CusHostNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6script16HuntedUnitScriptE12unit_createdB12_": 2,
+        "$_RNvXs_NtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6scriptNtB4_16HuntedUnitScriptNtNtNtCs11OJtM1yFBm_10spring_sdk3cus6script10UnitScript6killed": 2,
+        "$_RNvXs_NtNtCsewWLk9TkM7w_5alloc3vec11spec_extendINtB6_3VeclEINtB4_10SpecExtendlINtNtNtNtCsdkdt1aaAg1T_4core4iter8adapters3map3MapINtNtB6_9into_iter8IntoIterNtNtNtCs11OJtM1yFBm_10spring_sdk3cus5types5PieceENCNvMs_NtB2x_8instanceINtB3n_11CusInstanceNtNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6script16HuntedUnitScriptE10try_invokes0_0EE11spec_extendB42_": 2,
+        "$_RNvMs0_NtCs3lgDEixyuPC_11springcabal7messageNtB5_7Encoder7kv_flag": 2,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus10lighthouse6update": 4,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus4mine4fuse": 4,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot8stealing": 4,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6carrot5score": 4,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus6rabbit10controller": 4,
+        "$_RNvNtNtCsk9IfqqToMKC_17hunted_rules_wasm3cus7shotgun4fire": 4,
+        "$_RNvXNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets15weapon_handlersNtB2_20WeaponHandlersGadgetINtNtCsllKBBIU1XoX_13spring_addons5rules6GadgetNtNtB6_5state6GlobalE10game_frame": 30,
+        "$_RNvXNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets15weapon_handlersNtB2_20WeaponHandlersGadgetINtNtCsllKBBIU1XoX_13spring_addons5rules6GadgetNtNtB6_5state6GlobalE14unit_destroyed": 2,
+        "$_RNvXNtNtCsk9IfqqToMKC_17hunted_rules_wasm7gadgets6rosterNtB2_12RosterGadgetINtNtCsllKBBIU1XoX_13spring_addons5rules6GadgetNtNtB6_5state6GlobalE14unit_destroyed": 2,
+        "$_RNvXsD_NtNtCs11OJtM1yFBm_10spring_sdk3cus9schedulerNtB5_7UnitCtxNtNtCsdkdt1aaAg1T_4core5clone5Clone5clone": 2,
+        "$_RNvXs_Csk9IfqqToMKC_17hunted_rules_wasmNtB4_19___SpringAddonModuleINtNtCs11OJtM1yFBm_10spring_sdk6module6ModuleNtB17_11RulesSyncedE10initialize": 13,
+        "$_RNvMsa_NtCsdkdt1aaAg1T_4core3fmtNtB5_9Formatter3pad": 73,
+        "$spring:module/initialize": 6,
+        "$_RNvMs2_NtNtNtCsdkdt1aaAg1T_4core3num3imp6bignumNtB5_8Big32x408mul_pow2": 6,
+        "$_RNvMsa_NtCsdkdt1aaAg1T_4core3fmtNtB5_9Formatter19pad_formatted_parts": 2,
+        "$_RNvXs1i_NtCsdkdt1aaAg1T_4core3fmtRNtNtCsdl5sGgnNXvY_3std5panic13PanicHookInfoNtB6_7Display3fmtCsllKBBIU1XoX_13spring_addons": 8,
+        "$_RNvXNtCsdkdt1aaAg1T_4core3anyReNtB2_3Any7type_idCsdl5sGgnNXvY_3std": 2,
+        "$_RNvXNtCsdkdt1aaAg1T_4core3anyNtNtCsewWLk9TkM7w_5alloc6string6StringNtB2_3Any7type_idCsdl5sGgnNXvY_3std": 2,
+        "$_RNSNvYNvNtCsdl5sGgnNXvY_3std9panicking12default_hookINtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTRNtNtB8_5panic13PanicHookInfoEE9call_once6vtableB8_": 4,
+        "$_RNvYNvNtCsdl5sGgnNXvY_3std9panicking12default_hookINtNtNtCsdkdt1aaAg1T_4core3ops8function5FnMutTRNtNtB6_5panic13PanicHookInfoEE8call_mutB6_": 4,
+        "$_RNvYNvNtCsdl5sGgnNXvY_3std9panicking12default_hookINtNtNtCsdkdt1aaAg1T_4core3ops8function2FnTRNtNtB6_5panic13PanicHookInfoEE4callB6_": 4
+      },
+      "wat": "codex-work/night-2026-10-30/v4/hunted-simd-build/hunted-rules.wat"
+    },
+    "LuaUI/wasm/hunted-ui.wasm": {
+      "normal_sha256": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d",
+      "simd_sha256": "cdecd3dc0586dc88beddc11097b021a2624aad0e5bfde1999a2aefbaaebf4fe8",
+      "normal_bytes": 298530,
+      "simd_bytes": 298790,
+      "normal_vector_operations": {},
+      "simd_vector_operations": {
+        "v128.const": 28,
+        "v128.store": 69,
+        "v128.load": 39,
+        "i32x4.extract_lane": 10,
+        "v128.store32_lane": 1,
+        "i8x16.shuffle": 14,
+        "v128.not": 6,
+        "i32x4.shr_u": 13,
+        "v128.or": 7,
+        "v128.and": 6,
+        "i32x4.add": 6,
+        "v128.load64_zero": 2,
+        "v128.load32_zero": 1,
+        "i8x16.gt_s": 1,
+        "i16x8.extend_low_i8x16_s": 1,
+        "i32x4.extend_low_i16x8_s": 1,
+        "i32x4.shl": 1,
+        "i8x16.eq": 4,
+        "i8x16.all_true": 4,
+        "i8x16.ne": 1,
+        "v128.any_true": 1
+      },
+      "simd_functions": {
+        "$_RINvMNtCs3lgDEixyuPC_11springcabal7volumesNtB3_7Volumes18draw_ground_circleNtCs11OJtM1yFBm_10spring_sdk2UiECs4lj3AHTR0tp_14hunted_ui_wasm": 6,
+        "$_RINvMs0_NtCs3lgDEixyuPC_11springcabal7messageNtB6_7Encoder5fieldfECs4lj3AHTR0tp_14hunted_ui_wasm": 2,
+        "$_RNvMs0_NtCsgis5MWNmFLl_8dlmalloc8dlmallocINtB5_8DlmallocNtNtB7_3sys6SystemE6mallocCsdl5sGgnNXvY_3std": 2,
+        "$_RNvNtCs11OJtM1yFBm_10spring_sdk9callbacks10wasm_event": 9,
+        "$_RNCNvNtNtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets7gui_rml3hud15create_bindings0B9_": 2,
+        "$_RNCNvNtNtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets7gui_rml3hud15create_bindingss2_0B9_": 2,
+        "$_RNCNvNtNtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets7gui_rml3hud15create_bindingss_0B9_": 2,
+        "$_RNvMs_NtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets7gui_rmlNtB4_3Rml10initialize": 22,
+        "$_RNvNtNtNtCscU5mONCCD8K_19spring_sdk_internal9generated5owned6rml_ui20data_model_bind_rows": 2,
+        "$_RNvXNtNtCsdkdt1aaAg1T_4core4iter8adaptersINtB2_12GenericShuntINtNtB2_3map3MapINtNtNtB4_7sources7from_fn6FromFnNCNvCs4lj3AHTR0tp_14hunted_ui_wasm35___spring_wasm_core_callin_key_press0ENCNCNCB1M_s_000EINtNtB6_6result6ResultNtNtB6_7convert10InfallibleNtCscU5mONCCD8K_19spring_sdk_internal8ApiErrorEENtNtNtB4_6traits8iterator8Iterator4nextB1O_": 4,
+        "$_RNvXs0_NtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets9gui_inputNtB5_14GuiInputWidgetINtNtCsllKBBIU1XoX_13spring_addons2ui6WidgetNtNtB9_5state6GlobalE11mouse_press": 3,
+        "$_RNvNtNtCs11OJtM1yFBm_10spring_sdk4wasm4game14get_mod_option": 5,
+        "$_RNvXs0_NtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets9gui_inputNtB5_14GuiInputWidgetINtNtCsllKBBIU1XoX_13spring_addons2ui6WidgetNtNtB9_5state6GlobalE6update": 6,
+        "$_RNvXs1_NtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets7gui_rmlNtB5_12GuiRmlWidgetINtNtCsllKBBIU1XoX_13spring_addons2ui6WidgetNtNtB9_5state6GlobalE6update": 2,
+        "$_RNvXs1_NtNtCs4lj3AHTR0tp_14hunted_ui_wasm7widgets7gui_rmlNtB5_12GuiRmlWidgetINtNtCsllKBBIU1XoX_13spring_addons2ui6WidgetNtNtB9_5state6GlobalE8shutdown": 2,
+        "$_RNvXs_Cs4lj3AHTR0tp_14hunted_ui_wasmNtB4_19___SpringAddonModuleINtNtCs11OJtM1yFBm_10spring_sdk6module6ModuleNtB14_2UiE10initialize": 20,
+        "$_RNvMsa_NtCsdkdt1aaAg1T_4core3fmtNtB5_9Formatter3pad": 73,
+        "$spring:callin/key-press": 10,
+        "$spring:callin/key-release": 10,
+        "$_RNvMs2_NtNtNtCsdkdt1aaAg1T_4core3num3imp6bignumNtB5_8Big32x408mul_pow2": 6,
+        "$_RNvMsa_NtCsdkdt1aaAg1T_4core3fmtNtB5_9Formatter19pad_formatted_parts": 2,
+        "$_RNvXs1i_NtCsdkdt1aaAg1T_4core3fmtRNtNtCsdl5sGgnNXvY_3std5panic13PanicHookInfoNtB6_7Display3fmtCsllKBBIU1XoX_13spring_addons": 8,
+        "$_RNvXNtCsdkdt1aaAg1T_4core3anyReNtB2_3Any7type_idCsdl5sGgnNXvY_3std": 2,
+        "$_RNvXNtCsdkdt1aaAg1T_4core3anyNtNtCsewWLk9TkM7w_5alloc6string6StringNtB2_3Any7type_idCsdl5sGgnNXvY_3std": 2,
+        "$_RNSNvYNvNtCsdl5sGgnNXvY_3std9panicking12default_hookINtNtNtCsdkdt1aaAg1T_4core3ops8function6FnOnceTRNtNtB8_5panic13PanicHookInfoEE9call_once6vtableB8_": 4,
+        "$_RNvYNvNtCsdl5sGgnNXvY_3std9panicking12default_hookINtNtNtCsdkdt1aaAg1T_4core3ops8function5FnMutTRNtNtB6_5panic13PanicHookInfoEE8call_mutB6_": 4,
+        "$_RNvYNvNtCsdl5sGgnNXvY_3std9panicking12default_hookINtNtNtCsdkdt1aaAg1T_4core3ops8function2FnTRNtNtB6_5panic13PanicHookInfoEE4callB6_": 4
+      },
+      "wat": "codex-work/night-2026-10-30/v4/hunted-simd-build/hunted-ui.wat"
+    }
+  },
+  "checks": {
+    "passed": true,
+    "cases": [
+      {
+        "case": "serial",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-simd-build/check-serial-2",
+        "workers": 1,
+        "jobs": "off"
+      },
+      {
+        "case": "visual",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-simd-build/check-visual-0",
+        "workers": 1,
+        "jobs": "off"
+      },
+      {
+        "case": "jobs",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-simd-build/check-jobs-0",
+        "workers": 4,
+        "jobs": "check"
+      }
+    ]
+  },
+  "worlds": {
+    "passed": true,
+    "results": [
+      {
+        "load": 1,
+        "recordings": {
+          "lua": "perf-runs/2026-10-30-night-v4-attempts/hunted-simd-worlds/1x-r0/hunted-01-lua",
+          "wasm": "perf-runs/2026-10-30-night-v4-attempts/hunted-simd-worlds/1x-r0/hunted-01-wasm"
+        },
+        "comparison": {
+          "sample_count": 401,
+          "first_differences": {},
+          "different_samples": {},
+          "examples": {}
+        }
+      },
+      {
+        "load": 10,
+        "recordings": {
+          "wasm": "perf-runs/2026-10-30-night-v4-attempts/hunted-simd-worlds/10x-r0/hunted-00-wasm",
+          "lua": "perf-runs/2026-10-30-night-v4-attempts/hunted-simd-worlds/10x-r0/hunted-00-lua"
+        },
+        "comparison": {
+          "sample_count": 401,
+          "first_differences": {},
+          "different_samples": {},
+          "examples": {}
+        }
+      }
+    ]
+  },
+  "timings": [
+    {
+      "id": "hunted-rust-simd-10x",
+      "title": "Hunted Rust compiler",
+      "load": "10\u00d7",
+      "backends": [
+        "wasm"
+      ],
+      "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+      "candidate": "87251863516a4c03b58464fc4262742d50d1fdbd",
+      "adopted": null,
+      "change": "Enable target-feature+simd128 with explicit modrules system.WasmSimd; relaxed SIMD remains off. Same Rust source/SDK/compiler otherwise, same NVIDIA engine and existing guards. Stress first; evaluate normal only if five pairs establish a whole-frame stress gain.",
+      "backend": "wasm",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-0-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-0-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-1-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-1-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-2-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-2-block-0/after/hunted-01-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-3-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-3-block-0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-4-block-0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-30-night-v4-attempts/hunted-rust-simd/10x-round-4-block-0/after/hunted-00-wasm"
+        }
+      ],
+      "wall_before_ms": 3.5171750000000004,
+      "wall_after_ms": 3.5167783333333333,
+      "wall_change_pct": 1.0068289936880026,
+      "wall_mean_ratio_95ci": [
+        0.9835643168042317,
+        1.0521821345199465
+      ],
+      "sim_before_ms": 1.4709949999999998,
+      "sim_after_ms": 1.4821300000000002,
+      "sim_change_pct": 0.7569706219259897,
+      "sim_mean_ratio_95ci": [
+        0.9978535993096423,
+        1.0147817138648167
+      ],
+      "draw_before_ms": 1.928203,
+      "draw_after_ms": 1.9227180000000001,
+      "draw_change_pct": 2.979064815092536,
+      "draw_mean_ratio_95ci": [
+        0.96041968855117,
+        1.123537296708058
+      ]
+    },
+    {
+      "id": "hunted-rust-simd-1x",
+      "title": "Hunted Rust compiler",
+      "load": "1\u00d7",
+      "backends": [
+        "wasm"
+      ],
+      "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+      "candidate": "87251863516a4c03b58464fc4262742d50d1fdbd",
+      "adopted": null,
+      "change": "Enable target-feature+simd128 with explicit modrules system.WasmSimd; relaxed SIMD remains off. Same Rust source/SDK/compiler otherwise, same NVIDIA engine and existing guards. Stress first; evaluate normal only if five pairs establish a whole-frame stress gain.",
+      "backend": "wasm",
+      "measured_rounds": 0,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 0,
+      "evidence": [],
+      "wall_before_ms": null,
+      "wall_after_ms": null,
+      "wall_change_pct": null,
+      "wall_mean_ratio_95ci": null,
+      "sim_before_ms": null,
+      "sim_after_ms": null,
+      "sim_change_pct": null,
+      "sim_mean_ratio_95ci": null,
+      "draw_before_ms": null,
+      "draw_after_ms": null,
+      "draw_change_pct": null,
+      "draw_mean_ratio_95ci": null
+    }
+  ],
+  "decision": "No reliable10x whole-frame gain in five clean alternating pairs; normal-load timing skipped by the stress-first decision rule."
+}

@@ -1,81 +1,8 @@
 {
-  "generated_utc": "2026-10-30T22:36:25.737696+00:00",
-  "primary_cases_with_matching_profile_pair": 5,
+  "generated_utc": "2026-10-31T00:06:06.311695+00:00",
+  "primary_cases_with_matching_profile_pair": 8,
   "scope": "Exclusive perf CPU sample weights per measured frame. Current engine and resource guard, sources and module identities exactly match each primary timing case. Profiles are separate instrumented captures; these are neither GPU execution times nor additional timing replicates. Language/runtime combines Lua interpreter/table/GC, Wasm guest and Wasmtime. Other CPU includes bindings, engine, graphics driver and unresolved symbols. Native call wrappers can therefore remain outside the language column. Sampling variation is not an exact causal decomposition of whole-frame timing.",
   "cases": [
-    {
-      "case": "hunted-lua-rust-w1",
-      "backends": {
-        "lua": {
-          "main_thread_cpu_ms_per_frame": 0.97194388,
-          "language_runtime_cpu_ms_per_frame": 0.20708082666666666,
-          "other_main_thread_cpu_ms_per_frame": 0.7648630533333334,
-          "exclusive_categories_ms": {
-            "CPU time in graphics driver": 0.36406145333333334,
-            "Checksums / measurement": 0.016700066666666666,
-            "Lua runtime / tables / GC": 0.20708082666666666,
-            "Native movement / pathfinding": 0.04342017333333333,
-            "Native rendering / models": 0.06680026666666666,
-            "Native simulation / animation": 0.04342017333333333,
-            "Other native code": 0.23046092
-          },
-          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-hunted-0f/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-00-lua/profile.json",
-          "profile_sha256": "09e7090a1eb131ec7d93565e9a5bf7daef609a00478be7aab04b333173dbd7e6",
-          "samples": 291,
-          "identity": {
-            "source_commit": "02009c4793e6de5e0dcb20517e126244626ebbef",
-            "modules": {},
-            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
-            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
-            "cpu_activity_policy": {
-              "max_background_cpu_cores": 0.5,
-              "quiet_seconds": 10,
-              "excludes": "runner process tree including live and reaped children",
-              "window": "launch through first CPU sample after final frame marker"
-            }
-          }
-        },
-        "wasm": {
-          "main_thread_cpu_ms_per_frame": 0.83166332,
-          "language_runtime_cpu_ms_per_frame": 0.07014028,
-          "other_main_thread_cpu_ms_per_frame": 0.7615230399999999,
-          "exclusive_categories_ms": {
-            "CPU time in graphics driver": 0.32064128,
-            "Checksums / measurement": 0.0033400133333333333,
-            "Lua runtime / tables / GC": 0.006680026666666667,
-            "Native movement / pathfinding": 0.026720106666666667,
-            "Native rendering / models": 0.06346025333333333,
-            "Native simulation / animation": 0.04676018666666667,
-            "Other native code": 0.2972611866666667,
-            "Unresolved": 0.0033400133333333333,
-            "Wasm guest": 0.04342017333333333,
-            "Wasmtime runtime": 0.02004008
-          },
-          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-hunted-0f/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-00-wasm/profile.json",
-          "profile_sha256": "0f07b3ae78c890091f13e59bece2bc619eda2a6ee7457ea6b76c3356dc7ef56e",
-          "samples": 249,
-          "identity": {
-            "source_commit": "557bda6a5cca611363f665c0ca00687cc51748ad",
-            "modules": {
-              "LuaUI/wasm/hunted-ui.wasm": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d",
-              "LuaRules/wasm/hunted-rules.wasm": "86bacda5532ef90d3d6c3c676a401bf7e45278afb03afb9f49dac4867a36d85f",
-              "LuaRules/wasm/hunted-jobs.wasm": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
-            },
-            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
-            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
-            "cpu_activity_policy": {
-              "max_background_cpu_cores": 0.5,
-              "quiet_seconds": 10,
-              "excludes": "runner process tree including live and reaped children",
-              "window": "launch through first CPU sample after final frame marker"
-            }
-          }
-        }
-      },
-      "main_thread_difference_lua_minus_rust_ms": 0.14028056,
-      "language_runtime_difference_lua_minus_rust_ms": 0.13694054666666666,
-      "other_cpu_difference_lua_minus_rust_ms": 0.003340013333333447
-    },
     {
       "case": "hunted-10x-lua-rust-w1",
       "backends": {
@@ -150,6 +77,79 @@
       "main_thread_difference_lua_minus_rust_ms": 3.4201736533333333,
       "language_runtime_difference_lua_minus_rust_ms": 3.370073453333333,
       "other_cpu_difference_lua_minus_rust_ms": 0.05010020000000015
+    },
+    {
+      "case": "hunted-lua-rust-w1",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 0.97194388,
+          "language_runtime_cpu_ms_per_frame": 0.20708082666666666,
+          "other_main_thread_cpu_ms_per_frame": 0.7648630533333334,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.36406145333333334,
+            "Checksums / measurement": 0.016700066666666666,
+            "Lua runtime / tables / GC": 0.20708082666666666,
+            "Native movement / pathfinding": 0.04342017333333333,
+            "Native rendering / models": 0.06680026666666666,
+            "Native simulation / animation": 0.04342017333333333,
+            "Other native code": 0.23046092
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-hunted-0f/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-00-lua/profile.json",
+          "profile_sha256": "09e7090a1eb131ec7d93565e9a5bf7daef609a00478be7aab04b333173dbd7e6",
+          "samples": 291,
+          "identity": {
+            "source_commit": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "modules": {},
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 0.83166332,
+          "language_runtime_cpu_ms_per_frame": 0.07014028,
+          "other_main_thread_cpu_ms_per_frame": 0.7615230399999999,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.32064128,
+            "Checksums / measurement": 0.0033400133333333333,
+            "Lua runtime / tables / GC": 0.006680026666666667,
+            "Native movement / pathfinding": 0.026720106666666667,
+            "Native rendering / models": 0.06346025333333333,
+            "Native simulation / animation": 0.04676018666666667,
+            "Other native code": 0.2972611866666667,
+            "Unresolved": 0.0033400133333333333,
+            "Wasm guest": 0.04342017333333333,
+            "Wasmtime runtime": 0.02004008
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-hunted-0f/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-00-wasm/profile.json",
+          "profile_sha256": "0f07b3ae78c890091f13e59bece2bc619eda2a6ee7457ea6b76c3356dc7ef56e",
+          "samples": 249,
+          "identity": {
+            "source_commit": "557bda6a5cca611363f665c0ca00687cc51748ad",
+            "modules": {
+              "LuaUI/wasm/hunted-ui.wasm": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d",
+              "LuaRules/wasm/hunted-rules.wasm": "86bacda5532ef90d3d6c3c676a401bf7e45278afb03afb9f49dac4867a36d85f",
+              "LuaRules/wasm/hunted-jobs.wasm": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
+            },
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 0.14028056,
+      "language_runtime_difference_lua_minus_rust_ms": 0.13694054666666666,
+      "other_cpu_difference_lua_minus_rust_ms": 0.003340013333333447
     },
     {
       "case": "area17-1x-w1",
@@ -299,6 +299,82 @@
       "other_cpu_difference_lua_minus_rust_ms": 0.03340013333333314
     },
     {
+      "case": "flove-combat-10x-lua-rust-w1",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 54.245156546666664,
+          "language_runtime_cpu_ms_per_frame": 7.02404804,
+          "other_main_thread_cpu_ms_per_frame": 47.22110850666667,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 2.1910487466666666,
+            "Checksums / measurement": 0.4008016,
+            "Lua runtime / tables / GC": 7.02404804,
+            "Native movement / pathfinding": 17.110888306666666,
+            "Native rendering / models": 2.99599196,
+            "Native simulation / animation": 13.53707404,
+            "Other native code": 10.915163573333333,
+            "Unresolved": 0.06680026666666666,
+            "Worker queue / waiting": 0.0033400133333333333
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/flove-combat-10x-lua-rust-w1/flove-combat-10x/flove-01-lua/profile.json",
+          "profile_sha256": "60af5dabc0d5c6c67cd2342897accb40ab445b322ebf807947e4a71ee85b5693",
+          "samples": 16256,
+          "identity": {
+            "source_commit": "ff06007e58303e169a7a39d301f70b479d745625",
+            "modules": {},
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 47.87241110666667,
+          "language_runtime_cpu_ms_per_frame": 2.14428856,
+          "other_main_thread_cpu_ms_per_frame": 45.72812254666667,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 2.254509,
+            "Checksums / measurement": 0.49766198666666667,
+            "Lua runtime / tables / GC": 0.7047428133333333,
+            "Native movement / pathfinding": 16.6833666,
+            "Native rendering / models": 2.8289912933333334,
+            "Native simulation / animation": 13.002671906666667,
+            "Other native code": 10.357381346666667,
+            "Unresolved": 0.09352037333333334,
+            "Wasm guest": 1.2090848266666667,
+            "Wasmtime runtime": 0.23046092,
+            "Worker queue / waiting": 0.01002004
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/flove-combat-10x-lua-rust-w1/flove-combat-10x/flove-01-wasm/profile.json",
+          "profile_sha256": "2a6cffd368e86dc27d25254971e9019464550c8b3c156150052fb0d9c594c549",
+          "samples": 14351,
+          "identity": {
+            "source_commit": "86b3bed3acdccc8ec7fe550e78cb041ec4fcfc6c",
+            "modules": {
+              "LuaUI/wasm/flove-ui.wasm": "f153a3a25503ef7cc3c4a9d32bbed6ffedfcdefb8acf506b5022a053236ae7d9",
+              "LuaRules/wasm/flove-jobs.wasm": "567c4db1651eb750ea1b58a306f838da552ce7fa014affa7e324052697e8eec3",
+              "LuaRules/wasm/flove-rules.wasm": "96a6475ac79889141d0e45a6cc7e421cd2c85adda4a717d7e56a84f1ce647995"
+            },
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 6.372745439999996,
+      "language_runtime_difference_lua_minus_rust_ms": 4.879759480000001,
+      "other_cpu_difference_lua_minus_rust_ms": 1.4929859599999986
+    },
+    {
       "case": "flove-combat-lua-rust-w1",
       "backends": {
         "lua": {
@@ -372,6 +448,152 @@
       "main_thread_difference_lua_minus_rust_ms": 0.6045424133333333,
       "language_runtime_difference_lua_minus_rust_ms": 0.44756178666666674,
       "other_cpu_difference_lua_minus_rust_ms": 0.1569806266666669
+    },
+    {
+      "case": "mycube-1x-w1",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 2.12424848,
+          "language_runtime_cpu_ms_per_frame": 0.18704074666666667,
+          "other_main_thread_cpu_ms_per_frame": 1.9372077333333333,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 1.06212424,
+            "Lua runtime / tables / GC": 0.18704074666666667,
+            "Native movement / pathfinding": 0.0033400133333333333,
+            "Native rendering / models": 0.04008016,
+            "Native simulation / animation": 0.023380093333333334,
+            "Other native code": 0.5744822933333333,
+            "Unresolved": 0.23046092,
+            "Worker queue / waiting": 0.0033400133333333333
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-lua/profile.json",
+          "profile_sha256": "3c747c074303035566939ad0e2de76d3a7f647c58973e910daef41740bf30b3e",
+          "samples": 636,
+          "identity": {
+            "source_commit": "4698657d927b4eac083319f86b177195e1ef7480",
+            "modules": {},
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 1.83366732,
+          "language_runtime_cpu_ms_per_frame": 0.023380093333333334,
+          "other_main_thread_cpu_ms_per_frame": 1.8102872266666667,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 1.0955243733333333,
+            "Checksums / measurement": 0.0033400133333333333,
+            "Lua runtime / tables / GC": 0.0033400133333333333,
+            "Native movement / pathfinding": 0.0033400133333333333,
+            "Native rendering / models": 0.06012024,
+            "Native simulation / animation": 0.006680026666666667,
+            "Other native code": 0.29392117333333334,
+            "Unresolved": 0.34736138666666666,
+            "Wasm guest": 0.013360053333333333,
+            "Wasmtime runtime": 0.006680026666666667
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-wasm/profile.json",
+          "profile_sha256": "1d5976fc924fb0d43197f00e164a33972f178b6a750edc27d8b1af04103c4d57",
+          "samples": 549,
+          "identity": {
+            "source_commit": "181d80a267b737b8f3a86f4a0fe2c6dedfc8431f",
+            "modules": {
+              "LuaUI/wasm/mycube-ui.wasm": "5fe29534244654fe276d76f781fff466990a4ce17734365a25e5f6d9ba11c4ec",
+              "LuaRules/wasm/mycube-rules.wasm": "698230a53a617aafbfbefad22005ae0e66243582363a702baccd5d485b7d9517"
+            },
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 0.2905811599999999,
+      "language_runtime_difference_lua_minus_rust_ms": 0.16366065333333335,
+      "other_cpu_difference_lua_minus_rust_ms": 0.12692050666666654
+    },
+    {
+      "case": "partsneeded-1x-w1",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 1.7368069333333334,
+          "language_runtime_cpu_ms_per_frame": 0.20374081333333333,
+          "other_main_thread_cpu_ms_per_frame": 1.53306612,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.9285237066666666,
+            "Lua runtime / tables / GC": 0.20374081333333333,
+            "Native movement / pathfinding": 0.01002004,
+            "Native rendering / models": 0.04342017333333333,
+            "Native simulation / animation": 0.04342017333333333,
+            "Other native code": 0.29392117333333334,
+            "Unresolved": 0.21376085333333333
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-lua/profile.json",
+          "profile_sha256": "88c36f3cdee539dc6625f674963f44c2fb8a20e206f9923f85b6719765a5e1a1",
+          "samples": 520,
+          "identity": {
+            "source_commit": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+            "modules": {},
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 0.68136272,
+          "language_runtime_cpu_ms_per_frame": 0.04008016,
+          "other_main_thread_cpu_ms_per_frame": 0.64128256,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.36406145333333334,
+            "Checksums / measurement": 0.026720106666666667,
+            "Lua runtime / tables / GC": 0.0033400133333333333,
+            "Native movement / pathfinding": 0.0033400133333333333,
+            "Native rendering / models": 0.06680026666666666,
+            "Native simulation / animation": 0.02004008,
+            "Other native code": 0.14362057333333333,
+            "Unresolved": 0.013360053333333333,
+            "Wasm guest": 0.026720106666666667,
+            "Wasm host API": 0.0033400133333333333,
+            "Wasmtime runtime": 0.01002004
+          },
+          "profile": "perf-runs/2026-10-26-profiles-production/night-v4-0f/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-wasm/profile.json",
+          "profile_sha256": "28762204bcc72e859d789d365b8cad4c98a6429db08a0d30b44cb62a208dfd57",
+          "samples": 204,
+          "identity": {
+            "source_commit": "73696165153a69d71f0899174196389008a31a77",
+            "modules": {
+              "LuaUI/wasm/partsneeded-ui.wasm": "c583ba6cec3a74f0e21b2d352d8de59fc7d045d4e58ed0a1333a681c1c44760f",
+              "LuaRules/wasm/partsneeded-rules.wasm": "35d246a04dc6e2d5c025e907d2803483c17e470f77f25b250a6d4ca578078d67"
+            },
+            "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 1.0554442133333333,
+      "language_runtime_difference_lua_minus_rust_ms": 0.16366065333333332,
+      "other_cpu_difference_lua_minus_rust_ms": 0.89178356
     }
   ]
 }
