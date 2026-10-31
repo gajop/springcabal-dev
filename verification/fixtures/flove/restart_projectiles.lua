@@ -3,8 +3,8 @@ function gadget:GetInfo() return {name='Flove restart projectile regression',lay
 if gadgetHandler:IsSyncedCode() then
     local previousRound, target, resetFrame
     local function status()
+        local round=Spring.GetGameRulesParam('round')
         for _,id in ipairs(Spring.GetTeamUnits(1)) do
-            local round=Spring.GetUnitRulesParam(id,'round')
             if round and Spring.GetUnitDefID(id)==UnitDefNames.spire.id then return round,id end
         end
     end

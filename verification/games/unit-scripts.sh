@@ -5,6 +5,7 @@ LUA_GAME_DIR="$GAMES_DIR/PartsNeeded.sdd"
 WASM_GAME_DIR="$GAMES_DIR/PartsNeeded-wasm.sdd"
 MAP_DIR="$MAPS_DIR/LD35-map.sdd"
 MAP_NAME='LD35 map 0.1'
+SCRIPT_SUITE=partsneeded
 LUA_GAME_NAME='Parts Needed $VERSION'
 WASM_GAME_NAME='Parts Needed WASM $VERSION'
 SOURCE_ROOT="$WASM_GAME_DIR/wasm-src"
@@ -21,9 +22,19 @@ SOURCE_COMPARE="$VERIFICATION_ROOT/unit-scripts/compare_source.py"
 # following frame; all stable animation frames remain densely checked.
 SAMPLE_FRAMES=$(seq -s, 10 42),$(seq -s, 44 88),$(seq -s, 90 170)
 PROBE_PIECES='Body,Head,Eyes,Ears,Mouth,Nose,ArmL,ArmR,ForeArmL,ForeArmR,HandL,HandR,ThighL,ThighR,CrusL,CrusR,FootL,FootR,Hair1,Hair2,Hair3,Hair4'
+MODULES=(partsneeded_rules_wasm:LuaRules/wasm/partsneeded-rules.wasm partsneeded_ui_wasm:LuaUI/wasm/partsneeded-ui.wasm)
 
 unit_scripts_start() {
 	local game=${1:?game name}
+	if [[ $SCRIPT_SUITE == mycube ]]; then
+		vf_start_file "$(vf_launch_script mycube wasm)"
+		vf_start_set GameType "$game"
+		vf_start_set FixedRNGSeed 424242
+		vf_modoption probe_unit eskimo
+		vf_modoption probe_frames "$SAMPLE_FRAMES"
+		vf_modoption probe_phase post
+		return
+	fi
 	vf_start_inline <<EOS
 [GAME]
 {
@@ -39,18 +50,16 @@ EOS
 
 unit_scripts_run_one() {
 	local label=${1:?label} archive=${2:?archive} game=${3:?game} seconds=${4:-60}
-	VF_OUT_DIR="$VERIFICATION_ROOT/out/unit-scripts-partsneeded-$label"
-	vf_workspace "unit-scripts-partsneeded-$label"
+	VF_OUT_DIR="$VERIFICATION_ROOT/out/unit-scripts-$SCRIPT_SUITE-$label"
+	vf_workspace "unit-scripts-$SCRIPT_SUITE-$label"
 	local staged
 	staged=$(vf_stage_game "$archive")
 	if [[ $label == wasm ]]; then
-		vf_install_modules "$staged" \
-			partsneeded_rules_wasm:LuaRules/wasm/partsneeded-rules.wasm \
-			partsneeded_ui_wasm:LuaUI/wasm/partsneeded-ui.wasm
+		vf_install_modules "$staged" "${MODULES[@]}"
 	fi
 	mkdir -p "$staged/LuaRules/Gadgets"
 	cp "$PROBE" "$staged/LuaRules/Gadgets/unit_script_probe.lua"
-	if [[ $label == lua ]]; then
+	if [[ $SCRIPT_SUITE == partsneeded && $label == lua ]]; then
 		# The WASM archive has the equivalent deterministic assembly gadget in
 		# its Rust rules module when built with unit-script-probe. Loading this
 		# Lua fixture there as well would assemble the same body twice and give
@@ -60,10 +69,12 @@ unit_scripts_run_one() {
 	# Keep the LuaUI boundary identical in both runs. The WASM archive normally
 	# ships a Rust UI module, but legacy LuaUI widgets are also active and are
 	# the game's actual input boundary.
-	mkdir -p "$staged/LuaUI/Widgets"
-	cp "$DRIVER" "$staged/LuaUI/Widgets/unit_script_driver.lua"
-	if [[ $label == lua ]]; then
-		cp "$NO_END" "$staged/LuaRules/Gadgets/game_end.lua"
+	if [[ $SCRIPT_SUITE == partsneeded ]]; then
+		mkdir -p "$staged/LuaUI/Widgets"
+		cp "$DRIVER" "$staged/LuaUI/Widgets/unit_script_driver.lua"
+		if [[ $label == lua ]]; then
+			cp "$NO_END" "$staged/LuaRules/Gadgets/game_end.lua"
+		fi
 	fi
 	vf_link_map "$MAP_DIR"
 	vf_link_game "$staged"
@@ -118,8 +129,32 @@ partsneeded_unit_scripts() {
 	echo '>>> Parts Needed Lua/WASM unit-script verification passed <<<'
 }
 
+# Reuse the same runtime matrix observer/comparator for the ordinary My Cube
+# story. This catches idle/aim timing errors that a distant village crop misses.
+mycube_unit_scripts() {
+	local seconds=${1:-60}
+	vf_cleanup_on_exit
+	SCRIPT_SUITE=mycube
+	LUA_GAME_DIR="$GAMES_DIR/MyCube.sdd"
+	WASM_GAME_DIR="$GAMES_DIR/MyCube-wasm.sdd"
+	SOURCE_ROOT="$WASM_GAME_DIR/wasm-src"
+	MAP_DIR="$MAPS_DIR/MyCube_v1-wasm.sdd"
+	LUA_GAME_NAME='Ludum Dare 42 Git'
+	WASM_GAME_NAME='MyCube WASM Git'
+	SAMPLE_FRAMES=$(seq -s, 1 650)
+	MODULES=(mycube_rules_wasm:LuaRules/wasm/mycube-rules.wasm mycube_ui_wasm:LuaUI/wasm/mycube-ui.wasm)
+	vf_build "$SOURCE_ROOT" ''
+	unit_scripts_run_one lua "$LUA_GAME_DIR" "$LUA_GAME_NAME" "$seconds"
+	unit_scripts_run_one wasm "$WASM_GAME_DIR" "$WASM_GAME_NAME" "$seconds"
+	python3 "$COMPARE" \
+		"$VERIFICATION_ROOT/out/unit-scripts-mycube-lua/trace.log" \
+		"$VERIFICATION_ROOT/out/unit-scripts-mycube-wasm/trace.log"
+	echo '>>> My Cube Lua/WASM unit-script verification passed <<<'
+}
+
 case "${1:-}" in
 	source) partsneeded_source ;;
 	partsneeded) partsneeded_unit_scripts "${2:-}" ;;
-	*) vf_die 'usage: unit-scripts.sh [source|partsneeded]' ;;
+	mycube) mycube_unit_scripts "${2:-}" ;;
+	*) vf_die 'usage: unit-scripts.sh [source|partsneeded|mycube]' ;;
 esac

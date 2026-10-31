@@ -1,0 +1,39 @@
+{
+  "complete": true,
+  "rmse": [
+    0.00658035,
+    0.00239798,
+    0.0169916,
+    0.00912297,
+    0.00955293
+  ],
+  "same_existing_village_tolerance_percent": 4,
+  "all_within_existing_tolerance": true,
+  "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/lua-village-check-0",
+  "frames": [
+    25,
+    390,
+    800,
+    1500,
+    2000
+  ],
+  "seed": 1,
+  "engine_unchanged": true,
+  "utc": "2026-10-31T12:03:35.693932+00:00",
+  "reference_runtime": "Original Lua My Cube",
+  "lua_commit": "4698657d927b4eac083319f86b177195e1ef7480",
+  "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+  "images_sha256": {
+    "village_1.png": "ad89e53822606eebcf7322e3adb8e083ba8fd52772af1ed7a643b4872550485d",
+    "village_2.png": "fb814c9affe241582e4f482072af244b10a64c2cb49ca7097583f010214901ac",
+    "village_3.png": "e07a4bff60220bab829cf14d3e208153dfebab5f873ffe7abc42f173967a8a75",
+    "village_4.png": "67f610bd983d119d22376460c4d2035348a09f3f3b7ba44b58c18608e9b4460f",
+    "village_5.png": "fb1b0c3ccade86bd991b4760db41a8fa671b1a31964e275b871d37ec4b409810"
+  },
+  "crop": "400x200+440+300 then normalize, unchanged existing visual method",
+  "lua_source_directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/final-selected-unaffected-v9-shared-healthbars-games/MyCube.sdd",
+  "reference_capture_golden_files_unchanged": true,
+  "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+  "guard_receipt": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/lua-village-check-0/guard.json",
+  "guard_sha256": "4201f7ffbd4cff2a7371b1ff8c9ec43c295072c129b304d6ffb6463b737658fe"
+}

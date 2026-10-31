@@ -11,3 +11,5 @@ gl         4.6.0 NVIDIA 580.178.04
 settings   launch/springsettings.cfg sha1 a487bc4da703
 
 Captured runtime sources resolved to ada482206a1a868ea601d09ee296abf17e9cc637 after capture (same runtime code; committed with documentation).
+
+Village references corrected on31October2026 from the original Lua runtime, with the same seed1, map, five shot frames and normalized crop. HUD reference above is retained. See VILLAGE_REFERENCE.json for hashes, renderer guard receipt and measured Lua/Rust image differences.

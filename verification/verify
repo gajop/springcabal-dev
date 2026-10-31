@@ -13,7 +13,7 @@ declare -A MODES=(
     [mycube]='headless visual lua-headless'
     [partsneeded]='headless visual'
     [ttld]='headless visual lua-visual pose-parity'
-    [unit-scripts]='partsneeded source'
+    [unit-scripts]='partsneeded source mycube'
     [gallery]='ceg anim parity'
     [host]='tests'
     [controls]='all area17 flove gravitas hunted mycube partsneeded ttld'
@@ -28,7 +28,7 @@ ALL_RUNS=(
     'host tests' 'perf tests' 'installed all' 'area17 static' 'area17 headless' 'area17 tech-ui' 'flove headless'
     'flove animation-trace' 'gravitas e2e' 'gravitas headless' 'gravitas lua-rules' 'gravitas lua-play' 'hunted headless' 'mycube headless'
     'mycube lua-headless' 'partsneeded headless' 'ttld headless' 'ttld pose-parity'
-    'unit-scripts partsneeded' 'controls all' 'gravitas bob' 'gravitas lua-bob'
+    'unit-scripts partsneeded' 'unit-scripts mycube' 'controls all' 'gravitas bob' 'gravitas lua-bob'
 )
 # What `verify visual` and `verify update-goldens` run: the golden comparisons.
 VISUAL_RUNS=(

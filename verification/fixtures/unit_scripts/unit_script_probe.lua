@@ -191,3 +191,11 @@ function gadget:GameFrame(frame)
 		gadgetHandler:RemoveGadget(self)
 	end
 end
+
+-- Some comparisons observe ordinary gameplay rather than injecting commands
+-- between gadget callins. Sample those after both runtimes and native physics
+-- have finished the frame. The existing Parts Needed schedule stays unchanged.
+if options.probe_phase == "post" then
+	gadget.GameFramePost = gadget.GameFrame
+	gadget.GameFrame = nil
+end

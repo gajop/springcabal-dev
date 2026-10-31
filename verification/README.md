@@ -23,7 +23,7 @@ just probe gravitas-fire lua     # a debugging probe
 | `mycube` | `headless` \| `visual` \| `lua-headless` |
 | `partsneeded` | `headless` \| `visual` |
 | `ttld` | `headless` \| `visual` \| `lua-visual` \| `pose-parity` |
-| `unit-scripts` | `partsneeded` \| `source` |
+| `unit-scripts` | `partsneeded` \| `source` \| `mycube` |
 | `gallery` | `ceg [game]` \| `anim [game]` \| `parity [game]` (game defaults to `all`) |
 | `host` | `tests` |
 | `controls` | `all` \| `<game>` (then `both`, `wasm` or `lua`) |
@@ -45,6 +45,10 @@ just probe gravitas-fire lua     # a debugging probe
   into a crate takes the game's collision damage, the boss fires in bursts.
 - `pose-parity`, `animation-trace` and `unit-scripts` compare Lua and Rust
   unit-script animation traces numerically.
+  `unit-scripts mycube` reuses the matrix probe during the ordinary story,
+  sampling every frame through the first combat at `GameFramePost`. It catches
+  idle and aim timing changes without replacing gameplay or relaxing the
+  existing transform tolerance.
 - `host tests` runs the host unit tests: `springcabal-rs` and every game's
   `shared` (and Hunted's `ai`) crate.
 - `installed` checks that the modules installed in each game folder match a
