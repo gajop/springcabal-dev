@@ -1,0 +1,24 @@
+{
+  "held": true,
+  "utc": "2026-10-31T06:49:06.949623+00:00",
+  "reason": "TTLD Lua loads the world health-bar widget; Rust has no equivalent pass. Matched ordinary-game frame450 also shows a house-fire difference. Old results cannot support a language-only ranking until both paths are audited and matched.",
+  "held_timing_cases": {
+    "ttld-shadows-1x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-shadows-1x-w1",
+    "ttld-shadows-10x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-shadows-10x-w1",
+    "ttld-burning-1x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-burning-1x-w1",
+    "ttld-burning-10x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-burning-10x-w1"
+  },
+  "all_raw_evidence_preserved": true,
+  "old_capture_parents": [
+    "2026-10-31-profiles-current",
+    "2026-10-31-worlds-current",
+    "2026-10-31-videos-current"
+  ],
+  "new_capture_parents": [
+    "2026-10-31-profiles-matched-ui",
+    "2026-10-31-worlds-matched-ui",
+    "2026-10-31-videos-matched-ui"
+  ],
+  "other_games_continue": true,
+  "ttld_gate": "codex-work/night-2026-10-30/v4/ttld-ui-matched-selection.json"
+}

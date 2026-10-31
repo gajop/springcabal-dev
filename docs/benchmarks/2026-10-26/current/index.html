@@ -26,6 +26,7 @@
 <section id="overview">
   <p class="eyebrow">GPU-rendered game measurements</p>
   <h1>SpringCabal benchmarks</h1>
+  <p class="note" id="ttld-hold-banner">TTLD comparisons are held: the Lua world health-bar pass is missing from Rust, and ordinary-game house-fire rendering is under audit. Existing TTLD numbers are diagnostic and are not a language ranking.</p>
   <p id="campaign-status" class="note"></p>
   <div class="facts"><div><strong id="total-runs">—</strong><span>GPU runs</span></div><div><strong id="accepted-pairs">—</strong><span>clean / attempted pairs</span></div><div><strong>600</strong><span>rendered steps / sample</span></div><div><strong>1 &amp; 4</strong><span>engine worker widths</span></div></div>
   <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Lua ms/frame</th><th>Rust ms/frame</th><th>Rust change</th><th>Sim p50<br>Lua / Rust</th><th>Draw p50<br>Lua / Rust</th><th>Units<br>Lua / Rust</th><th>Clean pairs</th><th>CPU gate</th></tr></thead><tbody id="overview-rows"></tbody></table></div>
@@ -75,6 +76,7 @@
   <details><summary>Changes and source A/B evidence paths</summary><div id="optimization-evidence"></div></details>
   <p class="caption">Current API trials: <a href="hunted-bulk-positions.patch">Hunted bulk reads</a> · <a href="flove-bulk-positions.patch">Flove bulk reads</a> · <a href="hunted-four-packets.patch">four packets</a> · <a href="hunted-serial-bulk.patch">serial bulk snapshot</a>. All four variants were rejected; <a href="candidate-source-audit.json">decisions, base commits and patch hashes</a>. Separate <a href="identical-build-control.json">unchanged-build controls</a> on this engine show whole-frame changes of +1.38% at pool 1 and −1.42% at pool 4; both intervals include zero change. Those controls describe these captures, not a universal noise bound.</p>
   <h2>Causes and corrections</h2>
+  <p class="note">TTLD timings are held while world health-bar and ordinary-game house-fire rendering are matched. Earlier TTLD captures remain diagnostic. <a href="ttld-workload-audit.json">Audit and preserved evidence</a>.</p>
   <div class="table-scroll"><table><thead><tr><th>Game</th><th>Algorithm / behavior corrected</th><th>Evidence</th></tr></thead><tbody>
   <tr><td>Flove</td><td>Corrected Rust creation callbacks so every scenario marker receives Lua's neutral/collision flags. A separate engine bug left native midpoint/radius changes out of the spatial index; this changed query order and then dense-unit collision accumulation.</td><td>The geometry fix makes all 14 recorded query orders exact. Normal and 10× worlds then match all 151 detailed samples, with identical units, projectiles, camera, movement and commands. Existing serial/jobs, original Lua scenario and nine golden-image checks pass. Earlier divergent captures are preserved. Final comparisons are being rerun on the current engine. <a href="native-geometry-audit.json">Before/after query hashes, worlds and engine tests</a>.</td></tr>
   <tr><td>Hunted</td><td>Same incremental food index, sorted rabbit roster, movement cache, f32 math, lifecycle and RNG order. Lua passes the known frame and rabbit definition directly; Rust publishes the same unit rules parameters.</td><td>Lua <a href="https://github.com/SpringCabal/Hunted/commit/02009c4793e6de5e0dcb20517e126244626ebbef">02009c4</a>; Rust <a href="https://github.com/SpringCabal/Hunted/commit/557bda6a5cca611363f665c0ca00687cc51748ad">557bda6</a>. At both normal and 10×: 401 full-detail samples over 2,400 rendered frames match, including rules parameters. Lua source A/B: −1.12% whole-frame time at 10× (95% mean-ratio interval 0.98772–0.99586); normal inconclusive. Rust incremental-index timing inconclusive; retained for algorithm parity. Lua all-unit cache rejected. <a href="hunted-selected-source.json">Source, normal-module and check records</a>.</td></tr>
@@ -93,7 +95,6 @@
   <h3>Where the CPU difference appears</h3>
   <p class="caption">Separate CPU profiles with the same source, modules, engine and guards as each current timing case. Exclusive sampled ms/frame; Lua / Rust. Runtime = Lua VM, tables and GC, or Wasm guest plus Wasmtime and residual Lua. Other = bindings, engine, driver and unresolved symbols. These samples do not measure GPU duration. <a href="runtime-attribution.json">Exact categories and capture identities</a>.</p>
   <div class="table-scroll"><table><thead><tr><th>Case</th><th>Main CPU<br>Lua / Rust</th><th>Language/runtime<br>Lua / Rust</th><th>Other CPU<br>Lua / Rust</th></tr></thead><tbody>
-<tr><td>ttld-shadows-1x-w1</td><td>5.441 / 5.224</td><td>0.731 / 0.237</td><td>4.709 / 4.987</td></tr>
 </tbody></table></div>
   <!-- runtime-attribution-end -->
   <p id="ceiling" class="caption"></p>
