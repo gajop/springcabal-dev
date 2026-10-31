@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T21:53:52.003505+00:00",
+  "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+  "lua_number": "f32",
+  "intermediate_arithmetic": "f32",
+  "trigonometry": "Existing springcabal-math pinned fdlibm/streflop sinf/cosf; same implementation as engine Lua",
+  "sqrt": "Engine FastMath SSE float32 sqrt; Wasm float32 sqrt",
+  "sources": {
+    "rts/lib/lua/include/luaconf.h": "ba12b71d5b7d25b63c64097753d7b44fa9785844038d158fbf85be6f9af4d7ca",
+    "rts/lib/lua/src/lmathlib.cpp": "a6e18bff437dd7cb9250f4d066b0982920c1a82cf52ee1f7a5dad41fd777b7dd",
+    "rts/System/FastMath.h": "80e23859bb33c824dcad023bfe79cc1ebde14d6eb77113d0e03d8cf240588ee7"
+  },
+  "superseded": "Earlier private f64 candidate snapshots; no GPU final comparisons or public adoption used those candidates",
+  "actual_gpu_vertex_uniform_image_proofs": "pending"
+}

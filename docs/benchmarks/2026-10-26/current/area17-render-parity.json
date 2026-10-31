@@ -24,25 +24,25 @@
   "next": "Use original simulation-frame pulse and matching explicit render state/low-height geometry; cache the same immutable cone ring on both sides. Existing NVIDIA functional/visual/input/world and bounded GL checks precede adoption. No engine update.",
   "candidate": {
     "status": "Private; not adopted or published",
-    "utc": "2026-10-31T21:16:22.092428+00:00",
+    "utc": "2026-10-31T21:55:34.521495+00:00",
     "base_commits": {
       "Area-17.sdd": "2c8c725e80814a32259f0fc400487337c1aa5343",
       "Area17-wasm.sdd": "4784fc666fc8783c6e1f5d08f659288fbacb4053"
     },
     "source_diffs_sha256": {
       "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
-      "Area17-wasm.sdd": "03e23e194043c14963567bb0b09d53225f6e1705e0570e232a440dfebdf26672"
+      "Area17-wasm.sdd": "4fcfe11eb8483d9442a4a97becf0ffc903e67b65302ea646284c3846b4c12f09"
     },
     "normal_modules": {
       "LuaRules/wasm/area17-rules.wasm": "6f6b059e71af591ace7ebe85ad2492767a7f077e3af6c730bb67eb729d147276",
-      "LuaUI/wasm/area17-ui.wasm": "a70fcd556eba2b3fe706d62df58bcbcd14233ccbee05ef709d0a28f412b55da3"
+      "LuaUI/wasm/area17-ui.wasm": "4ba2e017c635ed6dfdb8d0887f216754b01cbe3d8c3046fbe09ff66b3f5ae346"
     },
     "checks": {
       "rust_host_tests": 6,
       "lua_regressions": 15,
       "fmt_clippy_lua_syntax": "passed",
       "no_render": {
-        "utc": "2026-10-31T21:10:55.084762+00:00",
+        "utc": "2026-10-31T21:51:20.014212+00:00",
         "complete": false,
         "cases": [
           {
@@ -50,12 +50,12 @@
             "mode": "static",
             "workers": 1,
             "jobs": "off",
-            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/d54c1b3aa5d2/static/attempt-1"
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/9677fbf59c10/static/attempt-0"
           }
         ],
         "source_diffs_sha256": {
           "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
-          "Area17-wasm.sdd": "03e23e194043c14963567bb0b09d53225f6e1705e0570e232a440dfebdf26672"
+          "Area17-wasm.sdd": "4fcfe11eb8483d9442a4a97becf0ffc903e67b65302ea646284c3846b4c12f09"
         },
         "engine_version": "spring-headless version 2026.10.3103 (Headless)",
         "harness_sha256": {
@@ -68,14 +68,18 @@
         "performance_evidence": false
       },
       "no_render_integration": {
-        "utc": "2026-10-31T21:12:16.545261+00:00",
+        "utc": "2026-10-31T21:53:52.003964+00:00",
         "suite_passed": false,
-        "log": "codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/d54c1b3aa5d2/integration/attempt-0/run.log",
+        "source_diffs_sha256": {
+          "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
+          "Area17-wasm.sdd": "4fcfe11eb8483d9442a4a97becf0ffc903e67b65302ea646284c3846b4c12f09"
+        },
+        "log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/9677fbf59c10/integration/attempt-0/run.log",
         "observed_assertions": {
           "Rust": 23,
           "Lua": 6
         },
-        "reason": "Strict suite rejects RmlUi image-load warnings in the no-render context. Full unmodified suite, including zero-warning requirement, remains mandatory in the queued NVIDIA serial case.",
+        "reason": "Strict suite rejects RmlUi image-load warnings in no-render context; full unmodified suite including zero warnings remains mandatory in first queued NVIDIA case.",
         "performance_evidence": false
       }
     },
@@ -85,7 +89,24 @@
     "changes": [
       "Beam uses simulation-frame pulse, original low-height geometry and explicit blend/depth/cull state",
       "Both cache immutable cone rings; Lua computes its pulse/frame once per draw",
-      "Native default radius70 and cached authored wantedHeight match Lua"
-    ]
+      "Native default radius70 and cached authored wantedHeight match Lua",
+      "Float32 intermediates and the existing pinned engine-matching sine/cosine helpers; earlier private float64 candidate snapshots superseded"
+    ],
+    "precision": {
+      "utc": "2026-10-31T21:53:52.003505+00:00",
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "lua_number": "f32",
+      "intermediate_arithmetic": "f32",
+      "trigonometry": "Existing springcabal-math pinned fdlibm/streflop sinf/cosf; same implementation as engine Lua",
+      "sqrt": "Engine FastMath SSE float32 sqrt; Wasm float32 sqrt",
+      "sources": {
+        "rts/lib/lua/include/luaconf.h": "ba12b71d5b7d25b63c64097753d7b44fa9785844038d158fbf85be6f9af4d7ca",
+        "rts/lib/lua/src/lmathlib.cpp": "a6e18bff437dd7cb9250f4d066b0982920c1a82cf52ee1f7a5dad41fd777b7dd",
+        "rts/System/FastMath.h": "80e23859bb33c824dcad023bfe79cc1ebde14d6eb77113d0e03d8cf240588ee7"
+      },
+      "superseded": "Earlier private f64 candidate snapshots; no GPU final comparisons or public adoption used those candidates",
+      "actual_gpu_vertex_uniform_image_proofs": "pending"
+    },
+    "private_normal_build_snapshot": "codex-work/night-2026-10-30/v4/area17-render-parity/builds/7dff6f39102389d6"
   }
 }
