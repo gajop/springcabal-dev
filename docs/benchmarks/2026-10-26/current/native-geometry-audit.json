@@ -1,0 +1,377 @@
+{
+  "scope": "Existing frame-stepped NVIDIA world observer, same frozen normal games and input. Only the engine NativeSetUnitMidAndAimPos/NativeSetUnitRadiusAndHeight spatial-index maintenance changes. Query observer runs only at frames60\u201366; no physics or visual settings are overridden. Before/after builds retain separate identities.",
+  "geometry_bug": {
+    "before": {
+      "captures": {
+        "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-quad-order/pair-0/flove-00-lua",
+        "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-quad-order/pair-0/flove-00-wasm"
+      },
+      "queries": [
+        {
+          "frame": 60,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": false,
+          "lua_order_sha256": "71edc13481d13be7451c097b29dd011f20c7d12c691af526bfc4a6991eb8faa1",
+          "rust_order_sha256": "ac0f6fd6d2cf7a6bdc1afbf8d1fe071261fe17be24bd5bc71b2c02b3ef480f00"
+        },
+        {
+          "frame": 60,
+          "query": "near",
+          "lua_count": 1749,
+          "rust_count": 1749,
+          "same_order": false,
+          "lua_order_sha256": "8d84fcde1578f0e629755b1ffdf235061325dca6cb3b8235586c6ed2a3dc177e",
+          "rust_order_sha256": "a12b3351b3f5f9e241e9e8c6268057ea49cd4e6eca4538bf51696513ac01d8a2"
+        },
+        {
+          "frame": 61,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": false,
+          "lua_order_sha256": "ad5275b355a0923b2bdfba9b6029e5309bb03b03dfb139673a2283b177c1c71e",
+          "rust_order_sha256": "635772d08df8d83e2d03a6e398626fb6fef9c9ff06a0b5ebff8fda50ea59592a"
+        },
+        {
+          "frame": 61,
+          "query": "near",
+          "lua_count": 1756,
+          "rust_count": 1756,
+          "same_order": false,
+          "lua_order_sha256": "82142063064153328a7329589c7dd0921070a79aa4e66fc5dab0edd7ca203f9c",
+          "rust_order_sha256": "a408faf80eac634c73e8dc1f88c45b26984aaee900391f7ddcd079d0ccdd9d80"
+        },
+        {
+          "frame": 62,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": false,
+          "lua_order_sha256": "221414c703fefea1687754a308e428824317c0edf48fd2f203eb3290741b1ffc",
+          "rust_order_sha256": "e2a6c4c5c051898bdb25c6a7fb1eeed042f00ab993858af71e08418c36361125"
+        },
+        {
+          "frame": 62,
+          "query": "near",
+          "lua_count": 1760,
+          "rust_count": 1760,
+          "same_order": false,
+          "lua_order_sha256": "b2e7a5af84a5addd2614064a7254171b45cfa0a6632ac7f0f6b27e2868f6e0af",
+          "rust_order_sha256": "1e0e2d74650bf40d64a3c966fc4599853f9cdbd79998eddf003117631605a36a"
+        },
+        {
+          "frame": 63,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": false,
+          "lua_order_sha256": "50a0011c5d0b0b8ba7700e324cbfd456ee365cb15acfde2524212940e684951d",
+          "rust_order_sha256": "41e5666f7ee9d13cc27223991f3e465f5e5ac8c85287066653f24bc50e4f722a"
+        },
+        {
+          "frame": 63,
+          "query": "near",
+          "lua_count": 1757,
+          "rust_count": 1757,
+          "same_order": false,
+          "lua_order_sha256": "d41eb1ce5f0bea515c73f3e286bc1e7dc9946a6320ede25528b9bd97ec85557b",
+          "rust_order_sha256": "f89501dc236b9d09e29941b97af6cac1ae8a4b03af00ffc9a05f8e7e4fd0f467"
+        },
+        {
+          "frame": 64,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": false,
+          "lua_order_sha256": "44c174e592abbdaa85ce5e7cd174d4044e35b109106aa30ec3e61c646bf2fec8",
+          "rust_order_sha256": "5026d9495497c0efa4ee8e31f340da6412a20f2e950c71b6d8d76f39847fc5cc"
+        },
+        {
+          "frame": 64,
+          "query": "near",
+          "lua_count": 1765,
+          "rust_count": 1765,
+          "same_order": false,
+          "lua_order_sha256": "132df843b961e6f1740fb08a62077058468e39e862e5b4207ae8e7bc720ed45c",
+          "rust_order_sha256": "a424d293223ffbb7e1231174c19ed22e97db580a3eb4c17194a942085d94c392"
+        },
+        {
+          "frame": 65,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": false,
+          "lua_order_sha256": "34eee96cc0b2097191faf47a003d9de837723c733f60fcefd568cadf360b8dc9",
+          "rust_order_sha256": "a8f875a772220121e0c3917192ebf6fa31fe902228cdec9e5ff64eb98a34d84b"
+        },
+        {
+          "frame": 65,
+          "query": "near",
+          "lua_count": 1754,
+          "rust_count": 1754,
+          "same_order": false,
+          "lua_order_sha256": "0cb469ad2909591e3ddfb7699761a79e1991db64b6bcac0f4635c0b683f3e947",
+          "rust_order_sha256": "924e18405f8b78feefaf5a217a58f793cad2d132081d7279e0a12e69e1a6995d"
+        },
+        {
+          "frame": 66,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": false,
+          "lua_order_sha256": "a39c80f3937afc87aafad234ecaff41d07959d6439a956f84a4c8bec7ad566b5",
+          "rust_order_sha256": "3e06f00f1b87bde1066de55307f634d8e341d969d73bbb6055f2e54c9f934f69"
+        },
+        {
+          "frame": 66,
+          "query": "near",
+          "lua_count": 1763,
+          "rust_count": 1763,
+          "same_order": false,
+          "lua_order_sha256": "c6a0e530a861644ef7fc48b9183a08db00661606037e42d3f9579640f6720cb7",
+          "rust_order_sha256": "3918157aa2b9cba7109e5be47957bce5df2f1554d349365a58b41d0ce595f85c"
+        }
+      ],
+      "all_orders_equal": false
+    },
+    "after": {
+      "captures": {
+        "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-quad-order-fixed/pair-0/flove-00-lua",
+        "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-quad-order-fixed/pair-0/flove-00-wasm"
+      },
+      "queries": [
+        {
+          "frame": 60,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": true,
+          "lua_order_sha256": "71edc13481d13be7451c097b29dd011f20c7d12c691af526bfc4a6991eb8faa1",
+          "rust_order_sha256": "71edc13481d13be7451c097b29dd011f20c7d12c691af526bfc4a6991eb8faa1"
+        },
+        {
+          "frame": 60,
+          "query": "near",
+          "lua_count": 1749,
+          "rust_count": 1749,
+          "same_order": true,
+          "lua_order_sha256": "8d84fcde1578f0e629755b1ffdf235061325dca6cb3b8235586c6ed2a3dc177e",
+          "rust_order_sha256": "8d84fcde1578f0e629755b1ffdf235061325dca6cb3b8235586c6ed2a3dc177e"
+        },
+        {
+          "frame": 61,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": true,
+          "lua_order_sha256": "ad5275b355a0923b2bdfba9b6029e5309bb03b03dfb139673a2283b177c1c71e",
+          "rust_order_sha256": "ad5275b355a0923b2bdfba9b6029e5309bb03b03dfb139673a2283b177c1c71e"
+        },
+        {
+          "frame": 61,
+          "query": "near",
+          "lua_count": 1756,
+          "rust_count": 1756,
+          "same_order": true,
+          "lua_order_sha256": "82142063064153328a7329589c7dd0921070a79aa4e66fc5dab0edd7ca203f9c",
+          "rust_order_sha256": "82142063064153328a7329589c7dd0921070a79aa4e66fc5dab0edd7ca203f9c"
+        },
+        {
+          "frame": 62,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": true,
+          "lua_order_sha256": "221414c703fefea1687754a308e428824317c0edf48fd2f203eb3290741b1ffc",
+          "rust_order_sha256": "221414c703fefea1687754a308e428824317c0edf48fd2f203eb3290741b1ffc"
+        },
+        {
+          "frame": 62,
+          "query": "near",
+          "lua_count": 1760,
+          "rust_count": 1760,
+          "same_order": true,
+          "lua_order_sha256": "b2e7a5af84a5addd2614064a7254171b45cfa0a6632ac7f0f6b27e2868f6e0af",
+          "rust_order_sha256": "b2e7a5af84a5addd2614064a7254171b45cfa0a6632ac7f0f6b27e2868f6e0af"
+        },
+        {
+          "frame": 63,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": true,
+          "lua_order_sha256": "50a0011c5d0b0b8ba7700e324cbfd456ee365cb15acfde2524212940e684951d",
+          "rust_order_sha256": "50a0011c5d0b0b8ba7700e324cbfd456ee365cb15acfde2524212940e684951d"
+        },
+        {
+          "frame": 63,
+          "query": "near",
+          "lua_count": 1757,
+          "rust_count": 1757,
+          "same_order": true,
+          "lua_order_sha256": "d41eb1ce5f0bea515c73f3e286bc1e7dc9946a6320ede25528b9bd97ec85557b",
+          "rust_order_sha256": "d41eb1ce5f0bea515c73f3e286bc1e7dc9946a6320ede25528b9bd97ec85557b"
+        },
+        {
+          "frame": 64,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": true,
+          "lua_order_sha256": "44c174e592abbdaa85ce5e7cd174d4044e35b109106aa30ec3e61c646bf2fec8",
+          "rust_order_sha256": "44c174e592abbdaa85ce5e7cd174d4044e35b109106aa30ec3e61c646bf2fec8"
+        },
+        {
+          "frame": 64,
+          "query": "near",
+          "lua_count": 1765,
+          "rust_count": 1765,
+          "same_order": true,
+          "lua_order_sha256": "132df843b961e6f1740fb08a62077058468e39e862e5b4207ae8e7bc720ed45c",
+          "rust_order_sha256": "132df843b961e6f1740fb08a62077058468e39e862e5b4207ae8e7bc720ed45c"
+        },
+        {
+          "frame": 65,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": true,
+          "lua_order_sha256": "34eee96cc0b2097191faf47a003d9de837723c733f60fcefd568cadf360b8dc9",
+          "rust_order_sha256": "34eee96cc0b2097191faf47a003d9de837723c733f60fcefd568cadf360b8dc9"
+        },
+        {
+          "frame": 65,
+          "query": "near",
+          "lua_count": 1754,
+          "rust_count": 1754,
+          "same_order": true,
+          "lua_order_sha256": "0cb469ad2909591e3ddfb7699761a79e1991db64b6bcac0f4635c0b683f3e947",
+          "rust_order_sha256": "0cb469ad2909591e3ddfb7699761a79e1991db64b6bcac0f4635c0b683f3e947"
+        },
+        {
+          "frame": 66,
+          "query": "all",
+          "lua_count": 5510,
+          "rust_count": 5510,
+          "same_order": true,
+          "lua_order_sha256": "a39c80f3937afc87aafad234ecaff41d07959d6439a956f84a4c8bec7ad566b5",
+          "rust_order_sha256": "a39c80f3937afc87aafad234ecaff41d07959d6439a956f84a4c8bec7ad566b5"
+        },
+        {
+          "frame": 66,
+          "query": "near",
+          "lua_count": 1763,
+          "rust_count": 1763,
+          "same_order": true,
+          "lua_order_sha256": "c6a0e530a861644ef7fc48b9183a08db00661606037e42d3f9579640f6720cb7",
+          "rust_order_sha256": "c6a0e530a861644ef7fc48b9183a08db00661606037e42d3f9579640f6720cb7"
+        }
+      ],
+      "all_orders_equal": true
+    },
+    "after_physical_world": {
+      "sample_count": 91,
+      "first_differences": {},
+      "different_samples": {},
+      "examples": {}
+    }
+  },
+  "fixture": "verification/fixtures/flove/spatial_order.lua",
+  "fixture_sha256": "dfb82d293506f822a95693203ff0d299090b337cec237a4b4fccea860a75a132",
+  "normal_full_world_pending": false,
+  "stress_full_world_pending": false,
+  "full_world_regression": {
+    "passed": true,
+    "results": [
+      {
+        "unit_multiplier": 1,
+        "samples": 151,
+        "before": {
+          "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-26-worlds-tested-api/night-v4-0f/attempt-0/flove-combat-lua-rust-w1/flove-combat-1x/flove-00-lua",
+          "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-geometry-baseline-worlds/1x-0/flove-00-wasm"
+        },
+        "after": {
+          "off": {
+            "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-targets-geometry-worlds/1x-off-0/flove-00-lua",
+            "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-targets-geometry-worlds/1x-off-0/flove-00-wasm"
+          },
+          "on": {
+            "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-targets-geometry-worlds/1x-on-0/flove-00-wasm"
+          }
+        },
+        "physical_state_and_rng_results_unchanged": true,
+        "global_status_unchanged_within_each_backend": true,
+        "jobs_on_matches_serial_including_all_unit_params": true,
+        "intentional_parameter_change": {
+          "lastOrderFrame": 23058
+        },
+        "existing_ui_binding_schema_differences": [
+          "desiredBranches",
+          "game_over",
+          "mana",
+          "power",
+          "round",
+          "shroom_event",
+          "story",
+          "wispCount",
+          "won"
+        ],
+        "parameter_scope": "Lua preserves all old unit parameters. Rust only adds Lua-compatible private lastOrderFrame. Existing Rust UI-carrier parameters remain distinct from the original Lua global UI schema; they are recorded, not silently discarded."
+      },
+      {
+        "unit_multiplier": 10,
+        "samples": 151,
+        "before": {
+          "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-26-worlds-tested-api/night-v4-0f/attempt-0/flove-combat-10x-lua-rust-w1/flove-combat-10x/flove-00-lua",
+          "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-geometry-baseline-worlds/10x-0/flove-00-wasm"
+        },
+        "after": {
+          "off": {
+            "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-targets-geometry-worlds/10x-off-0/flove-00-lua",
+            "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-targets-geometry-worlds/10x-off-0/flove-00-wasm"
+          },
+          "on": {
+            "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v4-attempts/flove-targets-geometry-worlds/10x-on-0/flove-00-wasm"
+          }
+        },
+        "physical_state_and_rng_results_unchanged": true,
+        "global_status_unchanged_within_each_backend": true,
+        "jobs_on_matches_serial_including_all_unit_params": true,
+        "intentional_parameter_change": {
+          "lastOrderFrame": 209358
+        },
+        "existing_ui_binding_schema_differences": [
+          "branches",
+          "desiredBranches",
+          "game_over",
+          "mana",
+          "power",
+          "round",
+          "shroom_event",
+          "story",
+          "wispCount",
+          "won"
+        ],
+        "parameter_scope": "Lua preserves all old unit parameters. Rust only adds Lua-compatible private lastOrderFrame. Existing Rust UI-carrier parameters remain distinct from the original Lua global UI schema; they are recorded, not silently discarded."
+      }
+    ]
+  },
+  "prototype_engine_sha256": "e2542a90eb03dee71db10840ba314a749536cf76e9f02ef0ab80665e024640bd",
+  "current_engine_merge": {
+    "source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+    "source_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+    "binary_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+    "build_log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/build-current.log",
+    "utc": "2026-10-31T03:03:04.850530+00:00",
+    "release_tag": "2026.10.3103",
+    "release_workflow_dispatched": true
+  },
+  "current_engine_tests": {
+    "GlobalRNG": 2504,
+    "WasmNanSinks": 30247,
+    "WasmSyncedJobs": 7024,
+    "ThreadPool": 2035923
+  }
+}

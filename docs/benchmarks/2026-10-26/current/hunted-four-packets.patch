@@ -1,0 +1,15 @@
+diff --git a/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs b/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
+index b3a57cd..0c64911 100644
+--- a/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
++++ b/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
+@@ -70,8 +70,8 @@ pub(super) fn prepare(
+     if positions.is_empty() {
+         return Some(prepared);
+     }
+-    // Keep the small light-query reduction in one ordered job packet.
+-    let chunk_size = positions.len();
++    // Current-engine comparison: retain ordered independent chunks.
++    let chunk_size = positions.len().div_ceil(springcabal::jobs::CHUNKS);
+     let mut inputs = Vec::new();
+     let mut limits = Vec::new();
+     for chunk in positions.chunks(chunk_size) {

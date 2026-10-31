@@ -1,0 +1,135 @@
+diff --git a/wasm-src/rules-synced/src/mushrooms.rs b/wasm-src/rules-synced/src/mushrooms.rs
+index aeefa80..f41a4e0 100644
+--- a/wasm-src/rules-synced/src/mushrooms.rs
++++ b/wasm-src/rules-synced/src/mushrooms.rs
+@@ -440,7 +440,7 @@ fn collect_targets(spring: &spring::Spring<'_, spring::RulesSynced>) -> Vec<(i32
+         defs.tree_level3,
+         defs.spire,
+     ];
+-    let mut targets = Vec::new();
++    let mut ids = Vec::new();
+     for &team in &defs.target_teams {
+         if spring
+             .teams()
+@@ -449,20 +449,46 @@ fn collect_targets(spring: &spring::Spring<'_, spring::RulesSynced>) -> Vec<(i32
+         {
+             continue;
+         }
+-        for id in spring
+-            .units_query()
+-            .get_team_units_by_defs(team, &wanted)
+-            .log_err_once(spring, "querying mushroom targets")
+-            .unwrap_or_default()
+-        {
+-            if let Ok(pos) = spring
+-                .units_info()
+-                .get_unit_position(id, Default::default())
+-            {
+-                targets.push((id, pos));
+-            }
+-        }
++        ids.extend(
++            spring
++                .units_query()
++                .get_team_units_by_defs(team, &wanted)
++                .log_err_once(spring, "querying mushroom targets")
++                .unwrap_or_default(),
++        );
+     }
++    let count = ids.len();
++    let mut planes = alloc::vec![0.0; count * 3];
++    let mut found = alloc::vec![0; count];
++    let read = spring.columns().get_units_f32(
++        spring::columns::UnitColumn::Position,
++        &ids,
++        spring::columns::ColumnArg::None,
++        &mut planes,
++        Some(&mut found),
++    );
++    let mut targets: Vec<_> = if read.is_ok() {
++        ids.into_iter()
++            .enumerate()
++            .filter(|(i, _)| found[*i] != 0)
++            .map(|(i, id)| {
++                (
++                    id,
++                    Float3::new(planes[i], planes[count + i], planes[2 * count + i]),
++                )
++            })
++            .collect()
++    } else {
++        ids.into_iter()
++            .filter_map(|id| {
++                spring
++                    .units_info()
++                    .get_unit_position(id, Default::default())
++                    .ok()
++                    .map(|pos| (id, pos))
++            })
++            .collect()
++    };
+     targets.sort_unstable_by_key(|(id, _)| *id);
+     targets
+ }
+diff --git a/wasm-src/rules-synced/src/mushrooms/jobs.rs b/wasm-src/rules-synced/src/mushrooms/jobs.rs
+index 1cae7c9..150d530 100644
+--- a/wasm-src/rules-synced/src/mushrooms/jobs.rs
++++ b/wasm-src/rules-synced/src/mushrooms/jobs.rs
+@@ -41,7 +41,7 @@ pub(super) fn prepare(
+ ) -> Option<Vec<Prepared>> {
+     use spring::ResultExt;
+     let mut result = Vec::with_capacity(units.len());
+-    let mut positions = Vec::new();
++    let mut eligible_units = Vec::new();
+     for (index, ai) in units.iter().enumerate() {
+         let eligible = if ai.def_id == small {
+             frame - ai.last_order_frame >= 30
+@@ -56,18 +56,38 @@ pub(super) fn prepare(
+             eligible,
+             stats: None,
+         });
+-        if eligible
+-            && let Ok(position) = spring.units_info().get_unit_position(
+-                ai.unit_id,
+-                spring::units_info::GetUnitPositionOptions {
+-                    mid_pos: false,
+-                    aim_pos: false,
+-                },
+-            )
+-        {
+-            positions.push((index, position));
++        if eligible {
++            eligible_units.push((index, ai.unit_id));
+         }
+     }
++    if eligible_units.is_empty() {
++        return Some(result);
++    }
++    let ids: Vec<_> = eligible_units.iter().map(|(_, id)| *id).collect();
++    let count = ids.len();
++    let mut planes = alloc::vec![0.0; count * 3];
++    let mut found = alloc::vec![0; count];
++    spring
++        .columns()
++        .get_units_f32(
++            spring::columns::UnitColumn::Position,
++            &ids,
++            spring::columns::ColumnArg::None,
++            &mut planes,
++            Some(&mut found),
++        )
++        .log_err_once(spring, "reading mushroom positions")?;
++    let positions: Vec<_> = eligible_units
++        .into_iter()
++        .enumerate()
++        .filter(|(i, _)| found[*i] != 0)
++        .map(|(i, (index, _))| {
++            (
++                index,
++                Float3::new(planes[i], planes[count + i], planes[2 * count + i]),
++            )
++        })
++        .collect();
+     if positions.is_empty() {
+         return Some(result);
+     }

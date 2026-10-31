@@ -1,0 +1,32 @@
+diff --git a/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs b/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
+index b3a57cd..bff3dde 100644
+--- a/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
++++ b/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
+@@ -17,9 +17,7 @@ pub(super) fn prepare(
+     frame: i32,
+ ) -> Option<Vec<Option<Prepared>>> {
+     let mut options = global.jobs.access_mut();
+-    if !options.enabled(spring) {
+-        return None;
+-    }
++    let enabled = options.enabled(spring);
+     let mut eligible = Vec::new();
+     {
+         let memories = global.rabbits.access();
+@@ -70,6 +68,16 @@ pub(super) fn prepare(
+     if positions.is_empty() {
+         return Some(prepared);
+     }
++    if !enabled {
++        for (index, position, factor) in positions.iter().copied() {
++            prepared[index] = Some(Prepared {
++                checking: false,
++                position,
++                light: scare::scariest(&surroundings.lights, position.x, position.z, factor),
++            });
++        }
++        return Some(prepared);
++    }
+     // Keep the small light-query reduction in one ordered job packet.
+     let chunk_size = positions.len();
+     let mut inputs = Vec::new();
