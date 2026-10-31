@@ -26,6 +26,15 @@ for game, scene, prefix in [('hunted','autonomous','hunted'),('flove','scripted'
         name=f'{prefix}-{mult}x';options=['--unit-multiplier',str(mult)]
         if scene=='scripted':options+=['--input',str(project/'verification/perf/scenarios'/('flove-mushrooms.txt' if game=='flove' else 'ttld-shadows.txt'))]
         cases.append((name,game,scene,options))
+# Additional production-fire controls are explicit; ordinary capture-all
+# continues to use the shipping game roots without a synthetic fire input.
+if a.case and any(name.startswith('ttld-burning-') for name in a.case):
+    expected=project/'verification/fixtures/ttld/production_fire.lua'
+    for backend in ['ToTheLastDrop.sdd','ToTheLastDrop-wasm.sdd']:
+        staged=a.games_dir/backend/'LuaRules/Gadgets/zz_perf_production_fire.lua'
+        if not staged.is_file() or staged.read_bytes()!=expected.read_bytes():raise ValueError('Production-fire capture requires the recorded frozen public-input fixture: '+str(staged))
+    for mult in [1,10]:
+        cases.append((f'ttld-burning-{mult}x','ttld','scripted',['--unit-multiplier',str(mult),'--input',str(project/'verification/perf/scenarios/ttld-shadows.txt')]))
 for count in [1,10,100]:cases.append((f'fire-{count}','gravitas','effects',['--effects-multiplier',str(count)]))
 for game in ['mycube','partsneeded']:cases.append((f'{game}-1x',game,'autonomous',[]))
 for name,game,scene,options in cases:

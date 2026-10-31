@@ -28,6 +28,8 @@ SCENES = [
     ('flove10', 'flove', 'Flove', '3,500 mushrooms', 'flove-combat-10x-lua-rust-w1', 'flove-combat-10x', 'flove-combat-10x'),
     ('ttld', 'ttld', 'To the Last Drop', 'Shadows on · normal', 'ttld-shadows-1x-w1', None, 'ttld-shadows-1x'),
     ('ttld10', 'ttld', 'To the Last Drop', 'Shadows on · 10×', 'ttld-shadows-10x-w1', None, 'ttld-shadows-10x'),
+    ('ttldburn', 'ttld', 'TTLD production fire', '106 burning houses', 'ttld-burning-1x-w1', None, 'ttld-burning-1x'),
+    ('ttldburn10', 'ttld', 'TTLD production fire', '10× units · 128 burning houses', 'ttld-burning-10x-w1', None, 'ttld-burning-10x'),
     ('area17', 'area17', 'Area 17', 'Normal', 'area17-1x-w1', None, 'area17-1x'),
     ('area172', 'area17', 'Area 17', '2× initial scene', 'area17-2x-w1', None, 'area17-2x'),
     ('fire1', 'gravitas', 'Gravitas fire', '1 emitter pair', 'fire-1-lua-rust-w4', 'fire-1-cpu', 'fire-1'),

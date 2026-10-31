@@ -821,3 +821,24 @@ and table helpers lack the usual `lua` prefix; their Lua-typed signatures identi
 them as runtime work. Similar native names and Wasmtime JIT symbols retain their
 own categories. The initial correction is recorded in the HTML report's
 `lua-runtime-label-audit.json`; benchmark execution and acceptance are unchanged.
+
+## TTLD production-fire control
+
+The shadow-only input does not ignite houses. The additional `ttld-burning-1x`
+and `ttld-burning-10x` scenes use the normal production widgets, with the same
+[public-input fixture](../fixtures/ttld/production_fire.lua) copied into both
+immutable game snapshots as `LuaRules/Gadgets/zz_perf_production_fire.lua`.
+At frame 120 it sets `on_fire` on deterministic near/far houses: 106 in the
+normal scene, 128 in the 10× unit scene. The latter is not 10× the particle count.
+
+Use the existing runner with those frozen games, `--input
+verification/perf/scenarios/ttld-shadows.txt`, and `--unit-multiplier 1` or `10`.
+Keep five clean alternating pairs, the NVIDIA renderer and the existing idle
+guards, as for the shadow-only scenes. Capture profiles and world recordings in
+separate runs. `capture-video.sh --case ttld-burning-1x --games-dir ...` (or
+`ttld-burning-10x`) requires the exact fixture in both snapshots; it records the
+same input and verifies the encoded frame count before removing source PNGs.
+
+GL upload accounting must identify a buffer by its numeric name **and deletion
+generation**. OpenGL reuses names: counting every later upload to an old fire
+buffer's name can incorrectly charge unrelated UI uploads to the particle stream.

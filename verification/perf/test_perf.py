@@ -137,7 +137,9 @@ class EquivalenceTests(unittest.TestCase):
                             ('hunted-10x-jobs', 'hunted10'),
                             ('flove-combat-1x-jobs', 'flove'),
                             ('flove-combat-10x-jobs', 'flove10'),
-                            ('fire-10-jobs', 'fire10')]:
+                            ('fire-10-jobs', 'fire10'),
+                            ('ttld-burning-1x', 'ttldburn'),
+                            ('ttld-burning-10x', 'ttldburn10')]:
             with self.subTest(name=name):
                 self.assertEqual(dashboard.capture_scene(name), scene)
         self.assertIsNone(dashboard.capture_scene('unknown-jobs'))
