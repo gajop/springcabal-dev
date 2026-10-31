@@ -124,6 +124,22 @@ def export(project, archive):
             ttld = next(g for g in games if g['game'] == 'ttld')
             ttld['code'] = 'House ignition and health-bar fixes tested/pushed. Existing suites, ordinary fire and all 604 detailed-world sample pairs pass; normal screenshots reviewed.'
             ttld['remaining'] = 'Fresh final timings, matching captures and profile analysis.'
+    by_game = {game['game']: game for game in games}
+    for name in ('hunted', 'gravitas'):
+        if by_game[name]['completed'] == by_game[name]['expected']:
+            by_game[name]['remaining'] = 'Timing matrix complete. Final profile interpretation and jobs-cost diagnostics remain.'
+    if by_game['area17']['completed'] == 1:
+        by_game['area17']['remaining'] = 'Normal timing/profile/world/clip complete; finish the fresh 2× case and its captures, then final analysis.'
+    if by_game['ttld']['completed'] == 4:
+        capture_counts = {}
+        for kind in ('profiles', 'videos'):
+            path = project / f'codex-work/cpu-idle-fire-{kind}.json'
+            saved = read(path).get('completed', {}) if path.exists() else {}
+            capture_counts[kind] = sum(name.startswith('ttld-') for name in saved)
+        by_game['ttld']['remaining'] = (
+            f"All four timing cases and world pairs complete. CPU profile pairs {capture_counts['profiles']}/4; "
+            f"clip pairs {capture_counts['videos']}/4. Finish remaining captures and final profile analysis."
+        )
     hold_path = project / 'verification/perf/web/world-parity-holds.json'
     if hold_path.exists():
         for name, hold in read(hold_path).get('campaigns', {}).items():
