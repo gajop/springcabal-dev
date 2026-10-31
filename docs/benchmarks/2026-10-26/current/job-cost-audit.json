@@ -1,0 +1,108 @@
+{
+  "complete": false,
+  "expected_cases": 10,
+  "completed": {
+    "fire-10-cpu-jobs-w1": {
+      "identity": {
+        "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+        "modules": {
+          "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+          "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+          "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+        },
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        },
+        "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+      },
+      "source": "perf-runs/2026-10-31-current-job-costs/fire-10-cpu-jobs-w1/attempt-1/gravitas-00-wasm",
+      "log_sha256": "7e6550e039d9ece95fbd38e23c7154fe4ea5062fa3146495074a7c0cc259d2d7",
+      "worker_threads": 1,
+      "unit_multiplier": 1,
+      "effects_multiplier": 10,
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "environment": {
+        "SPRING_WASM_JOB_TIMING": "1"
+      },
+      "reports": [
+        {
+          "start_frame": 0,
+          "end_frame": 900,
+          "jobs_per_frame": 7.7,
+          "instantiate_us": 8.1,
+          "input_us": 12.6,
+          "execute_us": 33.4,
+          "output_us": 1.0,
+          "teardown_other_us": 8.7,
+          "whole_us": 63.9,
+          "worker_elapsed_sum_ms_per_frame": 0.493,
+          "setup_teardown_sum_ms_per_frame": 0.13,
+          "main_batch_wait_ms_per_frame": 0.493,
+          "batches_per_frame": 1.9,
+          "next_frame_barrier_ms_per_frame": 0.0
+        }
+      ]
+    },
+    "fire-10-cpu-jobs-w4": {
+      "identity": {
+        "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+        "modules": {
+          "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+          "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+          "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+        },
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        },
+        "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+      },
+      "source": "perf-runs/2026-10-31-current-job-costs/fire-10-cpu-jobs-w4/attempt-1/gravitas-00-wasm",
+      "log_sha256": "33fae2819821ceed263f31af2fee6909179ca988bc4823ba50a3470fe3254800",
+      "worker_threads": 4,
+      "unit_multiplier": 1,
+      "effects_multiplier": 10,
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "environment": {
+        "SPRING_WASM_JOB_TIMING": "1"
+      },
+      "reports": [
+        {
+          "start_frame": 0,
+          "end_frame": 900,
+          "jobs_per_frame": 7.7,
+          "instantiate_us": 22.1,
+          "input_us": 22.9,
+          "execute_us": 40.9,
+          "output_us": 1.1,
+          "teardown_other_us": 16.4,
+          "whole_us": 103.3,
+          "worker_elapsed_sum_ms_per_frame": 0.797,
+          "setup_teardown_sum_ms_per_frame": 0.297,
+          "main_batch_wait_ms_per_frame": 0.252,
+          "batches_per_frame": 1.9,
+          "next_frame_barrier_ms_per_frame": 0.0
+        }
+      ]
+    }
+  },
+  "generated_utc": "2026-10-31T22:43:50.750888+00:00",
+  "scope": "Separate diagnostic GPU runs with SPRING_WASM_JOB_TIMING=1. The existing engine clock reports its first 900-frame interval, including warmup; the extra tick guarantees the report is emitted. These are elapsed worker-thread clocks, including scheduling, not CPU sample time or additional benchmark pairs. Worker sums and main-thread batch waits overlap. Teardown/other is the remainder after the named internal clocks. All game modules, inputs, native worker widths and CPU/GPU guards match the selected case; 901 frames instead of the primary 900 is recorded explicitly."
+}

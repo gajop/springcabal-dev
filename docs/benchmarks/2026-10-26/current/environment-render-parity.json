@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-31T22:47:41.165899+00:00",
+  "public_sources_untouched": true,
+  "shared_base": "a996f20cbb30efa9dd62a06b1b0b74bf8bdc7313",
+  "games": {
+    "hunted": {
+      "Hunted.sdd": {
+        "base": "3f774a026ecb2922c08178f538dcd70def73d4cd",
+        "dependencies": {
+          "libs/analytics": "349fe93e139fd38787fbe3e5bd383bf687adb66f",
+          "libs/chiliui": "0069e0c574e116adaebbdd370171b6f574191bce"
+        }
+      },
+      "Hunted-wasm.sdd": {
+        "base": "2fd87bbc17b548d8223ed6874321bb52a4ffd6e7",
+        "dependencies": {
+          "libs/analytics": "349fe93e139fd38787fbe3e5bd383bf687adb66f",
+          "libs/chiliui": "0069e0c574e116adaebbdd370171b6f574191bce"
+        }
+      }
+    },
+    "mycube": {
+      "MyCube.sdd": {
+        "base": "4698657d927b4eac083319f86b177195e1ef7480",
+        "dependencies": {}
+      },
+      "MyCube-wasm.sdd": {
+        "base": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
+        "dependencies": {}
+      }
+    },
+    "partsneeded": {
+      "PartsNeeded.sdd": {
+        "base": "c47447d37869b08a9cdcc037b545c7dd881af2a9",
+        "dependencies": {}
+      },
+      "PartsNeeded-wasm.sdd": {
+        "base": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
+        "dependencies": {}
+      }
+    },
+    "ttld": {
+      "ToTheLastDrop.sdd": {
+        "base": "15c0e01991d48720407c2db574c8195fb9ece14f",
+        "dependencies": {}
+      },
+      "ToTheLastDrop-wasm.sdd": {
+        "base": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+        "dependencies": {}
+      }
+    }
+  },
+  "map_edge": "Native pass absent in Hunted/MyCube/Parts. Private shared code reuses tested TTLD native renderer; same original Lua helper/culling in all four.",
+  "parts_fog": "Original Lua GPU capture loads Volumetric Clouds; Rust has no matching pass. Correction still required.",
+  "remaining": "Compile/check the map-edge candidates; implement matching Parts fog and audit deferred/projectile-light activation. Existing GPU/world/GL/image checks and source-cost trials must precede adoption."
+}
