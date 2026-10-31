@@ -1,5 +1,5 @@
 {
-  "checked_utc": "2026-10-31T08:00:17.831211+00:00",
+  "checked_utc": "2026-10-31T13:34:33.762301+00:00",
   "sdk_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
   "engine_release": "2026.10.3103",
   "all_byte_identical": true,
@@ -18,14 +18,14 @@
     },
     {
       "game": "Flove",
-      "benchmark_runtime_source": "41a448ffa1008e5a3eed8390fb7a764a27478a46",
-      "public_rust_head": "41a448ffa1008e5a3eed8390fb7a764a27478a46",
+      "benchmark_runtime_source": "ca305b5e7daed186e5ea89de87c7961764837216",
+      "public_rust_head": "ca305b5e7daed186e5ea89de87c7961764837216",
       "source_diff": [],
       "installed_source_check_passed": true,
       "modules": {
         "LuaRules/wasm/flove-jobs.wasm": "2a62162bbd50c71a109a06abe515d3d3008766d352241e1adbf6c9c269a4275c",
-        "LuaRules/wasm/flove-rules.wasm": "35d4453eaf6c279535d2189c2e715cd401f1525cd2eb361138d58e5cf15c5c5f",
-        "LuaUI/wasm/flove-ui.wasm": "a71b88bff8391cc6699c08ad2fb91a40ed61e836a18aed4722ee63e3a25c21d2"
+        "LuaRules/wasm/flove-rules.wasm": "ad46ccaae327354666a1513bcebd409d4d3659e5fc3399315b5af37fbd5c4e7d",
+        "LuaUI/wasm/flove-ui.wasm": "fc4b399c7761f53495fe4673771166f14e5350738617dc5c808ad6f470f6f928"
       }
     },
     {
@@ -54,24 +54,24 @@
     },
     {
       "game": "MyCube",
-      "benchmark_runtime_source": "9ba643445e038a4e930aaf052bc6f0724294c26e",
-      "public_rust_head": "9ba643445e038a4e930aaf052bc6f0724294c26e",
+      "benchmark_runtime_source": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
+      "public_rust_head": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
       "source_diff": [],
       "installed_source_check_passed": true,
       "modules": {
-        "LuaRules/wasm/mycube-rules.wasm": "abd769273341f20497cf37d00447ac0b22a232ea36e29a727bb51a2e734e1c5e",
+        "LuaRules/wasm/mycube-rules.wasm": "4db9089d03cc495d92a527e5d68e500fbf07175f76cd0528aa6b9480b2385919",
         "LuaUI/wasm/mycube-ui.wasm": "5408e80b1f109e33f4170656ca43fd57c029293c3726ce4aa72b0c72c983ceb3"
       }
     },
     {
       "game": "PartsNeeded",
-      "benchmark_runtime_source": "76764bcdb4491e0c36b7462b5c631a1dfd8b0f2f",
-      "public_rust_head": "76764bcdb4491e0c36b7462b5c631a1dfd8b0f2f",
+      "benchmark_runtime_source": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
+      "public_rust_head": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
       "source_diff": [],
       "installed_source_check_passed": true,
       "modules": {
-        "LuaRules/wasm/partsneeded-rules.wasm": "fef1bbe21e40041c13a593afe43b4aa721ab89e01484caef4f6792eed7b8978f",
-        "LuaUI/wasm/partsneeded-ui.wasm": "8d0ecf8a2eebf949a5dd7125ba0d121f5b547762d2303037e413240c457a49de"
+        "LuaRules/wasm/partsneeded-rules.wasm": "5b67dfd246b9404d1dd68b4a29f053cfb777d18ed400a8b4ae13a9444ab6d615",
+        "LuaUI/wasm/partsneeded-ui.wasm": "3a2a38176b9955ef330c1bb3a48731fc81fe9343175406a65f7403a30e9f0b3e"
       }
     },
     {

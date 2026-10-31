@@ -1,0 +1,678 @@
+{
+  "utc": "2026-10-31T13:34:34.578580+00:00",
+  "cases": {
+    "fire-1-lua-rust-w4": {
+      "wasm": {
+        "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-1-lua-rust-w4/fire-1/gravitas-00-wasm/profile.json",
+        "symbols": [
+          {
+            "symbol": "luaV_execute(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          }
+        ]
+      },
+      "lua": {
+        "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-1-lua-rust-w4/fire-1/gravitas-00-lua/profile.json",
+        "symbols": [
+          {
+            "symbol": "luaV_execute(lua_State*, int)",
+            "exclusive_ms": 0.05344021333333333
+          },
+          {
+            "symbol": "luaH_get(Table*, lua_TValue const*)",
+            "exclusive_ms": 0.03340013333333333
+          },
+          {
+            "symbol": "luaH_set(lua_State*, Table*, lua_TValue const*)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "spring_lua_alloc(void*, void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "CLuaHandle::RunCallInTraceback(lua_State*, LuaHashString const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, int, int, int, bool)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "decltype(auto) sol::stack::get<sol::optional<float> >(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaOpenGL::Blending(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaV_gettable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaV_settable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaD_poscall(lua_State*, lua_TValue*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "newkey(lua_State*, Table*, lua_TValue const*) [clone .constprop.0]",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_next(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaS_newlstr(lua_State*, char const*, unsigned long)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaH_getstr(Table*, TString*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaH_getn(Table*)",
+            "exclusive_ms": 0.0033400133333333333
+          }
+        ]
+      }
+    },
+    "fire-10-lua-rust-w4": {
+      "wasm": {
+        "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-lua-rust-w4/fire-10/gravitas-00-wasm/profile.json",
+        "symbols": [
+          {
+            "symbol": "luaV_execute(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "CLuaHandle::GameFrame(int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaV_gettable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "mi_new",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "malloc",
+            "exclusive_ms": 0.0033400133333333333
+          }
+        ]
+      },
+      "lua": {
+        "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-lua-rust-w4/fire-10/gravitas-00-lua/profile.json",
+        "symbols": [
+          {
+            "symbol": "luaV_execute(lua_State*, int)",
+            "exclusive_ms": 0.3440213733333333
+          },
+          {
+            "symbol": "luaH_get(Table*, lua_TValue const*)",
+            "exclusive_ms": 0.3373413466666667
+          },
+          {
+            "symbol": "luaV_gettable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+            "exclusive_ms": 0.08016032
+          },
+          {
+            "symbol": "decltype(auto) sol::stack::get<sol::optional<float> >(lua_State*, int)",
+            "exclusive_ms": 0.06346025333333333
+          },
+          {
+            "symbol": "lua_type(lua_State*, int)",
+            "exclusive_ms": 0.046760186666666675
+          },
+          {
+            "symbol": "luaD_precall(lua_State*, lua_TValue*, int)",
+            "exclusive_ms": 0.03674014666666667
+          },
+          {
+            "symbol": "lua_tonumber(lua_State*, int)",
+            "exclusive_ms": 0.03674014666666667
+          },
+          {
+            "symbol": "spring_lua_alloc(void*, void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.03674014666666667
+          },
+          {
+            "symbol": "LuaMutexLock(lua_State*)",
+            "exclusive_ms": 0.026720106666666667
+          },
+          {
+            "symbol": "lua_rawgeti(lua_State*, int, int)",
+            "exclusive_ms": 0.026720106666666663
+          },
+          {
+            "symbol": "luaS_newlstr(lua_State*, char const*, unsigned long)",
+            "exclusive_ms": 0.023380093333333334
+          },
+          {
+            "symbol": "luaV_settable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+            "exclusive_ms": 0.02338009333333333
+          },
+          {
+            "symbol": "newkey(lua_State*, Table*, lua_TValue const*) [clone .constprop.0]",
+            "exclusive_ms": 0.02338009333333333
+          },
+          {
+            "symbol": "LuaVBOImpl::Upload(sol::basic_table_core<false, sol::stack_reference> const&, sol::optional<int>, sol::optional<int>, sol::optional<int>, sol::optional<int>)",
+            "exclusive_ms": 0.02004008
+          },
+          {
+            "symbol": "luaD_poscall(lua_State*, lua_TValue*)",
+            "exclusive_ms": 0.02004008
+          },
+          {
+            "symbol": "luaH_getnum(Table*, int)",
+            "exclusive_ms": 0.016700066666666666
+          },
+          {
+            "symbol": "luaH_getn(Table*)",
+            "exclusive_ms": 0.016700066666666666
+          },
+          {
+            "symbol": "unsigned long LuaVBOImpl::UploadImpl<float, LuaVBOImpl::UploadImpl<float>(std::vector<float, std::allocator<float> > const&, unsigned int, int)::{lambda(int)#1}>(std::vector<float, std::allocator<float> > const&, unsigned int, LuaVBOImpl::UploadImpl<float>(std::vector<float, std::allocator<float> > const&, unsigned int, int)::{lambda(int)#1})",
+            "exclusive_ms": 0.013360053333333333
+          },
+          {
+            "symbol": "luaH_set(lua_State*, Table*, lua_TValue const*)",
+            "exclusive_ms": 0.013360053333333333
+          },
+          {
+            "symbol": "luaV_equalval(lua_State*, lua_TValue const*, lua_TValue const*)",
+            "exclusive_ms": 0.010020040000000001
+          },
+          {
+            "symbol": "mainposition(Table const*, lua_TValue const*)",
+            "exclusive_ms": 0.010020040000000001
+          },
+          {
+            "symbol": "luaD_call(lua_State*, lua_TValue*, int)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "bool LuaVBOImpl::TransformAndWrite<float, float, __gnu_cxx::__normal_iterator<float const*, std::vector<float, std::allocator<float> > > >(int&, unsigned char*&, int, int, __gnu_cxx::__normal_iterator<float const*, std::vector<float, std::allocator<float> > >&, __gnu_cxx::__normal_iterator<float const*, std::vector<float, std::allocator<float> > > const&, bool) [clone .isra.0]",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "_int_free_merge_chunk",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "luaB_type(lua_State*)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "CLuaHandle::RunDrawCallIn(LuaHashString const&)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_getmetatable(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_settop(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaTextures::GetIdx(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "ipairsaux(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_tointeger(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaM_realloc_(lua_State*, void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "resize(lua_State*, Table*, int, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaMemPool::Realloc(void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaMutexUnlock(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaOpenGL::EnableDrawWorld()",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaOpenGL::ResetGLState()",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "sm::Allocator::Free(void*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "setnodevector(lua_State*, Table*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "_int_malloc",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaO_log2(unsigned int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "mi_new",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaT_gettm(Table*, TMS, TString*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaB_next(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_next(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaH_next(lua_State*, Table*, lua_TValue*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaO_rawequalObj(lua_TValue const*, lua_TValue const*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaMemPool::Free(void*, unsigned long)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaC_separateudata(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "propagatemark(global_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          }
+        ]
+      }
+    },
+    "fire-100-lua-rust-w4": {
+      "lua": {
+        "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-100-lua-rust-w4/fire-100/gravitas-01-lua/profile.json",
+        "symbols": [
+          {
+            "symbol": "luaH_get(Table*, lua_TValue const*)",
+            "exclusive_ms": 9.141616493333334
+          },
+          {
+            "symbol": "luaV_execute(lua_State*, int)",
+            "exclusive_ms": 2.9726118666666665
+          },
+          {
+            "symbol": "luaV_gettable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+            "exclusive_ms": 1.4261856933333332
+          },
+          {
+            "symbol": "spring_lua_alloc(void*, void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.4776219066666667
+          },
+          {
+            "symbol": "luaD_precall(lua_State*, lua_TValue*, int)",
+            "exclusive_ms": 0.43086171999999995
+          },
+          {
+            "symbol": "luaD_poscall(lua_State*, lua_TValue*)",
+            "exclusive_ms": 0.27054108
+          },
+          {
+            "symbol": "luaV_settable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+            "exclusive_ms": 0.250501
+          },
+          {
+            "symbol": "luaS_newlstr(lua_State*, char const*, unsigned long)",
+            "exclusive_ms": 0.22712090666666668
+          },
+          {
+            "symbol": "newkey(lua_State*, Table*, lua_TValue const*) [clone .constprop.0]",
+            "exclusive_ms": 0.21376085333333333
+          },
+          {
+            "symbol": "lua_type(lua_State*, int)",
+            "exclusive_ms": 0.18704074666666667
+          },
+          {
+            "symbol": "decltype(auto) sol::stack::get<sol::optional<float> >(lua_State*, int)",
+            "exclusive_ms": 0.1837007333333333
+          },
+          {
+            "symbol": "lua_rawgeti(lua_State*, int, int)",
+            "exclusive_ms": 0.15364061333333334
+          },
+          {
+            "symbol": "propagatemark(global_State*)",
+            "exclusive_ms": 0.13360053333333333
+          },
+          {
+            "symbol": "luaV_equalval(lua_State*, lua_TValue const*, lua_TValue const*)",
+            "exclusive_ms": 0.13026052
+          },
+          {
+            "symbol": "mainposition(Table const*, lua_TValue const*)",
+            "exclusive_ms": 0.12692050666666665
+          },
+          {
+            "symbol": "_int_malloc",
+            "exclusive_ms": 0.12692050666666665
+          },
+          {
+            "symbol": "lua_tonumber(lua_State*, int)",
+            "exclusive_ms": 0.12358049333333335
+          },
+          {
+            "symbol": "luaH_getn(Table*)",
+            "exclusive_ms": 0.12358049333333333
+          },
+          {
+            "symbol": "LuaMutexLock(lua_State*)",
+            "exclusive_ms": 0.11690046666666667
+          },
+          {
+            "symbol": "LuaVBOImpl::Upload(sol::basic_table_core<false, sol::stack_reference> const&, sol::optional<int>, sol::optional<int>, sol::optional<int>, sol::optional<int>)",
+            "exclusive_ms": 0.09018036
+          },
+          {
+            "symbol": "malloc_consolidate",
+            "exclusive_ms": 0.08350033333333333
+          },
+          {
+            "symbol": "luaD_call(lua_State*, lua_TValue*, int)",
+            "exclusive_ms": 0.08016032
+          },
+          {
+            "symbol": "LuaMutexUnlock(lua_State*)",
+            "exclusive_ms": 0.07682030666666669
+          },
+          {
+            "symbol": "luaH_set(lua_State*, Table*, lua_TValue const*)",
+            "exclusive_ms": 0.07682030666666666
+          },
+          {
+            "symbol": "_int_free",
+            "exclusive_ms": 0.07348029333333334
+          },
+          {
+            "symbol": "luaH_next(lua_State*, Table*, lua_TValue*)",
+            "exclusive_ms": 0.07348029333333334
+          },
+          {
+            "symbol": "singlestep(lua_State*)",
+            "exclusive_ms": 0.05344021333333333
+          },
+          {
+            "symbol": "resize(lua_State*, Table*, int, int)",
+            "exclusive_ms": 0.04676018666666667
+          },
+          {
+            "symbol": "malloc",
+            "exclusive_ms": 0.040080160000000004
+          },
+          {
+            "symbol": "luaH_getstr(Table*, TString*)",
+            "exclusive_ms": 0.03674014666666667
+          },
+          {
+            "symbol": "sm::GenericAllocator::Free(void*, void*)",
+            "exclusive_ms": 0.03674014666666666
+          },
+          {
+            "symbol": "lua_settop(lua_State*, int)",
+            "exclusive_ms": 0.03340013333333333
+          },
+          {
+            "symbol": "luaO_rawequalObj(lua_TValue const*, lua_TValue const*)",
+            "exclusive_ms": 0.03340013333333333
+          },
+          {
+            "symbol": "ipairsaux(lua_State*)",
+            "exclusive_ms": 0.03006012
+          },
+          {
+            "symbol": "unsigned long LuaVBOImpl::UploadImpl<float, LuaVBOImpl::UploadImpl<float>(std::vector<float, std::allocator<float> > const&, unsigned int, int)::{lambda(int)#1}>(std::vector<float, std::allocator<float> > const&, unsigned int, LuaVBOImpl::UploadImpl<float>(std::vector<float, std::allocator<float> > const&, unsigned int, int)::{lambda(int)#1})",
+            "exclusive_ms": 0.026720106666666667
+          },
+          {
+            "symbol": "sm::Allocator::Free(void*)",
+            "exclusive_ms": 0.023380093333333334
+          },
+          {
+            "symbol": "LuaMemPool::Realloc(void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.02338009333333333
+          },
+          {
+            "symbol": "setnodevector(lua_State*, Table*, int)",
+            "exclusive_ms": 0.02338009333333333
+          },
+          {
+            "symbol": "_int_free_merge_chunk",
+            "exclusive_ms": 0.02338009333333333
+          },
+          {
+            "symbol": "LuaMemPool::Free(void*, unsigned long)",
+            "exclusive_ms": 0.02338009333333333
+          },
+          {
+            "symbol": "bool LuaVBOImpl::TransformAndWrite<float, float, __gnu_cxx::__normal_iterator<float const*, std::vector<float, std::allocator<float> > > >(int&, unsigned char*&, int, int, __gnu_cxx::__normal_iterator<float const*, std::vector<float, std::allocator<float> > >&, __gnu_cxx::__normal_iterator<float const*, std::vector<float, std::allocator<float> > > const&, bool) [clone .isra.0]",
+            "exclusive_ms": 0.02004008
+          },
+          {
+            "symbol": "luaL_checkinteger(lua_State*, int)",
+            "exclusive_ms": 0.02004008
+          },
+          {
+            "symbol": "luaB_next(lua_State*)",
+            "exclusive_ms": 0.02004008
+          },
+          {
+            "symbol": "luaT_gettm(Table*, TMS, TString*)",
+            "exclusive_ms": 0.016700066666666666
+          },
+          {
+            "symbol": "luaH_getnum(Table*, int)",
+            "exclusive_ms": 0.016700066666666666
+          },
+          {
+            "symbol": "lua_tointeger(lua_State*, int)",
+            "exclusive_ms": 0.016700066666666666
+          },
+          {
+            "symbol": "lua_pushnumber(lua_State*, float)",
+            "exclusive_ms": 0.013360053333333333
+          },
+          {
+            "symbol": "luaL_checktype(lua_State*, int, int)",
+            "exclusive_ms": 0.010020040000000001
+          },
+          {
+            "symbol": "luaH_setnum(lua_State*, Table*, int)",
+            "exclusive_ms": 0.010020040000000001
+          },
+          {
+            "symbol": "lua_pushinteger(lua_State*, int)",
+            "exclusive_ms": 0.01002004
+          },
+          {
+            "symbol": "luaB_type(lua_State*)",
+            "exclusive_ms": 0.01002004
+          },
+          {
+            "symbol": "lua_pushstring(lua_State*, char const*)",
+            "exclusive_ms": 0.01002004
+          },
+          {
+            "symbol": "lua_getmetatable(lua_State*, int)",
+            "exclusive_ms": 0.01002004
+          },
+          {
+            "symbol": "lua_pushvalue(lua_State*, int)",
+            "exclusive_ms": 0.01002004
+          },
+          {
+            "symbol": "luaM_realloc_(lua_State*, void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "luaH_new(lua_State*, int, int)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "malloc@plt",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "luaL_checkany(lua_State*, int)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "lua_pushnil(lua_State*)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "lua_next(lua_State*, int)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "CLuaHandle::CollectGarbage(bool)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "luaH_free(lua_State*, Table*)",
+            "exclusive_ms": 0.006680026666666667
+          },
+          {
+            "symbol": "luaT_gettmbyobj(lua_State*, lua_TValue const*, TMS)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaVBOImpl::UploadImpl<unsigned int, LuaVBOImpl::UploadImpl<unsigned int>(std::vector<unsigned int, std::allocator<unsigned int> > const&, unsigned int, int)::{lambda(int)#1}>(std::vector<unsigned int, std::allocator<unsigned int> > const&, unsigned int, LuaVBOImpl::UploadImpl<unsigned int>(std::vector<unsigned int, std::allocator<unsigned int> > const&, unsigned int, int)::{lambda(int)#1})::{lambda(int)#1}::operator()(int) const",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "_mi_malloc_generic",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "mi_arenas_try_find_free",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "mi_arena_try_alloc_at",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "_mi_page_retire",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "decltype(auto) sol::stack::check_get<LuaVBOImpl*>(lua_State*, int) [clone .constprop.0]",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_getfield(lua_State*, int, char const*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "sol::usertype_traits<LuaVBOImpl>::metatable[abi:cxx11]()",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaTextures::GetIdx(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaShaders::UseShader(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaV_concat(lua_State*, int, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "CUnitDrawerGL4::DrawLuaDrawObjectsLegacy(CModelDrawerBase<CUnitDrawerData, CUnitDrawer>::LuaDrawPass, bool) const",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "CLuaInputReceiver::GetInstance()",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_typename(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "math_cos(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaUnsyncedCtrl::SetCameraState(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "math_sqrt(lua_State*)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "luaO_fb2int(int)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_checkstack(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          }
+        ]
+      },
+      "wasm": {
+        "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-100-lua-rust-w4/fire-100/gravitas-01-wasm/profile.json",
+        "symbols": [
+          {
+            "symbol": "LuaObjectDrawer::Update(bool)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "mi_free_size",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "mi_new",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "LuaOpenGL::DisableDrawWorld()",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "spring_lua_alloc(void*, void*, unsigned long, unsigned long)",
+            "exclusive_ms": 0.0033400133333333333
+          },
+          {
+            "symbol": "lua_type(lua_State*, int)",
+            "exclusive_ms": 0.0033400133333333333
+          }
+        ]
+      }
+    }
+  },
+  "scope": "Exclusive CPU weights in the already accepted, identity-matched rendered profiles. Not new timing replicates or a GPU-duration decomposition."
+}

@@ -1,0 +1,583 @@
+{
+  "utc": "2026-10-31T13:43:14.483020+00:00",
+  "mycube": {
+    "head": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
+    "public_branch": "rust"
+  },
+  "partsneeded": {
+    "PartsNeeded.sdd": {
+      "head": "c47447d37869b08a9cdcc037b545c7dd881af2a9",
+      "public_branch": "master"
+    },
+    "PartsNeeded-wasm.sdd": {
+      "head": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
+      "public_branch": "rust"
+    }
+  },
+  "flove": {
+    "lua_master": "07e792c658b9767d4cfe6340020bb4ef840ac60c",
+    "rust": "ca305b5e7daed186e5ea89de87c7961764837216"
+  },
+  "area17_lua_master": "2c8c725e80814a32259f0fc400487337c1aa5343",
+  "source_checks": {
+    "mycube_world_pairs_exact": 151,
+    "mycube_pose_samples_exact": 9750,
+    "partsneeded_world_pairs_exact": 151,
+    "flove_physical_pairs_exact": 302,
+    "flove_visible_status_pairs_match_lua": 302,
+    "area17": {
+      "complete": true,
+      "utc": "2026-10-31T13:24:59.747878+00:00",
+      "cases": {
+        "1": {
+          "sample_pairs": 151,
+          "units_projectiles_camera_exact": true,
+          "all_other_native_detail_fields_exact": true,
+          "orientation_basis_maxima": {
+            "right.x": {
+              "maximum_absolute": 1.1900000007614153e-07,
+              "unit_samples": 1359,
+              "first": [
+                0,
+                18674,
+                0.998492479,
+                0.99849236
+              ]
+            },
+            "right.z": {
+              "maximum_absolute": 1.200000000478596e-07,
+              "unit_samples": 1359,
+              "first": [
+                0,
+                18674,
+                -0.054811332,
+                -0.054811325
+              ]
+            },
+            "up.y": {
+              "maximum_absolute": 5.999999996841865e-08,
+              "unit_samples": 151,
+              "first": [
+                0,
+                6696,
+                0.999995768,
+                0.999995708
+              ]
+            }
+          },
+          "basis_unit_count": 9,
+          "rust_only_rule_transport": {
+            "n": {
+              "unit_samples": 52699,
+              "values": [
+                0.0,
+                1.0
+              ]
+            },
+            "active_weapon_slot": {
+              "unit_samples": 151,
+              "values": [
+                0.0
+              ]
+            },
+            "selfMoveSpeedChange": {
+              "unit_samples": 151,
+              "values": [
+                1.0
+              ]
+            },
+            "beam_enabled": {
+              "unit_samples": 1,
+              "values": [
+                0.0
+              ]
+            }
+          },
+          "raw_strict_comparison": {
+            "sample_count": 151,
+            "first_differences": {
+              "details": 0
+            },
+            "different_samples": {
+              "details": 151
+            },
+            "examples": {
+              "details": {
+                "unit": 78,
+                "differences": [
+                  [
+                    5,
+                    {},
+                    {
+                      "n": 0.0
+                    }
+                  ]
+                ]
+              }
+            }
+          },
+          "recordings": {
+            "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-area17-camera-order/c07cd721f1d8/1x/attempt-0/area17-00-wasm",
+            "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-area17-camera-order/c07cd721f1d8/1x/attempt-0/area17-00-lua"
+          },
+          "source_diff_sha256": "c07cd721f1d876d21cffc89f9fe203dd590d4187baaf311118394ecc54809820"
+        },
+        "2": {
+          "sample_pairs": 151,
+          "units_projectiles_camera_exact": true,
+          "all_other_native_detail_fields_exact": true,
+          "orientation_basis_maxima": {
+            "right.x": {
+              "maximum_absolute": 1.1900000007614153e-07,
+              "unit_samples": 1359,
+              "first": [
+                0,
+                18674,
+                0.998492479,
+                0.99849236
+              ]
+            },
+            "right.z": {
+              "maximum_absolute": 1.200000000478596e-07,
+              "unit_samples": 1359,
+              "first": [
+                0,
+                18674,
+                -0.054811332,
+                -0.054811325
+              ]
+            },
+            "up.y": {
+              "maximum_absolute": 5.999999996841865e-08,
+              "unit_samples": 151,
+              "first": [
+                0,
+                6696,
+                0.999995768,
+                0.999995708
+              ]
+            }
+          },
+          "basis_unit_count": 9,
+          "rust_only_rule_transport": {
+            "n": {
+              "unit_samples": 52559,
+              "values": [
+                0.0,
+                1.0
+              ]
+            },
+            "active_weapon_slot": {
+              "unit_samples": 151,
+              "values": [
+                0.0
+              ]
+            },
+            "selfMoveSpeedChange": {
+              "unit_samples": 11,
+              "values": [
+                1.0
+              ]
+            },
+            "beam_enabled": {
+              "unit_samples": 1,
+              "values": [
+                0.0
+              ]
+            }
+          },
+          "raw_strict_comparison": {
+            "sample_count": 151,
+            "first_differences": {
+              "details": 0
+            },
+            "different_samples": {
+              "details": 151
+            },
+            "examples": {
+              "details": {
+                "unit": 78,
+                "differences": [
+                  [
+                    5,
+                    {},
+                    {
+                      "n": 0.0
+                    }
+                  ]
+                ]
+              }
+            }
+          },
+          "recordings": {
+            "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-area17-camera-order/c07cd721f1d8/2x/attempt-0/area17-00-lua",
+            "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-area17-camera-order/c07cd721f1d8/2x/attempt-0/area17-00-wasm"
+          },
+          "source_diff_sha256": "c07cd721f1d876d21cffc89f9fe203dd590d4187baaf311118394ecc54809820"
+        }
+      },
+      "precision": "Engine Lua numbers are f32 (luaconf.h513-514). Aligned rolling-average operation order removes the camera discrepancy.",
+      "basis_source": "Lua front-only SetUnitDirection normalizes front then derives right in ForcedSpin(front); NativeSetUnitDirection separately normalizes explicit front and right. Small fixed right/up rounding remains in this API path. Native positions/headings/velocities and all commands/collision state match.",
+      "rule_sources": {
+        "n": "rules-synced/src/scenario.rs:220",
+        "selfMoveSpeedChange": "rules-synced/src/civilians.rs:557 and scenario.rs",
+        "active_weapon_slot": "rules-synced/src/cus_scripts/ufo.rs:185",
+        "beam_enabled": "rules-synced/src/cus_scripts/ufo.rs:232"
+      },
+      "raw_comparator_differences_retained": true,
+      "engine_and_shared_unchanged": true
+    }
+  },
+  "canonical_normal_module_check": {
+    "checked_utc": "2026-10-31T13:34:33.762301+00:00",
+    "sdk_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+    "engine_release": "2026.10.3103",
+    "all_byte_identical": true,
+    "module_count": 18,
+    "games": [
+      {
+        "game": "Area17",
+        "benchmark_runtime_source": "4784fc666fc8783c6e1f5d08f659288fbacb4053",
+        "public_rust_head": "4784fc666fc8783c6e1f5d08f659288fbacb4053",
+        "source_diff": [],
+        "installed_source_check_passed": true,
+        "modules": {
+          "LuaRules/wasm/area17-rules.wasm": "c5e3d811279130d039caa9e618099bf405cc645eeeb89f1fbcb2f78430904974",
+          "LuaUI/wasm/area17-ui.wasm": "fde7324665957dbba69d78bd71f3b2c4c53478ff98785dd55194c1f647f554e1"
+        }
+      },
+      {
+        "game": "Flove",
+        "benchmark_runtime_source": "ca305b5e7daed186e5ea89de87c7961764837216",
+        "public_rust_head": "ca305b5e7daed186e5ea89de87c7961764837216",
+        "source_diff": [],
+        "installed_source_check_passed": true,
+        "modules": {
+          "LuaRules/wasm/flove-jobs.wasm": "2a62162bbd50c71a109a06abe515d3d3008766d352241e1adbf6c9c269a4275c",
+          "LuaRules/wasm/flove-rules.wasm": "ad46ccaae327354666a1513bcebd409d4d3659e5fc3399315b5af37fbd5c4e7d",
+          "LuaUI/wasm/flove-ui.wasm": "fc4b399c7761f53495fe4673771166f14e5350738617dc5c808ad6f470f6f928"
+        }
+      },
+      {
+        "game": "Gravitas",
+        "benchmark_runtime_source": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+        "public_rust_head": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+        "source_diff": [],
+        "installed_source_check_passed": true,
+        "modules": {
+          "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2",
+          "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+          "LuaUI/wasm/gravitas-ui.wasm": "b33dcb623bc79a7cb709bab3667f68dfb2445bed18a82159cd17325a83ca0fab"
+        }
+      },
+      {
+        "game": "Hunted",
+        "benchmark_runtime_source": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "public_rust_head": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "source_diff": [],
+        "installed_source_check_passed": true,
+        "modules": {
+          "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+          "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19",
+          "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1"
+        }
+      },
+      {
+        "game": "MyCube",
+        "benchmark_runtime_source": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
+        "public_rust_head": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
+        "source_diff": [],
+        "installed_source_check_passed": true,
+        "modules": {
+          "LuaRules/wasm/mycube-rules.wasm": "4db9089d03cc495d92a527e5d68e500fbf07175f76cd0528aa6b9480b2385919",
+          "LuaUI/wasm/mycube-ui.wasm": "5408e80b1f109e33f4170656ca43fd57c029293c3726ce4aa72b0c72c983ceb3"
+        }
+      },
+      {
+        "game": "PartsNeeded",
+        "benchmark_runtime_source": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
+        "public_rust_head": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
+        "source_diff": [],
+        "installed_source_check_passed": true,
+        "modules": {
+          "LuaRules/wasm/partsneeded-rules.wasm": "5b67dfd246b9404d1dd68b4a29f053cfb777d18ed400a8b4ae13a9444ab6d615",
+          "LuaUI/wasm/partsneeded-ui.wasm": "3a2a38176b9955ef330c1bb3a48731fc81fe9343175406a65f7403a30e9f0b3e"
+        }
+      },
+      {
+        "game": "ToTheLastDrop",
+        "benchmark_runtime_source": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+        "public_rust_head": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+        "source_diff": [],
+        "installed_source_check_passed": true,
+        "modules": {
+          "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+          "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0",
+          "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655"
+        }
+      }
+    ],
+    "existing_check": "verification/verify installed all",
+    "log": "codex-work/night-2026-10-30/v4/normal-source-check-final/installed.log"
+  },
+  "candidate_world_proofs": {
+    "mycube": {
+      "comparison": {
+        "sample_count": 151,
+        "first_differences": {},
+        "different_samples": {},
+        "examples": {}
+      },
+      "strict_equal": true,
+      "recordings": {
+        "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-world-parity-fixes/mycube/3bc508c26d8c/attempt-0/mycube-01-wasm",
+        "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-world-parity-fixes/mycube/3bc508c26d8c/attempt-0/mycube-01-lua"
+      },
+      "source_diff_sha256": "3bc508c26d8cc0fa9cd717a705068f3bff5be0daf2a35b20a121df7ff6ca7275"
+    },
+    "partsneeded": {
+      "comparison": {
+        "sample_count": 151,
+        "first_differences": {},
+        "different_samples": {},
+        "examples": {}
+      },
+      "strict_equal": true,
+      "recordings": {
+        "wasm": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-world-parity-fixes/partsneeded/a3c358134be4/attempt-0/partsneeded-00-wasm",
+        "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-world-parity-fixes/partsneeded/a3c358134be4/attempt-0/partsneeded-00-lua"
+      },
+      "source_diff_sha256": "a3c358134be4054e18257b5fe174f81c58fc369d1b9eaf99828281e6af12d1d9"
+    }
+  },
+  "candidate_checks": {
+    "mycube": {
+      "complete": true,
+      "cases": [
+        {
+          "game": "mycube",
+          "mode": "headless",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/checks-mycube/3bc508c26d8c/00-mycube-headless-0"
+        },
+        {
+          "game": "mycube",
+          "mode": "visual",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/checks-mycube/3bc508c26d8c/01-mycube-visual-0"
+        },
+        {
+          "game": "controls",
+          "mode": "mycube",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/checks-mycube/3bc508c26d8c/02-controls-mycube-0"
+        }
+      ],
+      "source_diff_sha256": "3bc508c26d8cc0fa9cd717a705068f3bff5be0daf2a35b20a121df7ff6ca7275",
+      "normal": {
+        "mycube": {
+          "modules": {
+            "LuaRules/wasm/mycube-rules.wasm": "c39da7e61eb4490138e866c96638e30fff17f01c61512910967793a5d6fe6837",
+            "LuaUI/wasm/mycube-ui.wasm": "0484623e7218ebff98a72d7d73d26fd1808c20d3cebe8dd1604338c691a39fbd"
+          },
+          "engine_unchanged": true,
+          "shared_crate_unchanged": true
+        },
+        "partsneeded": {
+          "modules": {
+            "LuaRules/wasm/partsneeded-rules.wasm": "29b56fcc192d0d0696a00f0852e35c0fb9f4979d8d69b67555bad85c25ede55a",
+            "LuaUI/wasm/partsneeded-ui.wasm": "2819a5b818dfcabc2ea1724f6b2a0aaa4e05e980c029c8921aa4970c206f9c48"
+          },
+          "engine_unchanged": true,
+          "shared_crate_unchanged": true
+        }
+      },
+      "utc": "2026-10-31T12:58:21.834439+00:00"
+    },
+    "partsneeded": {
+      "complete": true,
+      "cases": [
+        {
+          "game": "partsneeded",
+          "mode": "headless",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/checks-partsneeded/a3c358134be4/00-partsneeded-headless-0"
+        },
+        {
+          "game": "partsneeded",
+          "mode": "visual",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/checks-partsneeded/a3c358134be4/01-partsneeded-visual-0"
+        },
+        {
+          "game": "unit-scripts",
+          "mode": "partsneeded",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/checks-partsneeded/a3c358134be4/02-unit-scripts-partsneeded-0"
+        },
+        {
+          "game": "controls",
+          "mode": "partsneeded",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/checks-partsneeded/a3c358134be4/03-controls-partsneeded-0"
+        }
+      ],
+      "source_diff_sha256": "a3c358134be4054e18257b5fe174f81c58fc369d1b9eaf99828281e6af12d1d9",
+      "normal": {
+        "mycube": {
+          "modules": {
+            "LuaRules/wasm/mycube-rules.wasm": "c39da7e61eb4490138e866c96638e30fff17f01c61512910967793a5d6fe6837",
+            "LuaUI/wasm/mycube-ui.wasm": "0484623e7218ebff98a72d7d73d26fd1808c20d3cebe8dd1604338c691a39fbd"
+          },
+          "engine_unchanged": true,
+          "shared_crate_unchanged": true
+        },
+        "partsneeded": {
+          "modules": {
+            "LuaRules/wasm/partsneeded-rules.wasm": "0abede02bfc2bed1b9a960cccce7cc3a7c2b8c3885cd17a375725455d105ada2",
+            "LuaUI/wasm/partsneeded-ui.wasm": "2819a5b818dfcabc2ea1724f6b2a0aaa4e05e980c029c8921aa4970c206f9c48"
+          },
+          "engine_unchanged": true,
+          "shared_crate_unchanged": true
+        }
+      },
+      "utc": "2026-10-31T13:16:02.054699+00:00"
+    }
+  },
+  "flove_correctness_cost": [
+    {
+      "id": "flove-game-status-10x",
+      "title": "Flove global HUD status",
+      "load": "10\u00d7",
+      "backends": [
+        "wasm"
+      ],
+      "base_commits": {
+        "wasm": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+      },
+      "candidate_commits": {
+        "wasm": "ca305b5e7daed186e5ea89de87c7961764837216"
+      },
+      "adopted": null,
+      "change": "Same Lua-compatible game rules status channel; seven independently cached fields replace carrier-unit lookup and tuple-wide re-publication. Same gameplay/graphics, native engine and strict source A/B method. Separate physical-world, integration, jobs, visual and input checks precede measurements.",
+      "backend": "wasm",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-0-block-1/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-0-block-1/after/flove-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-1-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-1-block-0/after/flove-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-2-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-2-block-0/after/flove-01-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-3-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-3-block-0/after/flove-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-4-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/10x-round-4-block-0/after/flove-00-wasm"
+        }
+      ],
+      "wall_before_ms": 46.851115,
+      "wall_after_ms": 46.981595,
+      "wall_change_pct": 0.3283486422895221,
+      "wall_mean_ratio_95ci": [
+        1.0001742995849296,
+        1.0044459365685674
+      ],
+      "sim_before_ms": 27.05075,
+      "sim_after_ms": 27.14639,
+      "sim_change_pct": 0.37482278370037925,
+      "sim_mean_ratio_95ci": [
+        0.9964602910297901,
+        1.0072948887599389
+      ],
+      "draw_before_ms": 6.763618,
+      "draw_after_ms": 6.811424,
+      "draw_change_pct": 0.6249162290809851,
+      "draw_mean_ratio_95ci": [
+        1.0052983569764187,
+        1.01149693560514
+      ]
+    },
+    {
+      "id": "flove-game-status-1x",
+      "title": "Flove global HUD status",
+      "load": "1\u00d7",
+      "backends": [
+        "wasm"
+      ],
+      "base_commits": {
+        "wasm": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+      },
+      "candidate_commits": {
+        "wasm": "ca305b5e7daed186e5ea89de87c7961764837216"
+      },
+      "adopted": null,
+      "change": "Same Lua-compatible game rules status channel; seven independently cached fields replace carrier-unit lookup and tuple-wide re-publication. Same gameplay/graphics, native engine and strict source A/B method. Separate physical-world, integration, jobs, visual and input checks precede measurements.",
+      "backend": "wasm",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-0-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-0-block-0/after/flove-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-1-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-1-block-0/after/flove-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-2-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-2-block-0/after/flove-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-3-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-3-block-0/after/flove-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-4-block-0/before/flove-00-wasm",
+          "after": "perf-runs/2026-10-31-flove-game-status-events/source/1x-round-4-block-0/after/flove-00-wasm"
+        }
+      ],
+      "wall_before_ms": 4.292603333333333,
+      "wall_after_ms": 4.311021666666667,
+      "wall_change_pct": 0.7773523655831616,
+      "wall_mean_ratio_95ci": [
+        0.998454108347588,
+        1.012591356060603
+      ],
+      "sim_before_ms": 1.425651,
+      "sim_after_ms": 1.429627,
+      "sim_change_pct": 0.8609286858574983,
+      "sim_mean_ratio_95ci": [
+        0.9930034760971193,
+        1.0114929895490856
+      ],
+      "draw_before_ms": 2.032231,
+      "draw_after_ms": 2.028026,
+      "draw_change_pct": -0.4728793134245013,
+      "draw_mean_ratio_95ci": [
+        0.9933042340689824,
+        1.0036877997129117
+      ]
+    }
+  ],
+  "note": "Corrected source revisions are public. Canonical installed/source checks pass and all18 normal modules match the new immutable inputs. Fresh final comparisons/captures replace older affected-source data; older values remain display-only history. Flove before/after costs compare an incorrect old HUD to corrected output, not same-behavior optimization gains."
+}
