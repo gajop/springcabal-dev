@@ -1,0 +1,111 @@
+{
+  "utc": "2026-10-31T20:05:33.498709+00:00",
+  "state": "private candidate; not adopted or published",
+  "public_base_commits": {
+    "Flove.sdd": "07e792c658b9767d4cfe6340020bb4ef840ac60c",
+    "Flove-wasm.sdd": "ca305b5e7daed186e5ea89de87c7961764837216"
+  },
+  "source_diffs_sha256": {
+    "Flove.sdd": "e165fb511f280c751d1a38473c39623b13509cb320713056eb0f7691a82311ec",
+    "Flove-wasm.sdd": "7ad9740e4172851ce3ca9c8ef2a35f7184c60703381c93f2804f921d672c728b"
+  },
+  "module_hashes": {
+    "LuaRules/wasm/flove-jobs.wasm": "080a1db95a3171226ba4c756a0fa4be7aa5a508f51e78f893116e942ea903855",
+    "LuaRules/wasm/flove-rules.wasm": "cf62f4f7836a04bd0969345471c5b8584a1d05084ec38b30fbb929f6a64b9d82",
+    "LuaUI/wasm/flove-ui.wasm": "48a93578cae2698e5cdd76156a51e5ad9eb1395afc712a899334c06a8ac3ed78"
+  },
+  "engine": {
+    "version": "spring-headless version 2026.10.3103 (Headless)",
+    "sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+    "renderer": "headless; no graphics"
+  },
+  "performance_evidence": false,
+  "existing_correctness_suites": [
+    {
+      "name": "animation",
+      "mode": "animation-trace",
+      "workers": 1,
+      "jobs": "off",
+      "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/flove-render-parity/headless-checks/01633aa5e9b0/animation/attempt-0"
+    },
+    {
+      "name": "integration",
+      "mode": "headless",
+      "workers": 1,
+      "jobs": "off",
+      "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/flove-render-parity/headless-checks/01633aa5e9b0/integration/attempt-0"
+    },
+    {
+      "name": "jobs-check",
+      "mode": "headless",
+      "workers": 4,
+      "jobs": "check",
+      "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/flove-render-parity/headless-checks/01633aa5e9b0/jobs-check/attempt-0"
+    }
+  ],
+  "identical_shared_renderers": {
+    "LuaRules/Gadgets/wisp_animation.lua": "fbe1871537c30ea3518cbb1f48667e179e22f2ca3f91f8bf85fcc9228af7d7c5",
+    "LuaRules/Gadgets/api_custom_unit_shaders.lua": "c314c20ae0a9140ea6a97935b8ebf85b4573c5e62408ba2119a468774856d38f",
+    "ModelMaterials/1_mushroom_shader.lua": "8893f82e3bd55237ee0070710ba86a20ced0d1003f8b076ed5659a675b5c31f4",
+    "ModelMaterials/1_tree_normalmapping.lua": "df37455e1c133c40c662886a940eff31d0fe152a7b3b017b8cf84a019c12921d",
+    "ModelMaterials/Shaders/treeshader.lua": "f0c8e9bbdf3930f95281200accbc2050cf464899935b50fe8014af682f351b50"
+  },
+  "animation": {
+    "skeleton_entries": 158,
+    "pose_samples": 47006,
+    "visibility_commands": 88,
+    "branch_count_samples": 654,
+    "effects": 128,
+    "pose_max_delta": 8.000000001118224e-06,
+    "effect_max_delta": 1.0000003385357559e-06,
+    "death_events": [
+      [
+        250,
+        "death_begin_spire_first"
+      ],
+      [
+        250,
+        "death_spire_first"
+      ],
+      [
+        270,
+        "death_begin_spire_tracked"
+      ],
+      [
+        270,
+        "death_spire_tracked"
+      ],
+      [
+        320,
+        "removed_spire_first"
+      ],
+      [
+        340,
+        "removed_spire_tracked"
+      ]
+    ]
+  },
+  "native_sqrt": {
+    "module_sha256": "cf62f4f7836a04bd0969345471c5b8584a1d05084ec38b30fbb929f6a64b9d82",
+    "native_wasm_sqrt": [
+      {
+        "function": "0217a7 func[222] <_RNCNvNtNtCshL3K8sLC5fV_16flove_rules_wasm12unit_scripts6simple10spire_glow0B7_>:",
+        "instruction": "021a9d: 91                         |                       f32.sqrt"
+      }
+    ],
+    "software_newton_loop_removed": true
+  },
+  "changes": [
+    "Both editions use the same cached tree/wisp renderer and health/growth materials.",
+    "Spire branches start independent 500ms transitions; per-unit glow repeats every300ms.",
+    "Spire death waits for its fall, and losing an untracked spire does not end the game.",
+    "Native CEG calls use Lua's damage-modifier default1; trace wrappers record actual engine defaults.",
+    "The shared power calculation uses native f32.sqrt instead of32 Newton divisions."
+  ],
+  "remaining": [
+    "Existing NVIDIA visual/wisp/outline/input suites and GUI integration checks",
+    "Normal/10x full-world comparison and retained rule-parameter classification",
+    "Source/cost review, public adoption and canonical normal-module build",
+    "Six fresh timing configurations and matching captures"
+  ]
+}

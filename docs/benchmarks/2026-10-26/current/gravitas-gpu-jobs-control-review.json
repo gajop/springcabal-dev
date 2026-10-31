@@ -1,0 +1,11 @@
+{
+  "case": "fire-10-gpu-jobs-w4",
+  "accepted_pairs": 5,
+  "active_jobs_on_runs": 0,
+  "paired_median_change_pct": -3.3736475339736116,
+  "mean_ratio_95ci": [
+    0.941523441353464,
+    1.0203234704307291
+  ],
+  "interpretation": "No particle jobs executed in any enabled capture. The confidence interval includes no change. The observed control difference is not evidence of a parallelization gain."
+}
