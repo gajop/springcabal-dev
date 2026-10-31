@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T21:06:04.565464+00:00",
+  "utc": "2026-10-31T23:40:19.304170+00:00",
   "scope": "Retain raw timings and captures, but exclude known physical, HUD or rendering workload mismatches from primary language rankings until corrected and checked.",
   "resolved_campaigns": {
     "mycube-1x-w1": {
@@ -320,11 +320,11 @@
       "source_review": "hunted-render-parity.json"
     },
     "area17-1x-w1": {
-      "reason": "The UFO beam pulse uses simulation frames in Lua and elapsed rendering time in Rust; explicit blend/depth state also differs. Correct and verify rendering before a language-speed claim.",
+      "reason": "The UFO beam pulse uses simulation frames in Lua and elapsed rendering time in Rust; explicit blend/depth state also differs. Correct and verify rendering before a language-speed claim. Original Lua also loads deferred lighting that the Rust version omits; restore and verify its authored passes.",
       "source_review": "area17-render-parity.json"
     },
     "area17-2x-w1": {
-      "reason": "The UFO beam pulse uses simulation frames in Lua and elapsed rendering time in Rust; explicit blend/depth state also differs. Correct and verify rendering before a language-speed claim.",
+      "reason": "The UFO beam pulse uses simulation frames in Lua and elapsed rendering time in Rust; explicit blend/depth state also differs. Correct and verify rendering before a language-speed claim. Original Lua also loads deferred lighting that the Rust version omits; restore and verify its authored passes.",
       "source_review": "area17-render-parity.json"
     },
     "mycube-1x-w1": {
@@ -332,7 +332,23 @@
       "source_review": "environment-render-parity.json"
     },
     "partsneeded-1x-w1": {
-      "reason": "Original Lua loads/draws volumetric fog and map-edge mirrors; Rust omits both. Correct environment rendering before a language-speed comparison.",
+      "reason": "Original Lua loads/draws volumetric fog and map-edge mirrors; Rust omits both. Correct environment rendering before a language-speed comparison. Original Lua also loads deferred lighting that the Rust version omits; restore and verify its authored passes.",
+      "source_review": "environment-render-parity.json"
+    },
+    "ttld-shadows-1x-w1": {
+      "reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
+      "source_review": "environment-render-parity.json"
+    },
+    "ttld-shadows-10x-w1": {
+      "reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
+      "source_review": "environment-render-parity.json"
+    },
+    "ttld-burning-1x-w1": {
+      "reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
+      "source_review": "environment-render-parity.json"
+    },
+    "ttld-burning-10x-w1": {
+      "reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
       "source_review": "environment-render-parity.json"
     }
   },

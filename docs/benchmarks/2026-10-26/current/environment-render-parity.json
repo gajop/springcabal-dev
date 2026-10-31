@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T22:47:41.165899+00:00",
+  "utc": "2026-10-31T23:40:19.304848+00:00",
   "public_sources_untouched": true,
   "shared_base": "a996f20cbb30efa9dd62a06b1b0b74bf8bdc7313",
   "games": {
@@ -51,6 +51,20 @@
     }
   },
   "map_edge": "Native pass absent in Hunted/MyCube/Parts. Private shared code reuses tested TTLD native renderer; same original Lua helper/culling in all four.",
-  "parts_fog": "Original Lua GPU capture loads Volumetric Clouds; Rust has no matching pass. Correction still required.",
-  "remaining": "Compile/check the map-edge candidates; implement matching Parts fog and audit deferred/projectile-light activation. Existing GPU/world/GL/image checks and source-cost trials must precede adoption."
+  "parts_fog": "Private implementation compiles; actual GPU fog offset, shader and compositing proof pending.",
+  "remaining": "Verify map-edge/fog corrections; restore Parts/Area deferred lighting; align TTLD bloom uniforms; audit Flove's benchmark activation. Require existing strict GPU checks, output/GL/world proof and fresh final timings before adoption.",
+  "deferred_lighting": {
+    "partsneeded": "Recorded Lua run loads deferred/projectile lights and Wisp control's mouse, wisp and lamp collectors. Native pass absent publicly; isolated shared implementation and Parts adapter under verification.",
+    "area17": "Recorded Lua run loads deferred/projectile lights with HDR/bloom. Native version lacks the pass. Correction and GPU verification pending.",
+    "ttld": "Both render deferred lights/HDR/bloom, but Rust blur spacing is twice Lua's: inverse half-size versus inverse full-size. The saved timings remain previous results; do not rank as language-only.",
+    "flove": "Lua shader exists, but the retained original functional run disables it through config. Need verify activation and active projectile lights in the actual benchmark config, not infer from that functional run."
+  },
+  "lighting_source_evidence_sha256": {
+    "spring-linux/games/ToTheLastDrop.sdd/LuaUI/Widgets/gfx_deferred_rendering.lua": "7954a53f087cdb17b4ccf9301010f577b0edba7e61b599f28bd2110793af1e51",
+    "spring-linux/games/ToTheLastDrop-wasm.sdd/wasm-src/ui/src/widgets/gfx_lighting/deferred_lighting.rs": "f6b8efb41d2a92df0d54390e8414aa3bfab766d7376bab513ed47c806a0995f9",
+    "spring-linux/games/Area-17.sdd/LuaUI/Widgets/gfx_deferred_rendering.lua": "afd2a2ac94b771e6a4175551dcdd5d227142558fb29a28531b85e2977adf6327",
+    "spring-linux/games/PartsNeeded.sdd/LuaUI/Widgets/gfx_deferred_rendering.lua": "e361ebf05f5d7ddbe68054a959ab623f1439e9b9cb60b2230b6d3b94fd48a947",
+    "perf-runs/2026-10-30-night-v8-unaffected/area17-1x-w1/area17-00-lua/engine.log": "d559a7c4109c0618c7c007df342eeba5f2b9ed82c6d31130da71746fbd87ea3e",
+    "perf-runs/2026-10-30-night-v8-unaffected/partsneeded-1x-w1/partsneeded-00-lua/engine.log": "d0546a39013707ae4cc678697a4c4603447552b77b284b7b2529e482f9c8b2ba"
+  }
 }

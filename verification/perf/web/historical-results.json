@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T22:48:45.863521+00:00",
+  "generated_at": "2026-10-31T23:44:01.035958+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -2005,9 +2005,16 @@
       "game": "ttld",
       "title": "To the Last Drop",
       "code": "House ignition and health-bar fixes tested/pushed. Existing suites, ordinary fire and all 604 detailed-world sample pairs pass; normal screenshots reviewed.",
-      "remaining": "All four timing cases and world pairs complete. CPU profile pairs 4/4; clip pairs 4/4. Finish remaining captures and final profile analysis.",
+      "remaining": "All four timing cases and world pairs complete. CPU profile pairs 4/4; clip pairs 4/4. Finish remaining captures and final profile analysis. 4 retained configurations have known workload mismatches and remain held.",
       "expected": 4,
-      "completed": 4
+      "completed": 0,
+      "raw_completed": 4,
+      "held_cases": [
+        "ttld-shadows-1x-w1",
+        "ttld-shadows-10x-w1",
+        "ttld-burning-1x-w1",
+        "ttld-burning-10x-w1"
+      ]
     },
     {
       "game": "gravitas",
