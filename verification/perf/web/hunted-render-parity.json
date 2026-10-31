@@ -22,5 +22,70 @@
   "lua": "CustomUnitShaders loaded in current normal/10x captures; the rabbit material sets distance/time, fades fragment RGBA by min(1,1.4-distance), and returns hidden when the unscaled distance exceeds90. It loops all beams per DrawUnit.",
   "rust": "Current captured runtime does not load CustomUnitShaders. Rust visibility uses spatial queries and SetUnitNoDraw, but no game Rust source installs a rabbit material or fade shader.",
   "consequence": "Physical-world equality does not prove matching model shading or equal rendering work. Hold language comparisons; retain raw data. Jobs off/on compare the same current Rust renderer, but corrected-source final comparisons will be needed after adoption.",
-  "source_work": "Port the same rabbit material through existing native rendering API if available, and align Lua spatial visibility/caches with Rust; preserve original output. No engine update authorized or needed merely to patch the game."
+  "source_work": "Port the same rabbit material through existing native rendering API if available, and align Lua spatial visibility/caches with Rust; preserve original output. No engine update authorized or needed merely to patch the game.",
+  "candidate": {
+    "status": "Private; not adopted or published",
+    "utc": "2026-10-31T21:16:22.092017+00:00",
+    "base_commits": {
+      "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+      "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69"
+    },
+    "source_diffs_sha256": {
+      "Hunted.sdd": "df6f1742416d6b5acfe53f043821a42a7be5081be2c6db832c8a6a88c61ae103",
+      "Hunted-wasm.sdd": "c18a14aa3bcc51929be9908539118a14c15b90305dc09bbc1bcda2dffb20984a",
+      "springcabal-rs": "97d329c3ef08b1c6b2e683e147fce85eb1fc2108ffa51ab2221455c0aaf12aaf"
+    },
+    "normal_modules": {
+      "LuaRules/wasm/hunted-rules.wasm": "488808931d1b160eff5a53fb68fe64930bd5981b8e02910c786106e5a07e15ac",
+      "LuaRules/wasm/hunted-jobs.wasm": "2bcadf95d7eb18cf300567975297a382e8d13f23a70cc5572de2e905ebf7a0fa",
+      "LuaUI/wasm/hunted-ui.wasm": "d6b8d6b799096c8392e3a3298b96feb10ef38e165810d3dc8f34a55fed73ac21"
+    },
+    "checks": {
+      "rust_host_tests": 45,
+      "lua_regressions": 22,
+      "fmt_clippy_lua_syntax": "passed",
+      "no_render": {
+        "utc": "2026-10-31T21:03:33.006262+00:00",
+        "complete": true,
+        "cases": [
+          {
+            "name": "integration",
+            "mode": "headless",
+            "workers": 1,
+            "jobs": "off",
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-render-parity/headless-checks/7f16ab7fbfca/integration/attempt-0"
+          },
+          {
+            "name": "jobs-check",
+            "mode": "headless",
+            "workers": 4,
+            "jobs": "check",
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-render-parity/headless-checks/7f16ab7fbfca/jobs-check/attempt-0"
+          }
+        ],
+        "source_diffs_sha256": {
+          "Hunted.sdd": "df6f1742416d6b5acfe53f043821a42a7be5081be2c6db832c8a6a88c61ae103",
+          "Hunted-wasm.sdd": "c18a14aa3bcc51929be9908539118a14c15b90305dc09bbc1bcda2dffb20984a",
+          "springcabal-rs": "97d329c3ef08b1c6b2e683e147fce85eb1fc2108ffa51ab2221455c0aaf12aaf"
+        },
+        "engine_version": "spring-headless version 2026.10.3103 (Headless)",
+        "harness_sha256": {
+          "/home/gajop/projects/spring-projects/springcabal-games/verification/games/hunted.sh": "7151b285df404104e318dd097a2af3a0a3ee366d71295ef22cbd1da80cf94b6f",
+          "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/hunted/lua_regressions.lua": "b0f60cf9f149cb8408c41b99d87379a94d1ccbf6ed7b57eb4d59cfedc766a765"
+        },
+        "engine_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+        "no_render_correctness_diagnostics_only": true,
+        "performance_evidence": false
+      }
+    },
+    "performance_evidence": false,
+    "gpu_checks": "queued under unchanged NVIDIA/CPU guards",
+    "worlds_and_render_gl_review": "pending",
+    "changes": [
+      "Original GLSL material through native rendering API; same per-object fade expression and textures",
+      "Lua uses spatial visibility queries and cached per-object uniforms instead of per-draw Lua callbacks",
+      "Local cursor flashlight updates in benchmark mode and outside the view, with synced command filtering preserved",
+      "Private shared volume helper uses original 222-vertex triangle strip and explicit front-face culling"
+    ]
+  }
 }

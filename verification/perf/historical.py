@@ -94,7 +94,7 @@ def export(project, archive):
                 elif row['campaign'] in SCENES:
                     scenes[SCENES[row['campaign']]] = value
     games = [
-        dict(game='area17', title='Area 17', code='Selected code work complete.', remaining='Fresh normal/2× comparisons, captures and profile review on aligned camera arithmetic.', expected=2),
+        dict(game='area17', title='Area 17', code='Gameplay/camera corrections are public. Confirmed beam pulse/render-state differences need correction; language comparisons are held.', remaining='Align the UFO beam clock and rendering, check GPU/world output, then fresh normal/2× comparisons, captures and profile review.', expected=2),
         dict(game='hunted', title='Hunted', code='AI optimizations are public. A confirmed rabbit material/fade mismatch needs correction; current language comparisons are held.', remaining='All six timing configurations and matching worlds/profiles complete; final profile analysis remains.', expected=6),
         dict(game='flove', title='Flove', code='Physics/HUD fixes are public. The private renderer/spire candidate passes serial/jobs correctness checks and extended animation/effect traces.', remaining='GPU visual/wisp/input checks and paired world replay, source/cost review and adoption, then six fresh normal/10× and jobs comparisons/captures.', expected=6),
         dict(game='ttld', title='To the Last Drop', code='House ignition and health-bar fixes implemented/tested/pushed. Final parity verification remains active.', remaining='Finish ordinary-fire and four detailed-world checks; then fresh timings, captures and analysis.', expected=4),
@@ -128,7 +128,7 @@ def export(project, archive):
     for name in ('hunted', 'gravitas'):
         if by_game[name]['completed'] == by_game[name]['expected']:
             by_game[name]['remaining'] = 'Timing matrix complete. Final profile interpretation and jobs-cost diagnostics remain.'
-    if by_game['area17']['completed'] == 1:
+    if by_game['area17']['completed'] == 1 and not (state_path.parent / 'area17-render-fixes-pending').exists():
         by_game['area17']['remaining'] = 'Normal timing/profile/world/clip complete; finish the fresh 2× case and its captures, then final analysis.'
     if by_game['ttld']['completed'] == 4:
         capture_counts = {}

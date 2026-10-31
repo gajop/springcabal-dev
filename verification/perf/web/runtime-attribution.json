@@ -1,81 +1,8 @@
 {
-  "generated_utc": "2026-10-31T20:37:33.313577+00:00",
-  "primary_cases_with_matching_profile_pair": 7,
+  "generated_utc": "2026-10-31T21:16:22.545853+00:00",
+  "primary_cases_with_matching_profile_pair": 6,
   "scope": "Exclusive perf CPU sample weights per measured frame. Current engine and resource guard, sources and module identities exactly match each primary timing case. Profiles are separate instrumented captures; these are neither GPU execution times nor additional timing replicates. Language/runtime combines Lua interpreter/table/GC, Wasm guest and Wasmtime. Other CPU includes bindings, engine, graphics driver and unresolved symbols. Native call wrappers can therefore remain outside the language column. Sampling variation is not an exact causal decomposition of whole-frame timing.",
   "cases": [
-    {
-      "case": "area17-1x-w1",
-      "backends": {
-        "lua": {
-          "main_thread_cpu_ms_per_frame": 2.658650613333333,
-          "language_runtime_cpu_ms_per_frame": 0.45424181333333336,
-          "other_main_thread_cpu_ms_per_frame": 2.2044088,
-          "exclusive_categories_ms": {
-            "CPU time in graphics driver": 0.5243820933333333,
-            "Checksums / measurement": 0.09686038666666667,
-            "Lua runtime / tables / GC": 0.45424181333333336,
-            "Native movement / pathfinding": 0.37074148,
-            "Native rendering / models": 0.21710086666666667,
-            "Native simulation / animation": 0.29058116,
-            "Other native code": 0.7014028,
-            "Unresolved": 0.0033400133333333333
-          },
-          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/area17-1x-w1/area17-1x/area17-00-lua/profile.json",
-          "profile_sha256": "ac2e608499b5bdd5436b14f562b4d9f0b982da4b7f92d7ef56574d135357dd36",
-          "samples": 798,
-          "identity": {
-            "source_commit": "2c8c725e80814a32259f0fc400487337c1aa5343",
-            "modules": {},
-            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
-            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
-            "cpu_activity_policy": {
-              "max_background_cpu_cores": 0.5,
-              "quiet_seconds": 10,
-              "excludes": "runner process tree including live and reaped children",
-              "window": "launch through first CPU sample after final frame marker"
-            }
-          }
-        },
-        "wasm": {
-          "main_thread_cpu_ms_per_frame": 2.2979291733333334,
-          "language_runtime_cpu_ms_per_frame": 0.08350033333333333,
-          "other_main_thread_cpu_ms_per_frame": 2.21442884,
-          "exclusive_categories_ms": {
-            "CPU time in graphics driver": 0.5644622533333333,
-            "Checksums / measurement": 0.09352037333333334,
-            "Lua runtime / tables / GC": 0.013360053333333333,
-            "Native movement / pathfinding": 0.3173012666666667,
-            "Native rendering / models": 0.21710086666666667,
-            "Native simulation / animation": 0.32064128,
-            "Other native code": 0.68136272,
-            "Unresolved": 0.02004008,
-            "Wasm guest": 0.0501002,
-            "Wasmtime runtime": 0.02004008
-          },
-          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/area17-1x-w1/area17-1x/area17-00-wasm/profile.json",
-          "profile_sha256": "9c377cf30b06fb46252ed8548dea72708de4b700246ca5950ff6e58db1326580",
-          "samples": 690,
-          "identity": {
-            "source_commit": "4784fc666fc8783c6e1f5d08f659288fbacb4053",
-            "modules": {
-              "LuaUI/wasm/area17-ui.wasm": "fde7324665957dbba69d78bd71f3b2c4c53478ff98785dd55194c1f647f554e1",
-              "LuaRules/wasm/area17-rules.wasm": "c5e3d811279130d039caa9e618099bf405cc645eeeb89f1fbcb2f78430904974"
-            },
-            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
-            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
-            "cpu_activity_policy": {
-              "max_background_cpu_cores": 0.5,
-              "quiet_seconds": 10,
-              "excludes": "runner process tree including live and reaped children",
-              "window": "launch through first CPU sample after final frame marker"
-            }
-          }
-        }
-      },
-      "main_thread_difference_lua_minus_rust_ms": 0.36072143999999984,
-      "language_runtime_difference_lua_minus_rust_ms": 0.37074148,
-      "other_cpu_difference_lua_minus_rust_ms": -0.010020040000000119
-    },
     {
       "case": "fire-1-lua-rust-w4",
       "backends": {

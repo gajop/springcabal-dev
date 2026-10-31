@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T20:37:37.991939+00:00",
+  "generated_at": "2026-10-31T21:16:25.662711+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1971,10 +1971,14 @@
     {
       "game": "area17",
       "title": "Area 17",
-      "code": "Selected code work complete.",
-      "remaining": "Normal timing/profile/world/clip complete; finish the fresh 2\u00d7 case and its captures, then final analysis.",
+      "code": "Gameplay/camera corrections are public. Confirmed beam pulse/render-state differences need correction; language comparisons are held.",
+      "remaining": "Align the UFO beam clock and rendering, check GPU/world output, then fresh normal/2\u00d7 comparisons, captures and profile review. 1 retained configurations have known workload mismatches and remain held.",
       "expected": 2,
-      "completed": 1
+      "completed": 0,
+      "raw_completed": 1,
+      "held_cases": [
+        "area17-1x-w1"
+      ]
     },
     {
       "game": "hunted",

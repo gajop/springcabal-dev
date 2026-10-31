@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T20:34:40.999970+00:00",
+  "utc": "2026-10-31T21:06:04.565464+00:00",
   "scope": "Retain raw timings and captures, but exclude known physical, HUD or rendering workload mismatches from primary language rankings until corrected and checked.",
   "resolved_campaigns": {
     "mycube-1x-w1": {
@@ -318,6 +318,14 @@
     "hunted-10x-lua-rust-w1": {
       "reason": "Lua runs the original rabbit material/fade callback; the captured Rust runtime only toggles visibility and does not load that shader. Rendering workload and output require correction before a language-speed claim.",
       "source_review": "hunted-render-parity.json"
+    },
+    "area17-1x-w1": {
+      "reason": "The UFO beam pulse uses simulation frames in Lua and elapsed rendering time in Rust; explicit blend/depth state also differs. Correct and verify rendering before a language-speed claim.",
+      "source_review": "area17-render-parity.json"
+    },
+    "area17-2x-w1": {
+      "reason": "The UFO beam pulse uses simulation frames in Lua and elapsed rendering time in Rust; explicit blend/depth state also differs. Correct and verify rendering before a language-speed claim.",
+      "source_review": "area17-render-parity.json"
     }
   },
   "resolved_utc": "2026-10-31T15:46:20.473782+00:00",

@@ -256,6 +256,7 @@
     "wall_mean_mean_ratio_95ci_hi": 0.8924470142589292,
     "lua_units_p50": 1329.0,
     "wasm_units_p50": 1329.0,
+    "held_reason": "The UFO beam pulse uses simulation frames in Lua and elapsed rendering time in Rust; explicit blend/depth state also differs. Correct and verify rendering before a language-speed claim.",
     "runtime": {
       "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
       "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",

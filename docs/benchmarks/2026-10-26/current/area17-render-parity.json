@@ -1,0 +1,91 @@
+{
+  "utc": "2026-10-31T21:06:04.564880+00:00",
+  "status": "Confirmed source mismatch; not a language-only comparison",
+  "sources": {
+    "lua_beam": {
+      "path": "/home/gajop/projects/spring-projects/springcabal-games/spring-linux/games/Area-17.sdd/LuaUI/Widgets/gfx_ufo_beam.lua",
+      "sha256": "dfb413b588476ca3d8188d24b14726ff63fca50c56368ca7c3ccb1446da6f51a"
+    },
+    "rust_beam": {
+      "path": "/home/gajop/projects/spring-projects/springcabal-games/spring-linux/games/Area17-wasm.sdd/wasm-src/ui/src/widgets/gfx_volumes.rs",
+      "sha256": "1ded95314579802881064c185b96645f056a8cc786dabcfa4d50bb8bb00e84f2"
+    },
+    "native_update": {
+      "path": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31/rts/NativeInterface/NativeInterfaceEventClient.cpp",
+      "sha256": "778482e89630485d1f73ab701702fbf825e389f2ec38ce0ac4c72fd6cdc381a5"
+    },
+    "engine_draw_dt": {
+      "path": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31/rts/Game/Game.cpp",
+      "sha256": "d928103c42d6bbb666ec2e5f3e7c2417c8f831a9077619f20daed407f0f4a911"
+    }
+  },
+  "lua": "UFO beam radius and alpha use sin(GetGameFrame()/period); explicit alpha blending, depth mask off, depth test on, then restore.",
+  "rust": "Accumulates UI Update deltaSeconds, then sin(seconds*30/period). NativeInterfaceEventClient::Update supplies CGame::updateDeltaSeconds from elapsed draw time, not simulated frames. Blend factors and depth mask are implicit. Rust also clamps radius>=1 and skips nonpositive heights unlike Lua max(1,height).",
+  "next": "Use original simulation-frame pulse and matching explicit render state/low-height geometry; cache the same immutable cone ring on both sides. Existing NVIDIA functional/visual/input/world and bounded GL checks precede adoption. No engine update.",
+  "candidate": {
+    "status": "Private; not adopted or published",
+    "utc": "2026-10-31T21:16:22.092428+00:00",
+    "base_commits": {
+      "Area-17.sdd": "2c8c725e80814a32259f0fc400487337c1aa5343",
+      "Area17-wasm.sdd": "4784fc666fc8783c6e1f5d08f659288fbacb4053"
+    },
+    "source_diffs_sha256": {
+      "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
+      "Area17-wasm.sdd": "03e23e194043c14963567bb0b09d53225f6e1705e0570e232a440dfebdf26672"
+    },
+    "normal_modules": {
+      "LuaRules/wasm/area17-rules.wasm": "6f6b059e71af591ace7ebe85ad2492767a7f077e3af6c730bb67eb729d147276",
+      "LuaUI/wasm/area17-ui.wasm": "a70fcd556eba2b3fe706d62df58bcbcd14233ccbee05ef709d0a28f412b55da3"
+    },
+    "checks": {
+      "rust_host_tests": 6,
+      "lua_regressions": 15,
+      "fmt_clippy_lua_syntax": "passed",
+      "no_render": {
+        "utc": "2026-10-31T21:10:55.084762+00:00",
+        "complete": false,
+        "cases": [
+          {
+            "name": "static",
+            "mode": "static",
+            "workers": 1,
+            "jobs": "off",
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/d54c1b3aa5d2/static/attempt-1"
+          }
+        ],
+        "source_diffs_sha256": {
+          "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
+          "Area17-wasm.sdd": "03e23e194043c14963567bb0b09d53225f6e1705e0570e232a440dfebdf26672"
+        },
+        "engine_version": "spring-headless version 2026.10.3103 (Headless)",
+        "harness_sha256": {
+          "/home/gajop/projects/spring-projects/springcabal-games/verification/games/area17.sh": "9ddd3cba8c9f7e60f5f9f349611016cba838e15408084761beb43f32b6192cd5",
+          "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/area17/lua_regressions.lua": "c05ad59d8791f13238aab5b9737e158aac0be2dcddbdf3590f7f8e314c432b15",
+          "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/area17/scenario.lua": "7eab78e9c68402fbd3689164ea90f0f4cafe8b07c191d27cef1e8c912484ebfa"
+        },
+        "engine_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+        "no_render_correctness_diagnostics_only": true,
+        "performance_evidence": false
+      },
+      "no_render_integration": {
+        "utc": "2026-10-31T21:12:16.545261+00:00",
+        "suite_passed": false,
+        "log": "codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/d54c1b3aa5d2/integration/attempt-0/run.log",
+        "observed_assertions": {
+          "Rust": 23,
+          "Lua": 6
+        },
+        "reason": "Strict suite rejects RmlUi image-load warnings in the no-render context. Full unmodified suite, including zero-warning requirement, remains mandatory in the queued NVIDIA serial case.",
+        "performance_evidence": false
+      }
+    },
+    "performance_evidence": false,
+    "gpu_checks": "queued under unchanged NVIDIA/CPU guards",
+    "worlds_and_render_gl_review": "pending",
+    "changes": [
+      "Beam uses simulation-frame pulse, original low-height geometry and explicit blend/depth/cull state",
+      "Both cache immutable cone rings; Lua computes its pulse/frame once per draw",
+      "Native default radius70 and cached authored wantedHeight match Lua"
+    ]
+  }
+}
