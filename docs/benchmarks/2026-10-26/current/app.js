@@ -1,6 +1,7 @@
 /* Portable benchmark explorer. No game simulation and no network services. */
 'use strict';
 const DATA=window.SC_DATA, $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
+const HISTORY=window.SC_HISTORY??{scenes:{},games:[],jobs:[]};
 const state={scene:DATA.scenes[0],comparison:'language',pair:0,worlds:[],frame:300,playing:false,fit:true,profile:null,flame:null,history:[]};
 const assets=new Map(), requests=new Map();
 const assetCacheLimit=6;
@@ -51,7 +52,8 @@ function variantOrder(r){return isLanguage()?(r.backend==='lua'?0:1):(r.rust_job
 function names(){return isLanguage()?['Lua','Rust · serial']:['Rust · jobs off','Rust · jobs on'];}
 function sceneNote(s){
   const notes={ttldburn:'Additional rendering control: at frame 120 the same public on_fire parameter is set on 106 deterministic near/far houses. Real normal UI modules and production fire widgets; shadows retained.',ttldburn10:'10× initial units with 128 deterministic near/far burning houses. This scales the unit scene, not the particle count by 10×. Same public-input fixture and production effects on both sides.',hunted:'Matched f32 math, lifecycle, food ordering and rounded falloff ties. The stress replay matches every recorded unit state and projectile sample.',hunted10:'10× initial scene, cloned after frame 60. Same AI and native pathfinder as normal gameplay.',flove:'350 mushrooms; same tree animation, hover highlighting and outlines in Lua and Rust.',flove10:'3,500 mushrooms plus the initial grove. Same targeting and visual effects; no reduced-effects shortcut.',ttld:'Gameplay view with shadows enabled in both. Matching deterministic lights and RGB targets.',ttld10:'10× initial population, shadows and lights retained in both. Native model streaming and shadow submission remain visible in CPU stacks.',area17:'1,329 initial units; matched scene placement, movement attributes and indexed civilian queries.',area172:'2× initial scene; normal NPC spawning and UFO behavior remain active.',fire1:'GPU curves and billboards in both; one deterministic burn/flame pair. Jobs controls use the Rust CPU particle-update reference (GPU graphics).',fire10:'Ten emitter pairs. GPU default versus Lua GPU renderer; jobs off/on is a separate CPU particle-update reference (GPU graphics).',fire100:'100 pairs, equal budgets, more than 50,000 normal particles. No Rust particle cap. Jobs off/on uses CPU particle updates with GPU graphics.',mycube:'Normal puzzle scene; no artificial unit stress.',partsneeded:'Normal village and wisp scene; cached live rosters in both implementations.'};
-  return notes[s.id];
+  const previous=$('show-history').checked&&!s.language.measured_pairs?HISTORY.scenes[s.id]:null;
+  return notes[s.id]+(previous?` Previous recorded frame time: Lua ${fmt(previous.summary.wall_mean_lua_ms)} / Rust ${fmt(previous.summary.wall_mean_rust_ms)} ms. ${previous.status.toUpperCase()}: ${previous.note} Current timing traces remain pending.`:'');
 }
 
 function overview(){
@@ -184,18 +186,31 @@ function videos(){const clips=(DATA.videos??[]).filter(v=>v.scene===state.scene.
 function overviewTable(){
   const body=$('overview-rows');body.replaceChildren();
   for(const scene of DATA.scenes){
-    const r=scene.language,tr=document.createElement('tr');tr.className='click-row';
+    const previous=$('show-history').checked&&!scene.language.measured_pairs?HISTORY.scenes[scene.id]:null;
+    const r=previous?.summary??scene.language,tr=document.createElement('tr');tr.className='click-row'+(previous?' historical-row':'');
+    const status=previous?`${previous.status.toUpperCase()} · ${previous.campaign_label}. ${previous.note}`:r.measured_pairs?`CURRENT · ≤ ${r.runtime?.cpu_activity_policy?.max_background_cpu_cores??'—'} background cores`:'Pending; no saved comparison';
     const cells=[scene.title+' · '+scene.load,fmt(r.wall_mean_lua_ms),fmt(r.wall_mean_rust_ms),pct(r.wall_mean_paired_rust_change_pct),
       fmt(r.sim_p50_lua_ms)+' / '+fmt(r.sim_p50_rust_ms),fmt(r.draw_p50_lua_ms)+' / '+fmt(r.draw_p50_rust_ms),
       fmt(r.lua_units_p50,0)+' / '+fmt(r.wasm_units_p50,0),r.measured_pairs+' / 5',
-      r.runtime?.cpu_activity_policy?'≤ '+r.runtime.cpu_activity_policy.max_background_cpu_cores+' background cores':r.measured_pairs?'Pressure only · historical':'Pending'];
+      status];
     for(const value of cells){const td=document.createElement('td');td.textContent=value;tr.append(td);}
+    if(previous)tr.title=previous.source+' · engine '+(previous.engine_commit?.slice(0,8)??'archived snapshot');
     tr.onclick=()=>{selectScene(scene.id);location.hash='lab';};body.append(tr);
   }
+}
+function workOverview(){
+  const body=$('work-rows');body.replaceChildren();
+  for(const game of HISTORY.games){const tr=document.createElement('tr');for(const value of[game.title,game.code,game.completed+' / '+game.expected,game.remaining]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);}
+  $('work-snapshot').textContent=`Code/queue snapshot ${HISTORY.generated_at??'unavailable'}. “No identified code fix pending” still requires final measurements and profile review; a discrepancy found there can require more code work.`;
+  const jobs=$('historical-jobs-rows');jobs.replaceChildren();
+  const current=DATA.scenes.flatMap(s=>Object.values(s.jobs??{}));
+  for(const old of HISTORY.jobs){const fresh=current.find(r=>r.campaign===old.summary.campaign&&r.measured_pairs>=5),r=fresh??old.summary,tr=document.createElement('tr');
+    for(const value of[old.game+' · '+old.load,old.worker_threads,fmt(r.wall_mean_off_ms),fmt(r.wall_mean_on_ms),pct(r.wall_mean_paired_jobs_change_pct),r.measured_pairs,fresh?'CURRENT':old.status.toUpperCase()+' · '+old.campaign_label]){const td=document.createElement('td');td.textContent=value;tr.append(td);}tr.title=old.note;jobs.append(tr);}
 }
 for(const s of DATA.scenes)option($('scene'),s.id,s.title+' · '+s.load);
 for(const p of DATA.profiles)option($('profile'),p.key,profileName(p));
 $('scene').onchange=()=>selectScene($('scene').value);$('comparison').onchange=()=>{state.comparison=$('comparison').value;refreshScene();};$('overview-metric').onchange=overview;$('repeat').onchange=traces;$('trace-metric').onchange=drawTrace;
+$('show-history').onchange=()=>{overviewTable();$('scene-note').textContent=sceneNote(state.scene);};
 $('frame').oninput=()=>{state.frame=+$('frame').value;drawWorlds();};$('play').onclick=()=>{if(state.frame>=900)state.frame=0;state.playing=!state.playing;$('play').textContent=state.playing?'Pause':'Play';};$('fit').onclick=()=>{state.fit=!state.fit;drawWorlds();};
 $('profile').onchange=loadProfile;$('thread').onchange=selectThread;$('flame-back').onclick=()=>{state.flame=state.history.pop()??state.flame;drawFlame();};$('flame-reset').onclick=selectThread;$('flame-search').oninput=drawFlame;
 $('theme').onclick=()=>{document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark';};
@@ -204,4 +219,4 @@ $('identities').textContent=JSON.stringify(DATA.audit,null,2);
 let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{overview();repeats();costs();drawTrace();drawWorlds();if(state.profile){drawFlame();profileCategories();}},100);}).observe(document.querySelector('main'));
 const cpuIdleComplete=DATA.scenes.filter(s=>s.language.measured_pairs>=5&&s.language.runtime?.cpu_activity_policy?.max_background_cpu_cores<=.5).length;
 $('campaign-status').textContent=`Snapshot ${DATA.audit.generated_at??'unknown time'} · New CPU+GPU-idle method: ${cpuIdleComplete} / ${DATA.scenes.length} primary scenes have five clean pairs. Earlier measurements are archived separately. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
-$('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();overview();selectScene((DATA.scenes.find(s=>s.language.measured_pairs>=5)??DATA.scenes[0]).id);requestAnimationFrame(animate);
+$('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();workOverview();overview();selectScene((DATA.scenes.find(s=>s.language.measured_pairs>=5)??DATA.scenes[0]).id);requestAnimationFrame(animate);

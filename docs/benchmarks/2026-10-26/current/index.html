@@ -29,7 +29,13 @@
   <p class="note" id="ttld-hold-banner">TTLD comparisons remain held. The missing world health bars and house-ignition callback are fixed and pushed; fresh scene and world checks precede new timings. Earlier TTLD numbers are diagnostic and are not a language ranking.</p>
   <p id="campaign-status" class="note"></p>
   <div class="facts"><div><strong id="total-runs">—</strong><span>GPU runs</span></div><div><strong id="accepted-pairs">—</strong><span>clean / attempted pairs</span></div><div><strong>600</strong><span>rendered steps / sample</span></div><div><strong>1 &amp; 4</strong><span>engine worker widths</span></div></div>
-  <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Lua ms/frame</th><th>Rust ms/frame</th><th>Rust change</th><th>Sim p50<br>Lua / Rust</th><th>Draw p50<br>Lua / Rust</th><th>Units<br>Lua / Rust</th><th>Clean pairs</th><th>CPU gate</th></tr></thead><tbody id="overview-rows"></tbody></table></div>
+  <label><input id="show-history" type="checkbox" checked> Show previous results where current results are pending</label>
+  <p class="caption"><strong>Current</strong> = this campaign. <strong>Stale</strong> = older engine/source. <strong>Superseded</strong> = known implementation or workload differences: the recorded numbers remain visible, but do not establish a language speedup. Counts, charts and scene-lab traces below use current results only. <a href="historical-results.json">Historical values and source identities</a>.</p>
+  <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Lua ms/frame</th><th>Rust ms/frame</th><th>Recorded Rust change</th><th>Sim p50<br>Lua / Rust</th><th>Draw p50<br>Lua / Rust</th><th>Units<br>Lua / Rust</th><th>Pairs shown</th><th>Result status</th></tr></thead><tbody id="overview-rows"></tbody></table></div>
+  <h2>Code work versus remaining measurements</h2>
+  <p class="caption" id="work-snapshot"></p>
+  <div class="table-scroll"><table><thead><tr><th>Game</th><th>Code work</th><th>Current configurations</th><th>What remains</th></tr></thead><tbody id="work-rows"></tbody></table></div>
+  <details><summary>Previous jobs off/on results</summary><p class="caption">Retained older runs, including older effect-reference workloads. Pool width is identical within each pair. The current engine changes job dispatch, so these are historical results. Negative change means less time with jobs on.</p><div class="table-scroll"><table><thead><tr><th>Game / load</th><th>Pool</th><th>Jobs off ms</th><th>Jobs on ms</th><th>Recorded change</th><th>Pairs</th><th>Status</th></tr></thead><tbody id="historical-jobs-rows"></tbody></table></div></details>
   <div class="toolbar"><h2>Rust time change versus Lua</h2><label>Measure <select id="overview-metric"><option value="wall_mean">Whole frame · window mean</option><option value="sim_p50">Simulation · p50</option><option value="draw_p50">Drawing · p50</option><option value="cpu_p95">Sim + draw · p95</option></select></label></div>
   <p class="caption">Left is less time in Rust; right is less time in Lua. Click a scene to inspect it. The dot is the mean paired time ratio; whiskers are its bootstrap 95% interval across independent pairs.</p>
   <div id="overview-chart" class="chart"></div>
@@ -148,5 +154,5 @@ python3 verification/perf/dashboard.py \
 <footer>SpringCabal Lua / Rust benchmarks · data from the existing verification framework</footer>
 </main></div>
 <div id="tooltip" role="tooltip" hidden></div>
-<script src="data.js"></script><script src="app.js"></script>
+<script src="data.js"></script><script src="historical-results.js"></script><script src="app.js"></script>
 </body></html>
