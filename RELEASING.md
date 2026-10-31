@@ -25,10 +25,10 @@ Choose a published release from
 [gajop/spring-rust](https://github.com/gajop/spring-rust/releases) containing both
 `recoil_<TAG>_amd64-linux.7z` and `recoil_<TAG>_amd64-windows.7z`. The SDK crates
 used to build the games must match that engine release. The current SDK pins
-match `2026.10.3001`. Use the pinned Git crates when preparing a public release:
+match `2026.10.3103`. Use the pinned Git crates when preparing a public release:
 
 ```bash
-gh release view 2026.10.3001 -R gajop/spring-rust
+gh release view 2026.10.3103 -R gajop/spring-rust
 ./setup.sh --no-dev-engine
 ```
 
@@ -37,6 +37,16 @@ records all engine changes since 1.0.2, including the weapon-number and module
 startup changes applied for 1.0.3-rc.2.
 The [next compatibility review](docs/engine-compatibility-2026-10-29.md) accounts
 for the subsequent runtime, query, velocity, RNG, wind and rendering changes.
+The [2026.10.3103 review](docs/engine-compatibility-2026-10-31.md) covers the
+current engine and SDK, including the spatial-index correction and preserved
+weapon conventions.
+
+When packaging the modules used by a benchmark campaign, keep the same
+`CARGO_TARGET_DIR` for its normal builds and release preparation. Generated SDK
+paths are embedded in the modules; a different build directory can change their
+bytes and function layout. Run `verification/verify installed all` with that
+same target directory before packaging, and compare the packaged modules with
+the campaign's recorded hashes.
 
 Commit the framework/menu, shared crate, games and maps before preparing a
 release. Preparation refuses dirty source checkouts, including untracked files.
