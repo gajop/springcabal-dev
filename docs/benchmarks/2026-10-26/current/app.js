@@ -34,6 +34,7 @@ function loadAsset(asset){
   document.head.append(script);return promise;
 }
 const fmt=(v,n=3)=>Number.isFinite(v)?v.toFixed(n):'—', pct=v=>Number.isFinite(v)?(v>0?'+':'')+fmt(v,1)+'%':'—', mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
+const displayTime=value=>value?new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Budapest',dateStyle:'medium',timeStyle:'short'}).format(new Date(value))+' Budapest':'unknown';
 const color=name=>getComputedStyle(document.documentElement).getPropertyValue('--'+name).trim();
 function option(select,value,label){const o=document.createElement('option');o.value=value;o.textContent=label;select.append(o);return o;}
 function element(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
@@ -201,7 +202,7 @@ function overviewTable(){
 function workOverview(){
   const body=$('work-rows');body.replaceChildren();
   for(const game of HISTORY.games){const tr=document.createElement('tr');for(const value of[game.title,game.code,game.completed+' / '+game.expected,game.remaining]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);}
-  $('work-snapshot').textContent=`Code/queue snapshot ${HISTORY.generated_at??'unavailable'}. “No identified code fix pending” still requires final measurements and profile review; a discrepancy found there can require more code work.`;
+  $('work-snapshot').textContent=`Code/queue snapshot ${displayTime(HISTORY.generated_at)}. “No identified code fix pending” still requires final measurements and profile review; a discrepancy found there can require more code work.`;
   const jobs=$('historical-jobs-rows');jobs.replaceChildren();
   const current=DATA.scenes.flatMap(s=>Object.values(s.jobs??{}));
   for(const old of HISTORY.jobs){const fresh=current.find(r=>r.campaign===old.summary.campaign&&r.measured_pairs>=5),r=fresh??old.summary,tr=document.createElement('tr');
@@ -218,5 +219,5 @@ $('video-play').onclick=()=>{const videos=[...$('video-grid').querySelectorAll('
 $('identities').textContent=JSON.stringify(DATA.audit,null,2);
 let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{overview();repeats();costs();drawTrace();drawWorlds();if(state.profile){drawFlame();profileCategories();}},100);}).observe(document.querySelector('main'));
 const cpuIdleComplete=DATA.scenes.filter(s=>s.language.measured_pairs>=5&&s.language.runtime?.cpu_activity_policy?.max_background_cpu_cores<=.5).length;
-$('campaign-status').textContent=`Snapshot ${DATA.audit.generated_at??'unknown time'} · New CPU+GPU-idle method: ${cpuIdleComplete} / ${DATA.scenes.length} primary scenes have five clean pairs. Earlier measurements are archived separately. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
+$('campaign-status').textContent=`Snapshot ${displayTime(DATA.audit.generated_at)} · New CPU+GPU-idle method: ${cpuIdleComplete} / ${DATA.scenes.length} primary scenes have five clean pairs. Earlier measurements are archived separately. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
 $('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();workOverview();overview();selectScene((DATA.scenes.find(s=>s.language.measured_pairs>=5)??DATA.scenes[0]).id);requestAnimationFrame(animate);
