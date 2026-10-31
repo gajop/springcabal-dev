@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T16:18:17.609808+00:00",
+  "utc": "2026-10-31T16:26:30.644445+00:00",
   "cases": [
     {
       "case": "ttld-shadows-1x-w1",
@@ -389,5 +389,5 @@
     },
     "utc": "2026-10-31T09:51:47.784576+00:00"
   },
-  "interpretation": "In the shadow 10x CPU captures the main-thread gap is almost entirely in Lua VM/table/GC versus Wasm guest/runtime costs; other main-thread CPU is close. Buffer-fence wait samples are negligible there. This describes the fresh captures and does not establish the cause of the superseded, contended rendering gap."
+  "interpretation": "In the shadow 10x CPU captures the main-thread gap is almost entirely in Lua VM/table/GC versus Wasm guest/runtime costs; other main-thread CPU is close. Buffer-fence wait samples are negligible there. This describes the fresh captures and does not establish the cause of the superseded rendering gap. In the normal fire captures Rust has about 1.31 ms less runtime CPU and 1.40 ms more inclusive stream-buffer fence wait CPU, leaving their total CPU times close; these are CPU wait samples, not GPU durations."
 }
