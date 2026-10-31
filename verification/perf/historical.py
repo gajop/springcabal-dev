@@ -85,12 +85,12 @@ def export(project, archive):
                     scenes[SCENES[row['campaign']]] = value
     games = [
         dict(game='area17', title='Area 17', code='Selected code work complete.', remaining='Planned normal/2× comparisons and captures complete.', expected=2),
-        dict(game='hunted', title='Hunted', code='Selected Lua/Rust optimizations implemented and tested; no identified code fix pending.', remaining='Jobs off/on measurements, remaining stress captures, final profile analysis.', expected=6),
-        dict(game='flove', title='Flove', code='Selected Lua/Rust optimizations and spatial-query corrections implemented and tested.', remaining='Fresh normal/10× and jobs comparisons, captures and profile analysis.', expected=6),
+        dict(game='hunted', title='Hunted', code='Selected Lua/Rust optimizations implemented and tested; no identified code fix pending.', remaining='All six timing configurations and matching worlds/profiles complete; final profile analysis remains.', expected=6),
+        dict(game='flove', title='Flove', code='Lua/Rust optimizations and HUD corrections tested and pushed; all 302 visible-status samples match Lua.', remaining='Fresh normal/10× and jobs comparisons, captures and profile analysis.', expected=6),
         dict(game='ttld', title='To the Last Drop', code='House ignition and health-bar fixes implemented/tested/pushed. Final parity verification remains active.', remaining='Finish ordinary-fire and four detailed-world checks; then fresh timings, captures and analysis.', expected=4),
         dict(game='gravitas', title='Gravitas effects', code='Selected optimizations implemented/tested on both sides; no identified code fix pending.', remaining='Current-engine effects/jobs comparisons, captures and analysis. Effects only.', expected=6),
-        dict(game='mycube', title='My Cube', code='Health-bar parity fix tested and pushed; no identified code fix pending.', remaining='Normal-scene comparison, captures and profile review. No artificial stress.', expected=1),
-        dict(game='partsneeded', title='Parts Needed', code='Selected changes implemented/tested; no identified code fix pending.', remaining='Normal-scene comparison, captures and profile review. No artificial stress.', expected=1),
+        dict(game='mycube', title='My Cube', code='Private story/RNG, mass and idle fixes pass existing suites; 9,750 animation transforms match exactly.', remaining='Finish full-world verification and public promotion, then fresh normal-scene comparisons/captures and profile review.', expected=1),
+        dict(game='partsneeded', title='Parts Needed', code='Private deterministic level/gate/camera fixes pass existing suites; full-world verification remains.', remaining='Finish full-world verification and public promotion, then fresh normal-scene comparisons/captures and profile review.', expected=1),
     ]
     state_path = project / 'codex-work/night-2026-10-30/v4/state.json'
     completed = read(state_path)['completed'] if state_path.exists() else {}
@@ -113,8 +113,7 @@ def export(project, archive):
     if hold_path.exists():
         for name, hold in read(hold_path).get('campaigns', {}).items():
             game = next(g for g in games if name.startswith(g['game']))
-            game['code'] = 'Recorded world or HUD comparison found a mismatch; source fix is in progress.'
-            game['remaining'] = hold['reason'] + ' Fix/check the source, then replace the held timings and captures.'
+            game['remaining'] += ' Earlier mismatched comparisons remain held until replaced.'
     return dict(generated_at=datetime.now(timezone.utc).isoformat(), timezone='Europe/Budapest',
                 scope='Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.',
                 scenes=scenes, jobs=jobs, games=games)

@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-10-31T11:46:20.596476+00:00",
-  "primary_cases_with_matching_profile_pair": 5,
+  "generated_utc": "2026-10-31T13:06:07.789713+00:00",
+  "primary_cases_with_matching_profile_pair": 8,
   "scope": "Exclusive perf CPU sample weights per measured frame. Current engine and resource guard, sources and module identities exactly match each primary timing case. Profiles are separate instrumented captures; these are neither GPU execution times nor additional timing replicates. Language/runtime combines Lua interpreter/table/GC, Wasm guest and Wasmtime. Other CPU includes bindings, engine, graphics driver and unresolved symbols. Native call wrappers can therefore remain outside the language column. Sampling variation is not an exact causal decomposition of whole-frame timing.",
   "cases": [
     {
@@ -373,6 +373,245 @@
       "main_thread_difference_lua_minus_rust_ms": 0.6312625199999999,
       "language_runtime_difference_lua_minus_rust_ms": 0.5644622533333333,
       "other_cpu_difference_lua_minus_rust_ms": 0.06680026666666627
+    },
+    {
+      "case": "fire-1-lua-rust-w4",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 0.46760186666666664,
+          "language_runtime_cpu_ms_per_frame": 0.12692050666666665,
+          "other_main_thread_cpu_ms_per_frame": 0.34068136,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.24716098666666667,
+            "Lua runtime / tables / GC": 0.12692050666666665,
+            "Native rendering / models": 0.026720106666666667,
+            "Native simulation / animation": 0.0033400133333333333,
+            "Other native code": 0.05678022666666667,
+            "Unresolved": 0.006680026666666667
+          },
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-1-lua-rust-w4/fire-1/gravitas-00-lua/profile.json",
+          "profile_sha256": "422a5e84a4af6680eba0cd59c0b8cb6d859862a8d0e9553fb3be7e633e322b0d",
+          "samples": 153,
+          "identity": {
+            "source_commit": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            },
+            "effects_fixtures": {
+              "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+              "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 0.38076152,
+          "language_runtime_cpu_ms_per_frame": 0.02004008,
+          "other_main_thread_cpu_ms_per_frame": 0.36072144,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.23714094666666666,
+            "Lua runtime / tables / GC": 0.0033400133333333333,
+            "Native rendering / models": 0.02004008,
+            "Native simulation / animation": 0.006680026666666667,
+            "Other native code": 0.07348029333333334,
+            "Unresolved": 0.02004008,
+            "Wasm guest": 0.01002004,
+            "Wasm host API": 0.0033400133333333333,
+            "Wasmtime runtime": 0.006680026666666667
+          },
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-1-lua-rust-w4/fire-1/gravitas-00-wasm/profile.json",
+          "profile_sha256": "841e75c2accc2ed9c2fc43e969be0dcc09fbff6c8117c08a9d20fb6055a2adc8",
+          "samples": 124,
+          "identity": {
+            "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+            "modules": {
+              "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+              "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+              "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            },
+            "effects_fixtures": {
+              "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+              "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+            },
+            "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 0.08684034666666662,
+      "language_runtime_difference_lua_minus_rust_ms": 0.10688042666666665,
+      "other_cpu_difference_lua_minus_rust_ms": -0.020040080000000016
+    },
+    {
+      "case": "fire-10-lua-rust-w4",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 1.7267868933333332,
+          "language_runtime_cpu_ms_per_frame": 1.1656646533333332,
+          "other_main_thread_cpu_ms_per_frame": 0.56112224,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.26052104,
+            "Lua runtime / tables / GC": 1.1656646533333332,
+            "Native rendering / models": 0.02004008,
+            "Other native code": 0.27722110666666666,
+            "Unresolved": 0.0033400133333333333
+          },
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-lua-rust-w4/fire-10/gravitas-00-lua/profile.json",
+          "profile_sha256": "d8c43770f22f89a5659ccb7ce3eba63c5e9766f57988483501a4bc3f77a568b5",
+          "samples": 536,
+          "identity": {
+            "source_commit": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            },
+            "effects_fixtures": {
+              "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+              "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 0.4509018,
+          "language_runtime_cpu_ms_per_frame": 0.04342017333333333,
+          "other_main_thread_cpu_ms_per_frame": 0.4074816266666667,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.27722110666666666,
+            "Lua runtime / tables / GC": 0.006680026666666667,
+            "Native rendering / models": 0.016700066666666666,
+            "Native simulation / animation": 0.0033400133333333333,
+            "Other native code": 0.10354041333333333,
+            "Unresolved": 0.006680026666666667,
+            "Wasm guest": 0.03340013333333333,
+            "Wasmtime runtime": 0.0033400133333333333
+          },
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-lua-rust-w4/fire-10/gravitas-00-wasm/profile.json",
+          "profile_sha256": "748604a974c25d1272310f5030c1e497be705466c26d33df7b0622f24d2d7988",
+          "samples": 147,
+          "identity": {
+            "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+            "modules": {
+              "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+              "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+              "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            },
+            "effects_fixtures": {
+              "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+              "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+            },
+            "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 1.2758850933333332,
+      "language_runtime_difference_lua_minus_rust_ms": 1.12224448,
+      "other_cpu_difference_lua_minus_rust_ms": 0.1536406133333333
+    },
+    {
+      "case": "fire-100-lua-rust-w4",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 19.372077333333333,
+          "language_runtime_cpu_ms_per_frame": 17.10420828,
+          "other_main_thread_cpu_ms_per_frame": 2.2678690533333317,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 0.5243820933333333,
+            "Lua runtime / tables / GC": 17.10420828,
+            "Native movement / pathfinding": 0.0033400133333333333,
+            "Native rendering / models": 0.04676018666666667,
+            "Native simulation / animation": 0.0033400133333333333,
+            "Other native code": 1.6766866933333333,
+            "Unresolved": 0.006680026666666667,
+            "Worker queue / waiting": 0.006680026666666667
+          },
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-100-lua-rust-w4/fire-100/gravitas-01-lua/profile.json",
+          "profile_sha256": "fb28913165037d25fe8099593f1e19dffa577b870386561f20d7307cb694eee9",
+          "samples": 5858,
+          "identity": {
+            "source_commit": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            },
+            "effects_fixtures": {
+              "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+              "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 2.7421509466666665,
+          "language_runtime_cpu_ms_per_frame": 0.19372077333333332,
+          "other_main_thread_cpu_ms_per_frame": 2.548430173333333,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 1.7401469466666666,
+            "Lua runtime / tables / GC": 0.006680026666666667,
+            "Native rendering / models": 0.03674014666666667,
+            "Native simulation / animation": 0.006680026666666667,
+            "Other native code": 0.18036072,
+            "Unresolved": 0.5845023333333333,
+            "Wasm guest": 0.17368069333333333,
+            "Wasmtime runtime": 0.013360053333333333
+          },
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-100-lua-rust-w4/fire-100/gravitas-01-wasm/profile.json",
+          "profile_sha256": "126bb23ca2d0a18fc2c00ff2239e406dbada117e385a45ac1f4cbacd38c20951",
+          "samples": 845,
+          "identity": {
+            "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+            "modules": {
+              "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+              "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+              "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            },
+            "effects_fixtures": {
+              "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+              "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+            },
+            "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 16.629926386666668,
+      "language_runtime_difference_lua_minus_rust_ms": 16.91048750666667,
+      "other_cpu_difference_lua_minus_rust_ms": -0.28056112000000155
     }
   ]
 }

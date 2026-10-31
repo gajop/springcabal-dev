@@ -837,5 +837,344 @@
       "partsneeded-1x-w1/partsneeded-04-lua",
       "partsneeded-1x-w1/partsneeded-04-wasm"
     ]
+  },
+  {
+    "campaign": "fire-1-lua-rust-w4",
+    "game": "gravitas",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 0.01644,
+    "sim_p50_rust_ms": 0.017081,
+    "sim_p50_paired_rust_change_pct": 3.5620934897574674,
+    "sim_p50_mean_ratio_95ci_lo": 1.029162697867956,
+    "sim_p50_mean_ratio_95ci_hi": 1.0460291118423999,
+    "sim_p95_lua_ms": 0.01964,
+    "sim_p95_rust_ms": 0.019927,
+    "sim_p95_paired_rust_change_pct": 0.7222420019327602,
+    "sim_p95_mean_ratio_95ci_lo": 1.003225016887568,
+    "sim_p95_mean_ratio_95ci_hi": 1.0340594165687615,
+    "draw_p50_lua_ms": 0.456973,
+    "draw_p50_rust_ms": 0.35476100000000005,
+    "draw_p50_paired_rust_change_pct": -22.367185807476588,
+    "draw_p50_mean_ratio_95ci_lo": 0.770148089830622,
+    "draw_p50_mean_ratio_95ci_hi": 0.7827078680027304,
+    "draw_p95_lua_ms": 0.684313,
+    "draw_p95_rust_ms": 0.9452050000000001,
+    "draw_p95_paired_rust_change_pct": 33.904434791393086,
+    "draw_p95_mean_ratio_95ci_lo": 1.1992182697254552,
+    "draw_p95_mean_ratio_95ci_hi": 1.4101309759597966,
+    "cpu_p50_lua_ms": 0.474178,
+    "cpu_p50_rust_ms": 0.37178300000000003,
+    "cpu_p50_paired_rust_change_pct": -21.59421145645727,
+    "cpu_p50_mean_ratio_95ci_lo": 0.7785015278225338,
+    "cpu_p50_mean_ratio_95ci_hi": 0.7917358337790004,
+    "cpu_p95_lua_ms": 0.702082,
+    "cpu_p95_rust_ms": 0.9601580000000001,
+    "cpu_p95_paired_rust_change_pct": 32.248425845674774,
+    "cpu_p95_mean_ratio_95ci_lo": 1.1945425344058973,
+    "cpu_p95_mean_ratio_95ci_hi": 1.397821050909423,
+    "wall_mean_lua_ms": 0.6069666666666665,
+    "wall_mean_rust_ms": 0.45874000000000004,
+    "wall_mean_paired_rust_change_pct": -24.082047339227774,
+    "wall_mean_mean_ratio_95ci_lo": 0.7156358101667397,
+    "wall_mean_mean_ratio_95ci_hi": 0.8383263070936681,
+    "lua_units_p50": 0.0,
+    "wasm_units_p50": 0.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "748fb0882057436a62b353bc8e3b7d4ab07ea98c905945dabe5e6513cd6291a4",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "22a61b8330f713b1100b41cb0f001dd4559a485bb0bc337c04aff936341631b9",
+        "modules": {
+          "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+          "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+          "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+        },
+        "jobs_api": true,
+        "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        },
+        "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+      }
+    },
+    "run_ids": [
+      "fire-1-lua-rust-w4/gravitas-00-lua",
+      "fire-1-lua-rust-w4/gravitas-00-wasm",
+      "fire-1-lua-rust-w4/gravitas-01-lua",
+      "fire-1-lua-rust-w4/gravitas-01-wasm",
+      "fire-1-lua-rust-w4/gravitas-02-lua",
+      "fire-1-lua-rust-w4/gravitas-02-wasm",
+      "fire-1-lua-rust-w4/gravitas-03-lua",
+      "fire-1-lua-rust-w4/gravitas-03-wasm",
+      "fire-1-lua-rust-w4/gravitas-04-lua",
+      "fire-1-lua-rust-w4/gravitas-04-wasm"
+    ]
+  },
+  {
+    "campaign": "fire-10-lua-rust-w4",
+    "game": "gravitas",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 0.017939,
+    "sim_p50_rust_ms": 0.017495,
+    "sim_p50_paired_rust_change_pct": -2.8541167289146685,
+    "sim_p50_mean_ratio_95ci_lo": 0.9662598775414423,
+    "sim_p50_mean_ratio_95ci_hi": 0.9920993453654859,
+    "sim_p95_lua_ms": 0.11333,
+    "sim_p95_rust_ms": 0.020609000000000002,
+    "sim_p95_paired_rust_change_pct": -82.01637521836565,
+    "sim_p95_mean_ratio_95ci_lo": 0.178532835257258,
+    "sim_p95_mean_ratio_95ci_hi": 0.1877549624245258,
+    "draw_p50_lua_ms": 1.4378309999999999,
+    "draw_p50_rust_ms": 0.394195,
+    "draw_p50_paired_rust_change_pct": -72.68552423754949,
+    "draw_p50_mean_ratio_95ci_lo": 0.2713980095833412,
+    "draw_p50_mean_ratio_95ci_hi": 0.2748505944309634,
+    "draw_p95_lua_ms": 4.035665,
+    "draw_p95_rust_ms": 1.400444,
+    "draw_p95_paired_rust_change_pct": -65.31934637785842,
+    "draw_p95_mean_ratio_95ci_lo": 0.34461744666900596,
+    "draw_p95_mean_ratio_95ci_hi": 0.350248171223544,
+    "cpu_p50_lua_ms": 1.461113,
+    "cpu_p50_rust_ms": 0.41225599999999996,
+    "cpu_p50_paired_rust_change_pct": -71.9097017136936,
+    "cpu_p50_mean_ratio_95ci_lo": 0.27944569914312173,
+    "cpu_p50_mean_ratio_95ci_hi": 0.2824867767137572,
+    "cpu_p95_lua_ms": 4.052618,
+    "cpu_p95_rust_ms": 1.419452,
+    "cpu_p95_paired_rust_change_pct": -64.98233981095677,
+    "cpu_p95_mean_ratio_95ci_lo": 0.34732565687362904,
+    "cpu_p95_mean_ratio_95ci_hi": 0.3529390837419829,
+    "wall_mean_lua_ms": 1.7573849999999993,
+    "wall_mean_rust_ms": 0.60185,
+    "wall_mean_paired_rust_change_pct": -66.05971857885235,
+    "wall_mean_mean_ratio_95ci_lo": 0.32562020254372964,
+    "wall_mean_mean_ratio_95ci_hi": 0.35416566675290195,
+    "lua_units_p50": 0.0,
+    "wasm_units_p50": 0.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "748fb0882057436a62b353bc8e3b7d4ab07ea98c905945dabe5e6513cd6291a4",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "22a61b8330f713b1100b41cb0f001dd4559a485bb0bc337c04aff936341631b9",
+        "modules": {
+          "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+          "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+          "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+        },
+        "jobs_api": true,
+        "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        },
+        "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+      }
+    },
+    "run_ids": [
+      "fire-10-lua-rust-w4/gravitas-00-lua",
+      "fire-10-lua-rust-w4/gravitas-00-wasm",
+      "fire-10-lua-rust-w4/gravitas-01-lua",
+      "fire-10-lua-rust-w4/gravitas-01-wasm",
+      "fire-10-lua-rust-w4/gravitas-02-lua",
+      "fire-10-lua-rust-w4/gravitas-02-wasm",
+      "fire-10-lua-rust-w4/gravitas-03-lua",
+      "fire-10-lua-rust-w4/gravitas-03-wasm",
+      "fire-10-lua-rust-w4/gravitas-04-lua",
+      "fire-10-lua-rust-w4/gravitas-04-wasm"
+    ]
+  },
+  {
+    "campaign": "fire-100-lua-rust-w4",
+    "game": "gravitas",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 0.050889000000000004,
+    "sim_p50_rust_ms": 0.018673,
+    "sim_p50_paired_rust_change_pct": -63.35235687908529,
+    "sim_p50_mean_ratio_95ci_lo": 0.361516519895387,
+    "sim_p50_mean_ratio_95ci_hi": 0.3736755773283383,
+    "sim_p95_lua_ms": 1.441136,
+    "sim_p95_rust_ms": 0.0269,
+    "sim_p95_paired_rust_change_pct": -98.07109858250598,
+    "sim_p95_mean_ratio_95ci_lo": 0.016794767284387994,
+    "sim_p95_mean_ratio_95ci_hi": 0.020163713357571264,
+    "draw_p50_lua_ms": 17.959164,
+    "draw_p50_rust_ms": 1.228627,
+    "draw_p50_paired_rust_change_pct": -93.13880529601558,
+    "draw_p50_mean_ratio_95ci_lo": 0.06384052471042198,
+    "draw_p50_mean_ratio_95ci_hi": 0.08144042792621022,
+    "draw_p95_lua_ms": 28.692781,
+    "draw_p95_rust_ms": 6.351466,
+    "draw_p95_paired_rust_change_pct": -77.86388848121763,
+    "draw_p95_mean_ratio_95ci_lo": 0.21872399920003197,
+    "draw_p95_mean_ratio_95ci_hi": 0.24350269326186635,
+    "cpu_p50_lua_ms": 18.151413,
+    "cpu_p50_rust_ms": 1.2453409999999998,
+    "cpu_p50_paired_rust_change_pct": -93.11909692460335,
+    "cpu_p50_mean_ratio_95ci_lo": 0.06403191514459947,
+    "cpu_p50_mean_ratio_95ci_hi": 0.08158585545376319,
+    "cpu_p95_lua_ms": 29.277192,
+    "cpu_p95_rust_ms": 6.372706,
+    "cpu_p95_paired_rust_change_pct": -78.02428860912848,
+    "cpu_p95_mean_ratio_95ci_lo": 0.21453619522242437,
+    "cpu_p95_mean_ratio_95ci_hi": 0.23834241658628086,
+    "wall_mean_lua_ms": 19.297430000000002,
+    "wall_mean_rust_ms": 2.910725,
+    "wall_mean_paired_rust_change_pct": -84.96988011946743,
+    "wall_mean_mean_ratio_95ci_lo": 0.14632465632485706,
+    "wall_mean_mean_ratio_95ci_hi": 0.1551458559036971,
+    "lua_units_p50": 0.0,
+    "wasm_units_p50": 0.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "748fb0882057436a62b353bc8e3b7d4ab07ea98c905945dabe5e6513cd6291a4",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "22a61b8330f713b1100b41cb0f001dd4559a485bb0bc337c04aff936341631b9",
+        "modules": {
+          "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+          "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+          "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+        },
+        "jobs_api": true,
+        "source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        },
+        "effects_fixtures": {
+          "fire_probe_rules.lua": "d0be5953f3bf7cbc9a9f10ec664f157353b3e1589ec583e416121d9d1fc6fe1d",
+          "fire_probe_ui.lua": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064"
+        },
+        "effects_probe_sha256": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b"
+      }
+    },
+    "run_ids": [
+      "fire-100-lua-rust-w4/gravitas-00-lua",
+      "fire-100-lua-rust-w4/gravitas-00-wasm",
+      "fire-100-lua-rust-w4/gravitas-01-lua",
+      "fire-100-lua-rust-w4/gravitas-01-wasm",
+      "fire-100-lua-rust-w4/gravitas-02-lua",
+      "fire-100-lua-rust-w4/gravitas-02-wasm",
+      "fire-100-lua-rust-w4/gravitas-03-lua",
+      "fire-100-lua-rust-w4/gravitas-03-wasm",
+      "fire-100-lua-rust-w4/gravitas-04-lua",
+      "fire-100-lua-rust-w4/gravitas-04-wasm"
+    ]
   }
 ]
