@@ -65,7 +65,7 @@ rustup target add wasm32-unknown-unknown
 ### 1. Content and engine
 
 ```bash
-./setup.sh --engine-tag 2026.10.21   # or: just setup 2026.10.21
+./setup.sh --engine-tag 2026.10.3103   # or: just setup 2026.10.3103
 ```
 
 This clones the public game and map branches listed in `content.tsv` into
@@ -78,6 +78,9 @@ exact game, map and shared-crate revisions used for each release.
 `run-wasm.sh` picks the engine in this order: `$SPRING_ENGINE_DIR`, a local
 engine build at `../spring-bar/build-amd64-linux/install` (override the checkout
 with `$SPRING_BAR_DIR`), then `engine/current` from setup.
+The current game SDK pins require the tested engine above. If another local
+engine checkout is present, set `SPRING_ENGINE_DIR="$PWD/engine/current"` when
+running these game builds.
 
 ### 2. Running
 

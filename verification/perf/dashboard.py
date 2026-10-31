@@ -96,6 +96,29 @@ def cpu_costs(profile):
             'leaves': [{'name': c['name'], 'ms': c['weight']/divisor} for c in profile['leaves'] if c['thread'] == main['name']][:8]}
 
 
+def complete_capture_runs(campaign, kind):
+    """Keep diagnostic partners together, using the recorded runner variants."""
+    args = read(campaign/'provenance.json')['args']
+    if args.get('rust_jobs') == 'compare':
+        required = {('wasm', 'off'), ('wasm', 'on')}
+    else:
+        backends = ('lua', 'wasm') if args['backend'] == 'both' else (args['backend'],)
+        required = {(backend, args.get('rust_jobs', 'off')) for backend in backends}
+    groups = defaultdict(dict)
+    for path in sorted(campaign.glob('*/result.json')):
+        result = report.read_result(path)
+        if not result['ok'] or result['contended']:
+            continue
+        directory = path.parent
+        artifact = ((directory/'profile.json').is_file() if kind == 'profiles' else
+                    any((directory/name).is_file() for name in ('world.jsonl', 'world.jsonl.gz')))
+        variant = result['backend'], result.get('rust_jobs', 'off')
+        if artifact and variant in required:
+            groups[result['repeat']][variant] = directory
+    return {directory for group in groups.values() if required <= group.keys()
+            for directory in group.values()}
+
+
 def scene_summary(summaries, campaign, game, allow_incomplete=False):
     if campaign in summaries:
         return summaries[campaign]
@@ -278,6 +301,7 @@ def main():
             summary['run_ids'] = ids
         data['scenes'].append(scene)
     capture_to_scene = {s['capture']: s['id'] for s in data['scenes'] if s['capture']}
+    accepted_worlds = {}
     for path in sorted([*args.recordings.glob('**/world.jsonl'), *args.recordings.glob('**/world.jsonl.gz')]):
         case = path.parent.parent.name
         sid = capture_scene(case)
@@ -286,12 +310,18 @@ def main():
         result = report.read_result(path.parent/'result.json')
         if not result['ok'] or result['contended']:
             continue
+        campaign = path.parent.parent
+        if campaign not in accepted_worlds:
+            accepted_worlds[campaign] = complete_capture_runs(campaign, 'worlds')
+        if path.parent not in accepted_worlds[campaign]:
+            continue
         key = 'recordings/'+str(path.parent.relative_to(args.recordings)).replace('/', '--')
         data['recordings'].append(dict(asset(out, key, world(path)), scene=sid,
             backend=result['backend'], jobs=result['rust_jobs'],
             worker_threads=result.get('worker_threads'),
             **capture_identity(path.parent.parent, result['game'], result['backend']),
             renderer=result['renderer'], source=str(path.relative_to(PROJECT))))
+    accepted_profiles = {}
     for path in sorted(args.profiles.glob('**/profile.json')):
         case = path.parent.parent.name
         sid = capture_scene(case)
@@ -301,6 +331,11 @@ def main():
         if result.get('world_recording'):
             raise ValueError('Profiles must be separate from the world observer')
         if not result['ok'] or result['contended']:
+            continue
+        campaign = path.parent.parent
+        if campaign not in accepted_profiles:
+            accepted_profiles[campaign] = complete_capture_runs(campaign, 'profiles')
+        if path.parent not in accepted_profiles[campaign]:
             continue
         key = 'profiles/'+str(path.parent.relative_to(args.profiles)).replace('/', '--')
         profile = read(path)
@@ -342,6 +377,7 @@ def main():
         'timing_roots': [str(root) for root in timing_roots],
         'primary_scenes_at_five_pairs': sum(s['language']['measured_pairs'] >= 5 for s in data['scenes']),
         'primary_scene_count': len(data['scenes']),
+        'diagnostic_pair_policy': 'Only complete clean recorded variant sets with both artifacts are exported; raw orphaned captures remain on disk.',
         'callback_timers': sorted({r.get('callback_timers', 'on') for r in saved}),
         'runs': len(saved), 'complete': sum(r['ok'] for r in saved),
         'accepted_pairs': sum(r['measured_pairs'] for r in [*language.values(), *jobs.values()]),

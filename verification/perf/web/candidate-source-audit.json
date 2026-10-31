@@ -1,0 +1,945 @@
+{
+  "scope": "Source patches for the current-engine bulk-read and packet trials. The bulk patches apply to the listed public SDK-pin commits. Apply hunted-bulk-positions.patch first to reconstruct the measured base for the packet/serial variants; those variants are separate experiments. All original compiled modules, source snapshots and raw attempts remain in local evidence.",
+  "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+  "local_engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+  "patches": [
+    {
+      "file": "hunted-bulk-positions.patch",
+      "base": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+      "candidate": "71747838ab8ce49e22652cb8dee21e3e62493451",
+      "prerequisite": null,
+      "sha256": "a47cfa98cbc6c94f2e5fb817c235737d4004f0dfbf43ed309d21cf7524df806a"
+    },
+    {
+      "file": "flove-bulk-positions.patch",
+      "base": "41a448ffa1008e5a3eed8390fb7a764a27478a46",
+      "candidate": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef",
+      "prerequisite": null,
+      "sha256": "4bed61ddcf92d63ed2cf7159635b983ea163d46698b91095d9a137d69bffd245"
+    },
+    {
+      "file": "hunted-four-packets.patch",
+      "base": "71747838ab8ce49e22652cb8dee21e3e62493451",
+      "candidate": "cafbfc3d43b7aa0236a20014d5318bb1f55bfb48",
+      "public_base": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+      "prerequisite": "hunted-bulk-positions.patch",
+      "sha256": "c6a030a657cf878db54b07709a5c655b30a493095b9a5dc723e812b1c6bbb201"
+    },
+    {
+      "file": "hunted-serial-bulk.patch",
+      "base": "71747838ab8ce49e22652cb8dee21e3e62493451",
+      "candidate": "b0145bcb979e0737d8d7d324daa19949225e591e",
+      "public_base": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+      "prerequisite": "hunted-bulk-positions.patch",
+      "sha256": "ca1e045ed94463e0527a7eca95ca5295c4986c4285b6d8af9f0e77b0f0899e00"
+    }
+  ],
+  "decisions": {
+    "columns": {
+      "adopted": false,
+      "reason": "Keep direct property reads. Six strict five-round trials show no whole-frame benefit; Hunted simulation changes are inconclusive, and Flove jobs-on stress simulation regresses about 0.62%. The column callers add ID/output/status arrays and tuple reconstruction. All correctness/world proofs pass; these are rejected performance candidates, not gameplay fixes.",
+      "selected": {
+        "Hunted": {
+          "selected": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+          "candidate_preserved": "71747838ab8ce49e22652cb8dee21e3e62493451",
+          "candidate_branch": "codex/rejected-hunted-columns-2026.10.31",
+          "normal_modules": {
+            "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1",
+            "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+            "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
+          },
+          "public_head_matches": true
+        },
+        "Flove": {
+          "selected": "41a448ffa1008e5a3eed8390fb7a764a27478a46",
+          "candidate_preserved": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef",
+          "candidate_branch": "codex/rejected-flove-columns-2026.10.31",
+          "normal_modules": {
+            "LuaUI/wasm/flove-ui.wasm": "a71b88bff8391cc6699c08ad2fb91a40ed61e836a18aed4722ee63e3a25c21d2",
+            "LuaRules/wasm/flove-jobs.wasm": "2a62162bbd50c71a109a06abe515d3d3008766d352241e1adbf6c9c269a4275c",
+            "LuaRules/wasm/flove-rules.wasm": "35d4453eaf6c279535d2189c2e715cd401f1525cd2eb361138d58e5cf15c5c5f"
+          },
+          "public_head_matches": true
+        }
+      },
+      "results": [
+        {
+          "id": "hunted-columns-10x-on",
+          "title": "Hunted bulk position reads",
+          "game": "hunted",
+          "load": "10\u00d7, jobs on",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 10,
+          "rust_jobs": "on",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "adopted": null,
+          "change": "Same SDK, engine, source algorithm and native position semantics. Replace independent per-unit position imports with one planar property read; keep unit order and refusal flags. Hunted uses mid-position; Flove uses ordinary position. Existing exact worlds and game suites must pass before timings. CPU/GPU guards and source-pair aggregation are unchanged.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 12,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round0-block0/before/hunted-01-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round0-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round1-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round2-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round2-block0/after/hunted-01-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-10x-on-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 3.539026666666666,
+          "wall_after_ms": 3.629575,
+          "wall_change_pct": 1.6772502420628221,
+          "wall_mean_ratio_95ci": [
+            0.9920413772422779,
+            1.045247546199051
+          ],
+          "sim_before_ms": 1.552196,
+          "sim_after_ms": 1.549933,
+          "sim_change_pct": -0.17376955632085744,
+          "sim_mean_ratio_95ci": [
+            0.9921854727587233,
+            1.0129566852625371
+          ],
+          "draw_before_ms": 1.820977,
+          "draw_after_ms": 1.96606,
+          "draw_change_pct": 6.034752813671429,
+          "draw_mean_ratio_95ci": [
+            0.9939657049469217,
+            1.1122489599889276
+          ]
+        },
+        {
+          "id": "hunted-columns-1x-on",
+          "title": "Hunted bulk position reads",
+          "game": "hunted",
+          "load": "1\u00d7, jobs on",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 1,
+          "rust_jobs": "on",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "adopted": null,
+          "change": "Same SDK, engine, source algorithm and native position semantics. Replace independent per-unit position imports with one planar property read; keep unit order and refusal flags. Hunted uses mid-position; Flove uses ordinary position. Existing exact worlds and game suites must pass before timings. CPU/GPU guards and source-pair aggregation are unchanged.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 11,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round0-block0/before/hunted-01-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round0-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round1-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round2-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round2-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/hunted-1x-on-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 0.9168683333333331,
+          "wall_after_ms": 0.9189716666666673,
+          "wall_change_pct": 0.4494312426674085,
+          "wall_mean_ratio_95ci": [
+            0.9961888213177157,
+            1.0070525100414187
+          ],
+          "sim_before_ms": 0.24290199999999998,
+          "sim_after_ms": 0.243155,
+          "sim_change_pct": -0.9956591066531684,
+          "sim_mean_ratio_95ci": [
+            0.986615114417428,
+            1.0260602988506902
+          ],
+          "draw_before_ms": 0.6202150000000001,
+          "draw_after_ms": 0.623557,
+          "draw_change_pct": 0.19477116806265737,
+          "draw_mean_ratio_95ci": [
+            0.9983762115677015,
+            1.0050272577655877
+          ]
+        },
+        {
+          "id": "flove-columns-10x-off",
+          "title": "Flove bulk position reads",
+          "game": "flove",
+          "load": "10\u00d7, jobs off",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 10,
+          "rust_jobs": "off",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "adopted": null,
+          "change": "Same SDK, engine, source algorithm and native position semantics. Replace independent per-unit position imports with one planar property read; keep unit order and refusal flags. Hunted uses mid-position; Flove uses ordinary position. Existing exact worlds and game suites must pass before timings. CPU/GPU guards and source-pair aggregation are unchanged.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 11,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round0-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round0-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round1-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round1-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round2-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round2-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round3-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round3-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round4-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-off-round4-block0/after/flove-01-wasm"
+            }
+          ],
+          "wall_before_ms": 46.97634333333334,
+          "wall_after_ms": 46.818614999999994,
+          "wall_change_pct": 0.08066470863941078,
+          "wall_mean_ratio_95ci": [
+            0.9965596069774049,
+            1.0012464256963645
+          ],
+          "sim_before_ms": 27.011236,
+          "sim_after_ms": 26.961173,
+          "sim_change_pct": -0.2443806227091172,
+          "sim_mean_ratio_95ci": [
+            0.9932461225319661,
+            0.9989486872406486
+          ],
+          "draw_before_ms": 6.741826,
+          "draw_after_ms": 6.751898,
+          "draw_change_pct": 0.20487802411814915,
+          "draw_mean_ratio_95ci": [
+            0.9937123774917505,
+            1.003528548324849
+          ]
+        },
+        {
+          "id": "flove-columns-1x-off",
+          "title": "Flove bulk position reads",
+          "game": "flove",
+          "load": "1\u00d7, jobs off",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 1,
+          "rust_jobs": "off",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "adopted": null,
+          "change": "Same SDK, engine, source algorithm and native position semantics. Replace independent per-unit position imports with one planar property read; keep unit order and refusal flags. Hunted uses mid-position; Flove uses ordinary position. Existing exact worlds and game suites must pass before timings. CPU/GPU guards and source-pair aggregation are unchanged.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 11,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round0-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round0-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round1-block0/before/flove-01-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round1-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round2-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round2-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round3-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round3-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round4-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-off-round4-block0/after/flove-00-wasm"
+            }
+          ],
+          "wall_before_ms": 4.314543333333333,
+          "wall_after_ms": 4.307666666666666,
+          "wall_change_pct": -0.15069188473404438,
+          "wall_mean_ratio_95ci": [
+            0.9854529671845602,
+            1.0078465922072755
+          ],
+          "sim_before_ms": 1.43054,
+          "sim_after_ms": 1.4278989999999998,
+          "sim_change_pct": -0.58272928468458,
+          "sim_mean_ratio_95ci": [
+            0.9882871337082776,
+            1.0121677246276894
+          ],
+          "draw_before_ms": 2.029946,
+          "draw_after_ms": 2.033687,
+          "draw_change_pct": -0.10716405524180406,
+          "draw_mean_ratio_95ci": [
+            0.9957384138727957,
+            1.005783386419633
+          ]
+        },
+        {
+          "id": "flove-columns-10x-on",
+          "title": "Flove bulk position reads",
+          "game": "flove",
+          "load": "10\u00d7, jobs on",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 10,
+          "rust_jobs": "on",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "adopted": null,
+          "change": "Same SDK, engine, source algorithm and native position semantics. Replace independent per-unit position imports with one planar property read; keep unit order and refusal flags. Hunted uses mid-position; Flove uses ordinary position. Existing exact worlds and game suites must pass before timings. CPU/GPU guards and source-pair aggregation are unchanged.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 11,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round0-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round0-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round1-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round1-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round2-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round2-block0/after/flove-01-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round3-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round3-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round4-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-10x-on-round4-block0/after/flove-00-wasm"
+            }
+          ],
+          "wall_before_ms": 46.93020333333333,
+          "wall_after_ms": 47.04454666666667,
+          "wall_change_pct": 0.231525087400275,
+          "wall_mean_ratio_95ci": [
+            0.9997582924679609,
+            1.0027597612057404
+          ],
+          "sim_before_ms": 26.961264,
+          "sim_after_ms": 27.054575,
+          "sim_change_pct": 0.6220141143048474,
+          "sim_mean_ratio_95ci": [
+            1.0040657403917765,
+            1.0076550767507233
+          ],
+          "draw_before_ms": 6.747968,
+          "draw_after_ms": 6.742077,
+          "draw_change_pct": 0.4425776767168932,
+          "draw_mean_ratio_95ci": [
+            0.9984722418132705,
+            1.005450993752394
+          ]
+        },
+        {
+          "id": "flove-columns-1x-on",
+          "title": "Flove bulk position reads",
+          "game": "flove",
+          "load": "1\u00d7, jobs on",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 1,
+          "rust_jobs": "on",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "41a448ffa1008e5a3eed8390fb7a764a27478a46"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "adopted": null,
+          "change": "Same SDK, engine, source algorithm and native position semantics. Replace independent per-unit position imports with one planar property read; keep unit order and refusal flags. Hunted uses mid-position; Flove uses ordinary position. Existing exact worlds and game suites must pass before timings. CPU/GPU guards and source-pair aggregation are unchanged.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 10,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round0-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round0-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round1-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round1-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round2-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round2-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round3-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round3-block0/after/flove-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round4-block0/before/flove-00-wasm",
+              "after": "perf-runs/2026-10-31-current-columns-ab/flove-1x-on-round4-block0/after/flove-00-wasm"
+            }
+          ],
+          "wall_before_ms": 4.326028333333333,
+          "wall_after_ms": 4.341583333333333,
+          "wall_change_pct": 0.20172974729926185,
+          "wall_mean_ratio_95ci": [
+            0.9931479919683284,
+            1.008662794790355
+          ],
+          "sim_before_ms": 1.435201,
+          "sim_after_ms": 1.425804,
+          "sim_change_pct": -0.1452758185090386,
+          "sim_mean_ratio_95ci": [
+            0.9898350916779439,
+            1.0082816545862596
+          ],
+          "draw_before_ms": 2.027168,
+          "draw_after_ms": 2.043276,
+          "draw_change_pct": 0.3549346586334545,
+          "draw_mean_ratio_95ci": [
+            0.9997208557331216,
+            1.0083971640329021
+          ]
+        }
+      ]
+    },
+    "packets": {
+      "adopted": false,
+      "selected_packets": 1,
+      "reason": "Retain one packet for this small light reduction. Four packets increase normal-load simulation time by 16.60% at pool1 and14.25% at pool4, and stress simulation by4.20% and4.94%. Normal whole-frame time also regresses. Stress whole-frame directions are mixed; the current identical-build control is retained for interpretation, without claiming a universal FPS effect.",
+      "tested_base": "71747838ab8ce49e22652cb8dee21e3e62493451",
+      "candidate_preserved": "cafbfc3d43b7aa0236a20014d5318bb1f55bfb48",
+      "public_direct_read_source_keeps_existing_single_packet": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+      "results": [
+        {
+          "id": "hunted-current-packets-10x-w1",
+          "title": "Hunted one / four job packets on current engine",
+          "game": "hunted",
+          "load": "10\u00d7, pool 1",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 10,
+          "rust_jobs": "on",
+          "worker_threads": 1,
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "cafbfc3d43b7aa0236a20014d5318bb1f55bfb48"
+          },
+          "adopted": null,
+          "change": "Current InstancePre jobs runtime, identical column-read source, UI and worker modules. Compare one ordered job packet against up to four independent ordered chunks, with exact output/complete-world checks. Same native worker width in each before/after phase; existing guards and source-pair statistics.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 11,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round0-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round0-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round1-block0/before/hunted-01-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round2-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round2-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w1-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 3.636703333333334,
+          "wall_after_ms": 3.5268316666666664,
+          "wall_change_pct": -2.610651954929888,
+          "wall_mean_ratio_95ci": [
+            0.9475904440284935,
+            0.9880723016283265
+          ],
+          "sim_before_ms": 1.539772,
+          "sim_after_ms": 1.607209,
+          "sim_change_pct": 4.204119667142359,
+          "sim_mean_ratio_95ci": [
+            1.0329967939014406,
+            1.0482673236057374
+          ],
+          "draw_before_ms": 1.970934,
+          "draw_after_ms": 1.765345,
+          "draw_change_pct": -9.049821049309614,
+          "draw_mean_ratio_95ci": [
+            0.8325752834776898,
+            0.9375601885735163
+          ]
+        },
+        {
+          "id": "hunted-current-packets-1x-w1",
+          "title": "Hunted one / four job packets on current engine",
+          "game": "hunted",
+          "load": "1\u00d7, pool 1",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 1,
+          "rust_jobs": "on",
+          "worker_threads": 1,
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "cafbfc3d43b7aa0236a20014d5318bb1f55bfb48"
+          },
+          "adopted": null,
+          "change": "Current InstancePre jobs runtime, identical column-read source, UI and worker modules. Compare one ordered job packet against up to four independent ordered chunks, with exact output/complete-world checks. Same native worker width in each before/after phase; existing guards and source-pair statistics.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 10,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round0-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round0-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round1-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round2-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round2-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w1-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 0.9219383333333335,
+          "wall_after_ms": 0.9630066666666667,
+          "wall_change_pct": 4.246465064974414,
+          "wall_mean_ratio_95ci": [
+            1.0414744638692317,
+            1.053035815058059
+          ],
+          "sim_before_ms": 0.245537,
+          "sim_after_ms": 0.283099,
+          "sim_change_pct": 16.603854407361183,
+          "sim_mean_ratio_95ci": [
+            1.1406702558363806,
+            1.1972750135684898
+          ],
+          "draw_before_ms": 0.627263,
+          "draw_after_ms": 0.6301760000000001,
+          "draw_change_pct": 0.4242809952419657,
+          "draw_mean_ratio_95ci": [
+            1.0001049691376886,
+            1.0097653026284645
+          ]
+        },
+        {
+          "id": "hunted-current-packets-10x-w4",
+          "title": "Hunted one / four job packets on current engine",
+          "game": "hunted",
+          "load": "10\u00d7, pool 4",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 10,
+          "rust_jobs": "on",
+          "worker_threads": 4,
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "cafbfc3d43b7aa0236a20014d5318bb1f55bfb48"
+          },
+          "adopted": null,
+          "change": "Current InstancePre jobs runtime, identical column-read source, UI and worker modules. Compare one ordered job packet against up to four independent ordered chunks, with exact output/complete-world checks. Same native worker width in each before/after phase; existing guards and source-pair statistics.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 11,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round0-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round0-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round1-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round2-block0/before/hunted-01-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round2-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-10x-w4-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 3.4883400000000004,
+          "wall_after_ms": 3.551696666666666,
+          "wall_change_pct": 1.7830692745022692,
+          "wall_mean_ratio_95ci": [
+            0.9856885287202011,
+            1.0193250091660044
+          ],
+          "sim_before_ms": 1.236902,
+          "sim_after_ms": 1.304027,
+          "sim_change_pct": 4.942496082844916,
+          "sim_mean_ratio_95ci": [
+            1.0414436809872352,
+            1.0585880425867795
+          ],
+          "draw_before_ms": 2.155625,
+          "draw_after_ms": 2.133201,
+          "draw_change_pct": -1.0402551464192555,
+          "draw_mean_ratio_95ci": [
+            0.9537366734752984,
+            1.0066582143802811
+          ]
+        },
+        {
+          "id": "hunted-current-packets-1x-w4",
+          "title": "Hunted one / four job packets on current engine",
+          "game": "hunted",
+          "load": "1\u00d7, pool 4",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 1,
+          "rust_jobs": "on",
+          "worker_threads": 4,
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "cafbfc3d43b7aa0236a20014d5318bb1f55bfb48"
+          },
+          "adopted": null,
+          "change": "Current InstancePre jobs runtime, identical column-read source, UI and worker modules. Compare one ordered job packet against up to four independent ordered chunks, with exact output/complete-world checks. Same native worker width in each before/after phase; existing guards and source-pair statistics.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 10,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round0-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round0-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round1-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round2-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round2-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-packets-ab/hunted-1x-w4-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 0.9604416666666663,
+          "wall_after_ms": 0.9914833333333332,
+          "wall_change_pct": 2.9686415492116147,
+          "wall_mean_ratio_95ci": [
+            1.02778214265589,
+            1.0487467135979205
+          ],
+          "sim_before_ms": 0.24900299999999997,
+          "sim_after_ms": 0.284885,
+          "sim_change_pct": 14.25365386151267,
+          "sim_mean_ratio_95ci": [
+            1.1128891336285636,
+            1.154406771755283
+          ],
+          "draw_before_ms": 0.652182,
+          "draw_after_ms": 0.6568010000000001,
+          "draw_change_pct": 0.8689394427616959,
+          "draw_mean_ratio_95ci": [
+            0.996950983111331,
+            1.0142909379178988
+          ]
+        }
+      ]
+    },
+    "serial-columns": {
+      "adopted": false,
+      "reason": "Both normal and tenfold existing integration/world checks pass, but five strict source rounds at each load show no simulation or whole-frame gain. Keep the original inline per-rabbit path; avoid added snapshots/temporary arrays without a measured benefit.",
+      "candidate_preserved": "b0145bcb979e0737d8d7d324daa19949225e591e",
+      "results": [
+        {
+          "id": "hunted-serial-columns-10x-off",
+          "title": "Hunted serial bulk position snapshot",
+          "game": "hunted",
+          "load": "10\u00d7, jobs off",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 10,
+          "rust_jobs": "off",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "b0145bcb979e0737d8d7d324daa19949225e591e"
+          },
+          "adopted": false,
+          "change": "Current engine and SDK, jobs off. Compare per-rabbit position imports and inline light queries against one bulk mid-position snapshot and the same direct inline light calculation. No job packets or worker instantiation on either side. Target, RNG and command order retained; complete worlds and existing integration suites gate timing.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 11,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round0-block1/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round0-block1/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round1-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round2-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round2-block0/after/hunted-01-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-10x-off-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 3.5617566666666662,
+          "wall_after_ms": 3.597031666666666,
+          "wall_change_pct": 0.8853665783627784,
+          "wall_mean_ratio_95ci": [
+            0.9933339160934768,
+            1.0129302498520867
+          ],
+          "sim_before_ms": 1.4681600000000001,
+          "sim_after_ms": 1.465622,
+          "sim_change_pct": -0.17286944202268284,
+          "sim_mean_ratio_95ci": [
+            0.9940728600421366,
+            1.0048708384407021
+          ],
+          "draw_before_ms": 1.970239,
+          "draw_after_ms": 2.031136,
+          "draw_change_pct": 0.7721293857737122,
+          "draw_mean_ratio_95ci": [
+            0.9636417903859075,
+            1.0278754146491735
+          ],
+          "decision": "Both normal and tenfold existing integration/world checks pass, but five strict source rounds at each load show no simulation or whole-frame gain. Keep the original inline per-rabbit path; avoid added snapshots/temporary arrays without a measured benefit."
+        },
+        {
+          "id": "hunted-serial-columns-1x-off",
+          "title": "Hunted serial bulk position snapshot",
+          "game": "hunted",
+          "load": "1\u00d7, jobs off",
+          "backends": [
+            "wasm"
+          ],
+          "unit_multiplier": 1,
+          "rust_jobs": "off",
+          "base_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+            "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+            "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+          },
+          "candidate_commits": {
+            "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+            "Hunted-wasm.sdd": "b0145bcb979e0737d8d7d324daa19949225e591e"
+          },
+          "adopted": false,
+          "change": "Current engine and SDK, jobs off. Compare per-rabbit position imports and inline light queries against one bulk mid-position snapshot and the same direct inline light calculation. No job packets or worker instantiation on either side. Target, RNG and command order retained; complete worlds and existing integration suites gate timing.",
+          "backend": "wasm",
+          "measured_rounds": 5,
+          "planned_rounds": 5,
+          "attempted_phase_pairs": 10,
+          "evidence": [
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round0-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round0-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round1-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round1-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round2-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round2-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round3-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round3-block0/after/hunted-00-wasm"
+            },
+            {
+              "before": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round4-block0/before/hunted-00-wasm",
+              "after": "perf-runs/2026-10-31-current-serial-columns-ab/hunted-1x-off-round4-block0/after/hunted-00-wasm"
+            }
+          ],
+          "wall_before_ms": 0.8744416666666662,
+          "wall_after_ms": 0.8746583333333329,
+          "wall_change_pct": -0.024015232518970198,
+          "wall_mean_ratio_95ci": [
+            0.9964606193500745,
+            1.003960214351704
+          ],
+          "sim_before_ms": 0.195964,
+          "sim_after_ms": 0.19617199999999999,
+          "sim_change_pct": 0.3970116960257952,
+          "sim_mean_ratio_95ci": [
+            0.9932256290070982,
+            1.0223175571944354
+          ],
+          "draw_before_ms": 0.62907,
+          "draw_after_ms": 0.626897,
+          "draw_change_pct": -0.40337384554501865,
+          "draw_mean_ratio_95ci": [
+            0.9893369234897688,
+            0.9997503490841937
+          ],
+          "decision": "Both normal and tenfold existing integration/world checks pass, but five strict source rounds at each load show no simulation or whole-frame gain. Keep the original inline per-rabbit path; avoid added snapshots/temporary arrays without a measured benefit."
+        }
+      ]
+    }
+  },
+  "identical_build_control": "identical-build-control.json"
+}

@@ -1,5 +1,5 @@
 {
-  "checked_utc": "2026-10-31T05:39:22.942249+00:00",
+  "checked_utc": "2026-10-31T08:00:17.831211+00:00",
   "sdk_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
   "engine_release": "2026.10.3103",
   "all_byte_identical": true,
@@ -54,8 +54,8 @@
     },
     {
       "game": "MyCube",
-      "benchmark_runtime_source": "77207bb325582a3881ca68f1f4854badd2dc369f",
-      "public_rust_head": "77207bb325582a3881ca68f1f4854badd2dc369f",
+      "benchmark_runtime_source": "9ba643445e038a4e930aaf052bc6f0724294c26e",
+      "public_rust_head": "9ba643445e038a4e930aaf052bc6f0724294c26e",
       "source_diff": [],
       "installed_source_check_passed": true,
       "modules": {
@@ -76,13 +76,13 @@
     },
     {
       "game": "ToTheLastDrop",
-      "benchmark_runtime_source": "d623d0ea48adc8397e2465bbcf6be0a649736721",
-      "public_rust_head": "d623d0ea48adc8397e2465bbcf6be0a649736721",
+      "benchmark_runtime_source": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+      "public_rust_head": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
       "source_diff": [],
       "installed_source_check_passed": true,
       "modules": {
         "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
-        "LuaRules/wasm/ttld-rules.wasm": "b2bdacf9d4ecdf63e5ec5d1bb88a33eab2c1396702ea53ceaf328db972291287",
+        "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0",
         "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655"
       }
     }

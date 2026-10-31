@@ -3,6 +3,7 @@
 const DATA=window.SC_DATA, $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const state={scene:DATA.scenes[0],comparison:'language',pair:0,worlds:[],frame:300,playing:false,fit:true,profile:null,flame:null,history:[]};
 const assets=new Map(), requests=new Map();
+const assetCacheLimit=6;
 window.SC_ASSET=async(key,encoded)=>{
   try{
     const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));
@@ -17,14 +18,19 @@ window.SC_ASSET=async(key,encoded)=>{
         return[frame,[...units.values()].map(row=>centi?row.slice(0,3).concat(row.slice(3).map(v=>v/100)):row),shots];
       });
     }
-    assets.set(key,value);requests.get(key)?.resolve(value);
-  }catch(error){requests.get(key)?.reject(error);}
+    assets.delete(key);assets.set(key,value);
+    while(assets.size>assetCacheLimit)assets.delete(assets.keys().next().value);
+    requests.get(key)?.resolve(value);requests.delete(key);
+  }catch(error){requests.get(key)?.reject(error);requests.delete(key);}
 };
 function loadAsset(asset){
-  if(assets.has(asset.key))return Promise.resolve(assets.get(asset.key));
+  if(assets.has(asset.key)){const value=assets.get(asset.key);assets.delete(asset.key);assets.set(asset.key,value);return Promise.resolve(value);}
   if(requests.has(asset.key))return requests.get(asset.key).promise;
   let resolve,reject;const promise=new Promise((ok,no)=>{resolve=ok;reject=no;});requests.set(asset.key,{promise,resolve,reject});
-  const script=document.createElement('script');script.src=asset.url;script.onerror=()=>reject(Error('Could not load '+asset.url));document.head.append(script);return promise;
+  const script=document.createElement('script');script.src=asset.url;
+  script.onload=()=>script.remove();
+  script.onerror=()=>{requests.delete(asset.key);script.remove();reject(Error('Could not load '+asset.url));};
+  document.head.append(script);return promise;
 }
 const fmt=(v,n=3)=>Number.isFinite(v)?v.toFixed(n):'—', pct=v=>Number.isFinite(v)?(v>0?'+':'')+fmt(v,1)+'%':'—', mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
 const color=name=>getComputedStyle(document.documentElement).getPropertyValue('--'+name).trim();
@@ -197,5 +203,5 @@ $('video-play').onclick=()=>{const videos=[...$('video-grid').querySelectorAll('
 $('identities').textContent=JSON.stringify(DATA.audit,null,2);
 let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{overview();repeats();costs();drawTrace();drawWorlds();if(state.profile){drawFlame();profileCategories();}},100);}).observe(document.querySelector('main'));
 const cpuIdleComplete=DATA.scenes.filter(s=>s.language.measured_pairs>=5&&s.language.runtime?.cpu_activity_policy?.max_background_cpu_cores<=.5).length;
-$('campaign-status').textContent=`Snapshot ${DATA.audit.generated_at??'unknown time'} · New CPU+GPU-idle method: ${cpuIdleComplete} / ${DATA.scenes.length} primary scenes have five clean pairs. Pressure-only results remain visible as historical evidence. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
-$('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();overview();selectScene(DATA.scenes[0].id);requestAnimationFrame(animate);
+$('campaign-status').textContent=`Snapshot ${DATA.audit.generated_at??'unknown time'} · New CPU+GPU-idle method: ${cpuIdleComplete} / ${DATA.scenes.length} primary scenes have five clean pairs. Earlier measurements are archived separately. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
+$('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();overview();selectScene((DATA.scenes.find(s=>s.language.measured_pairs>=5)??DATA.scenes[0]).id);requestAnimationFrame(animate);

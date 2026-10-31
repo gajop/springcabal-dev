@@ -1,0 +1,65 @@
+diff --git a/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs b/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
+index 1dafd18..b3a57cd 100644
+--- a/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
++++ b/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs
+@@ -20,7 +20,7 @@ pub(super) fn prepare(
+     if !options.enabled(spring) {
+         return None;
+     }
+-    let mut positions = Vec::new();
++    let mut eligible = Vec::new();
+     {
+         let memories = global.rabbits.access();
+         for (index, &rabbit) in rabbits.iter().enumerate() {
+@@ -28,15 +28,44 @@ pub(super) fn prepare(
+             if memory.is_some_and(|memory| frame < memory.next_update) {
+                 continue;
+             }
+-            if let Some(position) = units::unit_position(spring, rabbit) {
+-                positions.push((
+-                    index,
+-                    position,
+-                    memory.map_or(1.0, |memory| carrier_light_factor(memory, frame)),
+-                ));
+-            }
++            eligible.push((
++                index,
++                rabbit,
++                memory.map_or(1.0, |memory| carrier_light_factor(memory, frame)),
++            ));
+         }
+     }
++    // This is the same pre-job snapshot as the scalar imports, including
++    // mid-position and refusal flags; only the host transition is shared.
++    if eligible.is_empty() {
++        return Some((0..rabbits.len()).map(|_| None).collect());
++    }
++    let ids: Vec<_> = eligible.iter().map(|(_, id, _)| *id).collect();
++    let count = ids.len();
++    let mut planes = alloc::vec![0.0; count * 3];
++    let mut found = alloc::vec![0; count];
++    spring
++        .columns()
++        .get_units_f32(
++            spring::columns::UnitColumn::MidPosition,
++            &ids,
++            spring::columns::ColumnArg::None,
++            &mut planes,
++            Some(&mut found),
++        )
++        .ok()?;
++    let positions: Vec<_> = eligible
++        .into_iter()
++        .enumerate()
++        .filter(|(i, _)| found[*i] != 0)
++        .map(|(i, (index, _, factor))| {
++            (
++                index,
++                spring::Float3::new(planes[i], planes[count + i], planes[2 * count + i]),
++                factor,
++            )
++        })
++        .collect();
+     let mut prepared: Vec<_> = (0..rabbits.len()).map(|_| None).collect();
+     if positions.is_empty() {
+         return Some(prepared);

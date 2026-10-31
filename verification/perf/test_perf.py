@@ -306,6 +306,40 @@ class EquivalenceTests(unittest.TestCase):
         self.assertEqual(costs['categories'], {'Wasm guest': 0.5})
         self.assertEqual(costs['leaves'], [{'name': 'kernel', 'ms': 0.2}])
 
+    def test_diagnostic_exports_require_complete_clean_partner_artifacts(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root/'provenance.json').write_text(json.dumps({'args': {'backend': 'both', 'rust_jobs': 'off'}}))
+
+            def capture(repeat, backend, *, ok=True, contended=False, artifact=True, jobs='off'):
+                path = root/f'{repeat:02}-{backend}-{jobs}'
+                path.mkdir()
+                (path/'result.json').write_text(json.dumps(dict(repeat=repeat, backend=backend,
+                    rust_jobs=jobs, ok=ok, contended=contended)))
+                if artifact:
+                    (path/'profile.json').write_text('{}')
+                return path
+
+            capture(0, 'lua')  # A clean orphan is not a paired capture.
+            capture(1, 'lua')
+            capture(1, 'wasm', contended=True)
+            good = {capture(2, 'lua'), capture(2, 'wasm')}
+            capture(3, 'lua')
+            capture(3, 'wasm', artifact=False)
+            capture(4, 'lua')
+            capture(4, 'wasm', ok=False)
+            self.assertEqual(dashboard.complete_capture_runs(root, 'profiles'), good)
+            self.assertEqual(dashboard.complete_capture_runs(root, 'worlds'), set())
+            for path in good:
+                (path/'world.jsonl.gz').write_bytes(b'present')
+            self.assertEqual(dashboard.complete_capture_runs(root, 'worlds'), good)
+
+            (root/'provenance.json').write_text(json.dumps({'args': {'backend': 'wasm', 'rust_jobs': 'compare'}}))
+            off = capture(5, 'wasm')
+            self.assertEqual(dashboard.complete_capture_runs(root, 'profiles'), set())
+            on = capture(5, 'wasm', jobs='on')
+            self.assertEqual(dashboard.complete_capture_runs(root, 'profiles'), {off, on})
+
     def test_dashboard_preserves_partial_evidence_without_inventing_frames(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

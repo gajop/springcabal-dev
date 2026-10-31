@@ -1,0 +1,54 @@
+{
+  "held": true,
+  "utc": "2026-10-31T06:49:06.949623+00:00",
+  "reason": "TTLD Lua loads the world health-bar widget; Rust has no equivalent pass. Matched ordinary-game frame450 also shows a house-fire difference. Old results cannot support a language-only ranking until both paths are audited and matched.",
+  "held_timing_cases": {
+    "ttld-shadows-1x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-shadows-1x-w1",
+    "ttld-shadows-10x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-shadows-10x-w1",
+    "ttld-burning-1x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-burning-1x-w1",
+    "ttld-burning-10x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-burning-10x-w1"
+  },
+  "all_raw_evidence_preserved": true,
+  "old_capture_parents": [
+    "2026-10-31-profiles-current",
+    "2026-10-31-worlds-current",
+    "2026-10-31-videos-current"
+  ],
+  "new_capture_parents": [
+    "2026-10-31-profiles-matched-ui",
+    "2026-10-31-worlds-matched-ui",
+    "2026-10-31-videos-matched-ui"
+  ],
+  "other_games_continue": true,
+  "ttld_gate": "codex-work/night-2026-10-30/v4/ttld-ui-matched-selection.json",
+  "current_fix": {
+    "public_head": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+    "commit_url": "https://github.com/SpringCabal/LD43/commit/5f59ab882bc3f41715d67f16f933c3f113558d8b",
+    "corrected_callback": "WorldHitByWeapon",
+    "damage_threshold": "> 400",
+    "same_damage_return": true,
+    "engine_changed_for_fix": false,
+    "existing_suites_passed": [
+      "ttld headless",
+      "ttld visual",
+      "ttld pose-parity",
+      "controls ttld (Lua and Wasm)"
+    ],
+    "damage_regression": "Real AddUnitDamage: 400 does not ignite; 401 ignites. Old registration fails the latter assertion.",
+    "shared_healthbar_files": {
+      "LuaUI/main.lua": "9b681f85ee30a8099bd888eb98b8741b4ca8df09613c5f7a16e97dc88f8dda1a",
+      "LuaUI/config.lua": "7375d05f66c23bf4f65a75da496c9fd7cf9ead4b451984e102e76e41320eedce",
+      "LuaUI/SystemWidgets/BlockUserWidgets.lua": "cb97002fa1449baa6a0e0e5d0d6cfc561bd73295bdc65cb5e5ff6f3b1b4a9379",
+      "LuaUI/Widgets/gui_healthbars.lua": "67ec143f28278a88237d0179bea7830557bdcb59ee514d33425fc96a92d500ac",
+      "LuaUI/Widgets/layout.lua": "15248f50f6149252c1292e6a198b78f18e024d6872db423d4cee114886e318ed"
+    },
+    "normal_ui_module_unchanged": true,
+    "source_and_normal_modules_committed_and_pushed": true
+  },
+  "pending": [
+    "GPU observer with normal HUD and camera",
+    "new normal and controlled-fire world comparisons",
+    "four fresh five-pair timing campaigns"
+  ],
+  "probe_correction": "The first fire observer used the isolated-probe widget list, so it lacked the normal Rust HUD and camera and failed the existing intro check. Its screenshots and timings are not accepted. The corrected observer keeps normal widgets and is diagnostic only."
+}

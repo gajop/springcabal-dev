@@ -1,0 +1,57 @@
+{
+  "public_head": "9ba643445e038a4e930aaf052bc6f0724294c26e",
+  "checks": {
+    "passed_so_far": [
+      {
+        "suite": "mycube",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/mycube-ui-parity/checks/962a81b1ade8/00-mycube-headless-0"
+      },
+      {
+        "suite": "mycube",
+        "mode": "visual",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/mycube-ui-parity/checks/962a81b1ade8/01-mycube-visual-0"
+      },
+      {
+        "suite": "controls",
+        "mode": "mycube",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/mycube-ui-parity/checks/962a81b1ade8/02-controls-mycube-0"
+      }
+    ],
+    "complete": true,
+    "engine": {
+      "source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "source_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "binary_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "build_log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/build-current.log",
+      "utc": "2026-10-31T03:03:04.850530+00:00",
+      "release_tag": "2026.10.3103",
+      "release_workflow_dispatched": true
+    },
+    "selected_heads": {
+      "MyCube-wasm.sdd": "77207bb325582a3881ca68f1f4854badd2dc369f"
+    },
+    "shared_healthbar_files": {
+      "LuaUI/main.lua": "9b681f85ee30a8099bd888eb98b8741b4ca8df09613c5f7a16e97dc88f8dda1a",
+      "LuaUI/config.lua": "7375d05f66c23bf4f65a75da496c9fd7cf9ead4b451984e102e76e41320eedce",
+      "LuaUI/SystemWidgets/BlockUserWidgets.lua": "8b368d3649cde871785a885332cccc7e513310f67042ed74026871db125e8fc6",
+      "LuaUI/Widgets/gui_healthbars.lua": "31656a88d6ae3b78146ede33a30268f0ca90c7e2eadc308e0e28978530b7521a",
+      "LuaUI/Widgets/layout.lua": "815ed5972a153e1fa45d25b6c2d264ed7b344fb5b2549fe6715ce49fa0d21c25"
+    },
+    "utc": "2026-10-31T07:19:50.349723+00:00"
+  },
+  "shared_files": {
+    "LuaUI/main.lua": "9b681f85ee30a8099bd888eb98b8741b4ca8df09613c5f7a16e97dc88f8dda1a",
+    "LuaUI/config.lua": "7375d05f66c23bf4f65a75da496c9fd7cf9ead4b451984e102e76e41320eedce",
+    "LuaUI/SystemWidgets/BlockUserWidgets.lua": "8b368d3649cde871785a885332cccc7e513310f67042ed74026871db125e8fc6",
+    "LuaUI/Widgets/gui_healthbars.lua": "31656a88d6ae3b78146ede33a30268f0ca90c7e2eadc308e0e28978530b7521a",
+    "LuaUI/Widgets/layout.lua": "815ed5972a153e1fa45d25b6c2d264ed7b344fb5b2549fe6715ce49fa0d21c25"
+  },
+  "utc": "2026-10-31T07:39:53.630202+00:00"
+}

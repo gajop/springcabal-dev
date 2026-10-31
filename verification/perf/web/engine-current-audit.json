@@ -1,0 +1,356 @@
+{
+  "previous_reviewed_engine": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10",
+  "source_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+  "release_tag": "2026.10.3103",
+  "release_url": "https://github.com/gajop/spring-rust/releases/tag/2026.10.3103",
+  "ci_url": "https://github.com/gajop/spring-rust/actions/runs/41162664369",
+  "ci_both_platforms_passed": true,
+  "local_binary_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+  "checks": {
+    "passed_so_far": [
+      {
+        "suite": "hunted",
+        "mode": "headless",
+        "workers": 4,
+        "jobs": "check",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/00-hunted-headless-0"
+      },
+      {
+        "suite": "hunted",
+        "mode": "visual",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/01-hunted-visual-0"
+      },
+      {
+        "suite": "flove",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/02-flove-headless-0"
+      },
+      {
+        "suite": "flove",
+        "mode": "headless",
+        "workers": 4,
+        "jobs": "check",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/03-flove-headless-0"
+      },
+      {
+        "suite": "flove",
+        "mode": "visual",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/04-flove-visual-0"
+      },
+      {
+        "suite": "flove",
+        "mode": "original",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/05-flove-original-0"
+      },
+      {
+        "suite": "host",
+        "mode": "tests",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/06-host-tests-1"
+      },
+      {
+        "suite": "perf",
+        "mode": "tests",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/07-perf-tests-0"
+      },
+      {
+        "suite": "installed",
+        "mode": "all",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/08-installed-all-0"
+      },
+      {
+        "suite": "area17",
+        "mode": "static",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/09-area17-static-0"
+      },
+      {
+        "suite": "area17",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/10-area17-headless-0"
+      },
+      {
+        "suite": "area17",
+        "mode": "tech-ui",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/11-area17-tech-ui-0"
+      },
+      {
+        "suite": "flove",
+        "mode": "animation-trace",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/12-flove-animation-trace-0"
+      },
+      {
+        "suite": "gravitas",
+        "mode": "e2e",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/13-gravitas-e2e-0"
+      },
+      {
+        "suite": "gravitas",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/14-gravitas-headless-0"
+      },
+      {
+        "suite": "gravitas",
+        "mode": "lua-rules",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/15-gravitas-lua-rules-0"
+      },
+      {
+        "suite": "gravitas",
+        "mode": "lua-play",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/16-gravitas-lua-play-0"
+      },
+      {
+        "suite": "mycube",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/17-mycube-headless-0"
+      },
+      {
+        "suite": "mycube",
+        "mode": "lua-headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/18-mycube-lua-headless-0"
+      },
+      {
+        "suite": "partsneeded",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/19-partsneeded-headless-0"
+      },
+      {
+        "suite": "ttld",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/20-ttld-headless-0"
+      },
+      {
+        "suite": "ttld",
+        "mode": "pose-parity",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/21-ttld-pose-parity-0"
+      },
+      {
+        "suite": "unit-scripts",
+        "mode": "partsneeded",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/22-unit-scripts-partsneeded-0"
+      },
+      {
+        "suite": "controls",
+        "mode": "all",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/23-controls-all-0"
+      },
+      {
+        "suite": "gravitas",
+        "mode": "bob",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/24-gravitas-bob-0"
+      },
+      {
+        "suite": "gravitas",
+        "mode": "lua-bob",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/25-gravitas-lua-bob-0"
+      },
+      {
+        "suite": "area17",
+        "mode": "visual",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/26-area17-visual-0"
+      },
+      {
+        "suite": "gravitas",
+        "mode": "shots",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/27-gravitas-shots-0"
+      },
+      {
+        "suite": "mycube",
+        "mode": "visual",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/28-mycube-visual-0"
+      },
+      {
+        "suite": "partsneeded",
+        "mode": "visual",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/29-partsneeded-visual-0"
+      },
+      {
+        "suite": "ttld",
+        "mode": "visual",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/verification-current/30-ttld-visual-0"
+      }
+    ],
+    "complete": true,
+    "engine": {
+      "source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "source_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "binary_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "build_log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/build-current.log",
+      "utc": "2026-10-31T03:03:04.850530+00:00",
+      "release_tag": "2026.10.3103",
+      "release_workflow_dispatched": true
+    },
+    "utc": "2026-10-31T03:35:34.983290+00:00"
+  },
+  "checks_receipt_sha256": "28c95d14292927c18c9c4e8bfaba8d4828ca0e3016f839bd9a7eaf2fd72c81f3",
+  "engine_test_assertions": {
+    "GlobalRNG": 2504,
+    "WasmNanSinks": 30247,
+    "WasmSyncedJobs": 7024,
+    "ThreadPool": 2035923
+  },
+  "commits": [
+    {
+      "sha": "a64fa3832aac61df13fc6f9d6e7bf5ed46ce8639",
+      "change": "GPU memory diagnostics",
+      "action": "Diagnostic command only; no game migration."
+    },
+    {
+      "sha": "505d85d816895c474a306d84bed97d436a3bedc8",
+      "change": "Model LOD and shattered-index storage controls",
+      "action": "Keep existing defaults; do not remove model detail from either benchmark side."
+    },
+    {
+      "sha": "3c7153e7f4a4fd6e2dcccd98583ac0a7b5890eb8",
+      "change": "Mip skipping for named images",
+      "action": "Keep TextureMipSkip at zero in both versions."
+    },
+    {
+      "sha": "b17feaa7332df9aa90e2bd53b74046b88f1b0ad6",
+      "change": "Opaque-model depth prepass and overdraw diagnostics",
+      "action": "Prepass remains off; retain the existing material paths."
+    },
+    {
+      "sha": "c13fea14dc77fbfaf74f088b5e98b6d6eac2f483",
+      "change": "Thread-pool completion returns when the submitted work is done",
+      "action": "Use the new default; rerun jobs off/on at native pool widths 1 and 4. Thread-pool tests pass 2,035,923 assertions."
+    },
+    {
+      "sha": "9a18e9346688a180d19a5683ecbe5bab952f5a92",
+      "change": "Prelinked Wasm job programs with InstancePre",
+      "action": "Keep fresh stores and ordered results. Retest packet sizes on this runtime; use its built-in job clock for separate diagnostics."
+    },
+    {
+      "sha": "7278faf7cc7eeb01d2b956e422674e696f4ca2d6",
+      "change": "RmlUi damage rectangles, program reuse and configurable MSAA",
+      "action": "Keep default damage rectangles and MSAA=2. Existing game images and real-input controls pass."
+    },
+    {
+      "sha": "250ef4f10c9e3e5a0fd2fb0d2c010d65d319cce3",
+      "change": "Shadow-caster LOD and receiver culling options",
+      "action": "New culling options stay off. Retain the same shadows and geometry in both versions."
+    },
+    {
+      "sha": "55747b9b375e97ce9c5ee5d60674fc215d824c9a",
+      "change": "Cache transforms and draw positions for resting features",
+      "action": "Use the new default; existing game golden images pass."
+    },
+    {
+      "sha": "4a2e322a196e06392a8eb28927be85f71b71254f",
+      "change": "Windows write-directory checks, UTF-8 file paths and menu errors",
+      "action": "Retain the isolated portable layout. Check the official Windows executable under Wine during final packaging."
+    },
+    {
+      "sha": "4e04bef331eb61fb067ae75ebb3b86fbbf934d5b",
+      "change": "Headless-only drawing and simulation pacing",
+      "action": "No rendered-build change. All performance runs and in-game verification here use the NVIDIA rendering build."
+    },
+    {
+      "sha": "365b44813b83257769968cf76a168de30a1e65ff",
+      "change": "Bulk unit-property API and SDK columns",
+      "action": "Pin the SDK to the merged commit. Test scalar versus bulk reads at both loads; do not assume fewer calls improve frame time."
+    },
+    {
+      "sha": "9c1ba392280fc68721b77cdb5d9a404a65d6bcd6",
+      "change": "Columns ABI and performance documentation",
+      "action": "Documentation only."
+    },
+    {
+      "sha": "961cacb807c27d0593d53a003d212f6d87a24c58",
+      "change": "Document the engine version required by columns",
+      "action": "Collection instructions select the tested 2026.10.3103 release."
+    },
+    {
+      "sha": "1f6ad86067a82e6aaa63061135d9aca354f2a103",
+      "change": "Refresh the spatial index after native midpoint/radius changes",
+      "action": "Match Lua RemoveUnit/MovedUnit conditions. Fourteen ordered-query checks and normal/10x detailed world comparisons pass."
+    },
+    {
+      "sha": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "change": "Merge current changes with the previous SpringCabal parity fixes",
+      "action": "Preserve the prior movement, spatial-query, RNG, wind and weapon fixes instead of replacing them with the other development branch."
+    }
+  ],
+  "official_assets": [
+    {
+      "name": "recoil_2026.10.3103_amd64-linux-dbgsym.tar.zst",
+      "bytes": 619428444,
+      "digest": "sha256:328153cdde0ace60b1f3447da6c76c6cb0f93a171c3bfb2789437cc28a00f2b4",
+      "url": "https://github.com/gajop/spring-rust/releases/download/untagged-75a6c46e183ed7ad4102/recoil_2026.10.3103_amd64-linux-dbgsym.tar.zst"
+    },
+    {
+      "name": "recoil_2026.10.3103_amd64-linux.7z",
+      "bytes": 45982845,
+      "digest": "sha256:6b84d1548e20bf169189004bed2f8dca678e89d6ced4a37ee4f3b1978f056fb5",
+      "url": "https://github.com/gajop/spring-rust/releases/download/untagged-75a6c46e183ed7ad4102/recoil_2026.10.3103_amd64-linux.7z"
+    },
+    {
+      "name": "recoil_2026.10.3103_amd64-windows-dbgsym.tar.zst",
+      "bytes": 649806235,
+      "digest": "sha256:7eb8446270f8f7d7130d9cf3d943a732c380a76d6ce8678c519c4bcc27096f9e",
+      "url": "https://github.com/gajop/spring-rust/releases/download/untagged-75a6c46e183ed7ad4102/recoil_2026.10.3103_amd64-windows-dbgsym.tar.zst"
+    },
+    {
+      "name": "recoil_2026.10.3103_amd64-windows.7z",
+      "bytes": 29187314,
+      "digest": "sha256:2267ab98121d736ed15be38e749529dc5efcc3d74da41a7e7ca50efd6a563be9",
+      "url": "https://github.com/gajop/spring-rust/releases/download/untagged-75a6c46e183ed7ad4102/recoil_2026.10.3103_amd64-windows.7z"
+    }
+  ]
+}

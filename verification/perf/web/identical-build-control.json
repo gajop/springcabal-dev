@@ -1,0 +1,164 @@
+{
+  "scope": "Two five-pair identical-build controls on current engine65ec; both labels use the exact same frozen normal modules/source717, workload, guards and worker width. Descriptive run-to-run variation for these Hunted cases, not a correction factor or noise threshold for other games.",
+  "results": [
+    {
+      "id": "hunted-current-noop-10x-w1",
+      "title": "Hunted identical-build control on current engine",
+      "game": "hunted",
+      "load": "10\u00d7, pool 1",
+      "backends": [
+        "wasm"
+      ],
+      "unit_multiplier": 10,
+      "rust_jobs": "on",
+      "worker_threads": 1,
+      "base_commits": {
+        "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+        "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+        "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+      },
+      "candidate_commits": {
+        "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+        "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+        "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+      },
+      "adopted": false,
+      "change": "Before and after labels load the exact same frozen one-packet game directory and normal Wasm bytes, engine, input, worker width and guards. No source/compiler change. This repeats the existing unchanged-build control on the current runtime to bound run-to-run changes; it is not an optimization.",
+      "backend": "wasm",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round0-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round0-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round1-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round1-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round2-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round2-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round3-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round3-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round4-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w1-round4-block0/after/hunted-00-wasm"
+        }
+      ],
+      "wall_before_ms": 3.5870016666666675,
+      "wall_after_ms": 3.636549999999999,
+      "wall_change_pct": 1.381330089522259,
+      "wall_mean_ratio_95ci": [
+        0.9665157367917111,
+        1.037434202453675
+      ],
+      "sim_before_ms": 1.547734,
+      "sim_after_ms": 1.548526,
+      "sim_change_pct": -0.39444555990549857,
+      "sim_mean_ratio_95ci": [
+        0.9948499887382835,
+        1.0009198008280191
+      ],
+      "draw_before_ms": 1.8748889999999998,
+      "draw_after_ms": 1.964135,
+      "draw_change_pct": 4.760068462719658,
+      "draw_mean_ratio_95ci": [
+        0.923146620244267,
+        1.1033972896547952
+      ],
+      "control": true,
+      "decision": "Identical-build control; no source change to adopt."
+    },
+    {
+      "id": "hunted-current-noop-10x-w4",
+      "title": "Hunted identical-build control on current engine",
+      "game": "hunted",
+      "load": "10\u00d7, pool 4",
+      "backends": [
+        "wasm"
+      ],
+      "unit_multiplier": 10,
+      "rust_jobs": "on",
+      "worker_threads": 4,
+      "base_commits": {
+        "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+        "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+        "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+      },
+      "candidate_commits": {
+        "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "Hunted-wasm.sdd": "71747838ab8ce49e22652cb8dee21e3e62493451",
+        "Flove.sdd": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+        "Flove-wasm.sdd": "719ec6f48e8c4e0b0031be42d6b5ba57291f72ef"
+      },
+      "adopted": false,
+      "change": "Before and after labels load the exact same frozen one-packet game directory and normal Wasm bytes, engine, input, worker width and guards. No source/compiler change. This repeats the existing unchanged-build control on the current runtime to bound run-to-run changes; it is not an optimization.",
+      "backend": "wasm",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round0-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round0-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round1-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round1-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round2-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round2-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round3-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round3-block0/after/hunted-00-wasm"
+        },
+        {
+          "before": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round4-block0/before/hunted-00-wasm",
+          "after": "perf-runs/2026-10-31-current-noop-control/hunted-10x-w4-round4-block0/after/hunted-00-wasm"
+        }
+      ],
+      "wall_before_ms": 3.652021666666667,
+      "wall_after_ms": 3.5256966666666663,
+      "wall_change_pct": -1.417980465616353,
+      "wall_mean_ratio_95ci": [
+        0.932550727594759,
+        1.0017096650449315
+      ],
+      "sim_before_ms": 1.244777,
+      "sim_after_ms": 1.251047,
+      "sim_change_pct": 0.052057517129577846,
+      "sim_mean_ratio_95ci": [
+        0.9935111930442495,
+        1.010981753528233
+      ],
+      "draw_before_ms": 2.289402,
+      "draw_after_ms": 2.1489070000000003,
+      "draw_change_pct": -2.617488051505179,
+      "draw_mean_ratio_95ci": [
+        0.8971470596890505,
+        0.9860921026028875
+      ],
+      "control": true,
+      "decision": "Identical-build control; no source change to adopt."
+    }
+  ],
+  "engine": {
+    "source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+    "source_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+    "binary_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+    "build_log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/build-current.log",
+    "utc": "2026-10-31T03:03:04.850530+00:00",
+    "release_tag": "2026.10.3103",
+    "release_workflow_dispatched": true
+  }
+}

@@ -1,5 +1,217 @@
 [
   {
+    "campaign": "hunted-10x-lua-rust-w1",
+    "game": "hunted",
+    "measured_pairs": 5,
+    "attempted_pairs": 6,
+    "excluded_pairs": 1,
+    "sim_p50_lua_ms": 3.088691,
+    "sim_p50_rust_ms": 1.468991,
+    "sim_p50_paired_rust_change_pct": -52.821532577747334,
+    "sim_p50_mean_ratio_95ci_lo": 0.47154815936961847,
+    "sim_p50_mean_ratio_95ci_hi": 0.475416561880831,
+    "sim_p95_lua_ms": 4.206354,
+    "sim_p95_rust_ms": 1.8031110000000001,
+    "sim_p95_paired_rust_change_pct": -57.094527051316945,
+    "sim_p95_mean_ratio_95ci_lo": 0.42783556026098135,
+    "sim_p95_mean_ratio_95ci_hi": 0.43622083859971233,
+    "draw_p50_lua_ms": 3.88771,
+    "draw_p50_rust_ms": 1.932774,
+    "draw_p50_paired_rust_change_pct": -50.089361593340065,
+    "draw_p50_mean_ratio_95ci_lo": 0.48425514731466873,
+    "draw_p50_mean_ratio_95ci_hi": 0.5325236923222463,
+    "draw_p95_lua_ms": 4.7339970000000005,
+    "draw_p95_rust_ms": 2.835178,
+    "draw_p95_paired_rust_change_pct": -40.07407942867022,
+    "draw_p95_mean_ratio_95ci_lo": 0.5957642402695531,
+    "draw_p95_mean_ratio_95ci_hi": 0.6049431861251082,
+    "cpu_p50_lua_ms": 6.963929,
+    "cpu_p50_rust_ms": 3.4450079999999996,
+    "cpu_p50_paired_rust_change_pct": -50.472074078078265,
+    "cpu_p50_mean_ratio_95ci_lo": 0.4894873884598354,
+    "cpu_p50_mean_ratio_95ci_hi": 0.5099213897430422,
+    "cpu_p95_lua_ms": 8.634746,
+    "cpu_p95_rust_ms": 4.293509,
+    "cpu_p95_paired_rust_change_pct": -50.237621349834725,
+    "cpu_p95_mean_ratio_95ci_lo": 0.49421805857895124,
+    "cpu_p95_mean_ratio_95ci_hi": 0.49911900035283324,
+    "wall_mean_lua_ms": 7.075303333333333,
+    "wall_mean_rust_ms": 3.512404999999999,
+    "wall_mean_paired_rust_change_pct": -50.56115379741082,
+    "wall_mean_mean_ratio_95ci_lo": 0.49221310136041546,
+    "wall_mean_mean_ratio_95ci_hi": 0.516475616817792,
+    "lua_units_p50": 1334.0,
+    "wasm_units_p50": 1334.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "031dab3cad0ba240841dbf07bf6cbdac685f52bf731e65e70252fc0043e8e81d",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "43e49fb595b0a44acc7f866a7c63ad8cd8871ef6e13b0d5d124cdf40c170e061",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1",
+          "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+          "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
+        },
+        "jobs_api": true,
+        "source_commit": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "hunted-10x-lua-rust-w1/hunted-00-lua",
+      "hunted-10x-lua-rust-w1/hunted-00-wasm",
+      "hunted-10x-lua-rust-w1/hunted-01-lua",
+      "hunted-10x-lua-rust-w1/hunted-01-wasm",
+      "hunted-10x-lua-rust-w1/hunted-02-lua",
+      "hunted-10x-lua-rust-w1/hunted-02-wasm",
+      "hunted-10x-lua-rust-w1/hunted-03-lua",
+      "hunted-10x-lua-rust-w1/hunted-03-wasm",
+      "hunted-10x-lua-rust-w1/hunted-04-lua",
+      "hunted-10x-lua-rust-w1/hunted-04-wasm",
+      "hunted-10x-lua-rust-w1/hunted-05-lua",
+      "hunted-10x-lua-rust-w1/hunted-05-wasm"
+    ]
+  },
+  {
+    "campaign": "hunted-lua-rust-w1",
+    "game": "hunted",
+    "measured_pairs": 5,
+    "attempted_pairs": 6,
+    "excluded_pairs": 1,
+    "sim_p50_lua_ms": 0.26505,
+    "sim_p50_rust_ms": 0.19392500000000001,
+    "sim_p50_paired_rust_change_pct": -26.834559517072243,
+    "sim_p50_mean_ratio_95ci_lo": 0.7308160425467789,
+    "sim_p50_mean_ratio_95ci_hi": 0.7378313199674127,
+    "sim_p95_lua_ms": 0.386104,
+    "sim_p95_rust_ms": 0.27011399999999997,
+    "sim_p95_paired_rust_change_pct": -29.923284918053163,
+    "sim_p95_mean_ratio_95ci_lo": 0.683461930697362,
+    "sim_p95_mean_ratio_95ci_hi": 0.7169761733467034,
+    "draw_p50_lua_ms": 0.663653,
+    "draw_p50_rust_ms": 0.626694,
+    "draw_p50_paired_rust_change_pct": -5.442429910515012,
+    "draw_p50_mean_ratio_95ci_lo": 0.9370369480365073,
+    "draw_p50_mean_ratio_95ci_hi": 0.9496620792957364,
+    "draw_p95_lua_ms": 0.798255,
+    "draw_p95_rust_ms": 0.715957,
+    "draw_p95_paired_rust_change_pct": -10.046037920213468,
+    "draw_p95_mean_ratio_95ci_lo": 0.8911960153670444,
+    "draw_p95_mean_ratio_95ci_hi": 0.9110629106026508,
+    "cpu_p50_lua_ms": 0.925432,
+    "cpu_p50_rust_ms": 0.823285,
+    "cpu_p50_paired_rust_change_pct": -10.94454385157263,
+    "cpu_p50_mean_ratio_95ci_lo": 0.8871066104235603,
+    "cpu_p50_mean_ratio_95ci_hi": 0.8983388281844406,
+    "cpu_p95_lua_ms": 1.179391,
+    "cpu_p95_rust_ms": 0.969812,
+    "cpu_p95_paired_rust_change_pct": -17.67129621005179,
+    "cpu_p95_mean_ratio_95ci_lo": 0.8065269794748966,
+    "cpu_p95_mean_ratio_95ci_hi": 0.8440528120013836,
+    "wall_mean_lua_ms": 0.9812766666666668,
+    "wall_mean_rust_ms": 0.8738466666666667,
+    "wall_mean_paired_rust_change_pct": -10.854394216324915,
+    "wall_mean_mean_ratio_95ci_lo": 0.8851602292586226,
+    "wall_mean_mean_ratio_95ci_hi": 0.8932817426233501,
+    "lua_units_p50": 143.0,
+    "wasm_units_p50": 143.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "031dab3cad0ba240841dbf07bf6cbdac685f52bf731e65e70252fc0043e8e81d",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "02009c4793e6de5e0dcb20517e126244626ebbef",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "43e49fb595b0a44acc7f866a7c63ad8cd8871ef6e13b0d5d124cdf40c170e061",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1",
+          "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+          "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
+        },
+        "jobs_api": true,
+        "source_commit": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "hunted-lua-rust-w1/hunted-00-lua",
+      "hunted-lua-rust-w1/hunted-00-wasm",
+      "hunted-lua-rust-w1/hunted-01-lua",
+      "hunted-lua-rust-w1/hunted-01-wasm",
+      "hunted-lua-rust-w1/hunted-02-lua",
+      "hunted-lua-rust-w1/hunted-02-wasm",
+      "hunted-lua-rust-w1/hunted-03-lua",
+      "hunted-lua-rust-w1/hunted-03-wasm",
+      "hunted-lua-rust-w1/hunted-04-lua",
+      "hunted-lua-rust-w1/hunted-04-wasm",
+      "hunted-lua-rust-w1/hunted-05-lua",
+      "hunted-lua-rust-w1/hunted-05-wasm"
+    ]
+  },
+  {
     "campaign": "area17-1x-w1",
     "game": "area17",
     "measured_pairs": 5,
