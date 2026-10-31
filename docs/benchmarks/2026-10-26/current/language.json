@@ -422,6 +422,111 @@
     ]
   },
   {
+    "campaign": "flove-combat-10x-lua-rust-w1",
+    "game": "flove",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 30.635197,
+    "sim_p50_rust_ms": 27.162927,
+    "sim_p50_paired_rust_change_pct": -11.896363176323188,
+    "sim_p50_mean_ratio_95ci_lo": 0.8793250474451283,
+    "sim_p50_mean_ratio_95ci_hi": 0.8972823416356221,
+    "sim_p95_lua_ms": 126.394273,
+    "sim_p95_rust_ms": 102.930643,
+    "sim_p95_paired_rust_change_pct": -19.723132473732697,
+    "sim_p95_mean_ratio_95ci_lo": 0.7955051612808588,
+    "sim_p95_mean_ratio_95ci_hi": 0.8235225286257291,
+    "draw_p50_lua_ms": 9.241418,
+    "draw_p50_rust_ms": 6.803908000000001,
+    "draw_p50_paired_rust_change_pct": -26.324843417296574,
+    "draw_p50_mean_ratio_95ci_lo": 0.731581696327954,
+    "draw_p50_mean_ratio_95ci_hi": 0.7413535488658181,
+    "draw_p95_lua_ms": 10.900253000000001,
+    "draw_p95_rust_ms": 8.120065,
+    "draw_p95_paired_rust_change_pct": -25.660239262336393,
+    "draw_p95_mean_ratio_95ci_lo": 0.7411857729571723,
+    "draw_p95_mean_ratio_95ci_hi": 0.754507497580783,
+    "cpu_p50_lua_ms": 39.297765,
+    "cpu_p50_rust_ms": 33.422785,
+    "cpu_p50_paired_rust_change_pct": -14.708478637220034,
+    "cpu_p50_mean_ratio_95ci_lo": 0.846109543064674,
+    "cpu_p50_mean_ratio_95ci_hi": 0.8590872619644657,
+    "cpu_p95_lua_ms": 135.829495,
+    "cpu_p95_rust_ms": 109.745709,
+    "cpu_p95_paired_rust_change_pct": -19.44024741929048,
+    "cpu_p95_mean_ratio_95ci_lo": 0.7979933137066951,
+    "cpu_p95_mean_ratio_95ci_hi": 0.8171366414846272,
+    "wall_mean_lua_ms": 54.39077833333334,
+    "wall_mean_rust_ms": 46.89374166666667,
+    "wall_mean_paired_rust_change_pct": -13.675852149768863,
+    "wall_mean_mean_ratio_95ci_lo": 0.8617462090611,
+    "wall_mean_mean_ratio_95ci_hi": 0.8649305525930032,
+    "lua_units_p50": 5566.0,
+    "wasm_units_p50": 5566.0,
+    "held_reason": "The Rust HUD caches the original spire after the 10x fixture creates more spires. It shows stale power in140/151 recorded samples. A global status-channel and incremental-power fix is being checked.",
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "a1d9fe1fefe7b4895c67774c4e677413cae3f2684b329b23596027a68d246eb5",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "db89cbee118959f60fbefc8b352171383b84e28720e31a0699f5859694aa02db",
+        "modules": {
+          "LuaUI/wasm/flove-ui.wasm": "a71b88bff8391cc6699c08ad2fb91a40ed61e836a18aed4722ee63e3a25c21d2",
+          "LuaRules/wasm/flove-jobs.wasm": "2a62162bbd50c71a109a06abe515d3d3008766d352241e1adbf6c9c269a4275c",
+          "LuaRules/wasm/flove-rules.wasm": "35d4453eaf6c279535d2189c2e715cd401f1525cd2eb361138d58e5cf15c5c5f"
+        },
+        "jobs_api": true,
+        "source_commit": "41a448ffa1008e5a3eed8390fb7a764a27478a46",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "flove-combat-10x-lua-rust-w1/flove-00-lua",
+      "flove-combat-10x-lua-rust-w1/flove-00-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-01-lua",
+      "flove-combat-10x-lua-rust-w1/flove-01-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-02-lua",
+      "flove-combat-10x-lua-rust-w1/flove-02-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-03-lua",
+      "flove-combat-10x-lua-rust-w1/flove-03-wasm",
+      "flove-combat-10x-lua-rust-w1/flove-04-lua",
+      "flove-combat-10x-lua-rust-w1/flove-04-wasm"
+    ]
+  },
+  {
     "campaign": "flove-combat-lua-rust-w1",
     "game": "flove",
     "measured_pairs": 5,
@@ -523,6 +628,214 @@
       "flove-combat-lua-rust-w1/flove-03-wasm",
       "flove-combat-lua-rust-w1/flove-04-lua",
       "flove-combat-lua-rust-w1/flove-04-wasm"
+    ]
+  },
+  {
+    "campaign": "mycube-1x-w1",
+    "game": "mycube",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 0.313052,
+    "sim_p50_rust_ms": 0.069604,
+    "sim_p50_paired_rust_change_pct": -77.64653364549312,
+    "sim_p50_mean_ratio_95ci_lo": 0.22145792944876508,
+    "sim_p50_mean_ratio_95ci_hi": 0.2260719812717199,
+    "sim_p95_lua_ms": 0.371847,
+    "sim_p95_rust_ms": 0.139284,
+    "sim_p95_paired_rust_change_pct": -62.532543244581454,
+    "sim_p95_mean_ratio_95ci_lo": 0.3736390989033974,
+    "sim_p95_mean_ratio_95ci_hi": 0.3767000246105465,
+    "draw_p50_lua_ms": 1.7760239999999998,
+    "draw_p50_rust_ms": 1.775122,
+    "draw_p50_paired_rust_change_pct": 0.24954617730390538,
+    "draw_p50_mean_ratio_95ci_lo": 0.8919937181330444,
+    "draw_p50_mean_ratio_95ci_hi": 1.1789972057614309,
+    "draw_p95_lua_ms": 1.883804,
+    "draw_p95_rust_ms": 1.883616,
+    "draw_p95_paired_rust_change_pct": -0.07001789995138008,
+    "draw_p95_mean_ratio_95ci_lo": 0.9968387194745978,
+    "draw_p95_mean_ratio_95ci_hi": 1.0065441526740067,
+    "cpu_p50_lua_ms": 2.1042330000000002,
+    "cpu_p50_rust_ms": 1.8725289999999999,
+    "cpu_p50_paired_rust_change_pct": -10.97967763075668,
+    "cpu_p50_mean_ratio_95ci_lo": 0.7906662170876536,
+    "cpu_p50_mean_ratio_95ci_hi": 1.0266594052552698,
+    "cpu_p95_lua_ms": 2.2019450000000003,
+    "cpu_p95_rust_ms": 1.9494500000000001,
+    "cpu_p95_paired_rust_change_pct": -11.466907665722815,
+    "cpu_p95_mean_ratio_95ci_lo": 0.8818852733878527,
+    "cpu_p95_mean_ratio_95ci_hi": 0.8935572412058432,
+    "wall_mean_lua_ms": 2.0327266666666657,
+    "wall_mean_rust_ms": 1.8098349999999996,
+    "wall_mean_paired_rust_change_pct": -10.637558922408664,
+    "wall_mean_mean_ratio_95ci_lo": 0.8108386754227564,
+    "wall_mean_mean_ratio_95ci_hi": 0.9345243119779302,
+    "lua_units_p50": 22.0,
+    "wasm_units_p50": 22.0,
+    "held_reason": "My Cube Lua/Rust spawn positions differ in all151 world samples; projectiles diverge later. Spawn/RNG ordering is under investigation.",
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "bc52becbe30ee85acdac4b1716d5d6c0551a1048d182a430edaeb281e2f4cee2",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "4698657d927b4eac083319f86b177195e1ef7480",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "d0b07431cd918360df726d75d371c43344ce183cc243eb527b8754231e4744c3",
+        "modules": {
+          "LuaUI/wasm/mycube-ui.wasm": "5408e80b1f109e33f4170656ca43fd57c029293c3726ce4aa72b0c72c983ceb3",
+          "LuaRules/wasm/mycube-rules.wasm": "abd769273341f20497cf37d00447ac0b22a232ea36e29a727bb51a2e734e1c5e"
+        },
+        "jobs_api": false,
+        "source_commit": "9ba643445e038a4e930aaf052bc6f0724294c26e",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "mycube-1x-w1/mycube-00-lua",
+      "mycube-1x-w1/mycube-00-wasm",
+      "mycube-1x-w1/mycube-01-lua",
+      "mycube-1x-w1/mycube-01-wasm",
+      "mycube-1x-w1/mycube-02-lua",
+      "mycube-1x-w1/mycube-02-wasm",
+      "mycube-1x-w1/mycube-03-lua",
+      "mycube-1x-w1/mycube-03-wasm",
+      "mycube-1x-w1/mycube-04-lua",
+      "mycube-1x-w1/mycube-04-wasm"
+    ]
+  },
+  {
+    "campaign": "partsneeded-1x-w1",
+    "game": "partsneeded",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 0.18466300000000002,
+    "sim_p50_rust_ms": 0.162041,
+    "sim_p50_paired_rust_change_pct": -12.015773227532033,
+    "sim_p50_mean_ratio_95ci_lo": 0.8745209430131452,
+    "sim_p50_mean_ratio_95ci_hi": 0.886271786979694,
+    "sim_p95_lua_ms": 0.269115,
+    "sim_p95_rust_ms": 0.194628,
+    "sim_p95_paired_rust_change_pct": -27.67850175575497,
+    "sim_p95_mean_ratio_95ci_lo": 0.7129319798602353,
+    "sim_p95_mean_ratio_95ci_hi": 0.730505019367486,
+    "draw_p50_lua_ms": 1.577974,
+    "draw_p50_rust_ms": 0.471098,
+    "draw_p50_paired_rust_change_pct": -70.14538896078135,
+    "draw_p50_mean_ratio_95ci_lo": 0.29127012576847416,
+    "draw_p50_mean_ratio_95ci_hi": 0.31066509215297555,
+    "draw_p95_lua_ms": 1.974462,
+    "draw_p95_rust_ms": 1.2423170000000001,
+    "draw_p95_paired_rust_change_pct": -36.62435640696048,
+    "draw_p95_mean_ratio_95ci_lo": 0.6236771897379164,
+    "draw_p95_mean_ratio_95ci_hi": 0.7419841602188447,
+    "cpu_p50_lua_ms": 1.7599740000000001,
+    "cpu_p50_rust_ms": 0.637366,
+    "cpu_p50_paired_rust_change_pct": -63.7711693468199,
+    "cpu_p50_mean_ratio_95ci_lo": 0.35493321185466853,
+    "cpu_p50_mean_ratio_95ci_hi": 0.37273198490383697,
+    "cpu_p95_lua_ms": 2.15202,
+    "cpu_p95_rust_ms": 1.400023,
+    "cpu_p95_paired_rust_change_pct": -33.56613786117229,
+    "cpu_p95_mean_ratio_95ci_lo": 0.6486596038147048,
+    "cpu_p95_mean_ratio_95ci_hi": 0.7595579462210913,
+    "wall_mean_lua_ms": 1.90979,
+    "wall_mean_rust_ms": 0.7397500000000005,
+    "wall_mean_paired_rust_change_pct": -60.904007576867,
+    "wall_mean_mean_ratio_95ci_lo": 0.3865976069780193,
+    "wall_mean_mean_ratio_95ci_hi": 0.42102525380991385,
+    "lua_units_p50": 345.0,
+    "wasm_units_p50": 345.0,
+    "held_reason": "Parts Needed Lua/Rust initial heights and camera differ in all151 world samples. Level placement and camera setup are under investigation.",
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "0b93ed53b9c2ff68186937a189a4fb7aced0a03b8ee72cf8d0bc8743f07a20f2",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "f4e081c4f26907e4a8233844d09a2b71f9edcd3996ba68041859f32b4c95a93f",
+        "modules": {
+          "LuaUI/wasm/partsneeded-ui.wasm": "8d0ecf8a2eebf949a5dd7125ba0d121f5b547762d2303037e413240c457a49de",
+          "LuaRules/wasm/partsneeded-rules.wasm": "fef1bbe21e40041c13a593afe43b4aa721ab89e01484caef4f6792eed7b8978f"
+        },
+        "jobs_api": false,
+        "source_commit": "76764bcdb4491e0c36b7462b5c631a1dfd8b0f2f",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "partsneeded-1x-w1/partsneeded-00-lua",
+      "partsneeded-1x-w1/partsneeded-00-wasm",
+      "partsneeded-1x-w1/partsneeded-01-lua",
+      "partsneeded-1x-w1/partsneeded-01-wasm",
+      "partsneeded-1x-w1/partsneeded-02-lua",
+      "partsneeded-1x-w1/partsneeded-02-wasm",
+      "partsneeded-1x-w1/partsneeded-03-lua",
+      "partsneeded-1x-w1/partsneeded-03-wasm",
+      "partsneeded-1x-w1/partsneeded-04-lua",
+      "partsneeded-1x-w1/partsneeded-04-wasm"
     ]
   }
 ]

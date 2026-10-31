@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T09:55:10.832034+00:00",
+  "generated_at": "2026-10-31T11:46:22.611022+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1982,15 +1982,15 @@
       "code": "Selected Lua/Rust optimizations implemented and tested; no identified code fix pending.",
       "remaining": "Jobs off/on measurements, remaining stress captures, final profile analysis.",
       "expected": 6,
-      "completed": 2
+      "completed": 6
     },
     {
       "game": "flove",
       "title": "Flove",
-      "code": "Selected Lua/Rust optimizations and spatial-query corrections implemented and tested.",
-      "remaining": "Fresh normal/10\u00d7 and jobs comparisons, captures and profile analysis.",
+      "code": "Recorded world or HUD comparison found a mismatch; source fix is in progress.",
+      "remaining": "The Rust HUD caches the original spire after the 10x fixture creates more spires. It shows stale power in140/151 recorded samples. A global status-channel and incremental-power fix is being checked. Fix/check the source, then replace the held timings and captures.",
       "expected": 6,
-      "completed": 1
+      "completed": 3
     },
     {
       "game": "ttld",
@@ -2011,18 +2011,18 @@
     {
       "game": "mycube",
       "title": "My Cube",
-      "code": "Health-bar parity fix tested and pushed; no identified code fix pending.",
-      "remaining": "Normal-scene comparison, captures and profile review. No artificial stress.",
+      "code": "Recorded world or HUD comparison found a mismatch; source fix is in progress.",
+      "remaining": "My Cube Lua/Rust spawn positions differ in all151 world samples; projectiles diverge later. Spawn/RNG ordering is under investigation. Fix/check the source, then replace the held timings and captures.",
       "expected": 1,
-      "completed": 0
+      "completed": 1
     },
     {
       "game": "partsneeded",
       "title": "Parts Needed",
-      "code": "Selected changes implemented/tested; no identified code fix pending.",
-      "remaining": "Normal-scene comparison, captures and profile review. No artificial stress.",
+      "code": "Recorded world or HUD comparison found a mismatch; source fix is in progress.",
+      "remaining": "Parts Needed Lua/Rust initial heights and camera differ in all151 world samples. Level placement and camera setup are under investigation. Fix/check the source, then replace the held timings and captures.",
       "expected": 1,
-      "completed": 0
+      "completed": 1
     }
   ]
 }

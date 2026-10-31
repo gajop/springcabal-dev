@@ -109,6 +109,12 @@ def export(project, archive):
             ttld = next(g for g in games if g['game'] == 'ttld')
             ttld['code'] = 'House ignition and health-bar fixes tested/pushed. Existing suites, ordinary fire and all 604 detailed-world sample pairs pass; normal screenshots reviewed.'
             ttld['remaining'] = 'Fresh final timings, matching captures and profile analysis.'
+    hold_path = project / 'verification/perf/web/world-parity-holds.json'
+    if hold_path.exists():
+        for name, hold in read(hold_path).get('campaigns', {}).items():
+            game = next(g for g in games if name.startswith(g['game']))
+            game['code'] = 'Recorded world or HUD comparison found a mismatch; source fix is in progress.'
+            game['remaining'] = hold['reason'] + ' Fix/check the source, then replace the held timings and captures.'
     return dict(generated_at=datetime.now(timezone.utc).isoformat(), timezone='Europe/Budapest',
                 scope='Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.',
                 scenes=scenes, jobs=jobs, games=games)

@@ -1,0 +1,313 @@
+{
+  "utc": "2026-10-31T10:46:02.136041+00:00",
+  "scope": "Five clean timing pairs exist, but these scenes compare different physical worlds. Keep raw timings/traces/captures visible and exclude them from the primary ranking until fixed and checked.",
+  "campaigns": {
+    "mycube-1x-w1": {
+      "reason": "My Cube Lua/Rust spawn positions differ in all151 world samples; projectiles diverge later. Spawn/RNG ordering is under investigation.",
+      "raw_world_comparison": {
+        "comparison": {
+          "sample_count": 151,
+          "first_differences": {
+            "units": 0,
+            "details": 0,
+            "projectiles": 498
+          },
+          "different_samples": {
+            "units": 151,
+            "details": 151,
+            "projectiles": 40
+          },
+          "examples": {
+            "details": {
+              "unit": 2699,
+              "differences": [
+                [
+                  1,
+                  [
+                    2693.0,
+                    39.96887207,
+                    2401.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.999991417,
+                    0.0,
+                    0.999995649,
+                    0.0,
+                    -0.999991417,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    2546.0,
+                    39.96887207,
+                    2118.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.999991417,
+                    0.0,
+                    0.999995649,
+                    0.0,
+                    -0.999991417,
+                    0.0,
+                    0.0
+                  ]
+                ],
+                [
+                  3,
+                  {
+                    "accRate": 0.5,
+                    "blockEnemyPushing": true,
+                    "blockHeightChanges": false,
+                    "blocking": true,
+                    "collisionAxis": 2.0,
+                    "collisionDisabled": true,
+                    "collisionOffsetX": 0.0,
+                    "collisionOffsetY": 0.0,
+                    "collisionOffsetZ": 0.0,
+                    "collisionScaleX": 180.0,
+                    "collisionScaleY": 180.0,
+                    "collisionScaleZ": 180.0,
+                    "collisionTest": 1.0,
+                    "collisionType": 3.0,
+                    "crushable": false,
+                    "currentSpeed": 0.0,
+                    "currwaypointx": 0.0,
+                    "currwaypointy": -1.0,
+                    "currwaypointz": 0.0,
+                    "dead": false,
+                    "decRate": 0.400000006,
+                    "goalRadius": 0.0,
+                    "goalx": 2693.0,
+                    "goaly": 39.96887207,
+                    "goalz": 2401.0,
+                    "maxReverseSpeed": 0.0,
+                    "maxSpeed": 300.0,
+                    "maxWantedSpeed": 300.0,
+                    "maxWeaponRange": 1000.0,
+                    "neutral": false,
+                    "nextwaypointx": 0.0,
+                    "nextwaypointy": -1.0,
+                    "nextwaypointz": 0.0,
+                    "pathFailures": 0.0,
+                    "projectileCollision": true,
+                    "rayCollision": true,
+                    "requestedSpeed": 0.0,
+                    "solidCollision": true,
+                    "state_active": false,
+                    "state_autorepairlevel": 0.0,
+                    "state_cloak": false,
+                    "state_firestate": 2.0,
+                    "state_movestate": 1.0,
+                    "state_repeat": false,
+                    "state_trajectory": false,
+                    "turnRate": 2250.0,
+                    "velocityMagnitude": 0.0,
+                    "wantedSpeed": 0.0
+                  },
+                  {
+                    "accRate": 0.5,
+                    "blockEnemyPushing": true,
+                    "blockHeightChanges": false,
+                    "blocking": true,
+                    "collisionAxis": 2.0,
+                    "collisionDisabled": true,
+                    "collisionOffsetX": 0.0,
+                    "collisionOffsetY": 0.0,
+                    "collisionOffsetZ": 0.0,
+                    "collisionScaleX": 180.0,
+                    "collisionScaleY": 180.0,
+                    "collisionScaleZ": 180.0,
+                    "collisionTest": 1.0,
+                    "collisionType": 3.0,
+                    "crushable": false,
+                    "currentSpeed": 0.0,
+                    "currwaypointx": 0.0,
+                    "currwaypointy": -1.0,
+                    "currwaypointz": 0.0,
+                    "dead": false,
+                    "decRate": 0.400000006,
+                    "goalRadius": 0.0,
+                    "goalx": 2546.0,
+                    "goaly": 39.96887207,
+                    "goalz": 2118.0,
+                    "maxReverseSpeed": 0.0,
+                    "maxSpeed": 300.0,
+                    "maxWantedSpeed": 300.0,
+                    "maxWeaponRange": 1000.0,
+                    "neutral": false,
+                    "nextwaypointx": 0.0,
+                    "nextwaypointy": -1.0,
+                    "nextwaypointz": 0.0,
+                    "pathFailures": 0.0,
+                    "projectileCollision": true,
+                    "rayCollision": true,
+                    "requestedSpeed": 0.0,
+                    "solidCollision": true,
+                    "state_active": false,
+                    "state_autorepairlevel": 0.0,
+                    "state_cloak": false,
+                    "state_firestate": 2.0,
+                    "state_movestate": 1.0,
+                    "state_repeat": false,
+                    "state_trajectory": false,
+                    "turnRate": 2250.0,
+                    "velocityMagnitude": 0.0,
+                    "wantedSpeed": 0.0
+                  }
+                ]
+              ]
+            }
+          }
+        },
+        "variants": [
+          {
+            "backend": "lua",
+            "jobs": "off",
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-lua"
+          },
+          {
+            "backend": "wasm",
+            "jobs": "off",
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-wasm"
+          }
+        ],
+        "capture": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/mycube-1x-w1/mycube-1x",
+        "timing_case": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v6-unaffected/mycube-1x-w1",
+        "input_results": {
+          "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-lua": "3bfa0a9aec2c74a93e0e53260f7f0c836668ae9a098bf556b85f58ddf924b528",
+          "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-wasm": "227c571381be61901d7ca65774d7c1e02cdbca905a906490801742b51ae46a89"
+        }
+      }
+    },
+    "partsneeded-1x-w1": {
+      "reason": "Parts Needed Lua/Rust initial heights and camera differ in all151 world samples. Level placement and camera setup are under investigation.",
+      "raw_world_comparison": {
+        "comparison": {
+          "sample_count": 151,
+          "first_differences": {
+            "units": 0,
+            "camera": 0,
+            "details": 0
+          },
+          "different_samples": {
+            "units": 151,
+            "camera": 151,
+            "details": 151
+          },
+          "examples": {
+            "details": {
+              "unit": 78,
+              "differences": [
+                [
+                  1,
+                  [
+                    4848.0,
+                    0.0,
+                    2496.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.999991417,
+                    0.0,
+                    0.999995649,
+                    0.0,
+                    -0.999991417,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    4848.0,
+                    411.499023438,
+                    2496.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.999991417,
+                    0.0,
+                    0.999995649,
+                    0.0,
+                    -0.999991417,
+                    0.0,
+                    0.0
+                  ]
+                ]
+              ]
+            }
+          }
+        },
+        "variants": [
+          {
+            "backend": "lua",
+            "jobs": "off",
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-lua"
+          },
+          {
+            "backend": "wasm",
+            "jobs": "off",
+            "directory": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-wasm"
+          }
+        ],
+        "capture": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x",
+        "timing_case": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-30-night-v6-unaffected/partsneeded-1x-w1",
+        "input_results": {
+          "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-lua": "e8c9f50a027d542bd1cab78708676a6d76a2a41edee26e9dcaf29ba83b7d3d2d",
+          "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-wasm": "989ba78394065a8f87dad49d879db6c16278a9fd5dfcdbdc51f2f48e4297419a"
+        }
+      }
+    },
+    "flove-combat-10x-lua-rust-w1": {
+      "reason": "The Rust HUD caches the original spire after the 10x fixture creates more spires. It shows stale power in140/151 recorded samples. A global status-channel and incremental-power fix is being checked.",
+      "recorded_hud_evidence": {
+        "load": 10,
+        "samples": 151,
+        "lua_payload_differences": {
+          "power": {
+            "samples": 1,
+            "first": [
+              858,
+              315.0,
+              312.0
+            ],
+            "last": [
+              858,
+              315.0,
+              312.0
+            ]
+          }
+        },
+        "cached_carrier_wrong_power": {
+          "samples": 140,
+          "first": [
+            66,
+            26488,
+            30.0,
+            300.0
+          ],
+          "last": [
+            900,
+            26488,
+            30.0,
+            312.0
+          ]
+        },
+        "lua": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-unaffected/attempt-0/flove-combat-10x-lua-rust-w1/flove-combat-10x/flove-00-lua",
+        "new_rust": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-flove-game-status/worlds/10x/attempt-0/flove-00-wasm"
+      },
+      "source_cause": "ui/widgets/gui_hud.rs carrier() returns the cached spire while it stays alive; rules publishes on the most recently created spire."
+    }
+  }
+}

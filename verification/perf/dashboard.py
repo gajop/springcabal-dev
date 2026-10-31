@@ -213,6 +213,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--videos', type=Path, help='capture-video.sh output directory')
     parser.add_argument('--optimizations', type=Path, help='same-behavior source A/B experiment manifest')
+    parser.add_argument('--holds', type=Path, help='Recorded workload mismatches to exclude from primary rankings')
     parser.add_argument('--allow-incomplete', action='store_true',
                         help='Show pending scenes while a campaign is running; never fill missing measurements')
     parser.add_argument('--require-current-effects-fixtures', action='store_true',
@@ -231,6 +232,7 @@ def main():
         data['optimization'] = report.source_optimization_summary(read(args.optimizations), PROJECT)
         report.write_rows(out/'optimizations', [{k: v for k, v in row.items() if k != 'evidence'} for row in data['optimization']])
     language, jobs, campaign_roots = {}, {}, {}
+    holds = read(args.holds).get('campaigns', {}) if args.holds else {}
     for timing_root in timing_roots:
         for target, is_jobs in ((language, False), (jobs, True)):
             for row in report.paired_summary(timing_root, jobs=is_jobs):
@@ -239,6 +241,8 @@ def main():
                     if effects_fixtures(stamp) != current_effects_fixtures():
                         continue
                 target[row['campaign']] = row
+                if row['campaign'] in holds:
+                    row['held_reason'] = holds[row['campaign']]['reason']
                 campaign_roots[row['campaign']] = timing_root
     for sid, game, title, load, control, job, capture in SCENES:
         scene = {'id': sid, 'game': game, 'title': title, 'load': load,
@@ -383,8 +387,10 @@ def main():
         'diagnostic_pair_policy': 'Only complete clean recorded variant sets with both artifacts are exported; raw orphaned captures remain on disk.',
         'callback_timers': sorted({r.get('callback_timers', 'on') for r in saved}),
         'runs': len(saved), 'complete': sum(r['ok'] for r in saved),
-        'accepted_pairs': sum(r['measured_pairs'] for r in [*language.values(), *jobs.values()]),
-        'attempted_pairs': sum(r['attempted_pairs'] for r in [*language.values(), *jobs.values()]),
+        'accepted_pairs': sum(r['measured_pairs'] for r in [*language.values(), *jobs.values()] if not r.get('held_reason')),
+        'attempted_pairs': sum(r['attempted_pairs'] for r in [*language.values(), *jobs.values()] if not r.get('held_reason')),
+        'held_accepted_pairs': sum(r['measured_pairs'] for r in [*language.values(), *jobs.values()] if r.get('held_reason')),
+        'held_campaigns': holds,
         'contended': sum(r['contended'] for r in saved),
         'gpu_overlap_runs': sum(r.get('gpu_contended', False) for r in saved),
         'background_cpu_overlap_runs': sum(r.get('background_cpu_contended', False) for r in saved),
