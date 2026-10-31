@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T13:43:14.483020+00:00",
+  "utc": "2026-10-31T15:21:26.236202+00:00",
   "mycube": {
     "head": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
     "public_branch": "rust"
@@ -465,8 +465,8 @@
       "candidate_commits": {
         "wasm": "ca305b5e7daed186e5ea89de87c7961764837216"
       },
-      "adopted": null,
-      "change": "Same Lua-compatible game rules status channel; seven independently cached fields replace carrier-unit lookup and tuple-wide re-publication. Same gameplay/graphics, native engine and strict source A/B method. Separate physical-world, integration, jobs, visual and input checks precede measurements.",
+      "adopted": true,
+      "change": "Correctness-fix cost: game-level status eliminates a stale cached-spire HUD and publishes tree power immediately, matching Lua. Physical worlds remain equal; old HUD output was wrong. Measured changes are costs of corrected output, not same-behavior optimization gains.",
       "backend": "wasm",
       "measured_rounds": 5,
       "planned_rounds": 5,
@@ -528,8 +528,8 @@
       "candidate_commits": {
         "wasm": "ca305b5e7daed186e5ea89de87c7961764837216"
       },
-      "adopted": null,
-      "change": "Same Lua-compatible game rules status channel; seven independently cached fields replace carrier-unit lookup and tuple-wide re-publication. Same gameplay/graphics, native engine and strict source A/B method. Separate physical-world, integration, jobs, visual and input checks precede measurements.",
+      "adopted": true,
+      "change": "Correctness-fix cost: game-level status eliminates a stale cached-spire HUD and publishes tree power immediately, matching Lua. Physical worlds remain equal; old HUD output was wrong. Measured changes are costs of corrected output, not same-behavior optimization gains.",
       "backend": "wasm",
       "measured_rounds": 5,
       "planned_rounds": 5,

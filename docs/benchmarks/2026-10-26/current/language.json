@@ -551,6 +551,110 @@
     ]
   },
   {
+    "campaign": "ttld-shadows-10x-w1",
+    "game": "ttld",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 36.142761,
+    "sim_p50_rust_ms": 35.813911999999995,
+    "sim_p50_paired_rust_change_pct": -0.7610929336582806,
+    "sim_p50_mean_ratio_95ci_lo": 0.9714741434161708,
+    "sim_p50_mean_ratio_95ci_hi": 1.0030204736346637,
+    "sim_p95_lua_ms": 103.151588,
+    "sim_p95_rust_ms": 102.931969,
+    "sim_p95_paired_rust_change_pct": -0.3134222228357797,
+    "sim_p95_mean_ratio_95ci_lo": 0.9901928647950173,
+    "sim_p95_mean_ratio_95ci_hi": 0.9999955599441102,
+    "draw_p50_lua_ms": 9.872800999999999,
+    "draw_p50_rust_ms": 7.573116,
+    "draw_p50_paired_rust_change_pct": -23.2464934722736,
+    "draw_p50_mean_ratio_95ci_lo": 0.7649084417764282,
+    "draw_p50_mean_ratio_95ci_hi": 0.7723378726654008,
+    "draw_p95_lua_ms": 11.173957,
+    "draw_p95_rust_ms": 8.396851,
+    "draw_p95_paired_rust_change_pct": -24.967351591721275,
+    "draw_p95_mean_ratio_95ci_lo": 0.7491592119332523,
+    "draw_p95_mean_ratio_95ci_hi": 0.7576294468625056,
+    "cpu_p50_lua_ms": 46.631642,
+    "cpu_p50_rust_ms": 43.617731,
+    "cpu_p50_paired_rust_change_pct": -5.890058514345265,
+    "cpu_p50_mean_ratio_95ci_lo": 0.9266379323729185,
+    "cpu_p50_mean_ratio_95ci_hi": 0.9503737662520475,
+    "cpu_p95_lua_ms": 112.85597200000001,
+    "cpu_p95_rust_ms": 110.716531,
+    "cpu_p95_paired_rust_change_pct": -2.035084968130385,
+    "cpu_p95_mean_ratio_95ci_lo": 0.973250348139729,
+    "cpu_p95_mean_ratio_95ci_hi": 0.9809095505295023,
+    "wall_mean_lua_ms": 57.73408333333334,
+    "wall_mean_rust_ms": 53.349558333333334,
+    "wall_mean_paired_rust_change_pct": -7.541959482756855,
+    "wall_mean_mean_ratio_95ci_lo": 0.9211345240277404,
+    "wall_mean_mean_ratio_95ci_hi": 0.9255507532756737,
+    "lua_units_p50": 5735.0,
+    "wasm_units_p50": 5735.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "b018cec47b8b578025cdf7337817a3bc9ba625850eabd265e8af230cfe5801ac",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "bf75f94c972d9a667d8e305a3c78f407983392734950ddfd8d6ea40c112ef9df",
+        "modules": {
+          "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+          "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+          "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+        },
+        "jobs_api": false,
+        "source_commit": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "ttld-shadows-10x-w1/ttld-00-lua",
+      "ttld-shadows-10x-w1/ttld-00-wasm",
+      "ttld-shadows-10x-w1/ttld-01-lua",
+      "ttld-shadows-10x-w1/ttld-01-wasm",
+      "ttld-shadows-10x-w1/ttld-02-lua",
+      "ttld-shadows-10x-w1/ttld-02-wasm",
+      "ttld-shadows-10x-w1/ttld-03-lua",
+      "ttld-shadows-10x-w1/ttld-03-wasm",
+      "ttld-shadows-10x-w1/ttld-04-lua",
+      "ttld-shadows-10x-w1/ttld-04-wasm"
+    ]
+  },
+  {
     "campaign": "ttld-shadows-1x-w1",
     "game": "ttld",
     "measured_pairs": 5,
