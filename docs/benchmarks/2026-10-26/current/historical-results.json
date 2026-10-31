@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T20:09:28.881615+00:00",
+  "generated_at": "2026-10-31T20:37:37.991939+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1979,10 +1979,15 @@
     {
       "game": "hunted",
       "title": "Hunted",
-      "code": "Selected Lua/Rust optimizations implemented and tested; no identified code fix pending.",
-      "remaining": "Timing matrix complete. Final profile interpretation and jobs-cost diagnostics remain.",
+      "code": "AI optimizations are public. A confirmed rabbit material/fade mismatch needs correction; current language comparisons are held.",
+      "remaining": "Six raw configurations retained; both language cases held. Correct material/fade and flashlight rendering, align visibility costs, then repeat the affected final comparisons/captures.",
       "expected": 6,
-      "completed": 6
+      "completed": 4,
+      "raw_completed": 6,
+      "held_cases": [
+        "hunted-lua-rust-w1",
+        "hunted-10x-lua-rust-w1"
+      ]
     },
     {
       "game": "flove",

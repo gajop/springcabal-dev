@@ -118,8 +118,6 @@
   <h3>Where the CPU difference appears</h3>
   <p class="caption">Separate CPU profiles with the same source, modules, engine and guards as each current timing case. Exclusive sampled ms/frame; Lua / Rust. Runtime = Lua VM, tables and GC, or Wasm guest plus Wasmtime and residual Lua. Other = bindings, engine, driver and unresolved symbols. These samples do not measure GPU duration. <a href="runtime-attribution.json">Exact categories and capture identities</a>.</p>
   <div class="table-scroll"><table><thead><tr><th>Case</th><th>Main CPU<br>Lua / Rust</th><th>Language/runtime<br>Lua / Rust</th><th>Other CPU<br>Lua / Rust</th></tr></thead><tbody>
-<tr><td>hunted-10x-lua-rust-w1</td><td>7.181 / 3.497</td><td>3.851 / 0.347</td><td>3.330 / 3.150</td></tr>
-<tr><td>hunted-lua-rust-w1</td><td>0.972 / 0.845</td><td>0.224 / 0.070</td><td>0.748 / 0.775</td></tr>
 <tr><td>area17-1x-w1</td><td>2.659 / 2.298</td><td>0.454 / 0.084</td><td>2.204 / 2.214</td></tr>
 <tr><td>fire-1-lua-rust-w4</td><td>0.468 / 0.381</td><td>0.127 / 0.020</td><td>0.341 / 0.361</td></tr>
 <tr><td>fire-10-lua-rust-w4</td><td>1.727 / 0.451</td><td>1.166 / 0.043</td><td>0.561 / 0.407</td></tr>

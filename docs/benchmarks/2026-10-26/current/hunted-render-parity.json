@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-31T20:34:40.999970+00:00",
+  "status": "confirmed source/runtime activation mismatch; correction required",
+  "sources": {
+    "lua_material": {
+      "path": "spring-linux/games/Hunted.sdd/ModelMaterials/0_rabbit.lua",
+      "sha256": "9201849a04b6cf0520264302dd251d272efbe1c043cadaf9da3a048e366237ff"
+    },
+    "lua_shader": {
+      "path": "spring-linux/games/Hunted.sdd/ModelMaterials/Shaders/rabbit.lua",
+      "sha256": "2a4431a464ebaed7cb5e663bd1b911cff7d25cb789f82b4a2a51735e00c23fed"
+    },
+    "wasm_draw_entry": {
+      "path": "spring-linux/games/Hunted-wasm.sdd/LuaRules/draw.lua",
+      "sha256": "2eee92b876894772af32c8a923b4852ee2c6dab7cbcb92a2e13e498088b69416"
+    },
+    "rust_visibility": {
+      "path": "spring-linux/games/Hunted-wasm.sdd/wasm-src/ui/src/widgets/gfx_rabbit_visibility.rs",
+      "sha256": "82bb3b4d861755063ef9aaa61343126e195d60e860867652f025bbf9b5820b3e"
+    }
+  },
+  "lua": "CustomUnitShaders loaded in current normal/10x captures; the rabbit material sets distance/time, fades fragment RGBA by min(1,1.4-distance), and returns hidden when the unscaled distance exceeds90. It loops all beams per DrawUnit.",
+  "rust": "Current captured runtime does not load CustomUnitShaders. Rust visibility uses spatial queries and SetUnitNoDraw, but no game Rust source installs a rabbit material or fade shader.",
+  "consequence": "Physical-world equality does not prove matching model shading or equal rendering work. Hold language comparisons; retain raw data. Jobs off/on compare the same current Rust renderer, but corrected-source final comparisons will be needed after adoption.",
+  "source_work": "Port the same rabbit material through existing native rendering API if available, and align Lua spatial visibility/caches with Rust; preserve original output. No engine update authorized or needed merely to patch the game."
+}

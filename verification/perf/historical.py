@@ -95,7 +95,7 @@ def export(project, archive):
                     scenes[SCENES[row['campaign']]] = value
     games = [
         dict(game='area17', title='Area 17', code='Selected code work complete.', remaining='Fresh normal/2× comparisons, captures and profile review on aligned camera arithmetic.', expected=2),
-        dict(game='hunted', title='Hunted', code='Selected Lua/Rust optimizations implemented and tested; no identified code fix pending.', remaining='All six timing configurations and matching worlds/profiles complete; final profile analysis remains.', expected=6),
+        dict(game='hunted', title='Hunted', code='AI optimizations are public. A confirmed rabbit material/fade mismatch needs correction; current language comparisons are held.', remaining='All six timing configurations and matching worlds/profiles complete; final profile analysis remains.', expected=6),
         dict(game='flove', title='Flove', code='Physics/HUD fixes are public. The private renderer/spire candidate passes serial/jobs correctness checks and extended animation/effect traces.', remaining='GPU visual/wisp/input checks and paired world replay, source/cost review and adoption, then six fresh normal/10× and jobs comparisons/captures.', expected=6),
         dict(game='ttld', title='To the Last Drop', code='House ignition and health-bar fixes implemented/tested/pushed. Final parity verification remains active.', remaining='Finish ordinary-fire and four detailed-world checks; then fresh timings, captures and analysis.', expected=4),
         dict(game='gravitas', title='Gravitas effects', code='Selected optimizations implemented/tested on both sides; no identified code fix pending.', remaining='Current-engine effects/jobs comparisons, captures and analysis. Effects only.', expected=6),
@@ -142,9 +142,16 @@ def export(project, archive):
         )
     hold_path = project / 'verification/perf/web/world-parity-holds.json'
     if hold_path.exists():
-        for name, hold in read(hold_path).get('campaigns', {}).items():
-            game = next(g for g in games if name.startswith(g['game']))
-            game['remaining'] += ' Earlier mismatched comparisons remain held until replaced.'
+        holds = read(hold_path).get('campaigns', {})
+        for game in games:
+            held = [name for name in holds if name in completed and name.startswith(game['game'])]
+            if held:
+                game['raw_completed'] = game['completed']
+                game['completed'] -= len(held)
+                game['held_cases'] = held
+                game['remaining'] += f' {len(held)} retained configurations have known workload mismatches and remain held.'
+                if game['game'] == 'hunted':
+                    game['remaining'] = 'Six raw configurations retained; both language cases held. Correct material/fade and flashlight rendering, align visibility costs, then repeat the affected final comparisons/captures.'
     return dict(generated_at=datetime.now(timezone.utc).isoformat(), timezone='Europe/Budapest',
                 scope='Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.',
                 scenes=scenes, jobs=jobs, games=games)
