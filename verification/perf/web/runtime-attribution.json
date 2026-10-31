@@ -1,5 +1,5 @@
 {
-  "generated_utc": "2026-10-31T16:26:30.774191+00:00",
+  "generated_utc": "2026-10-31T17:53:10.395630+00:00",
   "primary_cases_with_matching_profile_pair": 9,
   "scope": "Exclusive perf CPU sample weights per measured frame. Current engine and resource guard, sources and module identities exactly match each primary timing case. Profiles are separate instrumented captures; these are neither GPU execution times nor additional timing replicates. Language/runtime combines Lua interpreter/table/GC, Wasm guest and Wasmtime. Other CPU includes bindings, engine, graphics driver and unresolved symbols. Native call wrappers can therefore remain outside the language column. Sampling variation is not an exact causal decomposition of whole-frame timing.",
   "cases": [

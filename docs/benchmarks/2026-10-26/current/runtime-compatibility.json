@@ -1,133 +1,136 @@
 {
-  "version": "1.0.3-rc.3-runtime-check",
-  "published": false,
-  "final_release": false,
-  "scope": "Current public game sources with the official new engine. Lua performance choices remain pending; this is not the final rc3 source snapshot.",
-  "framework_commit_at_packaging": "20de2be0f675106234c5b2386e86020e582cf1ff",
-  "engine_tag": "2026.10.3001",
-  "engine_commit": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10",
-  "engine_release": "https://github.com/gajop/spring-rust/releases/tag/2026.10.3001",
+  "version": "1.0.3-rc.3",
+  "published": true,
+  "prerelease": true,
+  "final_selected_build": true,
+  "scope": "Final locally built public Lua/Rust/menu sources with official 2026.10.3103 Linux and Windows engines. All eighteen normal game modules exactly match the selected benchmark modules.",
+  "framework_commit_at_packaging": "0c85ddf3330e37fa9c71f214fd7691e56c26d6f9",
+  "engine_tag": "2026.10.3103",
+  "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+  "engine_release": "https://github.com/gajop/spring-rust/releases/tag/2026.10.3103",
   "verification": "Existing release/smoke-test.sh (14 game entries and menu) plus verification/sdk-menu/run.py --packaged (no arguments, external working directory, keyboard navigation, Lua Gravitas launch/return, clean quit).",
+  "release": "https://github.com/gajop/springcabal-dev/releases/tag/v1.0.3-rc.3",
   "not_performance_data": true,
   "packaged_module_equivalence": {
     "all_byte_identical": true,
     "module_count": 18,
-    "reference": "verification/perf/web/normal-build-equivalence.json",
+    "reference": "codex-work/night-2026-10-30/v4/normal-source-check-final/proof.json",
     "modules": [
       {
         "archive": "Area17-wasm.sdz",
         "module": "LuaRules/wasm/area17-rules.wasm",
-        "sha256": "43c44a575222fae7786d7114498642de72f714c6002326be3198d04488020317"
+        "sha256": "c5e3d811279130d039caa9e618099bf405cc645eeeb89f1fbcb2f78430904974"
       },
       {
         "archive": "Area17-wasm.sdz",
         "module": "LuaUI/wasm/area17-ui.wasm",
-        "sha256": "606f399682d80ec0d092db4b25929c262a86e29052cce999fd006eb148d30559"
+        "sha256": "fde7324665957dbba69d78bd71f3b2c4c53478ff98785dd55194c1f647f554e1"
       },
       {
         "archive": "Flove-wasm.sdz",
         "module": "LuaRules/wasm/flove-jobs.wasm",
-        "sha256": "567c4db1651eb750ea1b58a306f838da552ce7fa014affa7e324052697e8eec3"
+        "sha256": "2a62162bbd50c71a109a06abe515d3d3008766d352241e1adbf6c9c269a4275c"
       },
       {
         "archive": "Flove-wasm.sdz",
         "module": "LuaRules/wasm/flove-rules.wasm",
-        "sha256": "96a6475ac79889141d0e45a6cc7e421cd2c85adda4a717d7e56a84f1ce647995"
+        "sha256": "ad46ccaae327354666a1513bcebd409d4d3659e5fc3399315b5af37fbd5c4e7d"
       },
       {
         "archive": "Flove-wasm.sdz",
         "module": "LuaUI/wasm/flove-ui.wasm",
-        "sha256": "f153a3a25503ef7cc3c4a9d32bbed6ffedfcdefb8acf506b5022a053236ae7d9"
+        "sha256": "fc4b399c7761f53495fe4673771166f14e5350738617dc5c808ad6f470f6f928"
       },
       {
         "archive": "Gravitas-wasm.sdz",
         "module": "LuaRules/wasm/gravitas-rules.wasm",
-        "sha256": "c32ba7441fc35a2251fa2eb4c3b84b30548d463d4379fa060cdee010133920c2"
+        "sha256": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
       },
       {
         "archive": "Gravitas-wasm.sdz",
         "module": "LuaUI/wasm/gravitas-jobs.wasm",
-        "sha256": "2c9c1bf6c18c5cf8e4b44a4bb360ba8673142a798a8f2f521eb5d5f02b18a9bc"
+        "sha256": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d"
       },
       {
         "archive": "Gravitas-wasm.sdz",
         "module": "LuaUI/wasm/gravitas-ui.wasm",
-        "sha256": "703129ed1e3c10941e251f3b91221d79738d4f3119e0ef73bc16e62451b3249c"
+        "sha256": "b33dcb623bc79a7cb709bab3667f68dfb2445bed18a82159cd17325a83ca0fab"
       },
       {
         "archive": "Hunted-wasm.sdz",
         "module": "LuaRules/wasm/hunted-rules.wasm",
-        "sha256": "ff78b81f86a3ca3e46c53badc4fa529b294e9b8405fbd06c6c04713e77875455"
+        "sha256": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5"
       },
       {
         "archive": "Hunted-wasm.sdz",
         "module": "LuaRules/wasm/hunted-jobs.wasm",
-        "sha256": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
+        "sha256": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
       },
       {
         "archive": "Hunted-wasm.sdz",
         "module": "LuaUI/wasm/hunted-ui.wasm",
-        "sha256": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d"
+        "sha256": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1"
       },
       {
         "archive": "MyCube-wasm.sdz",
         "module": "LuaRules/wasm/mycube-rules.wasm",
-        "sha256": "698230a53a617aafbfbefad22005ae0e66243582363a702baccd5d485b7d9517"
+        "sha256": "4db9089d03cc495d92a527e5d68e500fbf07175f76cd0528aa6b9480b2385919"
       },
       {
         "archive": "MyCube-wasm.sdz",
         "module": "LuaUI/wasm/mycube-ui.wasm",
-        "sha256": "5fe29534244654fe276d76f781fff466990a4ce17734365a25e5f6d9ba11c4ec"
+        "sha256": "5408e80b1f109e33f4170656ca43fd57c029293c3726ce4aa72b0c72c983ceb3"
       },
       {
         "archive": "PartsNeeded-wasm.sdz",
         "module": "LuaRules/wasm/partsneeded-rules.wasm",
-        "sha256": "35d246a04dc6e2d5c025e907d2803483c17e470f77f25b250a6d4ca578078d67"
+        "sha256": "5b67dfd246b9404d1dd68b4a29f053cfb777d18ed400a8b4ae13a9444ab6d615"
       },
       {
         "archive": "PartsNeeded-wasm.sdz",
         "module": "LuaUI/wasm/partsneeded-ui.wasm",
-        "sha256": "c583ba6cec3a74f0e21b2d352d8de59fc7d045d4e58ed0a1333a681c1c44760f"
+        "sha256": "3a2a38176b9955ef330c1bb3a48731fc81fe9343175406a65f7403a30e9f0b3e"
       },
       {
         "archive": "ToTheLastDrop-wasm.sdz",
         "module": "LuaRules/wasm/ttld-rules-unsynced.wasm",
-        "sha256": "a13c9d7063a014515cd5e14abed4d149c0dc0e04ec27c65eb36078f02f47314d"
+        "sha256": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11"
       },
       {
         "archive": "ToTheLastDrop-wasm.sdz",
         "module": "LuaRules/wasm/ttld-rules.wasm",
-        "sha256": "b8ef4e7dbd5c2b22bae5754b108a06d441a9062fc6354a9447a6a65d26a30890"
+        "sha256": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
       },
       {
         "archive": "ToTheLastDrop-wasm.sdz",
         "module": "LuaUI/wasm/ttld-ui.wasm",
-        "sha256": "5dd3acddc1cbefc2fb1b2f09b496039dcf61e7c9513b5a6df19f1eb17cb51e51"
+        "sha256": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655"
       }
-    ]
+    ],
+    "menu_sha256": "2141368e60c81d06ff5e266f0d7c93d475747f67678ab0607992d809428ac95e"
   },
   "platforms": {
     "linux": {
       "runtime": "Linux/NVIDIA",
-      "engine_sha256": "84267b736136968fceaceb251a72457f8995edcfdcb2318ea7eb4ad66d923d96",
+      "engine_sha256": "da99c762c93f0700e63bc6b4818e7d497e21054858c34d3723d5106a4ca06c63",
       "game_archives": {
-        "Area-17.sdz": "3693ab7704ac18e6efa8c08fd3b7c2627ea82c7a94295c03b582bb9299b7f86f",
-        "Scenario-Editor-Gravitas.sdz": "dc2ed8f95f6708895589b0417d884b4bb49a04ddd77d253bd1bf58047e22f899",
-        "Area17-wasm.sdz": "053a761d48149bdca6284e285334d2c1eff035e155c7f1e03887cf5765518add",
-        "Hunted-wasm.sdz": "cefa1ce185ce160897527ea3474b58a3d4897d012aff9bb27690b06139a8d24b",
-        "Gravitas.sdz": "72a9091f1fd979f9fd4566536f80337633573cc5cc2ef4470470f61b5891e951",
-        "MyCube-wasm.sdz": "7de66643cdfaf49f72fa46e7a5759e3042dd5a3cecfd607d2c4a37d98c91cba3",
-        "Flove-wasm.sdz": "ca3269cd869d675b67c6bdc03c5ffc67654dd4b59a8ddcd07011705e9adecc84",
-        "PartsNeeded.sdz": "92dfb7776050dad09baccbc768ce38d90733bf049d2d773deef63c16ade4cdcd",
-        "Scenario-Editor-Core.sdz": "4189962697a5503aa634b272c5f6438537f2a4fb5ea14d14eee919cf473249d7",
-        "Gravitas-wasm.sdz": "83a42fee2b1cc366846b30c688d381afd2a554fb3a404e5cd15e00ff6a1d95c5",
-        "ToTheLastDrop-wasm.sdz": "f536b23ed1ca06c37fa285ccdbeae4cb1e847699e16b93a4c7b2a65780466215",
-        "ToTheLastDrop.sdz": "d80c854e0050404926d69e4e03b35bb00c24cb8614b98d502c1b1d4a307ce777",
-        "Hunted.sdz": "2b6efe27c6768390c5e9b9c66f1d59658b42f890b273b410a53bceb4f46d0a8e",
-        "PartsNeeded-wasm.sdz": "b4dd20417d2a2ba3769387fa2ed42f10f341839b491abaa45d21bb8b42f11cf3",
+        "Area-17.sdz": "fb0180180a98a4a691d0573ed5337b5b11bcba9bf290eb5b4ddbee1bea02b588",
+        "Area17-wasm.sdz": "3088f6ac1456ab0cb0942ecb714c87b3766c07ec6db6dda4a2bfc5a57b3e425f",
+        "Flove-wasm.sdz": "34592a424523da38a2467f3fad6d3e40d668ee1dacce6cffba6df6f1ca3d281c",
+        "Flove.sdz": "285bfbd6010443f93fdcb014ad4a499f85b9982700e81dd1ceb4ee919e24a8ea",
+        "Gravitas-wasm.sdz": "9da6a1b39cd59691ed6b0c47015e9aac033d3935a18e9ac0ba3a916c34db4bd8",
+        "Gravitas.sdz": "40d7ea719f8531e12186ad84c413f877a88d33a21e64519d7e9dc3dacffe8b96",
+        "Hunted-wasm.sdz": "acf0f8e6ed6399b5437f87d2a687c5a3337f9f6825d9418ed7196d0002f1cf96",
+        "Hunted.sdz": "5d76fb83cdbee70dc1ba245c4bb3975d378e263fc64eec751594f39705cf81d5",
+        "MyCube-wasm.sdz": "2119fb1126d562c25b648ddc3f26c47dabc0cc85fef4a8e9e41ae8979d2b1132",
         "MyCube.sdz": "7bfee7a8325ed02206c75334e25c540c5f207e12d87b61db136142c9bc1c82be",
-        "WasmMenu.sdz": "7e8c947d8c10d3fd84b06bbc61aece9e1826baa7f455f277a2d06d0d618d5c9d",
-        "Flove.sdz": "8f2dc4d1bfc608105a1a09f81cffbd50514f4baa8a89595ff68253c07f96661d"
+        "PartsNeeded-wasm.sdz": "8319794a1f79c0001cf6d2efb95f8579dd50cebe53854d16d64f6b8224f8f041",
+        "PartsNeeded.sdz": "e5f285255c1f2d0e013bda8a6a4872daf684cb3ba822950a5c0f6944ad888e07",
+        "Scenario-Editor-Core.sdz": "4189962697a5503aa634b272c5f6438537f2a4fb5ea14d14eee919cf473249d7",
+        "Scenario-Editor-Gravitas.sdz": "dc2ed8f95f6708895589b0417d884b4bb49a04ddd77d253bd1bf58047e22f899",
+        "ToTheLastDrop-wasm.sdz": "a665ce66807442a79b5b2618658a5af50d75f2dd240a62efe21bc7ff9b3ae320",
+        "ToTheLastDrop.sdz": "bf360bc9f1249187dbebf4e983b1cf12a4931a5df8a867e1b22d22ac9e473635",
+        "WasmMenu.sdz": "95ee4e7f376023c0c3494fc752501737d1b3db7a0572e2d1abadbf70d7999b78"
       },
       "packaged_menu": {
         "ok": true,
@@ -137,9 +140,9 @@
         "exit": 0,
         "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
         "command": [
-          "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/runtime-check/linux/menu-attempt-0/wasm/SpringCabal"
+          "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/final-3103/linux/menu-attempt-0/wasm/SpringCabal"
         ],
-        "cwd": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/runtime-check/linux/menu-attempt-0",
+        "cwd": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/final-3103/linux/menu-attempt-0",
         "isolation": true
       },
       "startup_cases": {
@@ -147,45 +150,45 @@
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 249,
-          "max_cpu_pressure": 0.51,
+          "guard_samples": 264,
+          "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "1b35be52c9f6249427349248f9134e066ee072cf9389ff8436b8089107fe4c76",
-          "guard_sha256": "25e2ec8e527cc0650617b2bbb18ea1f8f71f73dbc717b3e4507eee3015928fa4",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/area17-lua"
+          "log_sha256": "a87bca51d6c59f0e2c7d5b1011c1402d358cb442eb4b843c7a89f92dbeec9120",
+          "guard_sha256": "a0621c4ff24f915729ae7ea79747c14a9ca0279f45d574e8bc4deaf4c8073291",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/area17-lua"
         },
         "area17/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 254,
-          "max_cpu_pressure": 0.46,
+          "guard_samples": 264,
+          "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "d492f511e361f45abc8e523e9bc0b1189d269805ed35212ff59cfe50b927f28e",
-          "guard_sha256": "e37899cb892b5f018ac70daf3aba7be4ed5253093dc1493f52c49ebd7f5e0f66",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/area17-wasm"
+          "log_sha256": "ec80d7cffa573a4ee2a5af50a834cbbe2a8a153fadc64cabf45b960ecf561ce9",
+          "guard_sha256": "5308ce587873c0ab090fd0a104db82128e52bf4ac2bfce54a93639923c6613da",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/area17-wasm"
         },
         "flove/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 265,
-          "max_cpu_pressure": 1.14,
+          "guard_samples": 271,
+          "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "8ea2925d3bcc777e6faae3b339b65371192f7e5316d1f8932f5cdf94bf6d7d3d",
-          "guard_sha256": "fa9c902e6c44d7ae4364739b1bea8583bf566fd530c37bc12859e1a09d53f42c",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/flove-lua"
+          "log_sha256": "d2b2b73b0ecb9bae084425ff652fa351674c8b81a726b0140ea7fc601416f2a7",
+          "guard_sha256": "74692f9f792ebf3e2289d0abc58fc0da177fb8b736c6c461058c720db13118e3",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/flove-lua"
         },
         "flove/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 267,
-          "max_cpu_pressure": 0.18,
+          "guard_samples": 271,
+          "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "97445d102b564dcebed341de86e654e6db27ee3fd415e46279009b3836199086",
-          "guard_sha256": "ab2a71ae77fd64e44d106798b92ebe71c6c40c52eaad4481724e6517db7b4524",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/flove-wasm"
+          "log_sha256": "c939312f8e6cf05061e00d072268b9cbdd86d085b99ae7591d77aff42256da32",
+          "guard_sha256": "3b713e405cece8c882af573d65eed21de99153bba75d5c5303f69090c5e42713",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/flove-wasm"
         },
         "gravitas/lua": {
           "passed": true,
@@ -194,147 +197,528 @@
           "guard_samples": 265,
           "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "c179e1f9aba5b8c489c6d29198362c014476cc2723983553af58f0fdd18b0518",
-          "guard_sha256": "e64f66808ca0445cf940c3a7147037240fdfddf451829036d9d9118fc64b2031",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/gravitas-lua"
-        },
-        "mycube/lua": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 262,
-          "max_cpu_pressure": 0.39,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "19bbdc1507e647dc1fab124db39efa6022205e26237d3ded87bc6e00bcdd0d15",
-          "guard_sha256": "a25ecf3be1386a21c56fdd6bb0c19854e686fd8609347bf6c1f5026db9e1fd94",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/mycube-lua"
-        },
-        "mycube/wasm": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 262,
-          "max_cpu_pressure": 0.67,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "b673657b7a2201ae2aa82af467012c36dfc2ddf9cd51ed6eebf8615666f6c155",
-          "guard_sha256": "5d2610e22281f47c304771a2ed4f742f9f68481730f59f6e2d743638f36915bf",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/mycube-wasm"
-        },
-        "partsneeded/lua": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 265,
-          "max_cpu_pressure": 0.33,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "261b05239b2e52ed23ea794b206f48aad6628e06989a62fc8222407131ff85a4",
-          "guard_sha256": "caa7316e77dacf5fbf590647dac8ff0dfc94fc116478affe1939744dd2f0eadb",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/partsneeded-lua"
-        },
-        "partsneeded/wasm": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 264,
-          "max_cpu_pressure": 0.37,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "fe3219fd189784c58769c3b47ff7ae707f5db458a424aa683ef59c66d873b6be",
-          "guard_sha256": "bc1d86fce19566f8e0a25b43671dabc4454f7734d4ec221460325beaf92b6825",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/partsneeded-wasm"
-        },
-        "ttld/lua": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 259,
-          "max_cpu_pressure": 0.0,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "b34316a00a2ab648e54f736b09f5976afe8f87476773274895511af1398b0484",
-          "guard_sha256": "e15c73167a5954461f0fdf63d0564b132f9699e4eebd69810c7ab2c967e90972",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/ttld-lua"
-        },
-        "ttld/wasm": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 257,
-          "max_cpu_pressure": 0.18,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "e91da4f5c7036eb4f9860cca3a84a8b8157c77549b2d42293e30cfd9fded4738",
-          "guard_sha256": "cdaa8f0ea60e6fd02f464985f3924a743aedbebaea540210b7ad4e12b1c5d962",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/ttld-wasm"
-        },
-        "menu": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 516,
-          "max_cpu_pressure": 0.0,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "28e8b23977fe1d09774293b00cf94214a2ee2c960312f2741012d40cdf062493",
-          "guard_sha256": "ea7025d92597aa414b0095534e2e39107a5e396231aafdb2e002e27ed21f1745",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-0/springcabal-smoke.1DZJFI/menu"
+          "log_sha256": "957f7fc1652b15a70c7857f7852c16204d6fd8cf439dccf6ad2fd82193c48182",
+          "guard_sha256": "41b99659606befe10529d5f34b2bb2870ea4688cc6bba09eccb576315a3055af",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/gravitas-lua"
         },
         "gravitas/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 270,
-          "max_cpu_pressure": 0.38,
+          "guard_samples": 267,
+          "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "3e74e2aa6eba0daec70117588df42968eb093e71f9cde86016fbc08f56b373c5",
-          "guard_sha256": "c79f5f4b1d4df5db4c6f5620b18da25fe4b2923b815a4d560b3fe17b9ad9bc91",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-1/springcabal-smoke.m5UYwE/gravitas-wasm"
+          "log_sha256": "e4c1fe9a47b10adeac091cdff7885b2cc29e8e89ae983db89025cba3f1a48f08",
+          "guard_sha256": "0a2332a7999048dc4e1be4fd19780f6041a846af117f2cf3d16500f5b0cdc4cb",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/gravitas-wasm"
         },
         "hunted/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 263,
-          "max_cpu_pressure": 0.27,
+          "guard_samples": 268,
+          "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "d1a5890f0e252a4edace926c7f53fa987d33223b5ca4022cb73ab704e63e81d4",
-          "guard_sha256": "646bfe7a2f9ea7e8a788b55da77797e73f20cb5c15d5c7797fbcd299bd70ed41",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-3/springcabal-smoke.83y1Am/hunted-lua"
+          "log_sha256": "ae1a14f39ebf89ecda4fb7056de4867571c4f4a6abb27d67ad77a164efa2b5e3",
+          "guard_sha256": "efde23efe0cec472609e60106e4e7db64cf4b5d09e6317e6beda06e44eed7a78",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/hunted-lua"
         },
         "hunted/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 261,
-          "max_cpu_pressure": 1.4,
+          "guard_samples": 270,
+          "max_cpu_pressure": 0.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "3f6d20a858ebf04fc6cb44a3a1f17e71d2385059f8e605a728b19ecba93e54ab",
-          "guard_sha256": "977db8951e2db05f593b3c07e9c1ea48aab2015552629925cbdf5991c38c07ff",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/linux/smoke-attempt-6/springcabal-smoke.SaGRZq/hunted-wasm"
+          "log_sha256": "448515749baa3e84cc212f8466981e1cdb93f1f881ec7649e39b53c2140b0012",
+          "guard_sha256": "db321df5725b82f4ae91099b8b1d6921e1623fe3fe4ec1257869b81556ba640b",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/hunted-wasm"
+        },
+        "mycube/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 271,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "53a7e3a645d49b38d727faa862fce66457a2a4f870fdcf17da77b6e0d6553046",
+          "guard_sha256": "546019c3f0dfdeca436c108bb4db69488a2bba11dccd8bb0c2a979e17636f1e5",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/mycube-lua"
+        },
+        "mycube/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 272,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "18f388a5bc88300ea42dfec2a551356cb2343af7f80794a834fc610e7ac8b9c8",
+          "guard_sha256": "626b0fe17c9f0a2905ea5a8dd86a8049e5cd117928f2a3805445610ff1f71d77",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/mycube-wasm"
+        },
+        "partsneeded/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 272,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "47609e1bb82cdbf6451c00a95da2ac53807da99c927bd940d5fe08387a339a4c",
+          "guard_sha256": "aa5ff1f0118bd3d13ef7756c3c4778ec957ff434da8b9e75fce6f9249ba62bfa",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/partsneeded-lua"
+        },
+        "partsneeded/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 273,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "0c92342594b39cbceef8032832368017c853bbf1dc3c530cb3e4fd4621bf3c68",
+          "guard_sha256": "428bfc6c00bfba627887e4a2c1c7429696f8d20be77b1d33497c9ea4b5d63a27",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/partsneeded-wasm"
+        },
+        "ttld/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 265,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "ab5bb9208fe79d7583a2d1c1adcdc4417718b1014222f9f2976678f7ea93cfef",
+          "guard_sha256": "cc6e89dee6da019f3b76241d435248a421ae11f3ed8d14c7c7f8a5b92cf1a17e",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/ttld-lua"
+        },
+        "ttld/wasm": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 265,
+          "max_cpu_pressure": 0.18,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "4d3434d05ccf17e963b54ce804b42f6b29092727f6f74a2423d11741f32fc155",
+          "guard_sha256": "8d2593d6365c6c08304f0ebf2953c522757c33c0a08a6f72514aeea8a421767a",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/ttld-wasm"
+        },
+        "menu": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 535,
+          "max_cpu_pressure": 0.0,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "a9060ad162807639bbea6c822305acf7455fca3ba1f5cd878c7f51cb0287b185",
+          "guard_sha256": "a263793a50f25937c38303f57dfd418424423fd98d3f334ef4fa0d8210a6793b",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/linux/smoke-attempt-0/springcabal-smoke.e3ioQw/menu"
         }
       },
       "images": {
         "initial": "runtime-linux-initial.png",
         "game": "runtime-linux-game.png"
+      },
+      "music_playback_and_looping": {
+        "music-normal": {
+          "variants": {
+            "lua": {
+              "active_samples": 15,
+              "resets": 0,
+              "samples": [
+                [
+                  0.46,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.53,
+                  0.037,
+                  130.56
+                ],
+                [
+                  1.16,
+                  0.6657,
+                  130.56
+                ],
+                [
+                  1.5,
+                  0.9964,
+                  130.56
+                ],
+                [
+                  2.0,
+                  1.5256,
+                  130.56
+                ],
+                [
+                  2.5,
+                  2.0221,
+                  130.56
+                ],
+                [
+                  3.0,
+                  2.5184,
+                  130.56
+                ],
+                [
+                  3.53,
+                  3.0503,
+                  130.56
+                ],
+                [
+                  4.03,
+                  3.5465,
+                  130.56
+                ],
+                [
+                  4.5,
+                  4.0098,
+                  130.56
+                ],
+                [
+                  5.08,
+                  4.6052,
+                  130.56
+                ],
+                [
+                  5.5,
+                  5.0022,
+                  130.56
+                ],
+                [
+                  6.0,
+                  5.4992,
+                  130.56
+                ],
+                [
+                  6.5,
+                  5.9998,
+                  130.56
+                ],
+                [
+                  7.05,
+                  6.5629,
+                  130.56
+                ],
+                [
+                  7.5,
+                  7.0269,
+                  130.56
+                ],
+                [
+                  8.02,
+                  7.5236,
+                  130.56
+                ]
+              ]
+            },
+            "wasm": {
+              "active_samples": 14,
+              "resets": 0,
+              "samples": [
+                [
+                  0.3,
+                  0.0405,
+                  130.56
+                ],
+                [
+                  0.5,
+                  0.2725,
+                  130.56
+                ],
+                [
+                  1.0,
+                  0.7694,
+                  130.56
+                ],
+                [
+                  1.5,
+                  1.2662,
+                  130.56
+                ],
+                [
+                  2.0,
+                  1.7631,
+                  130.56
+                ],
+                [
+                  2.5,
+                  2.2598,
+                  130.56
+                ],
+                [
+                  3.0,
+                  2.757,
+                  130.56
+                ],
+                [
+                  3.5,
+                  3.256,
+                  130.56
+                ],
+                [
+                  4.0,
+                  3.7528,
+                  130.56
+                ],
+                [
+                  4.5,
+                  4.2499,
+                  130.56
+                ],
+                [
+                  5.0,
+                  4.7468,
+                  130.56
+                ],
+                [
+                  5.5,
+                  5.2434,
+                  130.56
+                ],
+                [
+                  6.0,
+                  5.7401,
+                  130.56
+                ],
+                [
+                  6.5,
+                  6.2401,
+                  130.56
+                ],
+                [
+                  7.05,
+                  6.8034,
+                  130.56
+                ],
+                [
+                  7.5,
+                  7.2671,
+                  130.56
+                ],
+                [
+                  8.0,
+                  7.7638,
+                  130.56
+                ]
+              ]
+            }
+          },
+          "guard_sha256": "e1de7a31e18a1fa92418cf3a16f20968bee91f1ba0bad7918ae8c6695dc58624",
+          "logs_sha256": {
+            "lua": "526564edda74fdd7f0a3e54082017e090b01108655720ace90a1394057cb06a6",
+            "wasm": "f24de2d0aab948b984022c1e072a356b00907b3c0194f659a2eb26c528867dd5"
+          },
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/music-linux/check-music-normal-1"
+        },
+        "music-loop": {
+          "variants": {
+            "lua": {
+              "active_samples": 15,
+              "resets": 3,
+              "samples": [
+                [
+                  0.44,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.12,
+                  0.6786,
+                  2.0
+                ],
+                [
+                  1.5,
+                  1.0424,
+                  2.0
+                ],
+                [
+                  2.0,
+                  1.539,
+                  2.0
+                ],
+                [
+                  2.5,
+                  0.0016,
+                  2.0
+                ],
+                [
+                  3.04,
+                  0.5639,
+                  2.0
+                ],
+                [
+                  3.5,
+                  0.9942,
+                  2.0
+                ],
+                [
+                  4.0,
+                  1.4903,
+                  2.0
+                ],
+                [
+                  4.56,
+                  0.0015,
+                  2.0
+                ],
+                [
+                  5.1,
+                  0.5645,
+                  2.0
+                ],
+                [
+                  5.51,
+                  0.9613,
+                  2.0
+                ],
+                [
+                  6.0,
+                  1.4581,
+                  2.0
+                ],
+                [
+                  6.52,
+                  1.9879,
+                  2.0
+                ],
+                [
+                  7.0,
+                  0.432,
+                  2.0
+                ],
+                [
+                  7.5,
+                  0.9286,
+                  2.0
+                ],
+                [
+                  8.01,
+                  1.4585,
+                  2.0
+                ]
+              ]
+            },
+            "wasm": {
+              "active_samples": 14,
+              "resets": 3,
+              "samples": [
+                [
+                  0.25,
+                  0.0368,
+                  2.0
+                ],
+                [
+                  0.5,
+                  0.2688,
+                  2.0
+                ],
+                [
+                  1.0,
+                  0.7657,
+                  2.0
+                ],
+                [
+                  1.55,
+                  1.3287,
+                  2.0
+                ],
+                [
+                  2.0,
+                  1.7926,
+                  2.0
+                ],
+                [
+                  2.5,
+                  0.2682,
+                  2.0
+                ],
+                [
+                  3.03,
+                  0.7981,
+                  2.0
+                ],
+                [
+                  3.52,
+                  1.2946,
+                  2.0
+                ],
+                [
+                  4.0,
+                  1.758,
+                  2.0
+                ],
+                [
+                  4.5,
+                  0.2554,
+                  2.0
+                ],
+                [
+                  5.0,
+                  0.7521,
+                  2.0
+                ],
+                [
+                  5.55,
+                  1.3153,
+                  2.0
+                ],
+                [
+                  6.01,
+                  1.7788,
+                  2.0
+                ],
+                [
+                  6.5,
+                  0.2314,
+                  2.0
+                ],
+                [
+                  7.02,
+                  0.7611,
+                  2.0
+                ],
+                [
+                  7.5,
+                  1.2577,
+                  2.0
+                ],
+                [
+                  8.05,
+                  1.7876,
+                  2.0
+                ]
+              ]
+            }
+          },
+          "guard_sha256": "804fab5f7b7267f54a0fcb229dbf740b7fb7dd7a2518a46ecfcde2a1452ff05d",
+          "logs_sha256": {
+            "lua": "8494393986ced6e344e7c6c2f19ff061318a1c3f74ac52fe90429595b6f1d9e5",
+            "wasm": "492cb687afc7240ea4fecc8050338cd1bec5b2b19d6570d9b179d0f4a69594ee"
+          },
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/music-linux/check-music-loop-0"
+        }
       }
     },
     "windows": {
       "runtime": "Wine on Linux/NVIDIA, not native Windows",
-      "engine_sha256": "8c1416af553761a16ecde3fca2db90b1387a6c2b273dece433ec483ff85430bd",
+      "engine_sha256": "f8b12d773f39ce410713d98ce38c8fe9e20b6d47c465c0da1a639d0a3dc851a2",
       "game_archives": {
-        "Area-17.sdz": "3693ab7704ac18e6efa8c08fd3b7c2627ea82c7a94295c03b582bb9299b7f86f",
-        "Scenario-Editor-Gravitas.sdz": "dc2ed8f95f6708895589b0417d884b4bb49a04ddd77d253bd1bf58047e22f899",
-        "Area17-wasm.sdz": "053a761d48149bdca6284e285334d2c1eff035e155c7f1e03887cf5765518add",
-        "Hunted-wasm.sdz": "cefa1ce185ce160897527ea3474b58a3d4897d012aff9bb27690b06139a8d24b",
-        "Gravitas.sdz": "72a9091f1fd979f9fd4566536f80337633573cc5cc2ef4470470f61b5891e951",
-        "MyCube-wasm.sdz": "7de66643cdfaf49f72fa46e7a5759e3042dd5a3cecfd607d2c4a37d98c91cba3",
-        "Flove-wasm.sdz": "ca3269cd869d675b67c6bdc03c5ffc67654dd4b59a8ddcd07011705e9adecc84",
-        "PartsNeeded.sdz": "92dfb7776050dad09baccbc768ce38d90733bf049d2d773deef63c16ade4cdcd",
-        "Scenario-Editor-Core.sdz": "4189962697a5503aa634b272c5f6438537f2a4fb5ea14d14eee919cf473249d7",
-        "Gravitas-wasm.sdz": "83a42fee2b1cc366846b30c688d381afd2a554fb3a404e5cd15e00ff6a1d95c5",
-        "ToTheLastDrop-wasm.sdz": "f536b23ed1ca06c37fa285ccdbeae4cb1e847699e16b93a4c7b2a65780466215",
-        "ToTheLastDrop.sdz": "d80c854e0050404926d69e4e03b35bb00c24cb8614b98d502c1b1d4a307ce777",
-        "Hunted.sdz": "2b6efe27c6768390c5e9b9c66f1d59658b42f890b273b410a53bceb4f46d0a8e",
-        "PartsNeeded-wasm.sdz": "b4dd20417d2a2ba3769387fa2ed42f10f341839b491abaa45d21bb8b42f11cf3",
+        "Area-17.sdz": "fb0180180a98a4a691d0573ed5337b5b11bcba9bf290eb5b4ddbee1bea02b588",
+        "Area17-wasm.sdz": "3088f6ac1456ab0cb0942ecb714c87b3766c07ec6db6dda4a2bfc5a57b3e425f",
+        "Flove-wasm.sdz": "34592a424523da38a2467f3fad6d3e40d668ee1dacce6cffba6df6f1ca3d281c",
+        "Flove.sdz": "285bfbd6010443f93fdcb014ad4a499f85b9982700e81dd1ceb4ee919e24a8ea",
+        "Gravitas-wasm.sdz": "9da6a1b39cd59691ed6b0c47015e9aac033d3935a18e9ac0ba3a916c34db4bd8",
+        "Gravitas.sdz": "40d7ea719f8531e12186ad84c413f877a88d33a21e64519d7e9dc3dacffe8b96",
+        "Hunted-wasm.sdz": "acf0f8e6ed6399b5437f87d2a687c5a3337f9f6825d9418ed7196d0002f1cf96",
+        "Hunted.sdz": "5d76fb83cdbee70dc1ba245c4bb3975d378e263fc64eec751594f39705cf81d5",
+        "MyCube-wasm.sdz": "2119fb1126d562c25b648ddc3f26c47dabc0cc85fef4a8e9e41ae8979d2b1132",
         "MyCube.sdz": "7bfee7a8325ed02206c75334e25c540c5f207e12d87b61db136142c9bc1c82be",
-        "WasmMenu.sdz": "7e8c947d8c10d3fd84b06bbc61aece9e1826baa7f455f277a2d06d0d618d5c9d",
-        "Flove.sdz": "8f2dc4d1bfc608105a1a09f81cffbd50514f4baa8a89595ff68253c07f96661d"
+        "PartsNeeded-wasm.sdz": "8319794a1f79c0001cf6d2efb95f8579dd50cebe53854d16d64f6b8224f8f041",
+        "PartsNeeded.sdz": "e5f285255c1f2d0e013bda8a6a4872daf684cb3ba822950a5c0f6944ad888e07",
+        "Scenario-Editor-Core.sdz": "4189962697a5503aa634b272c5f6438537f2a4fb5ea14d14eee919cf473249d7",
+        "Scenario-Editor-Gravitas.sdz": "dc2ed8f95f6708895589b0417d884b4bb49a04ddd77d253bd1bf58047e22f899",
+        "ToTheLastDrop-wasm.sdz": "a665ce66807442a79b5b2618658a5af50d75f2dd240a62efe21bc7ff9b3ae320",
+        "ToTheLastDrop.sdz": "bf360bc9f1249187dbebf4e983b1cf12a4931a5df8a867e1b22d22ac9e473635",
+        "WasmMenu.sdz": "95ee4e7f376023c0c3494fc752501737d1b3db7a0572e2d1abadbf70d7999b78"
       },
       "packaged_menu": {
         "ok": true,
@@ -345,272 +729,639 @@
         "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
         "command": [
           "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-20261021/wine-runtime/root/usr/lib/wine/wine64",
-          "Z:\\home\\gajop\\projects\\spring-projects\\springcabal-games\\codex-work\\release-1.0.3-rc.3\\runtime-check\\windows\\menu-attempt-0\\wasm\\SpringCabal.exe"
+          "Z:\\home\\gajop\\projects\\spring-projects\\springcabal-games\\codex-work\\release-1.0.3-rc.3\\final-3103\\windows\\menu-attempt-0\\wasm\\SpringCabal.exe"
         ],
-        "cwd": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/runtime-check/windows/menu-attempt-0",
+        "cwd": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/release-1.0.3-rc.3/final-3103/windows/menu-attempt-0",
         "isolation": true
       },
       "startup_cases": {
+        "area17/lua": {
+          "passed": true,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "exit": 124,
+          "guard_samples": 251,
+          "max_cpu_pressure": 1.48,
+          "foreign_gpu_samples": 0,
+          "log_sha256": "097c4e693d5ed146fc1745df7579dcce174270cdce609e637a127f2657d486d6",
+          "guard_sha256": "90bc33b68faac016bd19acd767cd8f889e8ff4a39d42f18d1619e8acce3e074e",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/area17-lua"
+        },
         "area17/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 235,
-          "max_cpu_pressure": 3.28,
+          "guard_samples": 254,
+          "max_cpu_pressure": 1.83,
           "foreign_gpu_samples": 0,
-          "log_sha256": "1f2b21b23ef1609373c525eda704b1fe2b8f1ea2b7986bc0dc0b7c16acec692d",
-          "guard_sha256": "7f584ba41f13ea8f48a9ff83a3fdc1afd3b6888e90c310a11cc9e9fa9795ffbe",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/area17-wasm"
+          "log_sha256": "8b52f20b2334316af6360697c9c45c0f3773ebc589cfc7e73e68ffeff0827f9e",
+          "guard_sha256": "124376bfb4a3e7cff6570ae17946873d1e174f0a288ae4d23a716e5e816c763b",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/area17-wasm"
         },
         "flove/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 237,
-          "max_cpu_pressure": 2.53,
+          "guard_samples": 259,
+          "max_cpu_pressure": 2.17,
           "foreign_gpu_samples": 0,
-          "log_sha256": "30e01c3238dc70694a0f1ebbc12f8f6153c4fe82556f7db13a4caa7954fba79d",
-          "guard_sha256": "cd77676107523cc0050d183b7d7f9eaa86a145b36de3de6605bf5745739a4ca9",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/flove-lua"
+          "log_sha256": "f4243cce8087e132dd9de6cda2705e8c30c03825d7c279a0a29a3b4f67d5734e",
+          "guard_sha256": "fc267f1f672e9aa6de5d52e081d8e16acf0310ecabf15a2e2d0546a115a39bab",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/flove-lua"
         },
         "flove/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 251,
-          "max_cpu_pressure": 2.36,
+          "guard_samples": 259,
+          "max_cpu_pressure": 2.1,
           "foreign_gpu_samples": 0,
-          "log_sha256": "6f50693574a788d896137e78cfc4c836bc2f40b8ddabce4760caed2ee63adb33",
-          "guard_sha256": "03faf059bcb7a18d3ada5f94362cd45e35d22539c3fdc421dec4e1be3b447d27",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/flove-wasm"
+          "log_sha256": "9a594a3139323464828eebe95b7d6b9977ad4a37684c015bb5d8623465bc73b3",
+          "guard_sha256": "f95cd6ef111922b9008cb2e9a27a56e0b79caf8ccd0498fd369cb25ab4aa672d",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/flove-wasm"
         },
         "gravitas/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 247,
-          "max_cpu_pressure": 2.29,
+          "guard_samples": 257,
+          "max_cpu_pressure": 2.24,
           "foreign_gpu_samples": 0,
-          "log_sha256": "3684ff656ac346ea6b27d00483dd09f631c1f6e4011c295c67bea8cca62b2b61",
-          "guard_sha256": "cc501adb1d054b68cd3d42db27e05815afdfce6325e1de79be86cdd3b7000765",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/gravitas-lua"
+          "log_sha256": "2e48bb9fb2c9301fa25920f7f1c60d59a9956c03844358f3f8177d7b31fb3fe2",
+          "guard_sha256": "72f9fa60c77a64f4ea37dbdae316c37a40f74bf2196f28b7989936a929ed1512",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/gravitas-lua"
         },
         "gravitas/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 252,
-          "max_cpu_pressure": 2.82,
+          "guard_samples": 259,
+          "max_cpu_pressure": 2.63,
           "foreign_gpu_samples": 0,
-          "log_sha256": "cd312706342895d560a6407e26b9307bddefdb1823f6dbfc81f599d01a839df3",
-          "guard_sha256": "a6b3f006582a96a1eb67d0f5bf98c256cd4d248413cb974d5cfb3947cb331812",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/gravitas-wasm"
+          "log_sha256": "e56dca0a23860a13041a0629981cab81bc315f1b62b113f6082af6b10b415932",
+          "guard_sha256": "983a51a4fc03b9e6064be0be9881c5dc1190f26c503033baceaa173f37a00d82",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/gravitas-wasm"
         },
         "hunted/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 251,
-          "max_cpu_pressure": 3.3,
+          "guard_samples": 259,
+          "max_cpu_pressure": 2.37,
           "foreign_gpu_samples": 0,
-          "log_sha256": "1359ff51eb8f8b42a387c7718dc3f3d06ec7bd8a78bed1b48f5965de497b4d9e",
-          "guard_sha256": "a8c300117043ceb712532abc7cc6eed620646ab45fb771f1dbf5a66321363c0b",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/hunted-lua"
+          "log_sha256": "c0556c0bcb8e72e6a982076750258af8a8242ee2dc0c95ef1e4f2995fff71fd0",
+          "guard_sha256": "8258eab2905733b575ade4ca30013ae1ea47fe8c02003add1b6f9c65b791d63c",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/hunted-lua"
         },
         "hunted/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 252,
-          "max_cpu_pressure": 2.71,
+          "guard_samples": 258,
+          "max_cpu_pressure": 1.78,
           "foreign_gpu_samples": 0,
-          "log_sha256": "586fe3238eec31486788eeeb537ace840681de286fa04fd65dd338769ea4d751",
-          "guard_sha256": "44fee55e7b01a64512596153996c30b90601c4c9df48807d220869a7deadb048",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/hunted-wasm"
+          "log_sha256": "7b1abbedd6b5fe56083c9bfa73104f50bfbff85fe94662354718f5d81af45eb9",
+          "guard_sha256": "050d78c874cc88703c2daa95605bf048076a0effd8c73d0c8ed5e7a939e2e7eb",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/hunted-wasm"
         },
         "mycube/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 247,
-          "max_cpu_pressure": 2.07,
+          "guard_samples": 258,
+          "max_cpu_pressure": 1.17,
           "foreign_gpu_samples": 0,
-          "log_sha256": "77c52d58fe05fa6bdc4ff8a890c9f734967165fde8a928fee044a78a4da6b1a9",
-          "guard_sha256": "d8be459238854662fce56d04b7a028fdde34a07967057dd9641cc81c82b56828",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/mycube-lua"
+          "log_sha256": "4e9020a46cb12c48c78b909e8884edeaa98b883ce9ae71026b8ddc55d234df03",
+          "guard_sha256": "8f66d175ed98c2973db0f927bf50a8a216ddba9bafd71abdfe73fb96bd2314e5",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/mycube-lua"
         },
         "mycube/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 254,
-          "max_cpu_pressure": 1.84,
+          "guard_samples": 258,
+          "max_cpu_pressure": 1.36,
           "foreign_gpu_samples": 0,
-          "log_sha256": "340e775da1aaced8688ed276fade4c0bec905bc9d40dc2aa39941361ea5896ac",
-          "guard_sha256": "ffd33d720f7cda5a6c73575d3f54286ed64ba4e4433e0f969f314dffcb2d8885",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/mycube-wasm"
+          "log_sha256": "c0ffef5f5454db0f13eb11aec9688bd7b768403f3f95444889dcd249e953facc",
+          "guard_sha256": "dea62e9da34512bf74ddaea73bd0f7015a80edd2de9abf1f3a3aeed40f715d0b",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/mycube-wasm"
         },
         "partsneeded/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 249,
-          "max_cpu_pressure": 2.18,
+          "guard_samples": 258,
+          "max_cpu_pressure": 1.82,
           "foreign_gpu_samples": 0,
-          "log_sha256": "3264c93e6611aebdd00ab7c71c1846e386a8dbe67a672a9c41a425b1a997c8a6",
-          "guard_sha256": "4aeb003666115d501f58229c2807ab4182315ebac0fbd2d0668eee221d7dd318",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/partsneeded-lua"
-        },
-        "menu": {
-          "passed": true,
-          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
-          "exit": 124,
-          "guard_samples": 498,
-          "max_cpu_pressure": 2.3,
-          "foreign_gpu_samples": 0,
-          "log_sha256": "aee07a806719dcc934ac7e6363dcc3bcd5f04826de47e6ff458681062f8017f5",
-          "guard_sha256": "867620f4d134bd16661780e25a0da52907bd9ee5a2776f8ba3cb47dfe3e526f3",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-0/springcabal-smoke.enDp2z/menu"
+          "log_sha256": "b8f418cad80f4c7c0dc26404633ec065ccfd0495129ba1499d5daedef05701f1",
+          "guard_sha256": "554370fad53158d1a22457ec2898976de72b330785ec795fc4283a6d0bf3663a",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/partsneeded-lua"
         },
         "partsneeded/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 252,
-          "max_cpu_pressure": 2.54,
+          "guard_samples": 258,
+          "max_cpu_pressure": 2.0,
           "foreign_gpu_samples": 0,
-          "log_sha256": "655cdba072871c368f58161382ff1b6f1b0709db7cc324db12c92146fd445f0b",
-          "guard_sha256": "a632c6fe7f7e0354d7bd9a703453a0519c382be290ca9b0d28272008536e13b5",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-1/springcabal-smoke.bIRTsd/partsneeded-wasm"
+          "log_sha256": "dd18b081dd11cca8b15cbffd663e63f17b25827be045e5f1ecbc63e830dfe9a7",
+          "guard_sha256": "2087b6c67a81f0d1c428c99f0642868170b97924d9aa563a79961e289a5cd8cb",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/partsneeded-wasm"
         },
         "ttld/lua": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 256,
-          "max_cpu_pressure": 0.88,
+          "guard_samples": 257,
+          "max_cpu_pressure": 1.19,
           "foreign_gpu_samples": 0,
-          "log_sha256": "22d656283a936d03d5f3288ef3b89592797add74d1cb091b4ea228786b5dbae0",
-          "guard_sha256": "b5b77c100aac3d2e3eb1b1eb7c0021b900f56203ec3987345f54d8c499e4c896",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-1/springcabal-smoke.bIRTsd/ttld-lua"
+          "log_sha256": "ee83d1897eb28df38adc788ba937c61f0547a9320b6e0475a5bb51a261b39ed6",
+          "guard_sha256": "2a14bc86cb5664212256d5ff4a67ccedbe6e1712ab8908e72d9fb6c9df9e0876",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/ttld-lua"
         },
         "ttld/wasm": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 255,
-          "max_cpu_pressure": 1.34,
+          "guard_samples": 256,
+          "max_cpu_pressure": 1.4,
           "foreign_gpu_samples": 0,
-          "log_sha256": "1bdcd1394f17629a59317dce73e8c66002e2c257fcd41e411e13c122ddc6d580",
-          "guard_sha256": "3545c4caa5adc669973b8d28c1eb56854922e7dfa2ccd7c86a81e0ee735d4a39",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-1/springcabal-smoke.bIRTsd/ttld-wasm"
+          "log_sha256": "b492bfc5771f62d267aa55b63bc58d7a0c99121fd4fa993f8743e8a54246ecfc",
+          "guard_sha256": "4f5d1682f84a0b0c5c9755698527e52c1643eb7d0055d3c8484fde334e81f575",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/ttld-wasm"
         },
-        "area17/lua": {
+        "menu": {
           "passed": true,
           "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
           "exit": 124,
-          "guard_samples": 252,
-          "max_cpu_pressure": 1.24,
+          "guard_samples": 515,
+          "max_cpu_pressure": 0.9,
           "foreign_gpu_samples": 0,
-          "log_sha256": "eb12cb9c93bcc08d2f7755f38f8c1a89289655e9101e9593cea8ed365fe05e50",
-          "guard_sha256": "525be2b896dd7a4254be733d9174579cb9905c6826d0771b08d2f53c170884eb",
-          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/runtime-check/windows/smoke-attempt-3/springcabal-smoke.6RvbXb/area17-lua"
+          "log_sha256": "914ce7feccb415f799211a7ec9939deb2b83775e399e026c2e59140a83770e03",
+          "guard_sha256": "d13a129be2094012ca29a3cfb79c37bf487a0f8651dd9116b04acd7b9e62979d",
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/windows/smoke-attempt-0/springcabal-smoke.agsFOt/menu"
         }
       },
       "images": {
         "initial": "runtime-windows-initial.png",
         "game": "runtime-windows-game.png"
+      },
+      "music_playback_and_looping": {
+        "music-normal": {
+          "variants": {
+            "lua": {
+              "active_samples": 14,
+              "resets": 0,
+              "samples": [
+                [
+                  0.62,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.89,
+                  1.2404,
+                  130.56
+                ],
+                [
+                  2.01,
+                  1.375,
+                  130.56
+                ],
+                [
+                  2.5,
+                  1.8473,
+                  130.56
+                ],
+                [
+                  3.0,
+                  2.3498,
+                  130.56
+                ],
+                [
+                  3.5,
+                  2.8536,
+                  130.56
+                ],
+                [
+                  4.0,
+                  3.3603,
+                  130.56
+                ],
+                [
+                  4.5,
+                  3.8634,
+                  130.56
+                ],
+                [
+                  5.0,
+                  4.3671,
+                  130.56
+                ],
+                [
+                  5.5,
+                  4.8718,
+                  130.56
+                ],
+                [
+                  6.0,
+                  5.34,
+                  130.56
+                ],
+                [
+                  6.5,
+                  5.8439,
+                  130.56
+                ],
+                [
+                  7.0,
+                  6.3521,
+                  130.56
+                ],
+                [
+                  7.5,
+                  6.8532,
+                  130.56
+                ],
+                [
+                  8.0,
+                  7.3547,
+                  130.56
+                ]
+              ]
+            },
+            "wasm": {
+              "active_samples": 14,
+              "resets": 0,
+              "samples": [
+                [
+                  0.32,
+                  0.0197,
+                  130.56
+                ],
+                [
+                  0.5,
+                  0.2214,
+                  130.56
+                ],
+                [
+                  1.0,
+                  0.6928,
+                  130.56
+                ],
+                [
+                  1.5,
+                  1.1955,
+                  130.56
+                ],
+                [
+                  2.0,
+                  1.6987,
+                  130.56
+                ],
+                [
+                  2.5,
+                  2.2024,
+                  130.56
+                ],
+                [
+                  3.0,
+                  2.7051,
+                  130.56
+                ],
+                [
+                  3.5,
+                  3.2092,
+                  130.56
+                ],
+                [
+                  4.0,
+                  3.7131,
+                  130.56
+                ],
+                [
+                  4.5,
+                  4.2155,
+                  130.56
+                ],
+                [
+                  5.0,
+                  4.7214,
+                  130.56
+                ],
+                [
+                  5.5,
+                  5.1905,
+                  130.56
+                ],
+                [
+                  6.0,
+                  5.6935,
+                  130.56
+                ],
+                [
+                  6.5,
+                  6.2011,
+                  130.56
+                ],
+                [
+                  7.0,
+                  6.7046,
+                  130.56
+                ],
+                [
+                  7.5,
+                  7.2075,
+                  130.56
+                ],
+                [
+                  8.0,
+                  7.713,
+                  130.56
+                ]
+              ]
+            }
+          },
+          "guard_sha256": "a330904618039abeaba289c2af4062615cf5568dd980b0b8992682f4cb321ebc",
+          "logs_sha256": {
+            "lua": "c6308e70bada8a6ebbcc7d3b8489b7b22976b0613d1a25234a97523dbe02a70e",
+            "wasm": "4c837db1cf2351dea1244b61b03c56aecdacdda72f5ee19210933aa1da59984d"
+          },
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/music-windows/check-music-normal-70"
+        },
+        "music-loop": {
+          "variants": {
+            "lua": {
+              "active_samples": 14,
+              "resets": 3,
+              "samples": [
+                [
+                  0.54,
+                  0.0,
+                  0.0
+                ],
+                [
+                  1.8,
+                  1.2478,
+                  2.0
+                ],
+                [
+                  2.04,
+                  1.4822,
+                  2.0
+                ],
+                [
+                  2.5,
+                  1.9524,
+                  2.0
+                ],
+                [
+                  3.0,
+                  0.371,
+                  2.0
+                ],
+                [
+                  3.5,
+                  0.8751,
+                  2.0
+                ],
+                [
+                  4.0,
+                  1.377,
+                  2.0
+                ],
+                [
+                  4.5,
+                  1.8815,
+                  2.0
+                ],
+                [
+                  5.0,
+                  0.3388,
+                  2.0
+                ],
+                [
+                  5.5,
+                  0.8427,
+                  2.0
+                ],
+                [
+                  6.01,
+                  1.3466,
+                  2.0
+                ],
+                [
+                  6.5,
+                  1.8197,
+                  2.0
+                ],
+                [
+                  7.0,
+                  0.2724,
+                  2.0
+                ],
+                [
+                  7.5,
+                  0.7732,
+                  2.0
+                ],
+                [
+                  8.0,
+                  1.2764,
+                  2.0
+                ]
+              ]
+            },
+            "wasm": {
+              "active_samples": 14,
+              "resets": 3,
+              "samples": [
+                [
+                  0.43,
+                  0.0432,
+                  2.0
+                ],
+                [
+                  0.53,
+                  0.1097,
+                  2.0
+                ],
+                [
+                  1.0,
+                  0.5813,
+                  2.0
+                ],
+                [
+                  1.5,
+                  1.0835,
+                  2.0
+                ],
+                [
+                  2.0,
+                  1.5862,
+                  2.0
+                ],
+                [
+                  2.5,
+                  0.0972,
+                  2.0
+                ],
+                [
+                  3.0,
+                  0.6,
+                  2.0
+                ],
+                [
+                  3.5,
+                  1.1029,
+                  2.0
+                ],
+                [
+                  4.0,
+                  1.605,
+                  2.0
+                ],
+                [
+                  4.5,
+                  0.0999,
+                  2.0
+                ],
+                [
+                  5.0,
+                  0.601,
+                  2.0
+                ],
+                [
+                  5.5,
+                  1.1047,
+                  2.0
+                ],
+                [
+                  6.0,
+                  1.6092,
+                  2.0
+                ],
+                [
+                  6.5,
+                  0.0998,
+                  2.0
+                ],
+                [
+                  7.0,
+                  0.5698,
+                  2.0
+                ],
+                [
+                  7.5,
+                  1.0736,
+                  2.0
+                ],
+                [
+                  8.01,
+                  1.5795,
+                  2.0
+                ]
+              ]
+            }
+          },
+          "guard_sha256": "30213d0ce931a04f58a561d186343a13b6bf882337ac096d23d18a17dc76f9c9",
+          "logs_sha256": {
+            "lua": "be62dca5e8edfa6397a258671d7f80381562b2e13b4b5a601d16537161ca1069",
+            "wasm": "d9daa42f3eb1298922c213548adea719095b0e5c03fdc4f24e5779278230e4fa"
+          },
+          "local_evidence_directory": "codex-work/release-1.0.3-rc.3/final-3103/music-windows/check-music-loop-0"
+        }
       }
     }
   },
+  "music_method": "Existing real stream-position/duration probe, both editions after intro shutdown/game start. Normal playback advances beyond3s; two-second track resets at least twice. Device output is muted during the probe; shipped engine defaults enable sound with master60/music100. Per-platform test workspaces keep native and Wine archive-cache paths separate.",
   "public_game_sources": [
     {
       "game": "Hunted.sdd",
       "branch": "master",
       "public_branch": "master",
-      "head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+      "head": "02009c4793e6de5e0dcb20517e126244626ebbef",
       "remote": "git@github.com:SpringCabal/Hunted.git",
-      "remote_head": "5773e6928b8edafa782cfa909a179e8cd72ec7c8",
+      "remote_head": "02009c4793e6de5e0dcb20517e126244626ebbef",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:21.476918+00:00"
+      "checked_utc": "2026-10-31T17:53:04.419070+00:00"
     },
     {
       "game": "Hunted-wasm.sdd",
       "branch": "rust",
       "public_branch": "rust",
-      "head": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+      "head": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
       "remote": "git@github.com:SpringCabal/Hunted.git",
-      "remote_head": "1190c49c2fc043b94a0f3f874f37b29666c0ac61",
+      "remote_head": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:21.460197+00:00"
+      "checked_utc": "2026-10-31T17:53:04.433714+00:00"
     },
     {
       "game": "ToTheLastDrop.sdd",
       "branch": "master",
       "public_branch": "master",
-      "head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+      "head": "15c0e01991d48720407c2db574c8195fb9ece14f",
       "remote": "git@github.com:SpringCabal/LD43.git",
-      "remote_head": "62471b1b0a66c3a0cd3e453e9059b80d0e2f7b78",
+      "remote_head": "15c0e01991d48720407c2db574c8195fb9ece14f",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:21.450552+00:00"
+      "checked_utc": "2026-10-31T17:53:04.406523+00:00"
     },
     {
       "game": "ToTheLastDrop-wasm.sdd",
       "branch": "ttld-wasm-port",
       "public_branch": "rust",
-      "head": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+      "head": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
       "remote": "git@github.com:SpringCabal/LD43.git",
-      "remote_head": "534da3d3b4c71b2b954bbecf3f86f69ff14bc7ba",
+      "remote_head": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:21.450779+00:00"
+      "checked_utc": "2026-10-31T17:53:04.406286+00:00"
     },
     {
       "game": "Flove.sdd",
       "branch": "main",
       "public_branch": "master",
-      "head": "ff06007e58303e169a7a39d301f70b479d745625",
+      "head": "07e792c658b9767d4cfe6340020bb4ef840ac60c",
       "remote": "git@github.com:SpringCabal/Flove.git",
-      "remote_head": "ff06007e58303e169a7a39d301f70b479d745625",
+      "remote_head": "07e792c658b9767d4cfe6340020bb4ef840ac60c",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:23.400174+00:00"
+      "checked_utc": "2026-10-31T17:53:06.379195+00:00"
     },
     {
       "game": "Flove-wasm.sdd",
       "branch": "rust",
       "public_branch": "rust",
-      "head": "369749aa3c00f35cac3443302a46e8230dde9b90",
+      "head": "ca305b5e7daed186e5ea89de87c7961764837216",
       "remote": "git@github.com:SpringCabal/Flove.git",
-      "remote_head": "369749aa3c00f35cac3443302a46e8230dde9b90",
+      "remote_head": "ca305b5e7daed186e5ea89de87c7961764837216",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:23.398796+00:00"
+      "checked_utc": "2026-10-31T17:53:06.369560+00:00"
     },
     {
       "game": "Area-17.sdd",
       "branch": "master",
       "public_branch": "master",
-      "head": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+      "head": "2c8c725e80814a32259f0fc400487337c1aa5343",
       "remote": "git@github.com:SpringCabal/Area-17.git",
-      "remote_head": "fe6f8dac5b56dad9e08d7a1fbe799f12d3df2ec2",
+      "remote_head": "2c8c725e80814a32259f0fc400487337c1aa5343",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:23.396862+00:00"
+      "checked_utc": "2026-10-31T17:53:06.360833+00:00"
     },
     {
       "game": "Area17-wasm.sdd",
       "branch": "rust",
       "public_branch": "rust",
-      "head": "bef0f959a8141b7d68f2f8b0c851b5965438d3fd",
+      "head": "4784fc666fc8783c6e1f5d08f659288fbacb4053",
       "remote": "git@github.com:SpringCabal/Area-17.git",
-      "remote_head": "bef0f959a8141b7d68f2f8b0c851b5965438d3fd",
+      "remote_head": "4784fc666fc8783c6e1f5d08f659288fbacb4053",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:23.461606+00:00"
+      "checked_utc": "2026-10-31T17:53:06.356180+00:00"
     },
     {
       "game": "MyCube.sdd",
@@ -621,68 +1372,70 @@
       "remote_head": "4698657d927b4eac083319f86b177195e1ef7480",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:25.329820+00:00"
+      "checked_utc": "2026-10-31T17:53:08.312541+00:00"
     },
     {
       "game": "MyCube-wasm.sdd",
       "branch": "mycube-wasm-port",
       "public_branch": "rust",
-      "head": "9d7c1fccd382cbc74a8b4e3915da002bd62590bc",
+      "head": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
       "remote": "git@github.com:SpringCabal/LD42.git",
-      "remote_head": "9d7c1fccd382cbc74a8b4e3915da002bd62590bc",
+      "remote_head": "8ed768267d2b8f3b2031a853c5eed0f07941ce0d",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:25.360650+00:00"
+      "checked_utc": "2026-10-31T17:53:08.297755+00:00"
     },
     {
       "game": "PartsNeeded.sdd",
       "branch": "master",
       "public_branch": "master",
-      "head": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+      "head": "c47447d37869b08a9cdcc037b545c7dd881af2a9",
       "remote": "git@github.com:SpringCabal/LD35.git",
-      "remote_head": "54f832a866a7c65c9007c2c9f0778e8a6f433b05",
+      "remote_head": "c47447d37869b08a9cdcc037b545c7dd881af2a9",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:25.366931+00:00"
+      "checked_utc": "2026-10-31T17:53:08.296142+00:00"
     },
     {
       "game": "PartsNeeded-wasm.sdd",
       "branch": "partsneeded-wasm-port",
       "public_branch": "rust",
-      "head": "de726c4238a2edd827c74d4347702f009d32f0bb",
+      "head": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
       "remote": "git@github.com:SpringCabal/LD35.git",
-      "remote_head": "de726c4238a2edd827c74d4347702f009d32f0bb",
+      "remote_head": "ce2a0ae7fad323f1418d37734ff2bcee42c2261e",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:25.462399+00:00"
+      "checked_utc": "2026-10-31T17:53:08.306941+00:00"
     },
     {
       "game": "Gravitas.sdd",
       "branch": "master",
       "public_branch": "master",
-      "head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+      "head": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
       "remote": "git@github.com:SpringCabal/Gravitas.git",
-      "remote_head": "8a095ada488347d2b22b3d83bbe37094c394eb20",
+      "remote_head": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:27.296616+00:00"
+      "checked_utc": "2026-10-31T17:53:10.231077+00:00"
     },
     {
       "game": "Gravitas-wasm.sdd",
       "branch": "gravitas-wasm-port",
       "public_branch": "rust",
-      "head": "9e073d8309923156d1ca49af03bb86f9aab64a02",
+      "head": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
       "remote": "git@github.com:SpringCabal/Gravitas.git",
-      "remote_head": "9e073d8309923156d1ca49af03bb86f9aab64a02",
+      "remote_head": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
       "dirty": "",
       "committed_and_pushed": true,
-      "checked_utc": "2026-10-29T22:28:27.334545+00:00"
+      "checked_utc": "2026-10-31T17:53:10.233388+00:00"
     }
   ],
   "verification_source_sha256": {
     "release/smoke-test.sh": "4eca4e20d3640cd238977ea3c89cc4b2ef06862ff9a9693894867511f21ebf18",
     "release/smoke-run.py": "f1d787617278faaf8a5ab19811c6b5a4b48b3626c7933833b3df9376312e5947",
     "verification/sdk-menu/run.py": "771b9fb95030227be56cb1f919056f01e64c2df6681d702b5a0a2956554d0a60",
-    "verification/lib/failures.sh": "59d8cba6260bc1a1e73fe70aa9629cde276e06d57cfb3ce0f1c6ef6e5e2e5316"
+    "verification/lib/failures.sh": "59d8cba6260bc1a1e73fe70aa9629cde276e06d57cfb3ce0f1c6ef6e5e2e5316",
+    "verification/probes/area17-music.sh": "3229f2a1abeb34a3dd4406b4d9b2992f56d7d2ec09cf24686c5ffb9cb4df4230",
+    "verification/fixtures/area17/music_probe.lua": "249e5a7159573d8808765105a28f6cb31411466f497c6be288c5addd757970ef"
   }
 }
