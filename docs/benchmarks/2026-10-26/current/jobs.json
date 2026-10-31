@@ -93,6 +93,101 @@
     ]
   },
   {
+    "campaign": "hunted-10x-jobs-w4",
+    "game": "hunted",
+    "measured_pairs": 5,
+    "attempted_pairs": 6,
+    "excluded_pairs": 1,
+    "worker_threads": 4,
+    "on_active_runs": 5,
+    "state_matched_pairs": 5,
+    "events_matched_pairs": 5,
+    "sim_p50_off_ms": 1.192256,
+    "sim_p50_on_ms": 1.328301,
+    "sim_p50_paired_jobs_change_pct": 11.097281120833124,
+    "sim_p50_mean_ratio_95ci_lo": 1.1050386151997305,
+    "sim_p50_mean_ratio_95ci_hi": 1.1358342795142016,
+    "sim_p95_off_ms": 1.4444839999999999,
+    "sim_p95_on_ms": 1.595731,
+    "sim_p95_paired_jobs_change_pct": 10.93461239348521,
+    "sim_p95_mean_ratio_95ci_lo": 1.097834080259972,
+    "sim_p95_mean_ratio_95ci_hi": 1.1147917414628146,
+    "draw_p50_off_ms": 2.1501669999999997,
+    "draw_p50_on_ms": 2.059355,
+    "draw_p50_paired_jobs_change_pct": -0.8184945634455265,
+    "draw_p50_mean_ratio_95ci_lo": 0.8969481904133371,
+    "draw_p50_mean_ratio_95ci_hi": 1.0388140804923238,
+    "draw_p95_off_ms": 3.004151,
+    "draw_p95_on_ms": 2.858777,
+    "draw_p95_paired_jobs_change_pct": -5.072022512811769,
+    "draw_p95_mean_ratio_95ci_lo": 0.9440156687485617,
+    "draw_p95_mean_ratio_95ci_hi": 0.9548412722786978,
+    "cpu_p50_off_ms": 3.3546810000000002,
+    "cpu_p50_on_ms": 3.401402,
+    "cpu_p50_paired_jobs_change_pct": 4.057643632881924,
+    "cpu_p50_mean_ratio_95ci_lo": 0.9882494589932779,
+    "cpu_p50_mean_ratio_95ci_hi": 1.0623093310224585,
+    "cpu_p95_off_ms": 4.181502999999999,
+    "cpu_p95_on_ms": 4.186659,
+    "cpu_p95_paired_jobs_change_pct": 0.06331696036652179,
+    "cpu_p95_mean_ratio_95ci_lo": 0.9965192306386896,
+    "cpu_p95_mean_ratio_95ci_hi": 1.0051721046964852,
+    "wall_mean_off_ms": 3.4270333333333336,
+    "wall_mean_on_ms": 3.5169333333333337,
+    "wall_mean_paired_jobs_change_pct": 5.707803639688325,
+    "wall_mean_mean_ratio_95ci_lo": 0.9748075238224051,
+    "wall_mean_mean_ratio_95ci_hi": 1.0656639579064804,
+    "off_units_p50": 1334.0,
+    "on_units_p50": 1334.0,
+    "runtime": {
+      "engine_commit": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10",
+      "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-fire-current-2026.10.29",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "wasm": {
+        "commit": null,
+        "content_sha256": "368c6f20c150d99421617eb36dad27e776d83f6f637e2ed7d99f3ea7f954a0d7",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d",
+          "LuaRules/wasm/hunted-rules.wasm": "86bacda5532ef90d3d6c3c676a401bf7e45278afb03afb9f49dac4867a36d85f",
+          "LuaRules/wasm/hunted-jobs.wasm": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
+        },
+        "jobs_api": true,
+        "source_commit": "557bda6a5cca611363f665c0ca00687cc51748ad",
+        "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "hunted-10x-jobs-w4/hunted-00-wasm-off",
+      "hunted-10x-jobs-w4/hunted-00-wasm-on",
+      "hunted-10x-jobs-w4/hunted-01-wasm-off",
+      "hunted-10x-jobs-w4/hunted-01-wasm-on",
+      "hunted-10x-jobs-w4/hunted-02-wasm-off",
+      "hunted-10x-jobs-w4/hunted-02-wasm-on",
+      "hunted-10x-jobs-w4/hunted-03-wasm-off",
+      "hunted-10x-jobs-w4/hunted-03-wasm-on",
+      "hunted-10x-jobs-w4/hunted-04-wasm-off",
+      "hunted-10x-jobs-w4/hunted-04-wasm-on",
+      "hunted-10x-jobs-w4/hunted-05-wasm-off",
+      "hunted-10x-jobs-w4/hunted-05-wasm-on"
+    ]
+  },
+  {
     "campaign": "hunted-jobs-w1",
     "game": "hunted",
     "measured_pairs": 5,
@@ -185,6 +280,99 @@
       "hunted-jobs-w1/hunted-04-wasm-on",
       "hunted-jobs-w1/hunted-05-wasm-off",
       "hunted-jobs-w1/hunted-05-wasm-on"
+    ]
+  },
+  {
+    "campaign": "hunted-jobs-w4",
+    "game": "hunted",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "worker_threads": 4,
+    "on_active_runs": 5,
+    "state_matched_pairs": 5,
+    "events_matched_pairs": 5,
+    "sim_p50_off_ms": 0.224028,
+    "sim_p50_on_ms": 0.312767,
+    "sim_p50_paired_jobs_change_pct": 39.91622242584827,
+    "sim_p50_mean_ratio_95ci_lo": 1.3632180587808023,
+    "sim_p50_mean_ratio_95ci_hi": 1.4304868906952208,
+    "sim_p95_off_ms": 0.29362,
+    "sim_p95_on_ms": 0.38756799999999997,
+    "sim_p95_paired_jobs_change_pct": 34.356932531934014,
+    "sim_p95_mean_ratio_95ci_lo": 1.2929363379415872,
+    "sim_p95_mean_ratio_95ci_hi": 1.3656424168134296,
+    "draw_p50_off_ms": 0.651227,
+    "draw_p50_on_ms": 0.6686599999999999,
+    "draw_p50_paired_jobs_change_pct": 3.229029453504917,
+    "draw_p50_mean_ratio_95ci_lo": 1.0177261569765128,
+    "draw_p50_mean_ratio_95ci_hi": 1.0340746081828378,
+    "draw_p95_off_ms": 0.747462,
+    "draw_p95_on_ms": 0.766732,
+    "draw_p95_paired_jobs_change_pct": 3.723231321885012,
+    "draw_p95_mean_ratio_95ci_lo": 1.0171820828288924,
+    "draw_p95_mean_ratio_95ci_hi": 1.044931235176984,
+    "cpu_p50_off_ms": 0.882452,
+    "cpu_p50_on_ms": 0.987645,
+    "cpu_p50_paired_jobs_change_pct": 11.970769848597683,
+    "cpu_p50_mean_ratio_95ci_lo": 1.1043140826369702,
+    "cpu_p50_mean_ratio_95ci_hi": 1.1363605382440527,
+    "cpu_p95_off_ms": 1.033998,
+    "cpu_p95_on_ms": 1.142055,
+    "cpu_p95_paired_jobs_change_pct": 11.069670006700827,
+    "cpu_p95_mean_ratio_95ci_lo": 1.0928129301356824,
+    "cpu_p95_mean_ratio_95ci_hi": 1.1217075729128396,
+    "wall_mean_off_ms": 0.922166666666667,
+    "wall_mean_on_ms": 1.023871666666667,
+    "wall_mean_paired_jobs_change_pct": 11.30950967154929,
+    "wall_mean_mean_ratio_95ci_lo": 1.0979064645572727,
+    "wall_mean_mean_ratio_95ci_hi": 1.120652339513811,
+    "off_units_p50": 143.0,
+    "on_units_p50": 143.0,
+    "runtime": {
+      "engine_commit": "0f0ee80fa0ee620bc2988c64559feb3cbd163e10",
+      "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-fire-current-2026.10.29",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "wasm": {
+        "commit": null,
+        "content_sha256": "368c6f20c150d99421617eb36dad27e776d83f6f637e2ed7d99f3ea7f954a0d7",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "684b71fe3bfad1439303d89535862647a7335cec257ec3fe968fa4c2706b8c5d",
+          "LuaRules/wasm/hunted-rules.wasm": "86bacda5532ef90d3d6c3c676a401bf7e45278afb03afb9f49dac4867a36d85f",
+          "LuaRules/wasm/hunted-jobs.wasm": "5ffb88ae767e40a413c45887d3c217df4c9f833cf5a4c98a107cb9ffa4ce1959"
+        },
+        "jobs_api": true,
+        "source_commit": "557bda6a5cca611363f665c0ca00687cc51748ad",
+        "engine_sha256": "db57fb666164c4fb62a9cbb7b4510a76439ba7ec66316fed1f071f6faed11d78",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "hunted-jobs-w4/hunted-00-wasm-off",
+      "hunted-jobs-w4/hunted-00-wasm-on",
+      "hunted-jobs-w4/hunted-01-wasm-off",
+      "hunted-jobs-w4/hunted-01-wasm-on",
+      "hunted-jobs-w4/hunted-02-wasm-off",
+      "hunted-jobs-w4/hunted-02-wasm-on",
+      "hunted-jobs-w4/hunted-03-wasm-off",
+      "hunted-jobs-w4/hunted-03-wasm-on",
+      "hunted-jobs-w4/hunted-04-wasm-off",
+      "hunted-jobs-w4/hunted-04-wasm-on"
     ]
   }
 ]

@@ -1945,5 +1945,72 @@
       0.9399192042019432,
       0.953258093959911
     ]
+  },
+  {
+    "id": "hunted-rust-simd-10x",
+    "title": "Hunted Rust compiler",
+    "load": "10\u00d7",
+    "backends": [
+      "wasm"
+    ],
+    "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+    "candidate": "87251863516a4c03b58464fc4262742d50d1fdbd",
+    "adopted": false,
+    "change": "Enable target-feature+simd128 with explicit modrules system.WasmSimd; relaxed SIMD remains off. Same Rust source/SDK/compiler otherwise, same NVIDIA engine and existing guards. Stress first; evaluate normal only if five pairs establish a whole-frame stress gain.",
+    "decision": "Not selected: five clean 10x source pairs do not demonstrate a whole-frame gain. Existing controls, GPU visual/jobs checks and401 detailed world samples per load pass. Normal-load timing not run under the predeclared stress-first rule.",
+    "backend": "wasm",
+    "measured_rounds": 5,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 11,
+    "wall_before_ms": 3.5171750000000004,
+    "wall_after_ms": 3.5167783333333333,
+    "wall_change_pct": 1.0068289936880026,
+    "wall_mean_ratio_95ci": [
+      0.9835643168042317,
+      1.0521821345199465
+    ],
+    "sim_before_ms": 1.4709949999999998,
+    "sim_after_ms": 1.4821300000000002,
+    "sim_change_pct": 0.7569706219259897,
+    "sim_mean_ratio_95ci": [
+      0.9978535993096423,
+      1.0147817138648167
+    ],
+    "draw_before_ms": 1.928203,
+    "draw_after_ms": 1.9227180000000001,
+    "draw_change_pct": 2.979064815092536,
+    "draw_mean_ratio_95ci": [
+      0.96041968855117,
+      1.123537296708058
+    ]
+  },
+  {
+    "id": "hunted-rust-simd-1x",
+    "title": "Hunted Rust compiler",
+    "load": "1\u00d7",
+    "backends": [
+      "wasm"
+    ],
+    "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+    "candidate": "87251863516a4c03b58464fc4262742d50d1fdbd",
+    "adopted": false,
+    "change": "Enable target-feature+simd128 with explicit modrules system.WasmSimd; relaxed SIMD remains off. Same Rust source/SDK/compiler otherwise, same NVIDIA engine and existing guards. Stress first; evaluate normal only if five pairs establish a whole-frame stress gain.",
+    "decision": "Not selected: five clean 10x source pairs do not demonstrate a whole-frame gain. Existing controls, GPU visual/jobs checks and401 detailed world samples per load pass. Normal-load timing not run under the predeclared stress-first rule.",
+    "backend": "wasm",
+    "measured_rounds": 0,
+    "planned_rounds": 5,
+    "attempted_phase_pairs": 0,
+    "wall_before_ms": null,
+    "wall_after_ms": null,
+    "wall_change_pct": null,
+    "wall_mean_ratio_95ci": null,
+    "sim_before_ms": null,
+    "sim_after_ms": null,
+    "sim_change_pct": null,
+    "sim_mean_ratio_95ci": null,
+    "draw_before_ms": null,
+    "draw_after_ms": null,
+    "draw_change_pct": null,
+    "draw_mean_ratio_95ci": null
   }
 ]
