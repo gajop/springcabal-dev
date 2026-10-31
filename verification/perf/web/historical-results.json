@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T15:21:29.752490+00:00",
+  "generated_at": "2026-10-31T16:18:20.297386+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1974,7 +1974,7 @@
       "code": "Selected code work complete.",
       "remaining": "Fresh normal/2\u00d7 comparisons, captures and profile review on aligned camera arithmetic.",
       "expected": 2,
-      "completed": 0
+      "completed": 1
     },
     {
       "game": "hunted",
@@ -1988,7 +1988,7 @@
       "game": "flove",
       "title": "Flove",
       "code": "Lua/Rust optimizations and HUD corrections tested and pushed; all 302 visible-status samples match Lua.",
-      "remaining": "Fresh normal/10\u00d7 and jobs comparisons, captures and profile analysis. Earlier mismatched comparisons remain held until replaced.",
+      "remaining": "Fresh normal/10\u00d7 and jobs comparisons, captures and profile analysis.",
       "expected": 6,
       "completed": 0
     },
@@ -1998,7 +1998,7 @@
       "code": "House ignition and health-bar fixes tested/pushed. Existing suites, ordinary fire and all 604 detailed-world sample pairs pass; normal screenshots reviewed.",
       "remaining": "Fresh final timings, matching captures and profile analysis.",
       "expected": 4,
-      "completed": 2
+      "completed": 4
     },
     {
       "game": "gravitas",
@@ -2012,7 +2012,7 @@
       "game": "mycube",
       "title": "My Cube",
       "code": "Story/RNG, mass and idle fixes tested/pushed; all 151 full-world and 9,750 pose samples match Lua exactly.",
-      "remaining": "Fresh normal-scene comparisons/captures and profile review on the corrected public sources. Earlier mismatched comparisons remain held until replaced.",
+      "remaining": "Fresh normal-scene comparisons/captures and profile review on the corrected public sources.",
       "expected": 1,
       "completed": 0
     },
@@ -2020,7 +2020,7 @@
       "game": "partsneeded",
       "title": "Parts Needed",
       "code": "Level/gate/camera and same-frame rotation fixes tested/pushed; all 151 full-world samples match Lua exactly.",
-      "remaining": "Fresh normal-scene comparisons/captures and profile review on the corrected public sources. Earlier mismatched comparisons remain held until replaced.",
+      "remaining": "Fresh normal-scene comparisons/captures and profile review on the corrected public sources.",
       "expected": 1,
       "completed": 0
     }

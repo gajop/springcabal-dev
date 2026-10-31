@@ -1,7 +1,7 @@
 {
   "utc": "2026-10-31T10:46:02.136041+00:00",
   "scope": "Five clean timing pairs exist, but these scenes compare different physical worlds. Keep raw timings/traces/captures visible and exclude them from the primary ranking until fixed and checked.",
-  "campaigns": {
+  "resolved_campaigns": {
     "mycube-1x-w1": {
       "reason": "My Cube Lua/Rust spawn positions differ in all151 world samples; projectiles diverge later. Spawn/RNG ordering is under investigation.",
       "raw_world_comparison": {
@@ -309,5 +309,11 @@
       },
       "source_cause": "ui/widgets/gui_hud.rs carrier() returns the cached spire while it stays alive; rules publishes on the most recently created spire."
     }
-  }
+  },
+  "campaigns": {},
+  "resolved_utc": "2026-10-31T15:46:20.473782+00:00",
+  "resolution_receipts": [
+    "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/world-parity-fixes/promoted.json",
+    "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/flove-game-status-events/promoted.json"
+  ]
 }

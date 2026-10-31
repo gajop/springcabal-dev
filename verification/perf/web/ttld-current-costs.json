@@ -1,0 +1,393 @@
+{
+  "utc": "2026-10-31T16:18:17.609808+00:00",
+  "cases": [
+    {
+      "case": "ttld-shadows-1x-w1",
+      "timings": {
+        "campaign": ".",
+        "game": "ttld",
+        "measured_pairs": 5,
+        "attempted_pairs": 5,
+        "excluded_pairs": 0,
+        "sim_p50_lua_ms": 1.414457,
+        "sim_p50_rust_ms": 1.312039,
+        "sim_p50_paired_rust_change_pct": -7.240799826364475,
+        "sim_p50_mean_ratio_95ci_lo": 0.9233810408323122,
+        "sim_p50_mean_ratio_95ci_hi": 0.9529472757929415,
+        "sim_p95_lua_ms": 4.730027,
+        "sim_p95_rust_ms": 4.615582000000001,
+        "sim_p95_paired_rust_change_pct": 0.30223928954318247,
+        "sim_p95_mean_ratio_95ci_lo": 0.9653360982182518,
+        "sim_p95_mean_ratio_95ci_hi": 1.0095087281462551,
+        "draw_p50_lua_ms": 3.853697,
+        "draw_p50_rust_ms": 3.8081660000000004,
+        "draw_p50_paired_rust_change_pct": -1.396191760794896,
+        "draw_p50_mean_ratio_95ci_lo": 0.9780957852413208,
+        "draw_p50_mean_ratio_95ci_hi": 0.9922699394659039,
+        "draw_p95_lua_ms": 4.584881,
+        "draw_p95_rust_ms": 4.3995299999999995,
+        "draw_p95_paired_rust_change_pct": -4.093214196835204,
+        "draw_p95_mean_ratio_95ci_lo": 0.9529543957901051,
+        "draw_p95_mean_ratio_95ci_hi": 0.9631649335494366,
+        "cpu_p50_lua_ms": 5.421936,
+        "cpu_p50_rust_ms": 5.230844,
+        "cpu_p50_paired_rust_change_pct": -3.5437415255707427,
+        "cpu_p50_mean_ratio_95ci_lo": 0.9628891815737619,
+        "cpu_p50_mean_ratio_95ci_hi": 0.9657175284662883,
+        "cpu_p95_lua_ms": 6.867369000000001,
+        "cpu_p95_rust_ms": 6.431105,
+        "cpu_p95_paired_rust_change_pct": -6.3527094583093024,
+        "cpu_p95_mean_ratio_95ci_lo": 0.9156370609396853,
+        "cpu_p95_mean_ratio_95ci_hi": 0.9452775721323738,
+        "wall_mean_lua_ms": 5.472503333333332,
+        "wall_mean_rust_ms": 5.2666900000000005,
+        "wall_mean_paired_rust_change_pct": -3.695688323016111,
+        "wall_mean_mean_ratio_95ci_lo": 0.9613520123088247,
+        "wall_mean_mean_ratio_95ci_hi": 0.9633846551759319,
+        "lua_units_p50": 623.0,
+        "wasm_units_p50": 623.0
+      },
+      "profiles": {
+        "lua": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-lua/profile.json",
+          "main_cpu_ms": 5.454241773333333,
+          "runtime_cpu_ms": 0.72144288,
+          "other_cpu_ms": 4.732798893333333,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 1.9706078666666667,
+            "Checksums / measurement": 0.07682030666666667,
+            "Lua runtime / tables / GC": 0.72144288,
+            "Native movement / pathfinding": 0.8984635866666667,
+            "Native rendering / models": 0.22044088,
+            "Native simulation / animation": 0.2972611866666667,
+            "Other native code": 0.8984635866666667,
+            "Unresolved": 0.37074148
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 1.6165664533333333,
+            "native_spatial_queries": 0.04008016,
+            "model_submission": 0.09018036,
+            "rml_ui": 0.0,
+            "unit_scripts": 0.06012024
+          }
+        },
+        "wasm": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-wasm/profile.json",
+          "main_cpu_ms": 5.277221066666667,
+          "runtime_cpu_ms": 0.26052104,
+          "other_cpu_ms": 5.016700026666667,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 2.0407481466666666,
+            "Checksums / measurement": 0.06346025333333333,
+            "Lua runtime / tables / GC": 0.006680026666666667,
+            "Native movement / pathfinding": 0.9552438133333333,
+            "Native rendering / models": 0.22378089333333334,
+            "Native simulation / animation": 0.3340013333333333,
+            "Other native code": 0.8383433466666667,
+            "Unresolved": 0.56112224,
+            "Wasm guest": 0.16700066666666666,
+            "Wasmtime runtime": 0.08684034666666667
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 2.0006679866666666,
+            "native_spatial_queries": 0.0501002,
+            "model_submission": 0.1002004,
+            "rml_ui": 0.04008016,
+            "unit_scripts": 0.04676018666666667
+          }
+        }
+      }
+    },
+    {
+      "case": "ttld-shadows-10x-w1",
+      "timings": {
+        "campaign": ".",
+        "game": "ttld",
+        "measured_pairs": 5,
+        "attempted_pairs": 5,
+        "excluded_pairs": 0,
+        "sim_p50_lua_ms": 36.142761,
+        "sim_p50_rust_ms": 35.813911999999995,
+        "sim_p50_paired_rust_change_pct": -0.7610929336582806,
+        "sim_p50_mean_ratio_95ci_lo": 0.9714741434161708,
+        "sim_p50_mean_ratio_95ci_hi": 1.0030204736346637,
+        "sim_p95_lua_ms": 103.151588,
+        "sim_p95_rust_ms": 102.931969,
+        "sim_p95_paired_rust_change_pct": -0.3134222228357797,
+        "sim_p95_mean_ratio_95ci_lo": 0.9901928647950173,
+        "sim_p95_mean_ratio_95ci_hi": 0.9999955599441102,
+        "draw_p50_lua_ms": 9.872800999999999,
+        "draw_p50_rust_ms": 7.573116,
+        "draw_p50_paired_rust_change_pct": -23.2464934722736,
+        "draw_p50_mean_ratio_95ci_lo": 0.7649084417764282,
+        "draw_p50_mean_ratio_95ci_hi": 0.7723378726654008,
+        "draw_p95_lua_ms": 11.173957,
+        "draw_p95_rust_ms": 8.396851,
+        "draw_p95_paired_rust_change_pct": -24.967351591721275,
+        "draw_p95_mean_ratio_95ci_lo": 0.7491592119332523,
+        "draw_p95_mean_ratio_95ci_hi": 0.7576294468625056,
+        "cpu_p50_lua_ms": 46.631642,
+        "cpu_p50_rust_ms": 43.617731,
+        "cpu_p50_paired_rust_change_pct": -5.890058514345265,
+        "cpu_p50_mean_ratio_95ci_lo": 0.9266379323729185,
+        "cpu_p50_mean_ratio_95ci_hi": 0.9503737662520475,
+        "cpu_p95_lua_ms": 112.85597200000001,
+        "cpu_p95_rust_ms": 110.716531,
+        "cpu_p95_paired_rust_change_pct": -2.035084968130385,
+        "cpu_p95_mean_ratio_95ci_lo": 0.973250348139729,
+        "cpu_p95_mean_ratio_95ci_hi": 0.9809095505295023,
+        "wall_mean_lua_ms": 57.73408333333334,
+        "wall_mean_rust_ms": 53.349558333333334,
+        "wall_mean_paired_rust_change_pct": -7.541959482756855,
+        "wall_mean_mean_ratio_95ci_lo": 0.9211345240277404,
+        "wall_mean_mean_ratio_95ci_hi": 0.9255507532756737,
+        "lua_units_p50": 5735.0,
+        "wasm_units_p50": 5735.0
+      },
+      "profiles": {
+        "lua": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-10x-w1/ttld-shadows-10x/ttld-00-lua/profile.json",
+          "main_cpu_ms": 58.149632133333334,
+          "runtime_cpu_ms": 5.744822933333333,
+          "other_cpu_ms": 52.4048092,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 3.5838343066666667,
+            "Checksums / measurement": 0.61122244,
+            "Lua runtime / tables / GC": 5.74148292,
+            "Native movement / pathfinding": 33.67735444,
+            "Native rendering / models": 2.5283900933333334,
+            "Native simulation / animation": 5.6045423733333335,
+            "Other native code": 6.265865013333333,
+            "Unresolved": 0.13360053333333333,
+            "Wasmtime runtime": 0.0033400133333333333
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 0.01002004,
+            "native_spatial_queries": 1.0587842266666667,
+            "model_submission": 1.0688042666666666,
+            "rml_ui": 0.0,
+            "unit_scripts": 0.6279225066666667
+          }
+        },
+        "wasm": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-10x-w1/ttld-shadows-10x/ttld-00-wasm/profile.json",
+          "main_cpu_ms": 54.034735706666666,
+          "runtime_cpu_ms": 1.5430861599999999,
+          "other_cpu_ms": 52.491649546666665,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 3.5036739866666666,
+            "Checksums / measurement": 0.49098196,
+            "Lua runtime / tables / GC": 0.013360053333333333,
+            "Native movement / pathfinding": 34.05143593333333,
+            "Native rendering / models": 2.5217100666666665,
+            "Native simulation / animation": 5.754842973333333,
+            "Other native code": 6.055444173333333,
+            "Unresolved": 0.11356045333333334,
+            "Wasm guest": 1.1857047333333333,
+            "Wasmtime runtime": 0.3440213733333333
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 0.013360053333333333,
+            "native_spatial_queries": 1.1523046,
+            "model_submission": 1.0153640533333332,
+            "rml_ui": 0.19038076,
+            "unit_scripts": 0.6947227733333333
+          }
+        }
+      }
+    },
+    {
+      "case": "ttld-burning-1x-w1",
+      "timings": {
+        "campaign": ".",
+        "game": "ttld",
+        "measured_pairs": 5,
+        "attempted_pairs": 6,
+        "excluded_pairs": 1,
+        "sim_p50_lua_ms": 1.438784,
+        "sim_p50_rust_ms": 1.3356810000000001,
+        "sim_p50_paired_rust_change_pct": -7.629706752368659,
+        "sim_p50_mean_ratio_95ci_lo": 0.9167025726315031,
+        "sim_p50_mean_ratio_95ci_hi": 0.9392585598143242,
+        "sim_p95_lua_ms": 4.764107,
+        "sim_p95_rust_ms": 4.680358,
+        "sim_p95_paired_rust_change_pct": -1.757916016579819,
+        "sim_p95_mean_ratio_95ci_lo": 0.9726344048482627,
+        "sim_p95_mean_ratio_95ci_hi": 0.9916245688183812,
+        "draw_p50_lua_ms": 2.9735329999999998,
+        "draw_p50_rust_ms": 3.8147759999999997,
+        "draw_p50_paired_rust_change_pct": 28.464922502424294,
+        "draw_p50_mean_ratio_95ci_lo": 1.2614708567475168,
+        "draw_p50_mean_ratio_95ci_hi": 1.3162366294935652,
+        "draw_p95_lua_ms": 6.527211,
+        "draw_p95_rust_ms": 4.4306350000000005,
+        "draw_p95_paired_rust_change_pct": -32.12054888374223,
+        "draw_p95_mean_ratio_95ci_lo": 0.6696729755637183,
+        "draw_p95_mean_ratio_95ci_hi": 0.6848092274639075,
+        "cpu_p50_lua_ms": 5.334079000000001,
+        "cpu_p50_rust_ms": 5.248940999999999,
+        "cpu_p50_paired_rust_change_pct": -1.4978030884057247,
+        "cpu_p50_mean_ratio_95ci_lo": 0.9800518267594168,
+        "cpu_p50_mean_ratio_95ci_hi": 0.9854977865699487,
+        "cpu_p95_lua_ms": 9.107136999999998,
+        "cpu_p95_rust_ms": 6.403898999999999,
+        "cpu_p95_paired_rust_change_pct": -30.396708790875092,
+        "cpu_p95_mean_ratio_95ci_lo": 0.6913068993549488,
+        "cpu_p95_mean_ratio_95ci_hi": 0.7109894010945017,
+        "wall_mean_lua_ms": 5.536775,
+        "wall_mean_rust_ms": 5.285671666666667,
+        "wall_mean_paired_rust_change_pct": -4.5351912138985595,
+        "wall_mean_mean_ratio_95ci_lo": 0.9540111051858073,
+        "wall_mean_mean_ratio_95ci_hi": 0.9567289708762441,
+        "lua_units_p50": 623.0,
+        "wasm_units_p50": 623.0
+      },
+      "profiles": {
+        "lua": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-1x-w1/ttld-burning-1x/ttld-00-lua/profile.json",
+          "main_cpu_ms": 5.4776218666666665,
+          "runtime_cpu_ms": 1.6065464133333334,
+          "other_cpu_ms": 3.871075453333333,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 1.3193052666666667,
+            "Checksums / measurement": 0.05678022666666667,
+            "Lua runtime / tables / GC": 1.6065464133333334,
+            "Native movement / pathfinding": 0.9352037333333333,
+            "Native rendering / models": 0.26052104,
+            "Native simulation / animation": 0.33734134666666665,
+            "Other native code": 0.8183032666666666,
+            "Unresolved": 0.14028056,
+            "Worker queue / waiting": 0.0033400133333333333
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 0.5778223066666667,
+            "native_spatial_queries": 0.05678022666666667,
+            "model_submission": 0.06346025333333333,
+            "rml_ui": 0.0,
+            "unit_scripts": 0.04008016
+          }
+        },
+        "wasm": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-1x-w1/ttld-burning-1x/ttld-00-wasm/profile.json",
+          "main_cpu_ms": 5.293921133333333,
+          "runtime_cpu_ms": 0.3006012,
+          "other_cpu_ms": 4.993319933333333,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 2.0708082666666665,
+            "Checksums / measurement": 0.04008016,
+            "Lua runtime / tables / GC": 0.0033400133333333333,
+            "Native movement / pathfinding": 0.9519038,
+            "Native rendering / models": 0.21042084,
+            "Native simulation / animation": 0.29392117333333334,
+            "Other native code": 0.9552438133333333,
+            "Unresolved": 0.47094188,
+            "Wasm guest": 0.22044088,
+            "Wasmtime runtime": 0.07682030666666667
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 1.9772878933333333,
+            "native_spatial_queries": 0.04676018666666667,
+            "model_submission": 0.08684034666666667,
+            "rml_ui": 0.03006012,
+            "unit_scripts": 0.05344021333333333
+          }
+        }
+      }
+    },
+    {
+      "case": "ttld-burning-10x-w1",
+      "timings": {
+        "campaign": ".",
+        "game": "ttld",
+        "measured_pairs": 5,
+        "attempted_pairs": 7,
+        "excluded_pairs": 2,
+        "sim_p50_lua_ms": 36.138866,
+        "sim_p50_rust_ms": 35.473525,
+        "sim_p50_paired_rust_change_pct": -1.868010222326677,
+        "sim_p50_mean_ratio_95ci_lo": 0.9737955922223253,
+        "sim_p50_mean_ratio_95ci_hi": 0.9826591767908064,
+        "sim_p95_lua_ms": 103.567752,
+        "sim_p95_rust_ms": 102.873603,
+        "sim_p95_paired_rust_change_pct": -0.7650862533609248,
+        "sim_p95_mean_ratio_95ci_lo": 0.9876088356397243,
+        "sim_p95_mean_ratio_95ci_hi": 1.0003751810020094,
+        "draw_p50_lua_ms": 10.963227000000002,
+        "draw_p50_rust_ms": 7.607196,
+        "draw_p50_paired_rust_change_pct": -30.741806221835965,
+        "draw_p50_mean_ratio_95ci_lo": 0.6882439313814752,
+        "draw_p50_mean_ratio_95ci_hi": 0.6958202231284993,
+        "draw_p95_lua_ms": 16.553261,
+        "draw_p95_rust_ms": 8.370753,
+        "draw_p95_paired_rust_change_pct": -49.226044558558776,
+        "draw_p95_mean_ratio_95ci_lo": 0.5044441310168921,
+        "draw_p95_mean_ratio_95ci_hi": 0.508017508383982,
+        "cpu_p50_lua_ms": 49.157025000000004,
+        "cpu_p50_rust_ms": 43.27752,
+        "cpu_p50_paired_rust_change_pct": -11.63914821940506,
+        "cpu_p50_mean_ratio_95ci_lo": 0.8675365457843014,
+        "cpu_p50_mean_ratio_95ci_hi": 0.887611228171719,
+        "cpu_p95_lua_ms": 114.546682,
+        "cpu_p95_rust_ms": 110.261179,
+        "cpu_p95_paired_rust_change_pct": -3.5987374816842777,
+        "cpu_p95_mean_ratio_95ci_lo": 0.9576008525242495,
+        "cpu_p95_mean_ratio_95ci_hi": 0.9710804490035103,
+        "wall_mean_lua_ms": 60.02327666666667,
+        "wall_mean_rust_ms": 53.43390166666666,
+        "wall_mean_paired_rust_change_pct": -10.92750918680505,
+        "wall_mean_mean_ratio_95ci_lo": 0.8873646777890802,
+        "wall_mean_mean_ratio_95ci_hi": 0.8929295785536165,
+        "lua_units_p50": 5735.0,
+        "wasm_units_p50": 5735.0
+      },
+      "profiles": {}
+    }
+  ],
+  "scope": "Five accepted paired timing runs per scene. Timing cells are medians of run window means, or medians of run draw p50s. CPU costs are separate identity-matched sampled captures, not timing replicates or GPU durations. Inclusive fence waits are a subset of other CPU; do not add them again. Missing profile cells remain pending.",
+  "source": {
+    "reviewed": true,
+    "checks_passed": true,
+    "worlds_passed": true,
+    "ordinary_fire_passed": true,
+    "work": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/final-selected-fire-v9-shared-healthbars",
+    "source": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+    "engine": {
+      "source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "source_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "binary_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "build_log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/build-current.log",
+      "utc": "2026-10-31T03:03:04.850530+00:00",
+      "release_tag": "2026.10.3103",
+      "release_workflow_dispatched": true
+    },
+    "normal_modules": {
+      "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+      "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+      "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+    },
+    "checks_receipt": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-ui-parity/published.json",
+    "worlds_receipt": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-ui-parity/worlds-final.json",
+    "ordinary_fire_receipt": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-ui-parity/ordinary-final.json",
+    "world_sample_pairs_exact": 604,
+    "ordinary_synced_samples_exact": 31,
+    "ordinary_ui_roster_rng_samples_exact": 30,
+    "normal_scene_review": {
+      "images": {
+        "lua": {
+          "path": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-ttld-production-fire-fixed-v2-resume/attempt-0/ttld-01-lua/write/screenshots/screen_2026-10-31_09-37-42-828.png",
+          "sha256": "9333fafeeeaadf93e4d79667d1a9333ed323ef1462becabf66e1d6e0a33b6ad8"
+        },
+        "wasm": {
+          "path": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-ttld-production-fire-fixed-v2-resume/attempt-0/ttld-01-wasm/write/screenshots/screen_2026-10-31_09-36-37-097.png",
+          "sha256": "ca03d74e8ec365facb6267669355538c0bd0fc784834679c88226e980dda32e2"
+        }
+      },
+      "same_camera_and_world_layout": true,
+      "ordinary_hud_present_both": true,
+      "visible_house_fire_both": true,
+      "note": "Reviewed both frame-450 ordinary-game screenshots. HUD typography/skin differs between Chili and RmlUi; world layout, camera and visible house fire agree. World/roster equality is established by recorded states, not pixel identity."
+    },
+    "utc": "2026-10-31T09:51:47.784576+00:00"
+  },
+  "interpretation": "In the shadow 10x CPU captures the main-thread gap is almost entirely in Lua VM/table/GC versus Wasm guest/runtime costs; other main-thread CPU is close. Buffer-fence wait samples are negligible there. This describes the fresh captures and does not establish the cause of the superseded, contended rendering gap."
+}

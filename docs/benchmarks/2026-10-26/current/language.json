@@ -212,6 +212,111 @@
     ]
   },
   {
+    "campaign": "area17-1x-w1",
+    "game": "area17",
+    "measured_pairs": 5,
+    "attempted_pairs": 6,
+    "excluded_pairs": 1,
+    "sim_p50_lua_ms": 1.444816,
+    "sim_p50_rust_ms": 1.214182,
+    "sim_p50_paired_rust_change_pct": -15.257424504131246,
+    "sim_p50_mean_ratio_95ci_lo": 0.833062176192591,
+    "sim_p50_mean_ratio_95ci_hi": 0.8608575652462997,
+    "sim_p95_lua_ms": 2.326348,
+    "sim_p95_rust_ms": 1.5751199999999999,
+    "sim_p95_paired_rust_change_pct": -32.58605333337918,
+    "sim_p95_mean_ratio_95ci_lo": 0.66068634500078,
+    "sim_p95_mean_ratio_95ci_hi": 0.7677069979220018,
+    "draw_p50_lua_ms": 0.955858,
+    "draw_p50_rust_ms": 0.905805,
+    "draw_p50_paired_rust_change_pct": -4.886911190495979,
+    "draw_p50_mean_ratio_95ci_lo": 0.9465291893078169,
+    "draw_p50_mean_ratio_95ci_hi": 0.9581930817766839,
+    "draw_p95_lua_ms": 1.2998340000000002,
+    "draw_p95_rust_ms": 1.2488350000000001,
+    "draw_p95_paired_rust_change_pct": -4.0718276333747365,
+    "draw_p95_mean_ratio_95ci_lo": 0.9465740501757027,
+    "draw_p95_mean_ratio_95ci_hi": 0.9758299399411641,
+    "cpu_p50_lua_ms": 2.430867,
+    "cpu_p50_rust_ms": 2.125164,
+    "cpu_p50_paired_rust_change_pct": -12.441742852217919,
+    "cpu_p50_mean_ratio_95ci_lo": 0.8671674868475485,
+    "cpu_p50_mean_ratio_95ci_hi": 0.8900659091159403,
+    "cpu_p95_lua_ms": 3.438152,
+    "cpu_p95_rust_ms": 2.755529,
+    "cpu_p95_paired_rust_change_pct": -20.378465222945962,
+    "cpu_p95_mean_ratio_95ci_lo": 0.7765364263576405,
+    "cpu_p95_mean_ratio_95ci_hi": 0.8432630316674651,
+    "wall_mean_lua_ms": 2.6244200000000006,
+    "wall_mean_rust_ms": 2.276256666666668,
+    "wall_mean_paired_rust_change_pct": -12.266583346669613,
+    "wall_mean_mean_ratio_95ci_lo": 0.8624986511853618,
+    "wall_mean_mean_ratio_95ci_hi": 0.8924470142589292,
+    "lua_units_p50": 1329.0,
+    "wasm_units_p50": 1329.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "20e789da110a7060672e1d53e17fbd87d6fe1e1c8bb331d922abd99cd0455f4c",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "2c8c725e80814a32259f0fc400487337c1aa5343",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "d5a1459301271f672ef3240564145a61b1c792e65a1c5f4fd543d89aad1c63c7",
+        "modules": {
+          "LuaUI/wasm/area17-ui.wasm": "fde7324665957dbba69d78bd71f3b2c4c53478ff98785dd55194c1f647f554e1",
+          "LuaRules/wasm/area17-rules.wasm": "c5e3d811279130d039caa9e618099bf405cc645eeeb89f1fbcb2f78430904974"
+        },
+        "jobs_api": false,
+        "source_commit": "4784fc666fc8783c6e1f5d08f659288fbacb4053",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "area17-1x-w1/area17-00-lua",
+      "area17-1x-w1/area17-00-wasm",
+      "area17-1x-w1/area17-01-lua",
+      "area17-1x-w1/area17-01-wasm",
+      "area17-1x-w1/area17-02-lua",
+      "area17-1x-w1/area17-02-wasm",
+      "area17-1x-w1/area17-03-lua",
+      "area17-1x-w1/area17-03-wasm",
+      "area17-1x-w1/area17-04-lua",
+      "area17-1x-w1/area17-04-wasm",
+      "area17-1x-w1/area17-05-lua",
+      "area17-1x-w1/area17-05-wasm"
+    ]
+  },
+  {
     "campaign": "fire-1-lua-rust-w4",
     "game": "gravitas",
     "measured_pairs": 5,
@@ -548,6 +653,220 @@
       "fire-100-lua-rust-w4/gravitas-03-wasm",
       "fire-100-lua-rust-w4/gravitas-04-lua",
       "fire-100-lua-rust-w4/gravitas-04-wasm"
+    ]
+  },
+  {
+    "campaign": "ttld-burning-10x-w1",
+    "game": "ttld",
+    "measured_pairs": 5,
+    "attempted_pairs": 7,
+    "excluded_pairs": 2,
+    "sim_p50_lua_ms": 36.138866,
+    "sim_p50_rust_ms": 35.473525,
+    "sim_p50_paired_rust_change_pct": -1.868010222326677,
+    "sim_p50_mean_ratio_95ci_lo": 0.9737955922223253,
+    "sim_p50_mean_ratio_95ci_hi": 0.9826591767908064,
+    "sim_p95_lua_ms": 103.567752,
+    "sim_p95_rust_ms": 102.873603,
+    "sim_p95_paired_rust_change_pct": -0.7650862533609248,
+    "sim_p95_mean_ratio_95ci_lo": 0.9876088356397243,
+    "sim_p95_mean_ratio_95ci_hi": 1.0003751810020094,
+    "draw_p50_lua_ms": 10.963227000000002,
+    "draw_p50_rust_ms": 7.607196,
+    "draw_p50_paired_rust_change_pct": -30.741806221835965,
+    "draw_p50_mean_ratio_95ci_lo": 0.6882439313814752,
+    "draw_p50_mean_ratio_95ci_hi": 0.6958202231284993,
+    "draw_p95_lua_ms": 16.553261,
+    "draw_p95_rust_ms": 8.370753,
+    "draw_p95_paired_rust_change_pct": -49.226044558558776,
+    "draw_p95_mean_ratio_95ci_lo": 0.5044441310168921,
+    "draw_p95_mean_ratio_95ci_hi": 0.508017508383982,
+    "cpu_p50_lua_ms": 49.157025000000004,
+    "cpu_p50_rust_ms": 43.27752,
+    "cpu_p50_paired_rust_change_pct": -11.63914821940506,
+    "cpu_p50_mean_ratio_95ci_lo": 0.8675365457843014,
+    "cpu_p50_mean_ratio_95ci_hi": 0.887611228171719,
+    "cpu_p95_lua_ms": 114.546682,
+    "cpu_p95_rust_ms": 110.261179,
+    "cpu_p95_paired_rust_change_pct": -3.5987374816842777,
+    "cpu_p95_mean_ratio_95ci_lo": 0.9576008525242495,
+    "cpu_p95_mean_ratio_95ci_hi": 0.9710804490035103,
+    "wall_mean_lua_ms": 60.02327666666667,
+    "wall_mean_rust_ms": 53.43390166666666,
+    "wall_mean_paired_rust_change_pct": -10.92750918680505,
+    "wall_mean_mean_ratio_95ci_lo": 0.8873646777890802,
+    "wall_mean_mean_ratio_95ci_hi": 0.8929295785536165,
+    "lua_units_p50": 5735.0,
+    "wasm_units_p50": 5735.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "61b5e1b9f66c484938c7ccbc89da4b56dca96fc286c0b5dc46c2501d746d360a",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "97a1bda10e3c9c56ffab0d3187c2171c1f31d4098c28b0f4fbd0603f07949934",
+        "modules": {
+          "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+          "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+          "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+        },
+        "jobs_api": false,
+        "source_commit": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "ttld-burning-10x-w1/ttld-00-lua",
+      "ttld-burning-10x-w1/ttld-00-wasm",
+      "ttld-burning-10x-w1/ttld-01-lua",
+      "ttld-burning-10x-w1/ttld-01-wasm",
+      "ttld-burning-10x-w1/ttld-02-lua",
+      "ttld-burning-10x-w1/ttld-02-wasm",
+      "ttld-burning-10x-w1/ttld-03-lua",
+      "ttld-burning-10x-w1/ttld-03-wasm",
+      "ttld-burning-10x-w1/ttld-04-lua",
+      "ttld-burning-10x-w1/ttld-04-wasm",
+      "ttld-burning-10x-w1/ttld-05-lua",
+      "ttld-burning-10x-w1/ttld-05-wasm",
+      "ttld-burning-10x-w1/ttld-06-lua",
+      "ttld-burning-10x-w1/ttld-06-wasm"
+    ]
+  },
+  {
+    "campaign": "ttld-burning-1x-w1",
+    "game": "ttld",
+    "measured_pairs": 5,
+    "attempted_pairs": 6,
+    "excluded_pairs": 1,
+    "sim_p50_lua_ms": 1.438784,
+    "sim_p50_rust_ms": 1.3356810000000001,
+    "sim_p50_paired_rust_change_pct": -7.629706752368659,
+    "sim_p50_mean_ratio_95ci_lo": 0.9167025726315031,
+    "sim_p50_mean_ratio_95ci_hi": 0.9392585598143242,
+    "sim_p95_lua_ms": 4.764107,
+    "sim_p95_rust_ms": 4.680358,
+    "sim_p95_paired_rust_change_pct": -1.757916016579819,
+    "sim_p95_mean_ratio_95ci_lo": 0.9726344048482627,
+    "sim_p95_mean_ratio_95ci_hi": 0.9916245688183812,
+    "draw_p50_lua_ms": 2.9735329999999998,
+    "draw_p50_rust_ms": 3.8147759999999997,
+    "draw_p50_paired_rust_change_pct": 28.464922502424294,
+    "draw_p50_mean_ratio_95ci_lo": 1.2614708567475168,
+    "draw_p50_mean_ratio_95ci_hi": 1.3162366294935652,
+    "draw_p95_lua_ms": 6.527211,
+    "draw_p95_rust_ms": 4.4306350000000005,
+    "draw_p95_paired_rust_change_pct": -32.12054888374223,
+    "draw_p95_mean_ratio_95ci_lo": 0.6696729755637183,
+    "draw_p95_mean_ratio_95ci_hi": 0.6848092274639075,
+    "cpu_p50_lua_ms": 5.334079000000001,
+    "cpu_p50_rust_ms": 5.248940999999999,
+    "cpu_p50_paired_rust_change_pct": -1.4978030884057247,
+    "cpu_p50_mean_ratio_95ci_lo": 0.9800518267594168,
+    "cpu_p50_mean_ratio_95ci_hi": 0.9854977865699487,
+    "cpu_p95_lua_ms": 9.107136999999998,
+    "cpu_p95_rust_ms": 6.403898999999999,
+    "cpu_p95_paired_rust_change_pct": -30.396708790875092,
+    "cpu_p95_mean_ratio_95ci_lo": 0.6913068993549488,
+    "cpu_p95_mean_ratio_95ci_hi": 0.7109894010945017,
+    "wall_mean_lua_ms": 5.536775,
+    "wall_mean_rust_ms": 5.285671666666667,
+    "wall_mean_paired_rust_change_pct": -4.5351912138985595,
+    "wall_mean_mean_ratio_95ci_lo": 0.9540111051858073,
+    "wall_mean_mean_ratio_95ci_hi": 0.9567289708762441,
+    "lua_units_p50": 623.0,
+    "wasm_units_p50": 623.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "61b5e1b9f66c484938c7ccbc89da4b56dca96fc286c0b5dc46c2501d746d360a",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "97a1bda10e3c9c56ffab0d3187c2171c1f31d4098c28b0f4fbd0603f07949934",
+        "modules": {
+          "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+          "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+          "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+        },
+        "jobs_api": false,
+        "source_commit": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "ttld-burning-1x-w1/ttld-00-lua",
+      "ttld-burning-1x-w1/ttld-00-wasm",
+      "ttld-burning-1x-w1/ttld-01-lua",
+      "ttld-burning-1x-w1/ttld-01-wasm",
+      "ttld-burning-1x-w1/ttld-02-lua",
+      "ttld-burning-1x-w1/ttld-02-wasm",
+      "ttld-burning-1x-w1/ttld-03-lua",
+      "ttld-burning-1x-w1/ttld-03-wasm",
+      "ttld-burning-1x-w1/ttld-04-lua",
+      "ttld-burning-1x-w1/ttld-04-wasm",
+      "ttld-burning-1x-w1/ttld-05-lua",
+      "ttld-burning-1x-w1/ttld-05-wasm"
     ]
   },
   {

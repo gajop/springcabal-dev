@@ -99,6 +99,17 @@
   <!-- hunted-simd-trial -->
   <p>Hunted compiler trial: enabling fixed-width SIMD passes the existing behavior, visual/HUD and jobs checks, plus 401 full world samples at both normal and 10× load. Five 10× source pairs show no reliable whole-frame improvement; the scalar public build stays. <a href="hunted-simd-trial.json">Compiler settings, module hashes, checks and source A/B</a>.</p>
   <h2>Code and API costs</h2>
+  <!-- ttld-current-costs-start -->
+  <h3>TTLD: fresh shadow and fire costs</h3>
+  <p class="caption">Lua / Rust, ms per frame. Five clean timing pairs per scene; CPU columns come from separate matching profiles. Runtime includes VM, tables and GC; other CPU includes bindings, engine and driver. Fence waits are already included in other CPU. <a href="ttld-current-costs.json">Exact statistics, categories and sources</a>.</p>
+  <div class="table-scroll"><table><thead><tr><th>Scene</th><th>Whole frame</th><th>Draw p50</th><th>Runtime CPU</th><th>Other CPU</th><th>Fence wait CPU</th></tr></thead><tbody>
+<tr><td>ttld-shadows-1x-w1</td><td>5.473 / 5.267</td><td>3.854 / 3.808</td><td>0.721 / 0.261</td><td>4.733 / 5.017</td><td>1.617 / 2.001</td></tr>
+<tr><td>ttld-shadows-10x-w1</td><td>57.734 / 53.350</td><td>9.873 / 7.573</td><td>5.745 / 1.543</td><td>52.405 / 52.492</td><td>0.010 / 0.013</td></tr>
+<tr><td>ttld-burning-1x-w1</td><td>5.537 / 5.286</td><td>2.974 / 3.815</td><td>1.607 / 0.301</td><td>3.871 / 4.993</td><td>0.578 / 1.977</td></tr>
+<tr><td>ttld-burning-10x-w1</td><td>60.023 / 53.434</td><td>10.963 / 7.607</td><td>pending</td><td>pending</td><td>pending</td></tr>
+  </tbody></table></div>
+  <p class="caption">At 10× with shadows, the fresh CPU gap is concentrated in language/runtime work; native movement and rendering costs are close, and buffer-fence waits are negligible. The earlier unexplained rendering gap is superseded. These captures do not establish its original cause.</p>
+  <!-- ttld-current-costs-end -->
   <!-- gravitas-vm-inspection -->
   <p class="caption">Gravitas100: Lua table lookup luaH_get alone takes9.14 sampled CPUms/frame; bytecode execution2.97ms, table-access dispatch1.43ms, allocator0.48ms. Earlier five-pair trials rejected captured coefficients (+0.83% whole-frame time) and merged Lua uploads (+3.82%); both preserved particle data. Lua VBO upload extracts a numeric table; Rust passes contiguous f32 slices. <a href="gravitas-vm-inspection.json">Current sampled symbols</a> · <a href="gravitas-upload-batching-trial.json">Upload trial</a>. These are separate CPU captures, not GPU duration.</p>
   <!-- runtime-attribution-start -->
@@ -107,11 +118,13 @@
   <div class="table-scroll"><table><thead><tr><th>Case</th><th>Main CPU<br>Lua / Rust</th><th>Language/runtime<br>Lua / Rust</th><th>Other CPU<br>Lua / Rust</th></tr></thead><tbody>
 <tr><td>hunted-10x-lua-rust-w1</td><td>7.181 / 3.497</td><td>3.851 / 0.347</td><td>3.330 / 3.150</td></tr>
 <tr><td>hunted-lua-rust-w1</td><td>0.972 / 0.845</td><td>0.224 / 0.070</td><td>0.748 / 0.775</td></tr>
+<tr><td>area17-1x-w1</td><td>2.659 / 2.298</td><td>0.454 / 0.084</td><td>2.204 / 2.214</td></tr>
 <tr><td>fire-1-lua-rust-w4</td><td>0.468 / 0.381</td><td>0.127 / 0.020</td><td>0.341 / 0.361</td></tr>
 <tr><td>fire-10-lua-rust-w4</td><td>1.727 / 0.451</td><td>1.166 / 0.043</td><td>0.561 / 0.407</td></tr>
 <tr><td>fire-100-lua-rust-w4</td><td>19.372 / 2.742</td><td>17.104 / 0.194</td><td>2.268 / 2.548</td></tr>
 <tr><td>ttld-shadows-1x-w1</td><td>5.454 / 5.277</td><td>0.721 / 0.261</td><td>4.733 / 5.017</td></tr>
 <tr><td>ttld-shadows-10x-w1</td><td>58.150 / 54.035</td><td>5.745 / 1.543</td><td>52.405 / 52.492</td></tr>
+<tr><td>ttld-burning-1x-w1</td><td>5.478 / 5.294</td><td>1.607 / 0.301</td><td>3.871 / 4.993</td></tr>
 </tbody></table></div>
   <!-- runtime-attribution-end -->
   <p id="ceiling" class="caption"></p>
