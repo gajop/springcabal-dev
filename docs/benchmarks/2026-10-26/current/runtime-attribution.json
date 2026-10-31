@@ -1,6 +1,82 @@
 {
-  "generated_utc": "2026-10-31T05:41:04.165245+00:00",
-  "primary_cases_with_matching_profile_pair": 0,
+  "generated_utc": "2026-10-31T05:48:23.052936+00:00",
+  "primary_cases_with_matching_profile_pair": 1,
   "scope": "Exclusive perf CPU sample weights per measured frame. Current engine and resource guard, sources and module identities exactly match each primary timing case. Profiles are separate instrumented captures; these are neither GPU execution times nor additional timing replicates. Language/runtime combines Lua interpreter/table/GC, Wasm guest and Wasmtime. Other CPU includes bindings, engine, graphics driver and unresolved symbols. Native call wrappers can therefore remain outside the language column. Sampling variation is not an exact causal decomposition of whole-frame timing.",
-  "cases": []
+  "cases": [
+    {
+      "case": "ttld-shadows-1x-w1",
+      "backends": {
+        "lua": {
+          "main_thread_cpu_ms_per_frame": 5.44088172,
+          "language_runtime_cpu_ms_per_frame": 0.73146292,
+          "other_main_thread_cpu_ms_per_frame": 4.7094188,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 2.01402804,
+            "Checksums / measurement": 0.05678022666666667,
+            "Lua runtime / tables / GC": 0.73146292,
+            "Native movement / pathfinding": 0.8984635866666667,
+            "Native rendering / models": 0.21376085333333333,
+            "Native simulation / animation": 0.34068136,
+            "Other native code": 0.8550434133333333,
+            "Unresolved": 0.32732130666666664,
+            "Worker queue / waiting": 0.0033400133333333333
+          },
+          "profile": "perf-runs/2026-10-31-profiles-current/night-v6-current-geometry-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-lua/profile.json",
+          "profile_sha256": "c209cc0bd8009b0e12ca76bc48a68751ec297ece9256ccfde8186e780400bd3e",
+          "samples": 1630,
+          "identity": {
+            "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        },
+        "wasm": {
+          "main_thread_cpu_ms_per_frame": 5.223780853333333,
+          "language_runtime_cpu_ms_per_frame": 0.23714094666666666,
+          "other_main_thread_cpu_ms_per_frame": 4.9866399066666665,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 2.12424848,
+            "Checksums / measurement": 0.04676018666666667,
+            "Lua runtime / tables / GC": 0.006680026666666667,
+            "Native movement / pathfinding": 0.89178356,
+            "Native rendering / models": 0.18370073333333334,
+            "Native simulation / animation": 0.32064128,
+            "Other native code": 0.9285237066666666,
+            "Unresolved": 0.49098196,
+            "Wasm guest": 0.17034068,
+            "Wasmtime runtime": 0.06012024
+          },
+          "profile": "perf-runs/2026-10-31-profiles-current/night-v6-current-geometry-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-wasm/profile.json",
+          "profile_sha256": "95c5df1ab4b80d3c2cf3529f31781149130501beb1eda16a6b6854e31a296026",
+          "samples": 1566,
+          "identity": {
+            "source_commit": "d623d0ea48adc8397e2465bbcf6be0a649736721",
+            "modules": {
+              "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+              "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+              "LuaRules/wasm/ttld-rules.wasm": "b2bdacf9d4ecdf63e5ec5d1bb88a33eab2c1396702ea53ceaf328db972291287"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          }
+        }
+      },
+      "main_thread_difference_lua_minus_rust_ms": 0.21710086666666673,
+      "language_runtime_difference_lua_minus_rust_ms": 0.4943219733333334,
+      "other_cpu_difference_lua_minus_rust_ms": -0.27722110666666655
+    }
+  ]
 }
