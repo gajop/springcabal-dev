@@ -119,6 +119,31 @@ def complete_capture_runs(campaign, kind):
             for directory in group.values()}
 
 
+def current_capture(campaign, game, selected, kind):
+    """Match both partners to one selected timing case before exporting either."""
+    captured = read(campaign/'provenance.json')['args']
+    backends = ('lua', 'wasm') if captured['backend'] == 'both' else (captured['backend'],)
+    content = read(campaign/f'{game}-content.json')
+    fields = ('scenario', 'backend', 'rust_jobs', 'worker_threads', 'unit_multiplier',
+              'effects_multiplier', 'fire_renderer', 'frames', 'warmup', 'callback_timers')
+    for timing in selected:
+        expected = read(timing/'provenance.json')['args']
+        if any(captured.get(k) != expected.get(k) for k in fields):
+            continue
+        normal = read(timing/f'{game}-content.json')
+        for backend in backends:
+            identity = capture_identity(campaign, game, backend)
+            if not identity['source_commit'] or identity != capture_identity(timing, game, backend):
+                break
+            # A world observer adds Lua files. Profiles and rendered clips do
+            # not, so their complete staged game content must also match.
+            if kind != 'worlds' and content[backend]['content_sha256'] != normal[backend]['content_sha256']:
+                break
+        else:
+            return True
+    return False
+
+
 def scene_summary(summaries, campaign, game, allow_incomplete=False):
     if campaign in summaries:
         return summaries[campaign]
@@ -244,6 +269,7 @@ def main():
                 if row['campaign'] in holds:
                     row['held_reason'] = holds[row['campaign']]['reason']
                 campaign_roots[row['campaign']] = timing_root
+    selected_captures = defaultdict(list)
     for sid, game, title, load, control, job, capture in SCENES:
         scene = {'id': sid, 'game': game, 'title': title, 'load': load,
                  'language': scene_summary(language, control, game, args.allow_incomplete), 'jobs': {}, 'capture': capture,
@@ -268,6 +294,8 @@ def main():
             if not (campaign_root/'provenance.json').exists() and args.allow_incomplete:
                 continue
             stamp = read(campaign_root/'provenance.json')
+            if summary['measured_pairs'] >= 5 and not summary.get('held_reason'):
+                selected_captures[sid].append(campaign_root)
             summary['runtime'] = {key: stamp.get(key) for key in
                                   ('engine_commit', 'engine_sha256', 'engine_source', 'cpu_activity_policy', 'resource_guard_sha256')}
             summary['game_content'] = read(campaign_root/f'{game}-content.json')
@@ -308,6 +336,17 @@ def main():
             summary['run_ids'] = ids
         data['scenes'].append(scene)
     capture_to_scene = {s['capture']: s['id'] for s in data['scenes'] if s['capture']}
+    capture_selection = {}
+    omitted_captures = defaultdict(set)
+
+    def selected_capture(campaign, game, sid, kind):
+        key = campaign, kind
+        if key not in capture_selection:
+            capture_selection[key] = current_capture(campaign, game, selected_captures[sid], kind)
+            if not capture_selection[key]:
+                omitted_captures[kind].add(str(campaign.relative_to(PROJECT)))
+        return capture_selection[key]
+
     accepted_worlds = {}
     for path in sorted([*args.recordings.glob('**/world.jsonl'), *args.recordings.glob('**/world.jsonl.gz')]):
         case = path.parent.parent.name
@@ -318,6 +357,8 @@ def main():
         if not result['ok'] or result['contended']:
             continue
         campaign = path.parent.parent
+        if not selected_capture(campaign, result['game'], sid, 'worlds'):
+            continue
         if campaign not in accepted_worlds:
             accepted_worlds[campaign] = complete_capture_runs(campaign, 'worlds')
         if path.parent not in accepted_worlds[campaign]:
@@ -340,6 +381,8 @@ def main():
         if not result['ok'] or result['contended']:
             continue
         campaign = path.parent.parent
+        if not selected_capture(campaign, result['game'], sid, 'profiles'):
+            continue
         if campaign not in accepted_profiles:
             accepted_profiles[campaign] = complete_capture_runs(campaign, 'profiles')
         if path.parent not in accepted_profiles[campaign]:
@@ -363,14 +406,17 @@ def main():
     if args.videos:
         clips = read(args.videos/'videos.json')
         (out/'videos').mkdir(exist_ok=True)
+        data['videos'] = []
         for clip in clips:
             clip['scene'] = capture_to_scene.get(clip['case'])
             source = Path(clip['source'])
             result = report.read_result(source/'result.json')
+            if not clip['scene'] or not selected_capture(source.parent, result['game'], clip['scene'], 'videos'):
+                continue
             clip.update(capture_identity(source.parent, result['game'], clip['backend']))
             clip['worker_threads'] = result.get('worker_threads')
             shutil.copyfile(args.videos/clip['file'], out/clip['url'])
-        data['videos'] = clips
+            data['videos'].append(clip)
     report.write_rows(out/'language', list(language.values()))
     report.write_rows(out/'jobs', list(jobs.values()))
     saved = [report.read_result(p) for root in timing_roots for p in root.glob('**/result.json')]
@@ -380,6 +426,7 @@ def main():
         for path in root.glob('**/*-content.json'):
             sources[path.stem.removesuffix('-content')+':'+path.parent.name] = read(path)
     data['audit'] = {
+        'omitted_superseded_capture_campaigns': {kind: sorted(paths) for kind, paths in omitted_captures.items()},
         'generated_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
         'timing_roots': [str(root) for root in timing_roots],
         'primary_scenes_at_five_pairs': sum(s['language']['measured_pairs'] >= 5 for s in data['scenes']),

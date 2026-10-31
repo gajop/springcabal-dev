@@ -306,6 +306,41 @@ class EquivalenceTests(unittest.TestCase):
         self.assertEqual(costs['categories'], {'Wasm guest': 0.5})
         self.assertEqual(costs['leaves'], [{'name': 'kernel', 'ms': 0.2}])
 
+    def test_capture_selection_rejects_the_whole_pair_when_only_lua_is_superseded(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            selected, captured = root/'selected', root/'captured'
+            args = dict(backend='both', scenario='autonomous', rust_jobs='off', worker_threads=1,
+                        unit_multiplier=1, effects_multiplier=1, fire_renderer='gpu',
+                        frames=900, warmup=300, callback_timers='off', games_dir=str(root))
+            stamp = dict(args=args, engine_sha256='engine', resource_guard_sha256='guard',
+                         cpu_activity_policy={'max_background_cpu_cores': 0.5})
+            content = {'lua': dict(commit='lua-current', modules={}, content_sha256='lua-tree'),
+                       'wasm': dict(commit='rust-current', modules={'rules.wasm': 'module'}, content_sha256='rust-tree')}
+            for path in [selected, captured]:
+                path.mkdir()
+                (path/'provenance.json').write_text(json.dumps(stamp))
+                (path/'hunted-content.json').write_text(json.dumps(content))
+            self.assertTrue(dashboard.current_capture(captured, 'hunted', [selected], 'profiles'))
+            content['lua']['commit'] = 'lua-old'  # Rust is unchanged; neither partner may be exported.
+            (captured/'hunted-content.json').write_text(json.dumps(content))
+            for kind in ['profiles', 'worlds', 'videos']:
+                self.assertFalse(dashboard.current_capture(captured, 'hunted', [selected], kind))
+            content['lua'].update(commit='lua-current', content_sha256='tree-with-world-observer')
+            (captured/'hunted-content.json').write_text(json.dumps(content))
+            self.assertTrue(dashboard.current_capture(captured, 'hunted', [selected], 'worlds'))
+            self.assertFalse(dashboard.current_capture(captured, 'hunted', [selected], 'profiles'))
+            content['lua']['content_sha256'] = 'lua-tree'
+            (captured/'hunted-content.json').write_text(json.dumps(content))
+            for field, value in [('engine_sha256', 'old-engine'), ('resource_guard_sha256', 'old-guard')]:
+                changed = dict(stamp, **{field: value})
+                (captured/'provenance.json').write_text(json.dumps(changed))
+                self.assertFalse(dashboard.current_capture(captured, 'hunted', [selected], 'worlds'))
+            changed = dict(stamp, args=dict(args, worker_threads=4))
+            (captured/'provenance.json').write_text(json.dumps(changed))
+            self.assertFalse(dashboard.current_capture(captured, 'hunted', [selected], 'videos'))
+            self.assertFalse(dashboard.current_capture(captured, 'hunted', [], 'profiles'))
+
     def test_diagnostic_exports_require_complete_clean_partner_artifacts(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
