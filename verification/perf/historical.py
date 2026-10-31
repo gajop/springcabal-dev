@@ -84,7 +84,7 @@ def export(project, archive):
                 if root.name == '2026-10-30-night-v6-unaffected':
                     value.update(status='stale' if row['game'] == 'area17' else 'superseded', note={
                         'area17': 'Before aligning Lua/Rust camera averaging order; replaced by the corrected-source campaign.',
-                        'flove': 'Before global HUD status and immediate power publication; the old stress HUD read a stale spire.',
+                        'flove': 'Before global HUD/power publication and wisp/spire rendering alignment; the old stress HUD read a stale spire.',
                         'mycube': 'Before matching story creation/RNG order, unit mass and idle animation.',
                         'partsneeded': 'Before matching level creation, prop/gate physics, rotation and camera initialization.',
                     }[row['game']])
@@ -96,7 +96,7 @@ def export(project, archive):
     games = [
         dict(game='area17', title='Area 17', code='Selected code work complete.', remaining='Fresh normal/2× comparisons, captures and profile review on aligned camera arithmetic.', expected=2),
         dict(game='hunted', title='Hunted', code='Selected Lua/Rust optimizations implemented and tested; no identified code fix pending.', remaining='All six timing configurations and matching worlds/profiles complete; final profile analysis remains.', expected=6),
-        dict(game='flove', title='Flove', code='Lua/Rust optimizations and HUD corrections tested and pushed; all 302 visible-status samples match Lua.', remaining='Fresh normal/10× and jobs comparisons, captures and profile analysis.', expected=6),
+        dict(game='flove', title='Flove', code='Physics/HUD fixes are public. Wisp-renderer and spire-effect parity corrections are in progress.', remaining='Source corrections and existing wisp/animation checks, then fresh normal/10× and jobs comparisons/captures.', expected=6),
         dict(game='ttld', title='To the Last Drop', code='House ignition and health-bar fixes implemented/tested/pushed. Final parity verification remains active.', remaining='Finish ordinary-fire and four detailed-world checks; then fresh timings, captures and analysis.', expected=4),
         dict(game='gravitas', title='Gravitas effects', code='Selected optimizations implemented/tested on both sides; no identified code fix pending.', remaining='Current-engine effects/jobs comparisons, captures and analysis. Effects only.', expected=6),
         dict(game='mycube', title='My Cube', code='Story/RNG, mass and idle fixes tested/pushed; all 151 full-world and 9,750 pose samples match Lua exactly.', remaining='Fresh normal-scene comparisons/captures and profile review on the corrected public sources.', expected=1),
