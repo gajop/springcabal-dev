@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T21:06:04.564880+00:00",
+  "utc": "2026-10-31T22:31:20.440113+00:00",
   "status": "Confirmed source mismatch; not a language-only comparison",
   "sources": {
     "lua_beam": {
@@ -23,90 +23,127 @@
   "rust": "Accumulates UI Update deltaSeconds, then sin(seconds*30/period). NativeInterfaceEventClient::Update supplies CGame::updateDeltaSeconds from elapsed draw time, not simulated frames. Blend factors and depth mask are implicit. Rust also clamps radius>=1 and skips nonpositive heights unlike Lua max(1,height).",
   "next": "Use original simulation-frame pulse and matching explicit render state/low-height geometry; cache the same immutable cone ring on both sides. Existing NVIDIA functional/visual/input/world and bounded GL checks precede adoption. No engine update.",
   "candidate": {
-    "status": "Private; not adopted or published",
-    "utc": "2026-10-31T21:55:34.521495+00:00",
-    "base_commits": {
-      "Area-17.sdd": "2c8c725e80814a32259f0fc400487337c1aa5343",
-      "Area17-wasm.sdd": "4784fc666fc8783c6e1f5d08f659288fbacb4053"
-    },
-    "source_diffs_sha256": {
-      "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
-      "Area17-wasm.sdd": "4fcfe11eb8483d9442a4a97becf0ffc903e67b65302ea646284c3846b4c12f09"
-    },
-    "normal_modules": {
-      "LuaRules/wasm/area17-rules.wasm": "6f6b059e71af591ace7ebe85ad2492767a7f077e3af6c730bb67eb729d147276",
-      "LuaUI/wasm/area17-ui.wasm": "4ba2e017c635ed6dfdb8d0887f216754b01cbe3d8c3046fbe09ff66b3f5ae346"
-    },
-    "checks": {
-      "rust_host_tests": 6,
-      "lua_regressions": 15,
-      "fmt_clippy_lua_syntax": "passed",
-      "no_render": {
-        "utc": "2026-10-31T21:51:20.014212+00:00",
-        "complete": false,
-        "cases": [
-          {
-            "name": "static",
-            "mode": "static",
-            "workers": 1,
-            "jobs": "off",
-            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/9677fbf59c10/static/attempt-0"
-          }
+    "state": "private; not adopted, released or used in final comparisons",
+    "normal_build": {
+      "utc": "2026-10-31T21:47:31.675531+00:00",
+      "commands": [
+        [
+          "cargo",
+          "fmt",
+          "--all"
         ],
-        "source_diffs_sha256": {
-          "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
-          "Area17-wasm.sdd": "4fcfe11eb8483d9442a4a97becf0ffc903e67b65302ea646284c3846b4c12f09"
-        },
-        "engine_version": "spring-headless version 2026.10.3103 (Headless)",
-        "harness_sha256": {
-          "/home/gajop/projects/spring-projects/springcabal-games/verification/games/area17.sh": "9ddd3cba8c9f7e60f5f9f349611016cba838e15408084761beb43f32b6192cd5",
-          "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/area17/lua_regressions.lua": "c05ad59d8791f13238aab5b9737e158aac0be2dcddbdf3590f7f8e314c432b15",
-          "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/area17/scenario.lua": "7eab78e9c68402fbd3689164ea90f0f4cafe8b07c191d27cef1e8c912484ebfa"
-        },
-        "engine_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
-        "no_render_correctness_diagnostics_only": true,
-        "performance_evidence": false
+        [
+          "cargo",
+          "clippy",
+          "--workspace",
+          "--target",
+          "wasm32-unknown-unknown",
+          "--release",
+          "--locked",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        [
+          "cargo",
+          "test",
+          "-p",
+          "area17-shared",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--locked"
+        ],
+        [
+          "cargo",
+          "build",
+          "--workspace",
+          "--target",
+          "wasm32-unknown-unknown",
+          "--release",
+          "--locked"
+        ]
+      ],
+      "source_diffs_sha256": {
+        "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
+        "Area17-wasm.sdd": "4fcfe11eb8483d9442a4a97becf0ffc903e67b65302ea646284c3846b4c12f09"
       },
-      "no_render_integration": {
-        "utc": "2026-10-31T21:53:52.003964+00:00",
-        "suite_passed": false,
-        "source_diffs_sha256": {
-          "Area-17.sdd": "ceeeb0f02e46e6a7cde996e0e537aac8f4b12b7bca810c0c72afb2ca90678a04",
-          "Area17-wasm.sdd": "4fcfe11eb8483d9442a4a97becf0ffc903e67b65302ea646284c3846b4c12f09"
-        },
-        "log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/9677fbf59c10/integration/attempt-0/run.log",
-        "observed_assertions": {
-          "Rust": 23,
-          "Lua": 6
-        },
-        "reason": "Strict suite rejects RmlUi image-load warnings in no-render context; full unmodified suite including zero warnings remains mandatory in first queued NVIDIA case.",
-        "performance_evidence": false
-      }
-    },
-    "performance_evidence": false,
-    "gpu_checks": "queued under unchanged NVIDIA/CPU guards",
-    "worlds_and_render_gl_review": "pending",
-    "changes": [
-      "Beam uses simulation-frame pulse, original low-height geometry and explicit blend/depth/cull state",
-      "Both cache immutable cone rings; Lua computes its pulse/frame once per draw",
-      "Native default radius70 and cached authored wantedHeight match Lua",
-      "Float32 intermediates and the existing pinned engine-matching sine/cosine helpers; earlier private float64 candidate snapshots superseded"
-    ],
-    "precision": {
-      "utc": "2026-10-31T21:53:52.003505+00:00",
-      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
-      "lua_number": "f32",
-      "intermediate_arithmetic": "f32",
-      "trigonometry": "Existing springcabal-math pinned fdlibm/streflop sinf/cosf; same implementation as engine Lua",
-      "sqrt": "Engine FastMath SSE float32 sqrt; Wasm float32 sqrt",
-      "sources": {
-        "rts/lib/lua/include/luaconf.h": "ba12b71d5b7d25b63c64097753d7b44fa9785844038d158fbf85be6f9af4d7ca",
-        "rts/lib/lua/src/lmathlib.cpp": "a6e18bff437dd7cb9250f4d066b0982920c1a82cf52ee1f7a5dad41fd777b7dd",
-        "rts/System/FastMath.h": "80e23859bb33c824dcad023bfe79cc1ebde14d6eb77113d0e03d8cf240588ee7"
+      "modules": {
+        "LuaRules/wasm/area17-rules.wasm": "6f6b059e71af591ace7ebe85ad2492767a7f077e3af6c730bb67eb729d147276",
+        "LuaUI/wasm/area17-ui.wasm": "4ba2e017c635ed6dfdb8d0887f216754b01cbe3d8c3046fbe09ff66b3f5ae346"
       },
-      "superseded": "Earlier private f64 candidate snapshots; no GPU final comparisons or public adoption used those candidates",
-      "actual_gpu_vertex_uniform_image_proofs": "pending"
+      "lua_syntax": "passed",
+      "public_sources_untouched": true,
+      "candidate_only": true
     },
-    "private_normal_build_snapshot": "codex-work/night-2026-10-30/v4/area17-render-parity/builds/7dff6f39102389d6"
+    "remaining": "GPU/world/GL/image review, cost review and source adoption, then canonical builds and final comparisons/captures",
+    "headless_checks": {
+      "complete": false,
+      "cases": [
+        {
+          "name": "static",
+          "mode": "static",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/headless-checks/9677fbf59c10/static/attempt-0"
+        }
+      ],
+      "utc": "2026-10-31T21:51:20.014212+00:00"
+    },
+    "gpu_checks": {
+      "complete": true,
+      "cases": [
+        {
+          "name": "serial",
+          "args": [
+            "area17",
+            "headless"
+          ],
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/gpu-checks/9677fbf59c10/serial/attempt-0"
+        },
+        {
+          "name": "visual",
+          "args": [
+            "area17",
+            "visual"
+          ],
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/gpu-checks/9677fbf59c10/visual/attempt-0"
+        },
+        {
+          "name": "tech-ui",
+          "args": [
+            "area17",
+            "tech-ui"
+          ],
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/gpu-checks/9677fbf59c10/tech-ui/attempt-2"
+        },
+        {
+          "name": "controls",
+          "args": [
+            "controls",
+            "area17"
+          ],
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/gpu-checks/9677fbf59c10/controls/attempt-0"
+        },
+        {
+          "name": "lua-review",
+          "args": [
+            "probe",
+            "area17-lua-review"
+          ],
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area17-render-parity/gpu-checks/9677fbf59c10/lua-review/attempt-0"
+        }
+      ],
+      "utc": "2026-10-31T22:05:33.980450+00:00"
+    }
   }
 }

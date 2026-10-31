@@ -1,0 +1,375 @@
+{
+  "utc": "2026-10-31T22:31:20.443107+00:00",
+  "scope": "Separate guarded NVIDIA instruction-count diagnostics, not CPU durations, normal timings or additional replicates. VM instruction shares cannot partition sampled luaH_get CPU time.",
+  "captures": [
+    {
+      "emitters": 100,
+      "interval": 997,
+      "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-11-01-gravitas-vm-lines/100x-count-997/attempt-0/gravitas-00-lua",
+      "samples": 1166784,
+      "top_functions": [
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 200,
+          "samples": 284899,
+          "instruction_share_percent": 24.417458587022104
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 243,
+          "samples": 156759,
+          "instruction_share_percent": 13.435134523613625
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 125,
+          "samples": 96433,
+          "instruction_share_percent": 8.264854506061104
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 182,
+          "samples": 94987,
+          "instruction_share_percent": 8.140924112774943
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 103,
+          "samples": 91063,
+          "instruction_share_percent": 7.804615078712084
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 304,
+          "samples": 78188,
+          "instruction_share_percent": 6.701154626734683
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 4,
+          "samples": 59251,
+          "instruction_share_percent": 5.078146426416543
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 160,
+          "samples": 56299,
+          "instruction_share_percent": 4.825143299873841
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 58,
+          "samples": 54276,
+          "instruction_share_percent": 4.6517607372058585
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 117,
+          "samples": 41149,
+          "instruction_share_percent": 3.5267024573528607
+        }
+      ]
+    },
+    {
+      "emitters": 1,
+      "interval": 997,
+      "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-11-01-gravitas-vm-lines/1x-count-997/attempt-0/gravitas-00-lua",
+      "samples": 12074,
+      "top_functions": [
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 200,
+          "samples": 2939,
+          "instruction_share_percent": 24.34156037767103
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 243,
+          "samples": 1709,
+          "instruction_share_percent": 14.154381315222793
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 103,
+          "samples": 1044,
+          "instruction_share_percent": 8.646678813980454
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 125,
+          "samples": 954,
+          "instruction_share_percent": 7.901275467947656
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 182,
+          "samples": 919,
+          "instruction_share_percent": 7.611396388934901
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 304,
+          "samples": 808,
+          "instruction_share_percent": 6.692065595494451
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 4,
+          "samples": 601,
+          "instruction_share_percent": 4.977637899619016
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 160,
+          "samples": 535,
+          "instruction_share_percent": 4.431008779194964
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 322,
+          "samples": 409,
+          "instruction_share_percent": 3.3874440947490476
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 117,
+          "samples": 399,
+          "instruction_share_percent": 3.3046215007454034
+        }
+      ]
+    },
+    {
+      "emitters": 100,
+      "interval": 10007,
+      "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-11-01-gravitas-vm-lines/100x-count-10007/attempt-0/gravitas-00-lua",
+      "samples": 113082,
+      "top_functions": [
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 200,
+          "samples": 27566,
+          "instruction_share_percent": 24.37700076051007
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 243,
+          "samples": 17142,
+          "instruction_share_percent": 15.158911232556905
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 125,
+          "samples": 9461,
+          "instruction_share_percent": 8.366495109743372
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 103,
+          "samples": 8792,
+          "instruction_share_percent": 7.774889018588281
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 182,
+          "samples": 7884,
+          "instruction_share_percent": 6.971931872446543
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 304,
+          "samples": 7638,
+          "instruction_share_percent": 6.754390619196689
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 4,
+          "samples": 5698,
+          "instruction_share_percent": 5.038821386250685
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 58,
+          "samples": 5351,
+          "instruction_share_percent": 4.731964415203127
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 160,
+          "samples": 4889,
+          "instruction_share_percent": 4.323411329831449
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 117,
+          "samples": 4039,
+          "instruction_share_percent": 3.571744397870572
+        }
+      ]
+    },
+    {
+      "emitters": 1,
+      "interval": 10007,
+      "source": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-11-01-gravitas-vm-lines/1x-count-10007/attempt-0/gravitas-00-lua",
+      "samples": 1170,
+      "top_functions": [
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 200,
+          "samples": 299,
+          "instruction_share_percent": 25.555555555555557
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 243,
+          "samples": 171,
+          "instruction_share_percent": 14.615384615384615
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 103,
+          "samples": 95,
+          "instruction_share_percent": 8.11965811965812
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 125,
+          "samples": 80,
+          "instruction_share_percent": 6.837606837606837
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 304,
+          "samples": 79,
+          "instruction_share_percent": 6.752136752136752
+        },
+        {
+          "source": "lups/ParticleClasses/SimpleParticles2.lua",
+          "definition": 182,
+          "samples": 76,
+          "instruction_share_percent": 6.495726495726496
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 160,
+          "samples": 63,
+          "instruction_share_percent": 5.384615384615385
+        },
+        {
+          "source": "LuaUI/main.lua",
+          "definition": 4,
+          "samples": 57,
+          "instruction_share_percent": 4.871794871794871
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 58,
+          "samples": 52,
+          "instruction_share_percent": 4.444444444444445
+        },
+        {
+          "source": "lups/headers/particle_batch.lua",
+          "definition": 117,
+          "samples": 43,
+          "instruction_share_percent": 3.675213675213675
+        }
+      ]
+    }
+  ],
+  "native_parent_audit": {
+    "utc": "2026-10-31T21:35:35.994752+00:00",
+    "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-100-lua-rust-w4/fire-100/gravitas-01-lua/profile.json",
+    "profile_sha256": "fb28913165037d25fe8099593f1e19dffa577b870386561f20d7307cb694eee9",
+    "main_thread": "recoil-main (3581972)",
+    "frames": 600,
+    "exclusive_lookup_ms_per_frame": {
+      "Lua VM": 9.141616493333334
+    },
+    "top_parent_paths": [
+      {
+        "path": [
+          "CLuaHandle::RunCallInTraceback(lua_State*, LuaHashString const&, int, int, int, bool) [clone .constprop.0]",
+          "CLuaHandle::RunCallInTraceback(lua_State*, LuaHashString const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, int, int, int, bool)",
+          "lua_pcall(lua_State*, int, int, int)",
+          "luaD_pcall(lua_State*, void (*)(lua_State*, void*), void*, long, long)",
+          "luaD_call(lua_State*, lua_TValue*, int)",
+          "luaV_execute(lua_State*, int)",
+          "luaV_gettable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)"
+        ],
+        "exclusive_ms_per_frame": 8.27655304
+      },
+      {
+        "path": [
+          "CLuaHandle::RunCallInTraceback(lua_State*, LuaHashString const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, int, int, int, bool)",
+          "lua_pcall(lua_State*, int, int, int)",
+          "luaD_pcall(lua_State*, void (*)(lua_State*, void*), void*, long, long)",
+          "luaD_call(lua_State*, lua_TValue*, int)",
+          "luaV_execute(lua_State*, int)",
+          "luaV_settable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+          "luaH_set(lua_State*, Table*, lua_TValue const*)"
+        ],
+        "exclusive_ms_per_frame": 0.68136272
+      },
+      {
+        "path": [
+          "luaD_precall(lua_State*, lua_TValue*, int)",
+          "LuaFBOs::ActiveFBO(lua_State*)",
+          "lua_pcall(lua_State*, int, int, int)",
+          "luaD_pcall(lua_State*, void (*)(lua_State*, void*), void*, long, long)",
+          "luaD_call(lua_State*, lua_TValue*, int)",
+          "luaV_execute(lua_State*, int)",
+          "luaV_gettable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)"
+        ],
+        "exclusive_ms_per_frame": 0.12358049333333333
+      },
+      {
+        "path": [
+          "lua_pcall(lua_State*, int, int, int)",
+          "luaD_pcall(lua_State*, void (*)(lua_State*, void*), void*, long, long)",
+          "luaD_call(lua_State*, lua_TValue*, int)",
+          "luaV_execute(lua_State*, int)",
+          "luaV_settable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+          "newkey(lua_State*, Table*, lua_TValue const*) [clone .constprop.0]",
+          "resize(lua_State*, Table*, int, int)"
+        ],
+        "exclusive_ms_per_frame": 0.04676018666666667
+      },
+      {
+        "path": [
+          "CLuaHandle::RunCallInTraceback(lua_State*, LuaHashString const*, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >*, int, int, int, bool)",
+          "lua_pcall(lua_State*, int, int, int)",
+          "luaD_pcall(lua_State*, void (*)(lua_State*, void*), void*, long, long)",
+          "luaD_call(lua_State*, lua_TValue*, int)",
+          "luaV_execute(lua_State*, int)",
+          "luaV_settable(lua_State*, lua_TValue const*, lua_TValue*, lua_TValue*)",
+          "newkey(lua_State*, Table*, lua_TValue const*) [clone .constprop.0]"
+        ],
+        "exclusive_ms_per_frame": 0.013360053333333333
+      }
+    ],
+    "scope": "Observed CPU stack parents from the accepted matching 100-emitter profile. All lookup self samples have a Lua VM ancestor; none have a VBO Upload ancestor. This does not identify individual interpreted Lua functions or prove that further source optimizations are impossible. The separately queued instruction hook identifies source locations, not CPU durations."
+  },
+  "raw_instruction_capture_sha256": "2b04be4444d2a9f3b8418fd1ae2041ab48ad38f3b87e6b9a1b6dae56464670d5",
+  "next_trial": {
+    "utc": "2026-10-31T22:27:28.655987+00:00",
+    "games": {
+      "gravitas": {
+        "folder": "Gravitas.sdd",
+        "base": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f",
+        "candidate": "f57e1756a29ffb4134f0bc91a2cd092579a20b63",
+        "original_sha256": "ca2fbd63c82dc438729fc0a23f08b617f42b31d765e2f329cba6a7354dd7178f",
+        "candidate_sha256": "cb67d4f3d2d34486a8690a3d10bfce92ebbd0e094bcbdee3e93578b9eccbe546"
+      },
+      "ttld": {
+        "folder": "ToTheLastDrop.sdd",
+        "base": "15c0e01991d48720407c2db574c8195fb9ece14f",
+        "candidate": "375e8dfa79c24e47112c6aa6e00b2de7a8e1a086",
+        "original_sha256": "ca2fbd63c82dc438729fc0a23f08b617f42b31d765e2f329cba6a7354dd7178f",
+        "candidate_sha256": "cb67d4f3d2d34486a8690a3d10bfce92ebbd0e094bcbdee3e93578b9eccbe546"
+      }
+    },
+    "host_checks_passed": true,
+    "public_sources_untouched": true,
+    "rust_unchanged": true,
+    "output_contract": "Same records, lifecycle, masks, upload order, draw ranges and shaders; only Lua field reads/calls change."
+  }
+}

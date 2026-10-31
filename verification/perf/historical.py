@@ -98,7 +98,7 @@ def export(project, archive):
         dict(game='hunted', title='Hunted', code='AI optimizations are public. A confirmed rabbit material/fade mismatch needs correction; current language comparisons are held.', remaining='All six timing configurations and matching worlds/profiles complete; final profile analysis remains.', expected=6),
         dict(game='flove', title='Flove', code='Physics/HUD fixes are public. The private renderer/spire candidate passes serial/jobs correctness checks and extended animation/effect traces.', remaining='GPU visual/wisp/input checks and paired world replay, source/cost review and adoption, then six fresh normal/10× and jobs comparisons/captures.', expected=6),
         dict(game='ttld', title='To the Last Drop', code='House ignition and health-bar fixes implemented/tested/pushed. Final parity verification remains active.', remaining='Finish ordinary-fire and four detailed-world checks; then fresh timings, captures and analysis.', expected=4),
-        dict(game='gravitas', title='Gravitas effects', code='Selected optimizations implemented/tested on both sides; no identified code fix pending.', remaining='Current-engine effects/jobs comparisons, captures and analysis. Effects only.', expected=6),
+        dict(game='gravitas', title='Gravitas effects', code='Selected optimizations are public. A new private Lua flush-cache trial targets the instruction hotspot; no additional gain claimed.', remaining='Effects timing matrix/captures complete; evaluate the private flush trial and finish jobs-cost/profile analysis.', expected=6),
         dict(game='mycube', title='My Cube', code='Story/RNG, mass and idle fixes tested/pushed; all 151 full-world and 9,750 pose samples match Lua exactly.', remaining='Fresh normal-scene comparisons/captures and profile review on the corrected public sources.', expected=1),
         dict(game='partsneeded', title='Parts Needed', code='Level/gate/camera and same-frame rotation fixes tested/pushed; all 151 full-world samples match Lua exactly.', remaining='Fresh normal-scene comparisons/captures and profile review on the corrected public sources.', expected=1),
     ]
@@ -127,7 +127,7 @@ def export(project, archive):
     by_game = {game['game']: game for game in games}
     for name in ('hunted', 'gravitas'):
         if by_game[name]['completed'] == by_game[name]['expected']:
-            by_game[name]['remaining'] = 'Timing matrix complete. Final profile interpretation and jobs-cost diagnostics remain.'
+            by_game[name]['remaining'] = 'Timing matrix complete. Final profile interpretation and jobs-cost diagnostics remain; Gravitas also has a private Lua flush trial under test.'
     if by_game['area17']['completed'] == 1 and not (state_path.parent / 'area17-render-fixes-pending').exists():
         by_game['area17']['remaining'] = 'Normal timing/profile/world/clip complete; finish the fresh 2× case and its captures, then final analysis.'
     if by_game['ttld']['completed'] == 4:

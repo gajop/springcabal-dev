@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T20:34:40.999970+00:00",
+  "utc": "2026-10-31T22:31:20.439392+00:00",
   "status": "confirmed source/runtime activation mismatch; correction required",
   "sources": {
     "lua_material": {
@@ -24,113 +24,151 @@
   "consequence": "Physical-world equality does not prove matching model shading or equal rendering work. Hold language comparisons; retain raw data. Jobs off/on compare the same current Rust renderer, but corrected-source final comparisons will be needed after adoption.",
   "source_work": "Port the same rabbit material through existing native rendering API if available, and align Lua spatial visibility/caches with Rust; preserve original output. No engine update authorized or needed merely to patch the game.",
   "candidate": {
-    "status": "Private; not adopted or published",
-    "utc": "2026-10-31T21:55:34.520898+00:00",
-    "base_commits": {
-      "Hunted.sdd": "02009c4793e6de5e0dcb20517e126244626ebbef",
-      "Hunted-wasm.sdd": "c52c000de1393b64ce8f32d9d3c3edaf70422d69"
-    },
-    "source_diffs_sha256": {
-      "Hunted.sdd": "a54c6da64e75c331d1a9711174dcabeffc5dd3b1ba62c638e11f58ab0549af12",
-      "Hunted-wasm.sdd": "f5943122ae13d0294a3023beb1abbe4f8abc7c307aa6cf50948bfc71a03ce8dc",
-      "springcabal-rs": "24b40bec745bfa0354be7e0113421314e0b45f8d677cf8039ede911cb8d9b30d"
-    },
-    "normal_modules": {
-      "LuaRules/wasm/hunted-rules.wasm": "dd17ef43c20eef3dd9701a222bc759cfeaccf2212d869964833e032c1ba8cf16",
-      "LuaRules/wasm/hunted-jobs.wasm": "816be69557a67989e0ebbbf450ca4070a677572ce5f8acbd4dede96ec8e99236",
-      "LuaUI/wasm/hunted-ui.wasm": "2600696829defddc052f3ce86d3994c371979377b43009893d5179b3d15aa825"
-    },
-    "checks": {
-      "rust_host_tests": 45,
-      "lua_regressions": 22,
-      "fmt_clippy_lua_syntax": "passed",
-      "no_render": {
-        "utc": "2026-10-31T21:54:12.320799+00:00",
-        "complete": true,
-        "cases": [
-          {
-            "name": "integration",
-            "mode": "headless",
-            "workers": 1,
-            "jobs": "off",
-            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-render-parity/headless-checks/9abf99c43962/integration/attempt-0"
-          },
-          {
-            "name": "jobs-check",
-            "mode": "headless",
-            "workers": 4,
-            "jobs": "check",
-            "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-render-parity/headless-checks/9abf99c43962/jobs-check/attempt-0"
-          }
+    "state": "private; not adopted, released or used in final comparisons",
+    "normal_build": {
+      "utc": "2026-10-31T22:13:16.663505+00:00",
+      "commands": [
+        [
+          "cargo",
+          "fmt",
+          "--all"
         ],
-        "source_diffs_sha256": {
-          "Hunted.sdd": "a54c6da64e75c331d1a9711174dcabeffc5dd3b1ba62c638e11f58ab0549af12",
-          "Hunted-wasm.sdd": "f5943122ae13d0294a3023beb1abbe4f8abc7c307aa6cf50948bfc71a03ce8dc",
-          "springcabal-rs": "24b40bec745bfa0354be7e0113421314e0b45f8d677cf8039ede911cb8d9b30d"
-        },
-        "engine_version": "spring-headless version 2026.10.3103 (Headless)",
-        "harness_sha256": {
-          "/home/gajop/projects/spring-projects/springcabal-games/verification/games/hunted.sh": "7151b285df404104e318dd097a2af3a0a3ee366d71295ef22cbd1da80cf94b6f",
-          "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/hunted/lua_regressions.lua": "e9021f53017c1b51578d52e8ee8e662666ab0fbd09c2f9ee030d72e063b9f248"
-        },
-        "engine_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
-        "no_render_correctness_diagnostics_only": true,
-        "performance_evidence": false
-      },
-      "engine_math_host_tests": 4
-    },
-    "performance_evidence": false,
-    "gpu_checks": "queued under unchanged NVIDIA/CPU guards",
-    "worlds_and_render_gl_review": "pending",
-    "changes": [
-      "Original GLSL material through native rendering API; same per-object fade expression and textures",
-      "Lua uses spatial visibility queries and cached per-object uniforms instead of per-draw Lua callbacks",
-      "Local cursor flashlight updates in benchmark mode and outside the view, with synced command filtering preserved",
-      "Private shared volume helper uses original 222-vertex triangle strip and explicit front-face culling",
-      "Both skip unchanged-frame/cursor fade work; Lua mutates existing light records, Rust reuses its beam buffer and reads published beam coordinates without a redundant position lookup",
-      "Float32 intermediates and the existing pinned engine-matching sine/cosine helpers; earlier private float64 candidate snapshots superseded"
-    ],
-    "private_normal_build_snapshot": "codex-work/night-2026-10-30/v4/hunted-render-parity/builds/276b1dd5690e9a6d",
-    "precision": {
-      "utc": "2026-10-31T21:53:52.003505+00:00",
-      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
-      "lua_number": "f32",
-      "intermediate_arithmetic": "f32",
-      "trigonometry": "Existing springcabal-math pinned fdlibm/streflop sinf/cosf; same implementation as engine Lua",
-      "sqrt": "Engine FastMath SSE float32 sqrt; Wasm float32 sqrt",
-      "sources": {
-        "rts/lib/lua/include/luaconf.h": "ba12b71d5b7d25b63c64097753d7b44fa9785844038d158fbf85be6f9af4d7ca",
-        "rts/lib/lua/src/lmathlib.cpp": "a6e18bff437dd7cb9250f4d066b0982920c1a82cf52ee1f7a5dad41fd777b7dd",
-        "rts/System/FastMath.h": "80e23859bb33c824dcad023bfe79cc1ebde14d6eb77113d0e03d8cf240588ee7"
-      },
-      "superseded": "Earlier private f64 candidate snapshots; no GPU final comparisons or public adoption used those candidates",
-      "actual_gpu_vertex_uniform_image_proofs": "pending"
-    },
-    "dependency_control": {
-      "utc": "2026-10-31T21:50:06.545012+00:00",
-      "exact_equal": true,
-      "public_volume_blob_sha256": "f2e5ef323ce258fef639103ea8e5ac76b489d2916480a79fe5082805f4bab12e",
-      "candidate_volume_blob_sha256": "84ca62fbeefd0227cb8f078afa2160b30df3d8502fd8ca724788357c8ba9b6d1",
-      "cargo_lock_sha256": "e9ce6ace0ac1fc989472c50e9f084bdfcb304e6efa1678bfb4562eab91ce1599",
-      "shared_manifest_sha256": "38e1617f7aa80e141a11cc164d01eea2a14c70da5b4a8e8c5b0f28ff394c091f",
-      "control": {
-        "hunted_rules_wasm": "dd17ef43c20eef3dd9701a222bc759cfeaccf2212d869964833e032c1ba8cf16",
-        "hunted_jobs_wasm": "816be69557a67989e0ebbbf450ca4070a677572ce5f8acbd4dede96ec8e99236"
-      },
-      "candidate": {
-        "hunted_rules_wasm": "dd17ef43c20eef3dd9701a222bc759cfeaccf2212d869964833e032c1ba8cf16",
-        "hunted_jobs_wasm": "816be69557a67989e0ebbbf450ca4070a677572ce5f8acbd4dede96ec8e99236"
-      },
-      "command": [
-        "cargo",
-        "build",
-        "--workspace",
-        "--target",
-        "wasm32-unknown-unknown",
-        "--release",
-        "--locked"
+        [
+          "cargo",
+          "clippy",
+          "--workspace",
+          "--target",
+          "wasm32-unknown-unknown",
+          "--release",
+          "--locked",
+          "--",
+          "-D",
+          "warnings"
+        ],
+        [
+          "cargo",
+          "test",
+          "-p",
+          "hunted-common",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--locked"
+        ],
+        [
+          "cargo",
+          "test",
+          "-p",
+          "hunted-ui-wasm",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--locked"
+        ],
+        [
+          "cargo",
+          "test",
+          "-p",
+          "springcabal-math",
+          "--target",
+          "x86_64-unknown-linux-gnu",
+          "--locked"
+        ],
+        [
+          "cargo",
+          "build",
+          "--workspace",
+          "--target",
+          "wasm32-unknown-unknown",
+          "--release",
+          "--locked"
+        ]
       ],
-      "note": "The original pre-dependency modules remain retained. Their code layout differs after adding the existing pinned math dependency. This controlled build proves that the rendering source change does not affect rules/jobs under the same dependency graph; it does not replace gameplay/world verification."
-    }
+      "source_diffs_sha256": {
+        "Hunted.sdd": "2ef3695c5ece5e47789e0a976f3f30f2f0d0aee81fc3ca6c2059fe05f74e3245",
+        "Hunted-wasm.sdd": "4c96dc01bdb16b2a01c28f2b57c0a837f6b2596e1695410d4827276ac8ceaac6",
+        "springcabal-rs": "24b40bec745bfa0354be7e0113421314e0b45f8d677cf8039ede911cb8d9b30d"
+      },
+      "modules": {
+        "LuaRules/wasm/hunted-rules.wasm": "dd17ef43c20eef3dd9701a222bc759cfeaccf2212d869964833e032c1ba8cf16",
+        "LuaRules/wasm/hunted-jobs.wasm": "816be69557a67989e0ebbbf450ca4070a677572ce5f8acbd4dede96ec8e99236",
+        "LuaUI/wasm/hunted-ui.wasm": "42076bc5fa17e1a91dabf165becc08a6d4b27c16048237c7c3677a11f6a9e187"
+      },
+      "lua_syntax": "passed",
+      "dependency_control": {
+        "utc": "2026-10-31T21:50:06.545012+00:00",
+        "exact_equal": true,
+        "public_volume_blob_sha256": "f2e5ef323ce258fef639103ea8e5ac76b489d2916480a79fe5082805f4bab12e",
+        "candidate_volume_blob_sha256": "84ca62fbeefd0227cb8f078afa2160b30df3d8502fd8ca724788357c8ba9b6d1",
+        "cargo_lock_sha256": "e9ce6ace0ac1fc989472c50e9f084bdfcb304e6efa1678bfb4562eab91ce1599",
+        "shared_manifest_sha256": "38e1617f7aa80e141a11cc164d01eea2a14c70da5b4a8e8c5b0f28ff394c091f",
+        "control": {
+          "hunted_rules_wasm": "dd17ef43c20eef3dd9701a222bc759cfeaccf2212d869964833e032c1ba8cf16",
+          "hunted_jobs_wasm": "816be69557a67989e0ebbbf450ca4070a677572ce5f8acbd4dede96ec8e99236"
+        },
+        "candidate": {
+          "hunted_rules_wasm": "dd17ef43c20eef3dd9701a222bc759cfeaccf2212d869964833e032c1ba8cf16",
+          "hunted_jobs_wasm": "816be69557a67989e0ebbbf450ca4070a677572ce5f8acbd4dede96ec8e99236"
+        },
+        "command": [
+          "cargo",
+          "build",
+          "--workspace",
+          "--target",
+          "wasm32-unknown-unknown",
+          "--release",
+          "--locked"
+        ],
+        "note": "The original pre-dependency modules remain retained. Their code layout differs after adding the existing pinned math dependency. This controlled build proves that the rendering source change does not affect rules/jobs under the same dependency graph; it does not replace gameplay/world verification."
+      },
+      "public_sources_untouched": true,
+      "candidate_only": true
+    },
+    "remaining": "GPU/world/GL/image review, cost review and source adoption, then canonical builds and final comparisons/captures",
+    "headless_checks": {
+      "complete": true,
+      "cases": [
+        {
+          "name": "integration",
+          "mode": "headless",
+          "workers": 1,
+          "jobs": "off",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-render-parity/headless-checks/fc2dff918401/integration/attempt-0"
+        },
+        {
+          "name": "jobs-check",
+          "mode": "headless",
+          "workers": 4,
+          "jobs": "check",
+          "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/hunted-render-parity/headless-checks/fc2dff918401/jobs-check/attempt-0"
+        }
+      ],
+      "utc": "2026-10-31T22:25:56.845970+00:00"
+    },
+    "runtime_dependencies": {
+      "libs/chiliui": {
+        "commit": "0069e0c574e116adaebbdd370171b6f574191bce",
+        "files": 158,
+        "tracked_files_sha256": "205c1e627641e0c1def61c48b2fc0392b1a2623402fae75516b54550b67d0ee2"
+      },
+      "libs/analytics": {
+        "commit": "349fe93e139fd38787fbe3e5bd383bf687adb66f",
+        "files": 6,
+        "tracked_files_sha256": "cf9aa9ef3417056c3e6c7f10c704843d3bf64d64c683bcc790515bcb166926d0"
+      }
+    },
+    "reveal_boundary": {
+      "x": 3976.143798828125,
+      "z": 2929.521728515625,
+      "light_x": 4000.123046875,
+      "light_z": 3100.346923828125,
+      "size": 150.0,
+      "radius": 172.5,
+      "distance_sq": 29756.251953125,
+      "radius_sq": 29756.25,
+      "minimum": 90.0,
+      "original_drawn": true,
+      "cylinder_revealed": false,
+      "iterations": 145
+    },
+    "changes": "Original rabbit shader/material, local cursor flashlight, original f32 distance cutoff with conservative cylinder broadphase, cached fade uniforms and matched cylinder topology/culling. Exact pinned UI dependencies restored in private inputs."
   }
 }
