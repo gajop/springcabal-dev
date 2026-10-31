@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-31T08:38:53.984532+00:00",
+  "generated_at": "2026-10-31T09:55:10.832034+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1990,13 +1990,13 @@
       "code": "Selected Lua/Rust optimizations and spatial-query corrections implemented and tested.",
       "remaining": "Fresh normal/10\u00d7 and jobs comparisons, captures and profile analysis.",
       "expected": 6,
-      "completed": 0
+      "completed": 1
     },
     {
       "game": "ttld",
       "title": "To the Last Drop",
-      "code": "House ignition and health-bar fixes implemented/tested/pushed. Final parity verification remains active.",
-      "remaining": "Detailed-world checks: 1/4 complete. Ordinary-fire verification, fresh timings/captures and analysis remain.",
+      "code": "House ignition and health-bar fixes tested/pushed. Existing suites, ordinary fire and all 604 detailed-world sample pairs pass; normal screenshots reviewed.",
+      "remaining": "Fresh final timings, matching captures and profile analysis.",
       "expected": 4,
       "completed": 0
     },

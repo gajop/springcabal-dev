@@ -256,6 +256,9 @@ def main():
                     continue
                 scene['jobs'][str(width)] = jobs[key]
                 campaigns.append((key, scene['jobs'][str(width)]))
+        if sid == 'fire10' and 'fire-10-gpu-jobs-w4' in jobs:
+            scene['gpu_jobs4'] = jobs['fire-10-gpu-jobs-w4']
+            campaigns.append(('fire-10-gpu-jobs-w4', scene['gpu_jobs4']))
         for campaign, summary in campaigns:
             campaign_root = campaign_roots.get(campaign, args.timings)/campaign
             if not (campaign_root/'provenance.json').exists() and args.allow_incomplete:

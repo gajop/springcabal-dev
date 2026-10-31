@@ -420,5 +420,109 @@
       "area17-2x-w1/area17-06-lua",
       "area17-2x-w1/area17-06-wasm"
     ]
+  },
+  {
+    "campaign": "flove-combat-lua-rust-w1",
+    "game": "flove",
+    "measured_pairs": 5,
+    "attempted_pairs": 5,
+    "excluded_pairs": 0,
+    "sim_p50_lua_ms": 1.668397,
+    "sim_p50_rust_ms": 1.416875,
+    "sim_p50_paired_rust_change_pct": -15.333760489859428,
+    "sim_p50_mean_ratio_95ci_lo": 0.8461057639331254,
+    "sim_p50_mean_ratio_95ci_hi": 0.8586891601170425,
+    "sim_p95_lua_ms": 6.303935,
+    "sim_p95_rust_ms": 5.636353,
+    "sim_p95_paired_rust_change_pct": -12.646945506102824,
+    "sim_p95_mean_ratio_95ci_lo": 0.8492653245901662,
+    "sim_p95_mean_ratio_95ci_hi": 0.8849861642340603,
+    "draw_p50_lua_ms": 2.333141,
+    "draw_p50_rust_ms": 2.035626,
+    "draw_p50_paired_rust_change_pct": -12.676344893000469,
+    "draw_p50_mean_ratio_95ci_lo": 0.8651409150670081,
+    "draw_p50_mean_ratio_95ci_hi": 0.8775480483203664,
+    "draw_p95_lua_ms": 2.854775,
+    "draw_p95_rust_ms": 2.505777,
+    "draw_p95_paired_rust_change_pct": -11.770433688054737,
+    "draw_p95_mean_ratio_95ci_lo": 0.8738955637233249,
+    "draw_p95_mean_ratio_95ci_hi": 0.8995431018604871,
+    "cpu_p50_lua_ms": 4.038174,
+    "cpu_p50_rust_ms": 3.4515519999999995,
+    "cpu_p50_paired_rust_change_pct": -14.245599982310253,
+    "cpu_p50_mean_ratio_95ci_lo": 0.8521381171199203,
+    "cpu_p50_mean_ratio_95ci_hi": 0.861998752206179,
+    "cpu_p95_lua_ms": 8.898579999999999,
+    "cpu_p95_rust_ms": 7.700283000000001,
+    "cpu_p95_paired_rust_change_pct": -15.017190728296859,
+    "cpu_p95_mean_ratio_95ci_lo": 0.837982959210976,
+    "cpu_p95_mean_ratio_95ci_hi": 0.8721759087169408,
+    "wall_mean_lua_ms": 4.962598333333333,
+    "wall_mean_rust_ms": 4.310843333333334,
+    "wall_mean_paired_rust_change_pct": -13.128505110141187,
+    "wall_mean_mean_ratio_95ci_lo": 0.8657883660647647,
+    "wall_mean_mean_ratio_95ci_hi": 0.8716976901970241,
+    "lua_units_p50": 601.0,
+    "wasm_units_p50": 601.0,
+    "runtime": {
+      "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "engine_source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "cpu_activity_policy": {
+        "max_background_cpu_cores": 0.5,
+        "quiet_seconds": 10,
+        "excludes": "runner process tree including live and reaped children",
+        "window": "launch through first CPU sample after final frame marker"
+      },
+      "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c"
+    },
+    "game_content": {
+      "lua": {
+        "commit": null,
+        "content_sha256": "a1d9fe1fefe7b4895c67774c4e677413cae3f2684b329b23596027a68d246eb5",
+        "modules": {},
+        "jobs_api": false,
+        "source_commit": "3c4434c0338ee662b0ea62b0711642aa3df64f5d",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "wasm": {
+        "commit": null,
+        "content_sha256": "db89cbee118959f60fbefc8b352171383b84e28720e31a0699f5859694aa02db",
+        "modules": {
+          "LuaUI/wasm/flove-ui.wasm": "a71b88bff8391cc6699c08ad2fb91a40ed61e836a18aed4722ee63e3a25c21d2",
+          "LuaRules/wasm/flove-jobs.wasm": "2a62162bbd50c71a109a06abe515d3d3008766d352241e1adbf6c9c269a4275c",
+          "LuaRules/wasm/flove-rules.wasm": "35d4453eaf6c279535d2189c2e715cd401f1525cd2eb361138d58e5cf15c5c5f"
+        },
+        "jobs_api": true,
+        "source_commit": "41a448ffa1008e5a3eed8390fb7a764a27478a46",
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      }
+    },
+    "run_ids": [
+      "flove-combat-lua-rust-w1/flove-00-lua",
+      "flove-combat-lua-rust-w1/flove-00-wasm",
+      "flove-combat-lua-rust-w1/flove-01-lua",
+      "flove-combat-lua-rust-w1/flove-01-wasm",
+      "flove-combat-lua-rust-w1/flove-02-lua",
+      "flove-combat-lua-rust-w1/flove-02-wasm",
+      "flove-combat-lua-rust-w1/flove-03-lua",
+      "flove-combat-lua-rust-w1/flove-03-wasm",
+      "flove-combat-lua-rust-w1/flove-04-lua",
+      "flove-combat-lua-rust-w1/flove-04-wasm"
+    ]
   }
 ]

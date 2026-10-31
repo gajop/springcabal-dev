@@ -1,7 +1,7 @@
 {
-  "held": true,
-  "utc": "2026-10-31T06:49:06.949623+00:00",
-  "reason": "TTLD Lua loads the world health-bar widget; Rust has no equivalent pass. Matched ordinary-game frame450 also shows a house-fire difference. Old results cannot support a language-only ranking until both paths are audited and matched.",
+  "held": false,
+  "utc": "2026-10-31T09:51:47.784576+00:00",
+  "reason": "House world-damage callback and original shared world health bars fixed; existing suites, ordinary fire and all four detailed-world pairs pass. Fresh final timing pairs are pending.",
   "held_timing_cases": {
     "ttld-shadows-1x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-shadows-1x-w1",
     "ttld-shadows-10x-w1": "perf-runs/2026-10-30-night-v6-fire/ttld-shadows-10x-w1",
@@ -20,7 +20,51 @@
     "2026-10-31-videos-matched-ui"
   ],
   "other_games_continue": true,
-  "ttld_gate": "codex-work/night-2026-10-30/v4/ttld-ui-matched-selection.json",
+  "ttld_gate": {
+    "reviewed": true,
+    "checks_passed": true,
+    "worlds_passed": true,
+    "ordinary_fire_passed": true,
+    "work": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/final-selected-fire-v9-shared-healthbars",
+    "source": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+    "engine": {
+      "source": "/home/gajop/projects/spring-projects/engine-current-geometry-2026.10.31",
+      "source_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+      "binary_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "build_log": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/engine-geometry/build-current.log",
+      "utc": "2026-10-31T03:03:04.850530+00:00",
+      "release_tag": "2026.10.3103",
+      "release_workflow_dispatched": true
+    },
+    "normal_modules": {
+      "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+      "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+      "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+    },
+    "checks_receipt": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-ui-parity/published.json",
+    "worlds_receipt": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-ui-parity/worlds-final.json",
+    "ordinary_fire_receipt": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-ui-parity/ordinary-final.json",
+    "world_sample_pairs_exact": 604,
+    "ordinary_synced_samples_exact": 31,
+    "ordinary_ui_roster_rng_samples_exact": 30,
+    "normal_scene_review": {
+      "images": {
+        "lua": {
+          "path": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-ttld-production-fire-fixed-v2-resume/attempt-0/ttld-01-lua/write/screenshots/screen_2026-10-31_09-37-42-828.png",
+          "sha256": "9333fafeeeaadf93e4d79667d1a9333ed323ef1462becabf66e1d6e0a33b6ad8"
+        },
+        "wasm": {
+          "path": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-10-31-ttld-production-fire-fixed-v2-resume/attempt-0/ttld-01-wasm/write/screenshots/screen_2026-10-31_09-36-37-097.png",
+          "sha256": "ca03d74e8ec365facb6267669355538c0bd0fc784834679c88226e980dda32e2"
+        }
+      },
+      "same_camera_and_world_layout": true,
+      "ordinary_hud_present_both": true,
+      "visible_house_fire_both": true,
+      "note": "Reviewed both frame-450 ordinary-game screenshots. HUD typography/skin differs between Chili and RmlUi; world layout, camera and visible house fire agree. World/roster equality is established by recorded states, not pixel identity."
+    },
+    "utc": "2026-10-31T09:51:47.784576+00:00"
+  },
   "current_fix": {
     "public_head": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
     "commit_url": "https://github.com/SpringCabal/LD43/commit/5f59ab882bc3f41715d67f16f933c3f113558d8b",
@@ -46,9 +90,7 @@
     "source_and_normal_modules_committed_and_pushed": true
   },
   "pending": [
-    "GPU observer with normal HUD and camera",
-    "new normal and controlled-fire world comparisons",
-    "four fresh five-pair timing campaigns"
+    "Fresh timing pairs, matching profiles and rendered recordings"
   ],
   "probe_correction": "The first fire observer used the isolated-probe widget list, so it lacked the normal Rust HUD and camera and failed the existing intro check. Its screenshots and timings are not accepted. The corrected observer keeps normal widgets and is diagnostic only."
 }

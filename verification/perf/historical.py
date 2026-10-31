@@ -102,6 +102,13 @@ def export(project, archive):
         worlds = read(world_path)
         ttld = next(g for g in games if g['game'] == 'ttld')
         ttld['remaining'] = f"Detailed-world checks: {len(worlds['passed'])}/4 complete. Ordinary-fire verification, fresh timings/captures and analysis remain."
+    gate_path = state_path.parent / 'ttld-ui-matched-selection.json'
+    if gate_path.exists():
+        gate = read(gate_path)
+        if all(gate.get(key) for key in ('reviewed', 'checks_passed', 'worlds_passed', 'ordinary_fire_passed')):
+            ttld = next(g for g in games if g['game'] == 'ttld')
+            ttld['code'] = 'House ignition and health-bar fixes tested/pushed. Existing suites, ordinary fire and all 604 detailed-world sample pairs pass; normal screenshots reviewed.'
+            ttld['remaining'] = 'Fresh final timings, matching captures and profile analysis.'
     return dict(generated_at=datetime.now(timezone.utc).isoformat(), timezone='Europe/Budapest',
                 scope='Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.',
                 scenes=scenes, jobs=jobs, games=games)
