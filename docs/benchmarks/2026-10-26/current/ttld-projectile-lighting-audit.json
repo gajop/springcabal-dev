@@ -1,0 +1,40 @@
+{
+  "utc": "2026-11-01T01:33:02.589427+00:00",
+  "source_sha256": {
+    "spring-linux/games/ToTheLastDrop.sdd/LuaUI/Widgets/gfx_projectile_lights.lua": "d1e9ef324cd97b82fa0bf4d8c091eaea88e4750adcef0642a83a15e3b4aed048",
+    "spring-linux/games/ToTheLastDrop.sdd/LuaUI/Widgets/gfx_deferred_rendering.lua": "7954a53f087cdb17b4ccf9301010f577b0edba7e61b599f28bd2110793af1e51",
+    "spring-linux/games/ToTheLastDrop-wasm.sdd/wasm-src/ui/src/widgets/gfx_lighting/lights/projectiles.rs": "e89442902d6e00c237f777c339d8b5839af3ceeba4f6e6eee35de27af394e247",
+    "spring-linux/games/ToTheLastDrop-wasm.sdd/wasm-src/ui/src/widgets/gfx_lighting/deferred_lighting.rs": "fa2dd1ac8b17c9bd21991edc8ed5f9dad4e08086f786edb591e2edfca8709c2f"
+  },
+  "findings": [
+    {
+      "policy": "projectile selection",
+      "lua": "GetVisibleProjectiles; includes eligible FIRE pieces",
+      "rust": "GetAllProjectiles with pieces excluded; no visibility filter"
+    },
+    {
+      "policy": "projectile parameters",
+      "lua": "FPS/camera LOD, ground limits, beam endpoints/offsets and TTL color fade",
+      "rust": "position/color/radius-only point light; these policies absent"
+    },
+    {
+      "policy": "projection",
+      "lua": "sphere cull on points, clamp X, keep projected coordinates without native valid flag",
+      "rust": "additional valid=false rejection and minimum-distance clamp"
+    },
+    {
+      "policy": "depth",
+      "status": "Both Lua and Rust already handle clip control; preserve this when reusing shared renderer"
+    },
+    {
+      "policy": "bloom",
+      "status": "Private full-view inverse-spacing correction exists, but does not close the projectile/projection gaps"
+    }
+  ],
+  "confirmed_source_policy_differences": true,
+  "actual_cost_and_output_impact_not_measured": true,
+  "old_timing_cases_already_held": true,
+  "action": "Reuse the shared original projectile/deferred renderer with TTLD-specific clip-control, sphere-cull, X-clamp and LOD policies; include original beam shader. Then run full existing checks and output/cost proof.",
+  "stopped_superseded_gpu_worker_at_lease_boundary": true,
+  "engine_unchanged": true
+}

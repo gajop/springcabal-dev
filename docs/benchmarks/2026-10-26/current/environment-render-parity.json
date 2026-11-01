@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-01T01:18:40.425615+00:00",
+  "utc": "2026-11-01T01:43:23.558674+00:00",
   "public_sources_untouched": true,
   "shared_base": "a996f20cbb30efa9dd62a06b1b0b74bf8bdc7313",
   "games": {
@@ -56,7 +56,7 @@
   "deferred_lighting": {
     "partsneeded": "Full private projectile/mouse/wisp/lamp lighting port and deferred-buffer startup now compile and match fresh builds. Existing NVIDIA suites/output review pending.",
     "area17": "Full private deferred-light/HDR/bloom port and startup policy now compile and match fresh builds. Existing NVIDIA suites/output review pending.",
-    "ttld": "Private native blur correction uses inverse full-view dimensions like Lua, with unchanged kernels and targets. Existing NVIDIA/output checks and fresh measurements pending.",
+    "ttld": "Full private shared projectile/deferred restoration now compiles, passes 11 host tests and matches fresh builds. It preserves TTLD's authored clip-control, sphere-cull/X-clamp, LOD and bloom policies. The guarded five-suite NVIDIA worker is resumed on that source; output and measured-cost review remain.",
     "flove": "Actual benchmark config enables the original Lua deferred widget. Its missing Rust pass is restored privately, using the original shader and point/beam policies. Latest normal and three correctness checks pass; GPU output and cost trials remain."
   },
   "lighting_source_evidence_sha256": {
@@ -81,8 +81,8 @@
       "remaining": "Complete current NVIDIA visual/wisp/input/world/GL checks; verify and measure Lua buffer reuse, adopt reviewed sources, then collect six fresh normal/10\u00d7 and jobs comparisons with matching captures."
     },
     "ttld": {
-      "code": "Ignition, health bars and prior world corrections are public. A private fix now matches Lua's full-view bloom sampling; old timing sets are held because Rust previously blurred twice as widely.",
-      "remaining": "Finish the bloom candidate's GPU/output checks, adopt it and rerun all four affected timing/profile/world/video cases; finish source/profile analysis."
+      "code": "Ignition, health bars and prior world corrections are public. Private shared rendering now restores visible projectiles, eligible pieces, LOD/fade/beams, original clip-control shaders and projection policy, plus full-view bloom spacing. Normal build, Clippy, 11 host tests and fresh-build comparison pass.",
+      "remaining": "Complete all five existing NVIDIA suites and detailed world/GL/image review, audit actual light counts at stress load, optimize both sides where measured, adopt reviewed sources and rerun all four timing/profile/world/video cases."
     },
     "area17": {
       "code": "Private beam pulse/geometry/render-state corrections and missing deferred-light/HDR/bloom passes are implemented. Latest normal builds, Clippy, installed-build comparison and 15 Lua regressions pass. New full-renderer GPU checks remain pending.",
@@ -100,21 +100,29 @@
   "candidate_builds": {
     "lighting-render-parity": {
       "source_diffs_sha256": {
-        "shared-source": "4573a8a7ac32dbf9ea0224abeee4afab8afed4552b8aff595e9766f957a7a175",
+        "shared-source": "fda80eaffa87b9024f7152fb75fc2b5e6cacd09da74ce2488f6b58e4c2dda7f2",
         "spring-linux/games/PartsNeeded.sdd": "fb2d857bcd0bbeb3bf6283aa532e5b8684c5697b1dd89e504fe984ddc7affc5f",
-        "spring-linux/games/PartsNeeded-wasm.sdd": "949e97b80257a134705b1d92908b78c5ad11889f733af033422843b17a5fbc97",
+        "spring-linux/games/PartsNeeded-wasm.sdd": "13deaa10ad53a77499aeeb96470fb8db2b9e75f9d06eb5c37099f89b01562a05",
         "spring-linux/games/Area-17.sdd": "5f1a469db777744815784e69f5c5c697795432df27b3534a495eca56c70bdc73",
-        "spring-linux/games/Area17-wasm.sdd": "8e02b5d13456cb8d3e93a2d415e058c401b276cfd8997a852f76631cd59890db"
+        "spring-linux/games/Area17-wasm.sdd": "d6cdd0768ca0ab79d03b504aef1bb4223f4921a5e9e0d3cf26fe555a9fa37696"
       },
-      "installed_check_sha256": "fa40ce1ca0b6e88db324f16e1235094fc865bece58620297c8d1a71321b2b40f"
+      "installed_check_sha256": "e8a2d959b0acb65a2103fb0dd05edf172a7c1bb5ffaf6c47262a3ce716389105"
     },
     "flove-lighting-parity": {
       "source_diffs_sha256": {
-        "shared-source": "4573a8a7ac32dbf9ea0224abeee4afab8afed4552b8aff595e9766f957a7a175",
+        "shared-source": "fda80eaffa87b9024f7152fb75fc2b5e6cacd09da74ce2488f6b58e4c2dda7f2",
         "spring-linux/games/Flove.sdd": "7f390e18295c1b47e282b01633a9f11c3c6de5bf0e375439ec7b10c5ac9a3ab0",
-        "spring-linux/games/Flove-wasm.sdd": "42dcd7f75966ac7bf33edd4d032a717a0ba8ebe983d6740b600fc963e48e078a"
+        "spring-linux/games/Flove-wasm.sdd": "6fa32cdb958a1172be317d4df57fa09cd6178878fc5255d32fc79ebe9a0616be"
       },
-      "installed_check_sha256": "d1f722ceff025256c7021d4741b88a604df9e2994c6cad1f3440c68d1647aa7c"
+      "installed_check_sha256": "258415714f1a3e510e1db597ce97843373c9ab14db008f4a21424c7431fcae93"
+    },
+    "ttld-bloom-parity": {
+      "source_diffs_sha256": {
+        "shared-source": "c19c0bf632cab512546322411398d6e6ab4fc384451ffb003605688debf5081a",
+        "spring-linux/games/ToTheLastDrop.sdd": "42ea8ed3cac47088b09e569674d1d507f880bb044ac746030eebf565e4f75c05",
+        "spring-linux/games/ToTheLastDrop-wasm.sdd": "4e8daa23de6d011bf8f78be328449bdaadc6d86fa3f3ef18a2458f0ba26737db"
+      },
+      "installed_check_sha256": "d7d4a46e7ae77442aa41d057f0a5804648e0833a8793ca56cc0ad29cfefcfb21"
     }
   },
   "flove_correctness": {
@@ -123,7 +131,7 @@
       "integration",
       "jobs-check"
     ],
-    "receipt_sha256": "148596c5206036470a3a65731a98620b791106c69960eb247a4705e9d0d9a984",
+    "receipt_sha256": "a1733406c0366bf51ff2a4b2fecf24c8184b9040f0cecea83d68436021cd9b8f",
     "no_render_correctness_only": true,
     "visual_and_performance_evidence": false
   },
@@ -141,11 +149,15 @@
         "mode": "headless",
         "workers": 1,
         "jobs": "off",
-        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/lighting-render-parity/headless-checks/488d975f59c7/partsneeded"
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/lighting-render-parity/headless-checks/42932f21186e/partsneeded"
       }
     ],
-    "receipt_sha256": "1a63b29089f3bf6750c935274fe9f89038fe177d782d9a2d2d840d61b3749446",
+    "receipt_sha256": "ab74dd80215d07da9873135dc015648345bcd22c4fc92e095f75433f414dadad",
     "no_render_correctness_only": true,
     "visual_and_performance_evidence": false
+  },
+  "ttld_projectile_source_audit": {
+    "url": "ttld-projectile-lighting-audit.json",
+    "sha256": "24154c201e1f17e2a6fc364309cdb877040d1f44f9a440232bc49ffa7043d34a"
   }
 }

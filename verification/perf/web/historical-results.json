@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T01:18:46.208373+00:00",
+  "generated_at": "2026-11-01T01:43:29.214067+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -2004,8 +2004,8 @@
     {
       "game": "ttld",
       "title": "To the Last Drop",
-      "code": "Ignition, health bars and prior world corrections are public. A private fix now matches Lua's full-view bloom sampling; old timing sets are held because Rust previously blurred twice as widely.",
-      "remaining": "Finish the bloom candidate's GPU/output checks, adopt it and rerun all four affected timing/profile/world/video cases; finish source/profile analysis.",
+      "code": "Ignition, health bars and prior world corrections are public. Private shared rendering now restores visible projectiles, eligible pieces, LOD/fade/beams, original clip-control shaders and projection policy, plus full-view bloom spacing. Normal build, Clippy, 11 host tests and fresh-build comparison pass.",
+      "remaining": "Complete all five existing NVIDIA suites and detailed world/GL/image review, audit actual light counts at stress load, optimize both sides where measured, adopt reviewed sources and rerun all four timing/profile/world/video cases.",
       "expected": 4,
       "completed": 0,
       "raw_completed": 4,

@@ -913,7 +913,7 @@
     "wall_mean_mean_ratio_95ci_hi": 0.8929295785536165,
     "lua_units_p50": 5735.0,
     "wasm_units_p50": 5735.0,
-    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
+    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison. The native projectile collector also differs in visibility/pieces, LOD/fade/beam handling and projection; full rendering restoration remains required.",
     "runtime": {
       "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
       "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
@@ -1022,7 +1022,7 @@
     "wall_mean_mean_ratio_95ci_hi": 0.9567289708762441,
     "lua_units_p50": 623.0,
     "wasm_units_p50": 623.0,
-    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
+    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison. The native projectile collector also differs in visibility/pieces, LOD/fade/beam handling and projection; full rendering restoration remains required.",
     "runtime": {
       "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
       "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
@@ -1129,7 +1129,7 @@
     "wall_mean_mean_ratio_95ci_hi": 0.9255507532756737,
     "lua_units_p50": 5735.0,
     "wasm_units_p50": 5735.0,
-    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
+    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison. The native projectile collector also differs in visibility/pieces, LOD/fade/beam handling and projection; full rendering restoration remains required.",
     "runtime": {
       "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
       "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
@@ -1234,7 +1234,7 @@
     "wall_mean_mean_ratio_95ci_hi": 0.9633846551759319,
     "lua_units_p50": 623.0,
     "wasm_units_p50": 623.0,
-    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison.",
+    "held_reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison. The native projectile collector also differs in visibility/pieces, LOD/fade/beam handling and projection; full rendering restoration remains required.",
     "runtime": {
       "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
       "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
