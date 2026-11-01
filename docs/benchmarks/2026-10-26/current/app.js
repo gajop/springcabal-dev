@@ -219,6 +219,8 @@ $('theme').onclick=()=>{document.documentElement.dataset.theme=document.document
 $('video-play').onclick=()=>{const videos=[...$('video-grid').querySelectorAll('video')],play=videos.some(v=>v.paused);for(const v of videos){if(play){v.currentTime=videos[0].currentTime;v.play().catch(()=>{});}else v.pause();}};
 $('identities').textContent=JSON.stringify(DATA.audit,null,2);
 let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{overview();repeats();costs();drawTrace();drawWorlds();if(state.profile){drawFlame();profileCategories();}},100);}).observe(document.querySelector('main'));
-const cpuIdleComplete=DATA.scenes.filter(s=>s.language.measured_pairs>=5&&s.language.runtime?.cpu_activity_policy?.max_background_cpu_cores<=.5).length;
-$('campaign-status').textContent=`Snapshot ${displayTime(DATA.audit.generated_at)} · New CPU+GPU-idle method: ${cpuIdleComplete} / ${DATA.scenes.length} primary scenes have five clean pairs. Earlier measurements are archived separately. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
+const usableConfigurations=HISTORY.games.reduce((total,game)=>total+game.completed,0);
+const plannedConfigurations=HISTORY.games.reduce((total,game)=>total+game.expected,0);
+const collectedConfigurations=HISTORY.games.reduce((total,game)=>total+(game.raw_completed??game.completed),0);
+$('campaign-status').textContent=`Snapshot ${displayTime(DATA.audit.generated_at)} · ${usableConfigurations} / ${plannedConfigurations} comparison configurations have five usable pairs; ${collectedConfigurations-usableConfigurations} further collected configurations are held for source corrections. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
 $('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();workOverview();overview();selectScene((DATA.scenes.find(s=>s.language.measured_pairs>=5)??DATA.scenes[0]).id);requestAnimationFrame(animate);

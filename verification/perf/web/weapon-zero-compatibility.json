@@ -1,0 +1,109 @@
+{
+  "utc": "2026-11-01T02:52:20.813857+00:00",
+  "public_sources_untouched": true,
+  "engine_unchanged": true,
+  "performance_evidence": false,
+  "cause": "Pinned engine weapon IDs are dense 0..count-1. Original Lua numeric loops and the private Rust dense-cache trials skipped zero.",
+  "checked": "Four actual Lua lighting collectors, Area impulse/fall-immunity regressions, and Gravitas shockwave/napalm registration/events pass. Both native cache candidates build and match fresh installed modules.",
+  "captures": "Finite guarded before/repeat/after job queued: Lua and Rust at TTLD 1\u00d7/10\u00d7 and Area 1\u00d7/2\u00d7. Output review and five alternating source pairs per backend/load remain.",
+  "source_receipts_sha256": {
+    "source-fix.json": "1a081410ae35c414abec53c69baa28b087563d0775f22ad47f88f5c5e6aacc4e",
+    "checks-and-resume.json": "649ac577053e5e4dee7534ae8568c57ae529902c861ea697e392d72c9c387f5b",
+    "four-lighting-collectors.json": "33f6225da26e0a683c7491561c48eac58899d65460efea0cf44f8aa0e79c57a0",
+    "lua-regressions.json": "fbee1906edf89828740deff527a95433577e422051a5aef2ab886ced3fcfe31e",
+    "gravitas-host-checks.json": "d6def5d1eb59d8871292fdb0a3532fe3ffb96a2616c7bc9d5c1ed0b2643d4dd6"
+  },
+  "host_pool_checks": {
+    "ttld-lighting-pool": {
+      "complete": true,
+      "utc": "2026-11-01T02:44:30.279573+00:00",
+      "source_diffs_sha256": {
+        "shared-source": "c4b88a9657aad0898b1266ab7810a01271a30c905e14f208510d98c22cf1d45d",
+        "spring-linux/games/ToTheLastDrop.sdd": "5c76ab47f1d55890f6866d596b4f577b707729a3c56491f6b4c371f6f25b2746",
+        "spring-linux/games/ToTheLastDrop-wasm.sdd": "7e3310eae297398e3f5cd1b699027d28c8638f41ebe53ee747c86dd5bc39b061"
+      },
+      "checks": [
+        {
+          "command": [
+            "lua5.1",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/check-ttld-light-pool.lua",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-bloom-parity/spring-linux/games/ToTheLastDrop.sdd",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-lighting-pool/spring-linux/games/ToTheLastDrop.sdd"
+          ],
+          "output": "TTLD LIGHT POOL HOST LOGIC PASS: 402 snapshots, 947 emitted lights; original records=947 pooled records=7; GPU and cost proof pending\n"
+        },
+        {
+          "command": [
+            "lua5.1",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/check-ttld-light-commands.lua",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-bloom-parity/spring-linux/games/ToTheLastDrop.sdd",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-lighting-pool/spring-linux/games/ToTheLastDrop.sdd"
+          ],
+          "output": "TTLD FULL LIGHT COMMANDS HOST PASS: 40 snapshots, 385 draws; GPU/output and cost proof pending\nHOST CALL COUNTS: camera 178 -> 78; FBO scopes 190 -> 160; sampler/useBloom writes 240 -> 40\n"
+        },
+        {
+          "command": [
+            "lua5.1",
+            "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/ttld/lua_lighting_test.lua",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-bloom-parity/spring-linux/games/ToTheLastDrop.sdd"
+          ],
+          "output": "TTLD Lua house lighting: 4 reference masks and removal passed\nTTLD Lua house lighting: stable multi-house order and replacement passed\nTTLD Lua staff lighting: cached offset, cast boundaries, flicker and lifecycle passed\nTTLD Lua projectile lighting: weapon definition zero passed\n"
+        },
+        {
+          "command": [
+            "lua5.1",
+            "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/ttld/lua_lighting_test.lua",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/ttld-lighting-pool/spring-linux/games/ToTheLastDrop.sdd"
+          ],
+          "output": "TTLD Lua house lighting: 4 reference masks and removal passed\nTTLD Lua house lighting: stable multi-house order and replacement passed\nTTLD Lua staff lighting: cached offset, cast boundaries, flicker and lifecycle passed\nTTLD Lua projectile lighting: weapon definition zero passed\n"
+        }
+      ],
+      "weapon_zero_exercised": true,
+      "diagnostic_only": true,
+      "performance_evidence": false,
+      "gpu_output_and_five_source_pairs_per_backend_per_load_required": true,
+      "adopted": false
+    },
+    "area-lighting-pool": {
+      "complete": true,
+      "utc": "2026-11-01T02:44:30.231018+00:00",
+      "source_diffs_sha256": {
+        "shared-source": "ec46d40615f1ae9a0864cacdb9cd97b6e0f9116441bc09f39b9d753011cceb0d",
+        "spring-linux/games/Area-17.sdd": "ed1bb9e7c960be33245422e4f2c6f913aa5fae4fccedb568380e9813ba9fc042",
+        "spring-linux/games/Area17-wasm.sdd": "510388841c54d70cfbfcffaf063db496debf620ce7776826280829683c125c19"
+      },
+      "checks": [
+        {
+          "command": [
+            "lua5.1",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/check-area-light-pool.lua",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/lighting-render-parity/spring-linux/games/Area-17.sdd",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area-lighting-pool/spring-linux/games/Area-17.sdd"
+          ],
+          "output": "AREA LIGHT POOL HOST LOGIC PASS: 402 snapshots, 2164 emitted lights; original records=947 pooled records=12; GPU and cost proof pending\n"
+        },
+        {
+          "command": [
+            "lua5.1",
+            "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/area17/lua_regressions.lua",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/lighting-render-parity/spring-linux/games/Area-17.sdd"
+          ],
+          "output": "PASS command colors restore through Shutdown\nPASS human screams and restarts float animation on later lifts\nPASS tank waits for its turret rotation before firing\nPASS flat impact bounces upward with restitution\nPASS slope impact preserves tangent friction and normal restitution\nPASS weapon definition zero grants fall immunity\nPASS impulse callback registration includes weapon definition zero\nPASS haste preserves upgraded weapon reloads and handles acceleration alone\nPASS Escape closes the technology panel\nPASS point-defense reload follows each weapon definition\nPASS RTS commands are blocked while development orders remain usable\nPASS alien callbacks tolerate failed creation and missing scripts\nPASS UFO death cancels active abilities while preserving cooldowns\nPASS rejected purchases do not apply gameplay effects\nPASS civilian spatial fear keeps the strict radius, cloak and idle behavior\nPASS beam pulse uses simulation frames and restores transparent render state\nPASS cone reuses its ring without changing strip vertices or alpha\n17 passed; 0 failed\n"
+        },
+        {
+          "command": [
+            "lua5.1",
+            "/home/gajop/projects/spring-projects/springcabal-games/verification/fixtures/area17/lua_regressions.lua",
+            "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/area-lighting-pool/spring-linux/games/Area-17.sdd"
+          ],
+          "output": "PASS command colors restore through Shutdown\nPASS human screams and restarts float animation on later lifts\nPASS tank waits for its turret rotation before firing\nPASS flat impact bounces upward with restitution\nPASS slope impact preserves tangent friction and normal restitution\nPASS weapon definition zero grants fall immunity\nPASS impulse callback registration includes weapon definition zero\nPASS haste preserves upgraded weapon reloads and handles acceleration alone\nPASS Escape closes the technology panel\nPASS point-defense reload follows each weapon definition\nPASS RTS commands are blocked while development orders remain usable\nPASS alien callbacks tolerate failed creation and missing scripts\nPASS UFO death cancels active abilities while preserving cooldowns\nPASS rejected purchases do not apply gameplay effects\nPASS civilian spatial fear keeps the strict radius, cloak and idle behavior\nPASS beam pulse uses simulation frames and restores transparent render state\nPASS cone reuses its ring without changing strip vertices or alpha\n17 passed; 0 failed\n"
+        }
+      ],
+      "weapon_zero_exercised": true,
+      "diagnostic_only": true,
+      "performance_evidence": false,
+      "gpu_output_and_five_source_pairs_per_backend_per_load_required": true,
+      "adopted": false
+    }
+  }
+}

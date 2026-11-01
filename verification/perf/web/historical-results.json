@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-01T01:43:29.214067+00:00",
+  "generated_at": "2026-11-01T02:57:54.744246+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1971,8 +1971,8 @@
     {
       "game": "area17",
       "title": "Area 17",
-      "code": "Private beam pulse/geometry/render-state corrections and missing deferred-light/HDR/bloom passes are implemented. Latest normal builds, Clippy, installed-build comparison and 15 Lua regressions pass. New full-renderer GPU checks remain pending.",
-      "remaining": "Verify lighting/bloom and matching world/GL/image output, evaluate remaining allocation work on both sides, adopt sources and collect fresh normal/2\u00d7 comparisons and captures. The no-render attempt has texture warnings and is not a passing suite.",
+      "code": "Private beam/deferred-light/HDR/bloom corrections build and match fresh builds. Seventeen Lua regressions pass, including weapon-zero impulse/fall-immunity handling. Both-side light-buffer/cache candidates preserve 2,164 sampled lights in host checks; GPU/cost proof remains.",
+      "remaining": "Complete rendered suites and before/repeat/after output captures for both backends, measure buffer reuse, adopt sources and collect fresh normal/2\u00d7 comparisons and captures. The earlier no-render texture-warning attempt remains failed.",
       "expected": 2,
       "completed": 0,
       "raw_completed": 1,
@@ -2004,8 +2004,8 @@
     {
       "game": "ttld",
       "title": "To the Last Drop",
-      "code": "Ignition, health bars and prior world corrections are public. Private shared rendering now restores visible projectiles, eligible pieces, LOD/fade/beams, original clip-control shaders and projection policy, plus full-view bloom spacing. Normal build, Clippy, 11 host tests and fresh-build comparison pass.",
-      "remaining": "Complete all five existing NVIDIA suites and detailed world/GL/image review, audit actual light counts at stress load, optimize both sides where measured, adopt reviewed sources and rerun all four timing/profile/world/video cases.",
+      "code": "Private full projectile/deferred/bloom restoration builds and matches fresh builds. Staff offset, exact cast parameters, mouse sampling and light order are aligned. Both sides now include weapon zero. The retained-buffer trial preserves 947 sampled lights and 385 recorded host draws; these are logic checks, not speed measurements.",
+      "remaining": "Complete the five existing NVIDIA suites, before/repeat/after output captures on both backends and measured buffer/cache trials. Review stress light counts, adopt sources and rerun all four timing/profile/world/video cases.",
       "expected": 4,
       "completed": 0,
       "raw_completed": 4,
@@ -2019,15 +2019,15 @@
     {
       "game": "gravitas",
       "title": "Gravitas effects",
-      "code": "Selected effects optimizations are public; baseline Lua/Rust and jobs timing sets are collected. A private Lua particle-submission trial is still being evaluated.",
-      "remaining": "Finish the submission trial, jobs-cost diagnostics, profile interpretation and final evidence audit.",
+      "code": "Selected effects optimizations are public; six timing configurations are collected. A private Lua submission trial remains. Separate shockwave/napalm weapon-zero fixes pass the existing LUPS regressions.",
+      "remaining": "Run the existing Lua rules/BOB checks on the compatibility fix, adopt reviewed sources, finish the submission trial, jobs diagnostics and final profile/source audit.",
       "expected": 6,
       "completed": 6
     },
     {
       "game": "mycube",
       "title": "My Cube",
-      "code": "Public story/RNG/pose corrections remain. Private map-edge restoration is implemented; its serial integration check passes.",
+      "code": "Public story/RNG/pose corrections remain. Private map-edge restoration passes serial integration. The private Lua projectile definition loop includes weapon zero and passes the actual-collector host regression.",
       "remaining": "Finish visual/input and matching output checks, adopt the map-edge correction, then rerun the normal comparison and captures.",
       "expected": 1,
       "completed": 0,
@@ -2039,7 +2039,7 @@
     {
       "game": "partsneeded",
       "title": "Parts Needed",
-      "code": "Private map-edge, volumetric fog and projectile/mouse/wisp/lamp lighting are implemented. Latest normal builds, Clippy and installed-build comparison pass; no-render integration, endings, restart and same-pass assertions pass. Deferred-buffer startup matches Lua.",
+      "code": "Private map-edge, fog and full lighting are implemented, including Lua weapon zero. Normal builds and installed-build comparison pass; current no-render integration, endings, restart and same-pass assertions pass. The actual Lua projectile collector also passes the weapon-zero host regression.",
       "remaining": "Complete current GPU/output checks and investigate camera settling if it repeats; adopt corrected sources, then repeat the normal comparison and its captures.",
       "expected": 1,
       "completed": 0,

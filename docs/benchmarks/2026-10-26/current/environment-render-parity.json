@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-01T01:43:23.558674+00:00",
+  "utc": "2026-11-01T02:52:20.813244+00:00",
   "public_sources_untouched": true,
   "shared_base": "a996f20cbb30efa9dd62a06b1b0b74bf8bdc7313",
   "games": {
@@ -69,8 +69,8 @@
   },
   "work_status": {
     "gravitas": {
-      "code": "Selected effects optimizations are public; baseline Lua/Rust and jobs timing sets are collected. A private Lua particle-submission trial is still being evaluated.",
-      "remaining": "Finish the submission trial, jobs-cost diagnostics, profile interpretation and final evidence audit."
+      "code": "Selected effects optimizations are public; six timing configurations are collected. A private Lua submission trial remains. Separate shockwave/napalm weapon-zero fixes pass the existing LUPS regressions.",
+      "remaining": "Run the existing Lua rules/BOB checks on the compatibility fix, adopt reviewed sources, finish the submission trial, jobs diagnostics and final profile/source audit."
     },
     "hunted": {
       "code": "Private material/fade, cursor flashlight and map-edge corrections are implemented. Full candidate serial integration passes; the visual check needs an original-Lua reference review.",
@@ -81,19 +81,19 @@
       "remaining": "Complete current NVIDIA visual/wisp/input/world/GL checks; verify and measure Lua buffer reuse, adopt reviewed sources, then collect six fresh normal/10\u00d7 and jobs comparisons with matching captures."
     },
     "ttld": {
-      "code": "Ignition, health bars and prior world corrections are public. Private shared rendering now restores visible projectiles, eligible pieces, LOD/fade/beams, original clip-control shaders and projection policy, plus full-view bloom spacing. Normal build, Clippy, 11 host tests and fresh-build comparison pass.",
-      "remaining": "Complete all five existing NVIDIA suites and detailed world/GL/image review, audit actual light counts at stress load, optimize both sides where measured, adopt reviewed sources and rerun all four timing/profile/world/video cases."
+      "code": "Private full projectile/deferred/bloom restoration builds and matches fresh builds. Staff offset, exact cast parameters, mouse sampling and light order are aligned. Both sides now include weapon zero. The retained-buffer trial preserves 947 sampled lights and 385 recorded host draws; these are logic checks, not speed measurements.",
+      "remaining": "Complete the five existing NVIDIA suites, before/repeat/after output captures on both backends and measured buffer/cache trials. Review stress light counts, adopt sources and rerun all four timing/profile/world/video cases."
     },
     "area17": {
-      "code": "Private beam pulse/geometry/render-state corrections and missing deferred-light/HDR/bloom passes are implemented. Latest normal builds, Clippy, installed-build comparison and 15 Lua regressions pass. New full-renderer GPU checks remain pending.",
-      "remaining": "Verify lighting/bloom and matching world/GL/image output, evaluate remaining allocation work on both sides, adopt sources and collect fresh normal/2\u00d7 comparisons and captures. The no-render attempt has texture warnings and is not a passing suite."
+      "code": "Private beam/deferred-light/HDR/bloom corrections build and match fresh builds. Seventeen Lua regressions pass, including weapon-zero impulse/fall-immunity handling. Both-side light-buffer/cache candidates preserve 2,164 sampled lights in host checks; GPU/cost proof remains.",
+      "remaining": "Complete rendered suites and before/repeat/after output captures for both backends, measure buffer reuse, adopt sources and collect fresh normal/2\u00d7 comparisons and captures. The earlier no-render texture-warning attempt remains failed."
     },
     "partsneeded": {
-      "code": "Private map-edge, volumetric fog and projectile/mouse/wisp/lamp lighting are implemented. Latest normal builds, Clippy and installed-build comparison pass; no-render integration, endings, restart and same-pass assertions pass. Deferred-buffer startup matches Lua.",
+      "code": "Private map-edge, fog and full lighting are implemented, including Lua weapon zero. Normal builds and installed-build comparison pass; current no-render integration, endings, restart and same-pass assertions pass. The actual Lua projectile collector also passes the weapon-zero host regression.",
       "remaining": "Complete current GPU/output checks and investigate camera settling if it repeats; adopt corrected sources, then repeat the normal comparison and its captures."
     },
     "mycube": {
-      "code": "Public story/RNG/pose corrections remain. Private map-edge restoration is implemented; its serial integration check passes.",
+      "code": "Public story/RNG/pose corrections remain. Private map-edge restoration passes serial integration. The private Lua projectile definition loop includes weapon zero and passes the actual-collector host regression.",
       "remaining": "Finish visual/input and matching output checks, adopt the map-edge correction, then rerun the normal comparison and captures."
     }
   },
@@ -101,12 +101,12 @@
     "lighting-render-parity": {
       "source_diffs_sha256": {
         "shared-source": "fda80eaffa87b9024f7152fb75fc2b5e6cacd09da74ce2488f6b58e4c2dda7f2",
-        "spring-linux/games/PartsNeeded.sdd": "fb2d857bcd0bbeb3bf6283aa532e5b8684c5697b1dd89e504fe984ddc7affc5f",
+        "spring-linux/games/PartsNeeded.sdd": "082f30d5d10204e6f690e92e3a6b31712325a6f7576d80a408442fa295b30b5a",
         "spring-linux/games/PartsNeeded-wasm.sdd": "13deaa10ad53a77499aeeb96470fb8db2b9e75f9d06eb5c37099f89b01562a05",
-        "spring-linux/games/Area-17.sdd": "5f1a469db777744815784e69f5c5c697795432df27b3534a495eca56c70bdc73",
+        "spring-linux/games/Area-17.sdd": "a86cf9f85c839821f956f7f9c3b0b0d426c37becfbbd8a853185c5a17679ca0d",
         "spring-linux/games/Area17-wasm.sdd": "d6cdd0768ca0ab79d03b504aef1bb4223f4921a5e9e0d3cf26fe555a9fa37696"
       },
-      "installed_check_sha256": "e8a2d959b0acb65a2103fb0dd05edf172a7c1bb5ffaf6c47262a3ce716389105"
+      "installed_check_sha256": "6e0a315b0fb2cb132e7ae8bf16d406867ffa55059dfa62596c4edb425cae803c"
     },
     "flove-lighting-parity": {
       "source_diffs_sha256": {
@@ -119,10 +119,10 @@
     "ttld-bloom-parity": {
       "source_diffs_sha256": {
         "shared-source": "c19c0bf632cab512546322411398d6e6ab4fc384451ffb003605688debf5081a",
-        "spring-linux/games/ToTheLastDrop.sdd": "42ea8ed3cac47088b09e569674d1d507f880bb044ac746030eebf565e4f75c05",
-        "spring-linux/games/ToTheLastDrop-wasm.sdd": "4e8daa23de6d011bf8f78be328449bdaadc6d86fa3f3ef18a2458f0ba26737db"
+        "spring-linux/games/ToTheLastDrop.sdd": "567a20ccfc73cd46feabeea14fac7148580cdde7b05c119677bcddfc4f3b3b06",
+        "spring-linux/games/ToTheLastDrop-wasm.sdd": "792de863367874ed1729bf622d5db4b9f51489fb6de60d72f7a2234c12695bec"
       },
-      "installed_check_sha256": "d7d4a46e7ae77442aa41d057f0a5804648e0833a8793ca56cc0ad29cfefcfb21"
+      "installed_check_sha256": "5efacb749191b0c8434ac5b49766bcf1fdff52feda2bbb388c7d4b06c3b577b2"
     }
   },
   "flove_correctness": {
@@ -149,15 +149,19 @@
         "mode": "headless",
         "workers": 1,
         "jobs": "off",
-        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/lighting-render-parity/headless-checks/42932f21186e/partsneeded"
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/lighting-render-parity/headless-checks/f85590f0ebc8/partsneeded"
       }
     ],
-    "receipt_sha256": "ab74dd80215d07da9873135dc015648345bcd22c4fc92e095f75433f414dadad",
+    "receipt_sha256": "bc6422f442e981e7eb0870a9b24f6cb21e632b9b8a41e3d034e59fe9473143c3",
     "no_render_correctness_only": true,
     "visual_and_performance_evidence": false
   },
   "ttld_projectile_source_audit": {
     "url": "ttld-projectile-lighting-audit.json",
     "sha256": "24154c201e1f17e2a6fc364309cdb877040d1f44f9a440232bc49ffa7043d34a"
+  },
+  "weapon_zero_compatibility": {
+    "url": "weapon-zero-compatibility.json",
+    "sha256": "a3dd6b2158c07619626272b9b11ddccb8fcc8629501d047403dfb785b1cc23ac"
   }
 }
