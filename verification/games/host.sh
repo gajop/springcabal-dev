@@ -13,8 +13,13 @@ PASSED=0
 host_cargo_test() {
     local dir=$1 name=$2 output passed
     shift 2
-    output=$(cd "$dir" && flock /tmp/springcabal-build.lock cargo test --locked "$@" \
-        --target "$HOST_TARGET" --target-dir "$BUILD_CACHE/host-$name" 2>&1) || {
+    # All workspaces share the same SDK dependencies. Cargo keys artifacts by
+    # package/features; separate per-game targets duplicate several GiB each.
+    # These assertion tests need neither debugger symbols nor incremental data.
+    output=$(cd "$dir" && CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 \
+        CARGO_PROFILE_DEV_INCREMENTAL=false CARGO_PROFILE_TEST_INCREMENTAL=false \
+        flock /tmp/springcabal-build.lock cargo test --locked "$@" \
+        --target "$HOST_TARGET" --target-dir "$BUILD_CACHE/host" 2>&1) || {
         printf '%s\n' "$output" | tail -30
         printf '  FAIL     %s\n' "$name"
         FAILURES=$((FAILURES + 1))
