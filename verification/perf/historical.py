@@ -152,6 +152,13 @@ def export(project, archive):
                 game['remaining'] += f' {len(held)} retained configurations have known workload mismatches and remain held.'
                 if game['game'] == 'hunted':
                     game['remaining'] = 'Six raw configurations retained; both language cases held. Correct material/fade and flashlight rendering, align visibility costs, then repeat the affected final comparisons/captures.'
+    # Display reviewed source-work progress independently of timing eligibility.
+    # Counts and held cases above still come from the campaign and hold records.
+    source_status = project / 'verification/perf/web/environment-render-parity.json'
+    if source_status.exists():
+        for name, fields in read(source_status).get('work_status', {}).items():
+            assert name in by_game and set(fields) <= {'code', 'remaining'}
+            by_game[name].update(fields)
     return dict(generated_at=datetime.now(timezone.utc).isoformat(), timezone='Europe/Budapest',
                 scope='Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.',
                 scenes=scenes, jobs=jobs, games=games)

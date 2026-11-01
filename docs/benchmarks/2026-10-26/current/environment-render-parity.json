@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T23:40:19.304848+00:00",
+  "utc": "2026-11-01T01:18:40.425615+00:00",
   "public_sources_untouched": true,
   "shared_base": "a996f20cbb30efa9dd62a06b1b0b74bf8bdc7313",
   "games": {
@@ -52,12 +52,12 @@
   },
   "map_edge": "Native pass absent in Hunted/MyCube/Parts. Private shared code reuses tested TTLD native renderer; same original Lua helper/culling in all four.",
   "parts_fog": "Private implementation compiles; actual GPU fog offset, shader and compositing proof pending.",
-  "remaining": "Verify map-edge/fog corrections; restore Parts/Area deferred lighting; align TTLD bloom uniforms; audit Flove's benchmark activation. Require existing strict GPU checks, output/GL/world proof and fresh final timings before adoption.",
+  "remaining": "Private fixes still require actual NVIDIA output/world/GL checks and measured source trials before adoption. Refresh all affected final comparisons and captures afterward; public game sources and engine remain unchanged by these candidates.",
   "deferred_lighting": {
-    "partsneeded": "Recorded Lua run loads deferred/projectile lights and Wisp control's mouse, wisp and lamp collectors. Native pass absent publicly; isolated shared implementation and Parts adapter under verification.",
-    "area17": "Recorded Lua run loads deferred/projectile lights with HDR/bloom. Native version lacks the pass. Correction and GPU verification pending.",
-    "ttld": "Both render deferred lights/HDR/bloom, but Rust blur spacing is twice Lua's: inverse half-size versus inverse full-size. The saved timings remain previous results; do not rank as language-only.",
-    "flove": "Lua shader exists, but the retained original functional run disables it through config. Need verify activation and active projectile lights in the actual benchmark config, not infer from that functional run."
+    "partsneeded": "Full private projectile/mouse/wisp/lamp lighting port and deferred-buffer startup now compile and match fresh builds. Existing NVIDIA suites/output review pending.",
+    "area17": "Full private deferred-light/HDR/bloom port and startup policy now compile and match fresh builds. Existing NVIDIA suites/output review pending.",
+    "ttld": "Private native blur correction uses inverse full-view dimensions like Lua, with unchanged kernels and targets. Existing NVIDIA/output checks and fresh measurements pending.",
+    "flove": "Actual benchmark config enables the original Lua deferred widget. Its missing Rust pass is restored privately, using the original shader and point/beam policies. Latest normal and three correctness checks pass; GPU output and cost trials remain."
   },
   "lighting_source_evidence_sha256": {
     "spring-linux/games/ToTheLastDrop.sdd/LuaUI/Widgets/gfx_deferred_rendering.lua": "7954a53f087cdb17b4ccf9301010f577b0edba7e61b599f28bd2110793af1e51",
@@ -66,5 +66,86 @@
     "spring-linux/games/PartsNeeded.sdd/LuaUI/Widgets/gfx_deferred_rendering.lua": "e361ebf05f5d7ddbe68054a959ab623f1439e9b9cb60b2230b6d3b94fd48a947",
     "perf-runs/2026-10-30-night-v8-unaffected/area17-1x-w1/area17-00-lua/engine.log": "d559a7c4109c0618c7c007df342eeba5f2b9ed82c6d31130da71746fbd87ea3e",
     "perf-runs/2026-10-30-night-v8-unaffected/partsneeded-1x-w1/partsneeded-00-lua/engine.log": "d0546a39013707ae4cc678697a4c4603447552b77b284b7b2529e482f9c8b2ba"
+  },
+  "work_status": {
+    "gravitas": {
+      "code": "Selected effects optimizations are public; baseline Lua/Rust and jobs timing sets are collected. A private Lua particle-submission trial is still being evaluated.",
+      "remaining": "Finish the submission trial, jobs-cost diagnostics, profile interpretation and final evidence audit."
+    },
+    "hunted": {
+      "code": "Private material/fade, cursor flashlight and map-edge corrections are implemented. Full candidate serial integration passes; the visual check needs an original-Lua reference review.",
+      "remaining": "Resolve the terrain-versus-sky screenshot difference without relaxing its threshold; finish GPU/world/GL review, Lua source-cost trials, adoption and both fresh language comparisons. Four Rust jobs controls remain usable."
+    },
+    "flove": {
+      "code": "Private renderer/spire and deferred-light corrections are implemented; depth inputs and startup policy are aligned. Latest animation, integration and jobs assertions pass. A separate Lua retained-light-record candidate passes host command comparisons only.",
+      "remaining": "Complete current NVIDIA visual/wisp/input/world/GL checks; verify and measure Lua buffer reuse, adopt reviewed sources, then collect six fresh normal/10\u00d7 and jobs comparisons with matching captures."
+    },
+    "ttld": {
+      "code": "Ignition, health bars and prior world corrections are public. A private fix now matches Lua's full-view bloom sampling; old timing sets are held because Rust previously blurred twice as widely.",
+      "remaining": "Finish the bloom candidate's GPU/output checks, adopt it and rerun all four affected timing/profile/world/video cases; finish source/profile analysis."
+    },
+    "area17": {
+      "code": "Private beam pulse/geometry/render-state corrections and missing deferred-light/HDR/bloom passes are implemented. Latest normal builds, Clippy, installed-build comparison and 15 Lua regressions pass. New full-renderer GPU checks remain pending.",
+      "remaining": "Verify lighting/bloom and matching world/GL/image output, evaluate remaining allocation work on both sides, adopt sources and collect fresh normal/2\u00d7 comparisons and captures. The no-render attempt has texture warnings and is not a passing suite."
+    },
+    "partsneeded": {
+      "code": "Private map-edge, volumetric fog and projectile/mouse/wisp/lamp lighting are implemented. Latest normal builds, Clippy and installed-build comparison pass; no-render integration, endings, restart and same-pass assertions pass. Deferred-buffer startup matches Lua.",
+      "remaining": "Complete current GPU/output checks and investigate camera settling if it repeats; adopt corrected sources, then repeat the normal comparison and its captures."
+    },
+    "mycube": {
+      "code": "Public story/RNG/pose corrections remain. Private map-edge restoration is implemented; its serial integration check passes.",
+      "remaining": "Finish visual/input and matching output checks, adopt the map-edge correction, then rerun the normal comparison and captures."
+    }
+  },
+  "candidate_builds": {
+    "lighting-render-parity": {
+      "source_diffs_sha256": {
+        "shared-source": "4573a8a7ac32dbf9ea0224abeee4afab8afed4552b8aff595e9766f957a7a175",
+        "spring-linux/games/PartsNeeded.sdd": "fb2d857bcd0bbeb3bf6283aa532e5b8684c5697b1dd89e504fe984ddc7affc5f",
+        "spring-linux/games/PartsNeeded-wasm.sdd": "949e97b80257a134705b1d92908b78c5ad11889f733af033422843b17a5fbc97",
+        "spring-linux/games/Area-17.sdd": "5f1a469db777744815784e69f5c5c697795432df27b3534a495eca56c70bdc73",
+        "spring-linux/games/Area17-wasm.sdd": "8e02b5d13456cb8d3e93a2d415e058c401b276cfd8997a852f76631cd59890db"
+      },
+      "installed_check_sha256": "fa40ce1ca0b6e88db324f16e1235094fc865bece58620297c8d1a71321b2b40f"
+    },
+    "flove-lighting-parity": {
+      "source_diffs_sha256": {
+        "shared-source": "4573a8a7ac32dbf9ea0224abeee4afab8afed4552b8aff595e9766f957a7a175",
+        "spring-linux/games/Flove.sdd": "7f390e18295c1b47e282b01633a9f11c3c6de5bf0e375439ec7b10c5ac9a3ab0",
+        "spring-linux/games/Flove-wasm.sdd": "42dcd7f75966ac7bf33edd4d032a717a0ba8ebe983d6740b600fc963e48e078a"
+      },
+      "installed_check_sha256": "d1f722ceff025256c7021d4741b88a604df9e2994c6cad1f3440c68d1647aa7c"
+    }
+  },
+  "flove_correctness": {
+    "cases": [
+      "animation",
+      "integration",
+      "jobs-check"
+    ],
+    "receipt_sha256": "148596c5206036470a3a65731a98620b791106c69960eb247a4705e9d0d9a984",
+    "no_render_correctness_only": true,
+    "visual_and_performance_evidence": false
+  },
+  "depth": "Parts/Area/Flove original shaders decode minus-one-to-one depth, while this engine uses zero-to-one depth. Both Lua and Rust now adapt the inverse-matrix input, preserving authored shader bytes. Math checks pass; actual GPU output review remains required. TTLD already handles clip control.",
+  "activation": "Parts/Area now explicitly enable deferred buffers on both sides; all three games follow the original left-side dual-screen exclusion. Flove retains its respect-config policy.",
+  "owned_cleanup": {
+    "deleted_allocated_bytes": 6944952320,
+    "scope": "Two expanded source snapshots matched retained archives byte-for-byte; six inactive owned QA Wine prefixes removed with registry/diagnostic evidence preserved.",
+    "receipt_sha256": "75e806ac723224d7b76e52d298316828feeaeba6d4a2e9a1907accfbff2bffef"
+  },
+  "parts_correctness": {
+    "cases": [
+      {
+        "game": "partsneeded",
+        "mode": "headless",
+        "workers": 1,
+        "jobs": "off",
+        "directory": "/home/gajop/projects/spring-projects/springcabal-games/codex-work/night-2026-10-30/v4/lighting-render-parity/headless-checks/488d975f59c7/partsneeded"
+      }
+    ],
+    "receipt_sha256": "1a63b29089f3bf6750c935274fe9f89038fe177d782d9a2d2d840d61b3749446",
+    "no_render_correctness_only": true,
+    "visual_and_performance_evidence": false
   }
 }
