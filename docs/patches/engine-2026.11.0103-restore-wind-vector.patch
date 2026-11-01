@@ -1,0 +1,220 @@
+diff --git a/rts/NativeInterface/api/Game.cpp b/rts/NativeInterface/api/Game.cpp
+index 5710c2b6aa..ff2f777e85 100644
+--- a/rts/NativeInterface/api/Game.cpp
++++ b/rts/NativeInterface/api/Game.cpp
+@@ -306,6 +306,14 @@ static void NativeGetWind(const GetWindQuery* query, GetWindResult* result) {
+ 	result->data.current = envResHandler.GetCurrentWindStrength();
+ }
+ 
++static void NativeGetWindVector(const GetWindVectorQuery* query, GetWindVectorResult* result) {
++	bufferPos = 0;
++	if (!GameReady()) { result->error = &GAME_NOT_READY_ERROR; return; }
++	result->error = nullptr;
++	const float3& wind = envResHandler.GetCurrentWindVec();
++	result->vector = {wind.x, wind.y, wind.z};
++}
++
+ static void NativeGetHeadingFromVector(const GetHeadingFromVectorQuery* query, GetHeadingFromVectorResult* result) {
+ 	bufferPos = 0;
+ 	result->error = nullptr;
+@@ -481,4 +489,5 @@ const GameApi GAME_API = {
+ 	.GetTeamStartPosition = NativeGetTeamStartPosition,
+ 	.GetMapStartPositions = NativeGetMapStartPositions,
+ 	.GetGameRulesResourceInfo = NativeGetGameRulesResourceInfo,
++	.GetWindVector = NativeGetWindVector,
+ };
+diff --git a/rts/NativeInterface/api/Game.h b/rts/NativeInterface/api/Game.h
+index c1a31c4cb2..11d27d23b9 100644
+--- a/rts/NativeInterface/api/Game.h
++++ b/rts/NativeInterface/api/Game.h
+@@ -195,6 +195,9 @@ struct GetTidalResult { const Error* error; float strength; };
+ 
+ struct GetWindQuery { uint8_t _unused; };
+ struct GetWindResult { const Error* error; WindData data; };
++// Current wind velocity, matching the first three Spring.GetWind results.
++struct GetWindVectorQuery { uint8_t _unused; };
++struct GetWindVectorResult { const Error* error; Float3 vector; };
+ 
+ struct GetHeadingFromVectorQuery { float x; float z; };
+ struct GetHeadingFromVectorResult { const Error* error; int32_t heading; };
+@@ -264,6 +267,7 @@ struct GameApi {
+ 	void (*GetTeamStartPosition)(const GetTeamStartPositionQuery* query, GetTeamStartPositionResult* result);
+ 	void (*GetMapStartPositions)(const GetMapStartPositionsQuery* query, GetMapStartPositionsResult* result);
+ 	void (*GetGameRulesResourceInfo)(const GetGameRulesResourceInfoQuery* query, GetGameRulesResourceInfoResult* result);
++	void (*GetWindVector)(const GetWindVectorQuery* query, GetWindVectorResult* result);
+ };
+ 
+ extern const GameApi GAME_API;
+diff --git a/rts/wasm/generated/WasmCalloutRegistry.h b/rts/wasm/generated/WasmCalloutRegistry.h
+index 933dcab0dfa227021186f17dcb9b245598ea8610..df95797fc3b21a15845bd7a3fff1676f0d94c995 100644
+GIT binary patch
+delta 36
+scmdlxjlF$3`v#%7$>(C(S;JD3OY$chE-;(i5YEvo6t`U{j!`=o00sjMDgXcg
+
+delta 18
+ZcmZpl&c1gV`v#%7=9swcF>#FAxd2AI2Il|(
+
+diff --git a/rts/wasm/generated/WasmCoreAbiInventory.h b/rts/wasm/generated/WasmCoreAbiInventory.h
+index f01748500833c956cc95e2224bc46ee67dc99091..6302a3e4652f255f66dc244b63c23afdf25afea7 100644
+GIT binary patch
+delta 41
+zcmV+^0M`HF-UqYa2e9ZolfXFy33q93WG!}OV|14R)BzQfU@Iqs;5@hBJOP5Thkp^x
+
+delta 18
+acmdmdpZ(E2_6;v=nk{X&TiP;KZ2|yVMhJ)i
+
+diff --git a/rts/wasm/generated/WasmCoreGeneratedRegistry.h b/rts/wasm/generated/WasmCoreGeneratedRegistry.h
+index 22006693d2ecc5123f645d52cb23483e6b4f9cc0..478a1d9d748ef3f33b104d2f13996eacadb2b66c 100644
+GIT binary patch
+delta 34
+qcmezJnRVkA)(z*qCx38d;V#e2OVKS$O)kkVYF_BQeW5pFupR&>tq(o`
+
+delta 18
+acmdn^h4ss4)(z*qn|XY;^Y}2T>Hz>+G6$ak
+
+diff --git a/rts/wasm/generated/core-abi.json b/rts/wasm/generated/core-abi.json
+index 8bfcda96bb6e6c25f74e7216e14031b7ac3ad1d1..1ddbd190a3b09b96448a45f9a57ba46e969536e9 100644
+GIT binary patch
+delta 107
+zcmeyl$nffN!-g%4Z_1}1IKafhoSBz0-7%Wcld~Mi(k)9(E}48VPJa4^xh&VG8?55~
+yJbi*Kqg4Bwaz-F#0%B$$W&vVWAZ7z%b|B^eVoo6D+Ww}TJNzc2$#j=M9#a4n1us+p
+
+delta 64
+zcmcb*-0<fj!-g%4Z_3*}su+Qo35c12m<5PgftU@5*@2h?h&h3nYr97kclb?4<LL{6
+Gc}xLEf)~~R
+
+diff --git a/rts/wasm/generated/core-executable-coverage.json b/rts/wasm/generated/core-executable-coverage.json
+index 829d7219c6649e4780d838d29b21ac53e4b326c0..197eccda12b4f19d1ba0237cffdfd4cfd8dd8d2e 100644
+GIT binary patch
+delta 189
+zcmaDbU%zXKzF;+%f`U>>eo11El9hs?iLvoSL1{+giMmaUCXE|fH!yD9z!c#=T|ttK
+zg(WjDC2acqBOL0}52!OKPM<J?nPvK4U8a)he#^MDrhmv|KV?#ySC(3onU<NFVx^Fm
+zuTYR!lvz@#kXn|RlA4#Cs*qo#Pz2<pmZzpDq*kQn7L;V>=S{!J&!RBBL6=FYox_6(
+eh?#+y1&CRJm<@>8ftUk`If0mKJBJ7NjdlP5kv>}h
+
+delta 86
+zcmeBLqW@sNzF;+%f`U>>eo11El9hs?iLuc{L1{*#iMmaU#*G_VH!yD9z!c%$Zsf%T
+e#LPg<0>rF9%m&2lK+FNeoIuRA-N=jkMmqqCZW=8B
+
+diff --git a/rts/wasm/generated/generation-report.json b/rts/wasm/generated/generation-report.json
+index 369eae1e456454dfc2a6768393deaf9270fb5097..0aa1b8a4ea7d8b55806da43bc3f971d73109965c 100644
+GIT binary patch
+delta 128
+zcmey%{FixxhM0*Cmx6*)T4`Q#NoIatv67X7p^35aM7!CHMiXzjG8#@+V3cAsn{3T!
+zt!oHU3RGNFnv+_rTbfr~nU|cJ0@7h<X$F-m&4lnRCog8SlQB`qP0TAz%&|2xFj4?&
+RC@m<+FDgk*u{AX30st$xBwqjk
+
+delta 128
+zcmey%{FixxhM2Jqmx6*)T4`Q#NoIatv67X7p^354M7!CHh7)hOG8#-)V3cAsoovl$
+zt!n^M3RGNFnv+_rTbfr~nU|cJ0@7h<X$qAq&4lnRCNE~RlQCAvP0TAz%&|2xFj4?&
+RC@m<+FDgk*u{AX30stuxBvt?b
+
+diff --git a/rts/wasm/generated/host/core/fixed/game.cpp b/rts/wasm/generated/host/core/fixed/game.cpp
+index 5cae24f61bf2235c513f27fbe6e3773b955e04a7..661a632d9bb202190f00728298f05a6e62bb36f6 100644
+GIT binary patch
+delta 213
+zcmey+#C&5K^9KGVj`Y-$`0~uWl+AUK3XELgKvr04a!G#C<ck5SEFkXW`%w*0Mzq0X
+zfj*AO8?=pJ0y{T1)I>3|LA3<tccPfks>SP`T7qQeLA5iJ_s_PRyg-zD^7(T1$<5_c
+zU~I;!$%=*!liz!UOxDl#K{n>2)y2*HP3z4kuUl2k0&?o)gPVLI45`g`Hf!&C!NzDZ
+IS>#|00AS8p0{{R3
+
+delta 29
+ncmV+&0OJ4HmILsD1F#Q*v$%?{H<KW;ZL<@^=mr5Zll;nD)<_OE
+
+diff --git a/rts/wasm/generated/sdk/core_environments.rs b/rts/wasm/generated/sdk/core_environments.rs
+index 760692304730a40abea69fb07620e0e6f86c3e73..2f4ed25f98430db89839d92065459106945a3ee4 100644
+GIT binary patch
+delta 745
+zcmdn-qPqEQ^#;Gg@~I`^nRzK;smUezMS-QMMU^@V?nq+W7dkU?F>Y6I=R3_g+2AA#
+zXE{)Hd>K&r^gwS`&B+hWux(#s#Ck|z+G+{G?S8JT83NOJy7(2R=Nk)iH#fX*Z+OoL
+z#7scUyuIN)OQHo8Y-|VG2*hka%nrmHKo@X6UPlFkiSi228_X&B+f{3Mf1jX&oyeX6
+z+RyRk_4eyFLeHpWG|)&k@%QcX|BC>z==S;l#Z2pobM<myq%%){;m^oFZJ#9j=7#gL
+z*`_NPGVyOda8sIfx`Py#%Jc*oVb<yK{o-8HA0+Y}+^+7*dYB)qWBW5+t|_cw<=f+8
+zSs!r&lZQY%*G6$5mH=YO?OYqB3Lg{a5K!uS!#q8}o6mOoIek{H$qlECr_0Qe=A3k9
+h`SiVptdi5;%wYpNvi-m;X&{yXV%hBnX314V0sxE|AKL%`
+
+delta 404
+zcmZpETfO5&^#;Gg(`_aQg-kaHV_CPohC}!y=l1#_zC!}d4)@y~?lS^06A&|Rceu~O
+z=83Mf9jFwD`GHsfs7>(A>+MPMoZk<jtHUr7XdE+V!}gFm-rpzC6(bu8WD5c{3tifR
+zO%+gvU;KUh3`S8P7TZ39QQWj1Roy?P={FoW__yB==3B%z{lIH>fo)5rcT`SSIKpZ-
+zeg9KF&gr&Gh3&V=%eXL37g#B5yS;Cv@Nw?R4)^)D&%MPe$u{kPu+R2-Bbf{Q+heZ^
+z?`5C9Ae&vF-Oo@0h$VqoYP+AIw0|n9rLUN$&(~$OoxZ@I&vvrHnGMt9-f&7z-@k_+
+g?2b!plMQaLPBysS(jLD=8i-|pSay5-5;>J105yT2(f|Me
+
+diff --git a/rts/wasm/generated/sdk/core_generated.rs b/rts/wasm/generated/sdk/core_generated.rs
+index b2fdec8228be185a4b0e6532373282fc90c773c4..35570b835c182e00508f3ebb7a85dc67f4188735 100644
+GIT binary patch
+delta 180
+zcmX@{%;VlikA@b;7N#xC9PQH`qM2DaGV@Y&%Tkj|rYGvKC`~VDW9DFw2l4ZZrYp8E
+zPuR}U&dlpSJs^ddl?$j8CgoVhB|g2!jqxmZIg)7MT-Nj37c?_1WZZ5b!N|cly+D99
+ws9p3LGZ3=?F)I+W0Wmuea{w_X5OV=BHxTmxF)tAF0Wm)i3v3s?CTJWB0QTuX+W-In
+
+delta 83
+zcmccj(c{E3kA@b;7N#xC9PQh$wKMbjx39j<48$xz%nHP8K+F!r96-zo#9Tnk4a7V^
+U%nQVPK+F%s0^3*L7Br3p0K1GSYXATM
+
+diff --git a/rts/wasm/generated/sdk/core_owned/game.rs b/rts/wasm/generated/sdk/core_owned/game.rs
+index b03d0fdd3c513fafeda694bc3b39a49028dbcb14..12144f8bc457a485b08c336437e1e037b45114c0 100644
+GIT binary patch
+delta 157
+zcmeC!!_<6$X~PsPcK6hh@XWlF$$zBfCSPDof%6y0$n%w@CYR(FSt+>X<R_LGPu?gV
+zwRwtGZXSPnYDs)KP*Xfa!Q}OR;%rbgh4vQQ$Wo1Sq_iPY3e^e~RtjZ_Ii;z36*>x)
+SFm|PmLKTc%wfW)<b5;OrlR9qz
+
+delta 19
+bcmZoZz|^saX~Pt)&8xL@^EUsP#m))<S@a0A
+
+diff --git a/rts/wasm/generated/sdk/scoped_api.rs b/rts/wasm/generated/sdk/scoped_api.rs
+index 215459bc9b179d10a132cb3d603caf7b4475a913..e53a2880a204278b61b5b5fd32e4cd467629083d 100644
+GIT binary patch
+delta 163
+zcmbO>FLd^z(1sSq7N#xCn{Q5QWM<{c%u9(cOHD4xFPh$+&w6P3|2xcV(*ssAvv8Lq
+zNeQ0gjG1mQm6>(A!E$DnX*Zc!*kQU97cj4H-+Yr9h*^M`6^Pk@m>q~YfS41Axqz4(
+eh<SjR7l`?Qm>-A*fLIWSg@9Oi`{tV>$)x}jlS#7x
+
+delta 89
+zcmbQeD0JGq(1sSq7N#xCn{T%7xXld2EI`Z(#B4y!4#XTl%n8I?K+FxqJV49~#C$-^
+V55xjMEC|FxKrFm{$8C}1QUDH$E|mZP
+
+diff --git a/rts/wasm/generated/sdk/scoped_coverage.json b/rts/wasm/generated/sdk/scoped_coverage.json
+index 5c8c9e7d0df9296d069d737603a46f0827fed1fe..ca38e3bc8885e4e0ad2d7d0b69a13999476c0e64 100644
+GIT binary patch
+delta 26
+icmccnmAUB~^M;vn?Cz;0;hA|UlQ+u9ZJsITat8pR_zQUe
+
+delta 14
+WcmZqr#(eiH^M;vnoA=4N+yMYNkOyY~
+
+diff --git a/rts/wasm/generated/sdk/scoped_native.rs b/rts/wasm/generated/sdk/scoped_native.rs
+index db30b0b827494d169e781de852ac489021d5e775..8835c195393e87f9db2fac039047c8cbf1c8f2df 100644
+GIT binary patch
+delta 186
+zcmezID5LjfMnel@3sVd87M8ky(>Kf#;F!MtJWKd=16Ed^=>kicWv2&pv*@vB=B0$C
+zCYMZKc!)=AdVwGNY?g4K(DZ_fEVa`ET9`PvKwOZD{G#a}wKzXdulUWP*k1RK1&CRJ
+zm<@>8ftUk`If0l9h`E872Z(urm=B2gfmi^D1%X%yh=qYz1c*g}SPY28fmmXD-9O1+
+FMgaKjRM7wc
+
+delta 107
+zcmWN=xe0(k6hJ}N`@ZiotZJ(egAYbV+lpX6W_BP3;v1O#*3YF^QDTXGILo&g<<g_i
+cfFUEsOqeob&VnT?)@<0aW6y!(Y1H)2Kl^SYY5)KL
+
+diff --git a/rts/wasm/generated/sdk/scoped_types.rs b/rts/wasm/generated/sdk/scoped_types.rs
+index 8ac1cad3cb0e95196b0c34e9bfa89b4ba2a6e400..da7606bdb50058e26176dabdf66372a977210daf 100644
+GIT binary patch
+delta 97
+zcmbPxRCCgC&4w1n7N!>FEiB(OrXR>=Wns_EO9@L&E}3i?A~rohj3sKifCdW-3s`7l
+si1_sN2bkEVv-LCbO<wTbz5Sa83lOscF&hxG12G2>b8i2p!L{5H0NQ>exBvhE
+
+delta 47
+vcmbPqTyySG&4w1n7N!>FEiB(O+Fxt305K~NvjH(X5OV-A=l0i{T+1y1+p80F
+
+diff --git a/rts/wasm/generated/sdk/scoped_types_wasm.rs b/rts/wasm/generated/sdk/scoped_types_wasm.rs
+index fef322186cd1eaf503ba3e2ae215b5c3fa35ee82..3d9bcd1604cf834a722933c8a5a2adc00e053d5d 100644
+GIT binary patch
+delta 68
+zcmbRIPvFQufej9i`4rq!OTshrQo>S`OY(~*AG{{aiQq9_l9?<Jdw;ruIHN&x%9Hk#
+PCyYSMv_0hs^ZF<N03{t|
+
+delta 37
+scmX@|Phj#tfej9ir&km($!;&GWMpM*p8TYJ@)JfNX4*da3G>D%09GUs!2kdN
+
