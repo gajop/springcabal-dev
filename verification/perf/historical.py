@@ -147,7 +147,7 @@ def export(project, archive):
         for game in games:
             prefix = 'fire-' if game['game'] == 'gravitas' else game['game']
             held = [name for name, path in completed.items()
-                    if name.startswith(prefix) and campaign_hold(holds, project / path, project)]
+                    if name.startswith(prefix) and campaign_hold(holds, name, (project / path).parent, project)]
             if held:
                 game['raw_completed'] = game['completed']
                 game['completed'] -= len(held)

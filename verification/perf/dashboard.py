@@ -46,11 +46,11 @@ def read(path):
     return json.loads(path.read_text())
 
 
-def campaign_hold(holds, campaign, project=PROJECT):
-    hold = holds.get(campaign.name)
+def campaign_hold(holds, name, timing_root, project=PROJECT):
+    hold = holds.get(name)
     if not hold or 'timing_root' not in hold:
         return hold
-    if campaign.parent.resolve() == (project / hold['timing_root']).resolve():
+    if timing_root.resolve() == (project / hold['timing_root']).resolve():
         return hold
 
 
@@ -274,7 +274,7 @@ def main():
                     if effects_fixtures(stamp) != current_effects_fixtures():
                         continue
                 target[row['campaign']] = row
-                hold = campaign_hold(holds, timing_root/row['campaign'])
+                hold = campaign_hold(holds, row['campaign'], timing_root)
                 if hold:
                     row['held_reason'] = hold['reason']
                 campaign_roots[row['campaign']] = timing_root

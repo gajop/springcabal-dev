@@ -288,10 +288,10 @@ class EquivalenceTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             holds = {'lua-rust': {'timing_root': 'baseline', 'reason': 'Earlier source'},
-                     'other': {'reason': 'Workload differs'}}
-            self.assertEqual(dashboard.campaign_hold(holds, root/'baseline/lua-rust', root), holds['lua-rust'])
-            self.assertIsNone(dashboard.campaign_hold(holds, root/'replacement/lua-rust', root))
-            self.assertEqual(dashboard.campaign_hold(holds, root/'replacement/other', root), holds['other'])
+                     'nested/other': {'reason': 'Workload differs'}}
+            self.assertEqual(dashboard.campaign_hold(holds, 'lua-rust', root/'baseline', root), holds['lua-rust'])
+            self.assertIsNone(dashboard.campaign_hold(holds, 'lua-rust', root/'replacement', root))
+            self.assertEqual(dashboard.campaign_hold(holds, 'nested/other', root/'replacement', root), holds['nested/other'])
 
     def test_recordings_use_explicit_frozen_revision_instead_of_observer_tree_hash(self):
         with tempfile.TemporaryDirectory() as directory:
