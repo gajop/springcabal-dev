@@ -1,0 +1,390 @@
+{
+  "scope": "Four NVIDIA Rust-only Hunted off/on comparisons with exactly five retained pairs each. The matched CPU profiles are separate captures on the same staged game tree, engine and input. The host-batch number sums samples once under the first WasmCoreHost::RunJobBatch frame on the main thread. It is inclusive sampled CPU, with 1\u20137 job-path samples per enabled run. It does not measure elapsed wait or resolve the full overhead.",
+  "cases": [
+    {
+      "campaign": "hunted-jobs-w1",
+      "measured_pairs": 5,
+      "worker_threads": 1,
+      "state_matched_pairs": 5,
+      "events_matched_pairs": 5,
+      "sim_p50_off_ms": 0.194569,
+      "sim_p50_on_ms": 0.245169,
+      "sim_p50_paired_jobs_change_pct": 26.17694620036599,
+      "sim_p50_mean_ratio_95ci_lo": 1.2427466891945693,
+      "sim_p50_mean_ratio_95ci_hi": 1.2661838125828233,
+      "draw_p50_off_ms": 0.631221,
+      "draw_p50_on_ms": 0.623595,
+      "draw_p50_paired_jobs_change_pct": -1.1897279694517704,
+      "draw_p50_mean_ratio_95ci_lo": 0.9852341489560638,
+      "draw_p50_mean_ratio_95ci_hi": 0.9974420347170321,
+      "wall_mean_off_ms": 0.8731249999999998,
+      "wall_mean_on_ms": 0.9193683333333331,
+      "wall_mean_paired_jobs_change_pct": 5.175441597390895,
+      "wall_mean_mean_ratio_95ci_lo": 1.044389314375796,
+      "wall_mean_mean_ratio_95ci_hi": 1.0570352376128949,
+      "timing_campaign": "perf-runs/2026-10-30-night-v6-hunted/hunted-jobs-w1",
+      "accepted_repeats": [
+        0,
+        1,
+        3,
+        4,
+        5
+      ],
+      "timing_provenance_sha256": "a0a383d9c9ef8e76b2174c590f5063d188b44a46f32dd56321150d556ea65e7e",
+      "map": {
+        "path": "/home/gajop/projects/spring-projects/springcabal-games/spring-linux/maps/HuntedMap.sdd",
+        "sha256": "86e09681d3f53fc7d7f499b94137a70a170b71d98d8c31dd2539219228a507ae"
+      },
+      "first_batch_packet_sizes_confirmed_in_timing_runs": true,
+      "identity": {
+        "source_commit": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1",
+          "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+          "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
+        },
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "profiles": {
+        "off": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w1/hunted-1x-jobs/hunted-00-wasm-off/profile.json",
+          "sha256": "61f31d2f14dc14eae319cc8280afedaad2225f0ceea23963ddbc21d5ab26a6e3",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-jobs-w1--hunted-1x-jobs--hunted-00-wasm-off.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 258,
+          "host_batch_main_samples": 0,
+          "host_batch_main_sampled_ms_per_frame": 0.0
+        },
+        "on": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w1/hunted-1x-jobs/hunted-00-wasm-on/profile.json",
+          "sha256": "4f2976f92665e87b044317dd05b1c6d0c7fef829d687e75c19a882040439330b",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-jobs-w1--hunted-1x-jobs--hunted-00-wasm-on.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 265,
+          "host_batch_main_samples": 3,
+          "host_batch_main_sampled_ms_per_frame": 0.01002004,
+          "first_batch_packets": 1,
+          "first_batch_input_bytes": 308
+        }
+      }
+    },
+    {
+      "campaign": "hunted-jobs-w4",
+      "measured_pairs": 5,
+      "worker_threads": 4,
+      "state_matched_pairs": 5,
+      "events_matched_pairs": 5,
+      "sim_p50_off_ms": 0.194659,
+      "sim_p50_on_ms": 0.253758,
+      "sim_p50_paired_jobs_change_pct": 32.20349579306572,
+      "sim_p50_mean_ratio_95ci_lo": 1.2722454259312495,
+      "sim_p50_mean_ratio_95ci_hi": 1.3428381011362802,
+      "draw_p50_off_ms": 0.642906,
+      "draw_p50_on_ms": 0.652779,
+      "draw_p50_paired_jobs_change_pct": 1.5356832880701,
+      "draw_p50_mean_ratio_95ci_lo": 1.0136074713284051,
+      "draw_p50_mean_ratio_95ci_hi": 1.0172385623362308,
+      "wall_mean_off_ms": 0.8953966666666664,
+      "wall_mean_on_ms": 0.964485,
+      "wall_mean_paired_jobs_change_pct": 7.162798535758719,
+      "wall_mean_mean_ratio_95ci_lo": 1.0688003538119104,
+      "wall_mean_mean_ratio_95ci_hi": 1.0812533775308322,
+      "timing_campaign": "perf-runs/2026-10-30-night-v6-hunted/hunted-jobs-w4",
+      "accepted_repeats": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "timing_provenance_sha256": "eaf875a22bd055851f4c585d20d33461016cbed43f7dc8b8471d3c7b2194d227",
+      "map": {
+        "path": "/home/gajop/projects/spring-projects/springcabal-games/spring-linux/maps/HuntedMap.sdd",
+        "sha256": "86e09681d3f53fc7d7f499b94137a70a170b71d98d8c31dd2539219228a507ae"
+      },
+      "first_batch_packet_sizes_confirmed_in_timing_runs": true,
+      "identity": {
+        "source_commit": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1",
+          "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+          "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
+        },
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "profiles": {
+        "off": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w4/hunted-1x-jobs/hunted-00-wasm-off/profile.json",
+          "sha256": "33d9639a4204a0d3c52bd6d707644c291437d49793037673d21bba7f5f01b082",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-jobs-w4--hunted-1x-jobs--hunted-00-wasm-off.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 328,
+          "host_batch_main_samples": 0,
+          "host_batch_main_sampled_ms_per_frame": 0.0
+        },
+        "on": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w4/hunted-1x-jobs/hunted-00-wasm-on/profile.json",
+          "sha256": "a7717f646dc028f908845cb3c50c1af5006d41bdc36ff04e749bedd1593662ba",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-jobs-w4--hunted-1x-jobs--hunted-00-wasm-on.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 348,
+          "host_batch_main_samples": 1,
+          "host_batch_main_sampled_ms_per_frame": 0.0033400133333333333,
+          "first_batch_packets": 1,
+          "first_batch_input_bytes": 308
+        }
+      }
+    },
+    {
+      "campaign": "hunted-10x-jobs-w1",
+      "measured_pairs": 5,
+      "worker_threads": 1,
+      "state_matched_pairs": 5,
+      "events_matched_pairs": 5,
+      "sim_p50_off_ms": 1.47473,
+      "sim_p50_on_ms": 1.544146,
+      "sim_p50_paired_jobs_change_pct": 4.74517244349959,
+      "sim_p50_mean_ratio_95ci_lo": 1.0394599148234966,
+      "sim_p50_mean_ratio_95ci_hi": 1.0587024898685997,
+      "draw_p50_off_ms": 1.988384,
+      "draw_p50_on_ms": 2.0598229999999997,
+      "draw_p50_paired_jobs_change_pct": 3.788663904009981,
+      "draw_p50_mean_ratio_95ci_lo": 0.9195650107899108,
+      "draw_p50_mean_ratio_95ci_hi": 1.064702809232416,
+      "wall_mean_off_ms": 3.584845,
+      "wall_mean_on_ms": 3.719691666666667,
+      "wall_mean_paired_jobs_change_pct": 2.3387298343083174,
+      "wall_mean_mean_ratio_95ci_lo": 0.9721415170212171,
+      "wall_mean_mean_ratio_95ci_hi": 1.049917054233728,
+      "timing_campaign": "perf-runs/2026-10-30-night-v6-hunted/hunted-10x-jobs-w1",
+      "accepted_repeats": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "timing_provenance_sha256": "56da7797f08c91422cf1d3482e4f71dc39cdb4293b000289d6f3996719eec84e",
+      "map": {
+        "path": "/home/gajop/projects/spring-projects/springcabal-games/spring-linux/maps/HuntedMap.sdd",
+        "sha256": "86e09681d3f53fc7d7f499b94137a70a170b71d98d8c31dd2539219228a507ae"
+      },
+      "first_batch_packet_sizes_confirmed_in_timing_runs": true,
+      "identity": {
+        "source_commit": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1",
+          "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+          "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
+        },
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "profiles": {
+        "off": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w1/hunted-10x-jobs/hunted-00-wasm-off/profile.json",
+          "sha256": "0df7177cb53894ff073e803356d4591e461be0809afc2af11570e75c1a124d96",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-10x-jobs-w1--hunted-10x-jobs--hunted-00-wasm-off.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 1052,
+          "host_batch_main_samples": 0,
+          "host_batch_main_sampled_ms_per_frame": 0.0
+        },
+        "on": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w1/hunted-10x-jobs/hunted-00-wasm-on/profile.json",
+          "sha256": "1ff107bd1cfc79c8b99a525ab9c908f9e2dd637f1660515b98574394f5d88179",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-10x-jobs-w1--hunted-10x-jobs--hunted-00-wasm-on.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 1049,
+          "host_batch_main_samples": 6,
+          "host_batch_main_sampled_ms_per_frame": 0.02004008,
+          "first_batch_packets": 1,
+          "first_batch_input_bytes": 308
+        }
+      }
+    },
+    {
+      "campaign": "hunted-10x-jobs-w4",
+      "measured_pairs": 5,
+      "worker_threads": 4,
+      "state_matched_pairs": 5,
+      "events_matched_pairs": 5,
+      "sim_p50_off_ms": 1.1672360000000002,
+      "sim_p50_on_ms": 1.235621,
+      "sim_p50_paired_jobs_change_pct": 5.765672066317351,
+      "sim_p50_mean_ratio_95ci_lo": 1.051232105990421,
+      "sim_p50_mean_ratio_95ci_hi": 1.0621026408013239,
+      "draw_p50_off_ms": 2.234158,
+      "draw_p50_on_ms": 2.2918049999999996,
+      "draw_p50_paired_jobs_change_pct": 2.9931634199551027,
+      "draw_p50_mean_ratio_95ci_lo": 0.9835645282243496,
+      "draw_p50_mean_ratio_95ci_hi": 1.066950904352961,
+      "wall_mean_off_ms": 3.5338233333333338,
+      "wall_mean_on_ms": 3.6440349999999997,
+      "wall_mean_paired_jobs_change_pct": 3.3368903880042433,
+      "wall_mean_mean_ratio_95ci_lo": 0.9960103569194219,
+      "wall_mean_mean_ratio_95ci_hi": 1.060191254289403,
+      "timing_campaign": "perf-runs/2026-10-30-night-v6-hunted/hunted-10x-jobs-w4",
+      "accepted_repeats": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "timing_provenance_sha256": "3c324cb4c951cb13101b8507e8c97d79ef5545298a40362f22284c5ad3c92814",
+      "map": {
+        "path": "/home/gajop/projects/spring-projects/springcabal-games/spring-linux/maps/HuntedMap.sdd",
+        "sha256": "86e09681d3f53fc7d7f499b94137a70a170b71d98d8c31dd2539219228a507ae"
+      },
+      "first_batch_packet_sizes_confirmed_in_timing_runs": true,
+      "identity": {
+        "source_commit": "c52c000de1393b64ce8f32d9d3c3edaf70422d69",
+        "modules": {
+          "LuaUI/wasm/hunted-ui.wasm": "fa4dbad0f402d9dbb8c4aed9380d721c2de075150144cba643e76418a8b157b1",
+          "LuaRules/wasm/hunted-rules.wasm": "b6805ebf671f58730c5342ad0554a5c88898c60ee506081e1d89271fca1f52d5",
+          "LuaRules/wasm/hunted-jobs.wasm": "42db888a2a0f690d882433854a42341650468e1009100ba4da5b9b15ab155d19"
+        },
+        "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+        "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+        "cpu_activity_policy": {
+          "max_background_cpu_cores": 0.5,
+          "quiet_seconds": 10,
+          "excludes": "runner process tree including live and reaped children",
+          "window": "launch through first CPU sample after final frame marker"
+        }
+      },
+      "profiles": {
+        "off": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w4/hunted-10x-jobs/hunted-00-wasm-off/profile.json",
+          "sha256": "ef9101030026f0ca13b0fda3a51451c44096fb2c5ccd1873c5e0c599bb0c3054",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-10x-jobs-w4--hunted-10x-jobs--hunted-00-wasm-off.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 1439,
+          "host_batch_main_samples": 0,
+          "host_batch_main_sampled_ms_per_frame": 0.0
+        },
+        "on": {
+          "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w4/hunted-10x-jobs/hunted-00-wasm-on/profile.json",
+          "sha256": "b8d3c6af989f3bb56bae5474a128e41103bd1717b707c452cb3cc0c7ab702ed7",
+          "dashboard_asset": "profiles/night-v7-matched-ui-hunted--attempt-0--hunted-10x-jobs-w4--hunted-10x-jobs--hunted-00-wasm-on.js",
+          "frames": [
+            300,
+            899
+          ],
+          "sample_rate_hz": 499,
+          "profile_samples": 1445,
+          "host_batch_main_samples": 7,
+          "host_batch_main_sampled_ms_per_frame": 0.023380093333333334,
+          "first_batch_packets": 1,
+          "first_batch_input_bytes": 308
+        }
+      }
+    }
+  ],
+  "prior_four_to_one_packet_trials": [
+    {
+      "id": "hunted-single-job-1x",
+      "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+      "candidate": "0f8d0ba36b235d81012cab83bfe2710f09dc2062",
+      "measured_rounds": 5,
+      "wall_change_pct": -3.7130495127569496,
+      "wall_mean_ratio_95ci": [
+        0.9618755948562008,
+        0.9696378121004194
+      ],
+      "sim_change_pct": -9.977246286452534,
+      "draw_change_pct": -0.6117223700927932
+    },
+    {
+      "id": "hunted-single-job-10x",
+      "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+      "candidate": "0f8d0ba36b235d81012cab83bfe2710f09dc2062",
+      "measured_rounds": 5,
+      "wall_change_pct": 1.28543127869869,
+      "wall_mean_ratio_95ci": [
+        1.0003414848040144,
+        1.0547270834946296
+      ],
+      "sim_change_pct": -5.155416255768685,
+      "draw_change_pct": 6.007692988716706
+    },
+    {
+      "id": "hunted-single-job-w1-1x",
+      "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+      "candidate": "0f8d0ba36b235d81012cab83bfe2710f09dc2062",
+      "measured_rounds": 5,
+      "wall_change_pct": -3.797629229654187,
+      "wall_mean_ratio_95ci": [
+        0.9516506848271208,
+        0.9747494233109133
+      ],
+      "sim_change_pct": -12.737567900732849,
+      "draw_change_pct": -0.6263165373486701
+    },
+    {
+      "id": "hunted-single-job-w1-10x",
+      "base": "557bda6a5cca611363f665c0ca00687cc51748ad",
+      "candidate": "0f8d0ba36b235d81012cab83bfe2710f09dc2062",
+      "measured_rounds": 5,
+      "wall_change_pct": 1.860216393092573,
+      "wall_mean_ratio_95ci": [
+        0.9961322383047475,
+        1.0474575605351615
+      ],
+      "sim_change_pct": -3.6375782881002072,
+      "draw_change_pct": 7.96295108880567
+    }
+  ],
+  "first_batch_source": "https://github.com/SpringCabal/Hunted/blob/c52c000de1393b64ce8f32d9d3c3edaf70422d69/wasm-src/rules-synced/src/gadgets/rabbit_ai/jobs.rs",
+  "runtime_batch_source": "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/WasmInterface/jobs/WasmSyncedJobs.cpp",
+  "runtime_pool_source": "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/System/Threading/ThreadPool.h"
+}

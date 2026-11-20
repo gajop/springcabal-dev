@@ -115,6 +115,15 @@
   <!-- job-cost-end -->
   <p>Gravitas at 10 emitter pairs, CPU particle updates with NVIDIA drawing. Jobs add 44.9% frame time at width 1 and 18.5% at width 4 across five clean pairs each. At width 4, sampled CPU on other threads increases from 0.053 to 0.287 ms/frame. The separate engine clocks show batch wait dropping from 0.493 to 0.252 ms/frame as the pool grows. <a href="job-cost-audit.json">Timing pairs and sampled profiles</a>.</p>
   <p>The worker receives 80 bytes per drawable particle plus camera and palette data, then returns 52 bytes per visible billboard for vertex assembly. Each job uses a fresh Wasmtime store. The worker export accounts for 40–52% of elapsed time per job. The rest includes setup, copies and teardown. <a href="https://github.com/SpringCabal/Gravitas/blob/4389119d5d16ba04a83583ebdb0855fe5c4207b1/wasm-src/ui/src/widgets/gfx_fire/fire/jobs.rs">Particle packets</a> · <a href="https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/WasmInterface/jobs/WasmJobProgram.cpp">Engine job execution</a>.</p>
+  <h3 id="hunted-job-attribution">Hunted rabbit-light jobs</h3>
+  <p>Jobs submit one packet per batch. A four-worker pool still has one light task. Each enabled run logged a 308-byte first packet. The earlier four-to-one packet trial improved simulation time at both loads and normal-load frame time at both widths. <a href="hunted-job-attribution.json">Sources, paired runs and exact profile identities</a>.</p>
+  <div class="table-scroll"><table><thead><tr><th>Load</th><th>Pool</th><th>Frame time<br>jobs on vs off</th><th>Mean ratio<br>95% interval</th><th>Simulation p50<br>jobs on minus off</th><th>Sampled batch CPU<br>µs/frame (samples)</th></tr></thead><tbody>
+  <tr><td>1×</td><td>1</td><td>+5.18%</td><td>1.044–1.057</td><td>+51 µs</td><td>10 (3)</td></tr>
+  <tr><td>1×</td><td>4</td><td>+7.16%</td><td>1.069–1.081</td><td>+59 µs</td><td>3 (1)</td></tr>
+  <tr><td>10×</td><td>1</td><td>+2.34%</td><td>0.972–1.050</td><td>+69 µs</td><td>20 (6)</td></tr>
+  <tr><td>10×</td><td>4</td><td>+3.34%</td><td>0.996–1.060</td><td>+68 µs</td><td>23 (7)</td></tr>
+  </tbody></table></div>
+  <p class="caption">Five clean NVIDIA timing pairs per row, with matching state and event totals. Both 10× frame-time intervals include parity. The separate main-thread profiles show Wasmtime setup and allocation under the batch call. Those few samples leave the full batch wait and caller-side packing cost unresolved.</p>
   <!-- ttld-current-costs-start -->
   <h3>TTLD baseline shadow and fire costs</h3>
   <p class="caption">Lua / Rust, ms per frame. These source revisions have different bloom and projectile lighting workloads. CPU columns are from separate sampled runs on the same revisions. Fence-wait samples are included in other CPU. <a href="ttld-current-costs.json">Exact statistics, categories and sources</a>.</p>
