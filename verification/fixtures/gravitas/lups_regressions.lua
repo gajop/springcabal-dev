@@ -27,6 +27,31 @@ x,y,z = env.ProcessParamCode(env.ParseParamString(text), {radius=4,life=5})
 assert(x==8 and y==6 and z==2, 'rollover retained stale locals')
 print('PASS Lups expressions: one compilation, fresh functions, current locals, bounded-cache rollover')
 
+-- Weapon definition zero is a real weapon in the pinned engine. Exercise
+-- registration and the emitted events from the shipped synced gadgets.
+for _, name in ipairs({'lups_shockwaves', 'lups_napalm'}) do
+    local watched, sent = {}, {}
+    local gadgetEnv = setmetatable({gadget = {},
+        gadgetHandler = {IsSyncedCode = function() return true end},
+        Script = {SetWatchWeapon = function(id, value) watched[id] = value end},
+        WeaponDefs = {[0] = {id = 0, type = 'Cannon', damageAreaOfEffect = 100,
+            description = 'Napalm', customParams = {}}},
+        SendToUnsynced = function(...) sent[#sent+1] = {...} end,
+    }, {__index = _G})
+    gadgetEnv._G = gadgetEnv
+    setfenv(assert(loadfile(root .. '/LuaRules/Gadgets/' .. name .. '.lua')), gadgetEnv)()
+    assert(watched[0], name .. ' skipped weapon definition zero')
+    gadgetEnv.gadget:Explosion(0,10,20,30,1)
+    if name == 'lups_napalm' then
+        gadgetEnv.gadget:GameFrame(1)
+        assert(gadgetEnv.napalmCount == 1 and gadgetEnv.napalmExplosions[1][1] == 0)
+        assert(sent[1] and sent[1][1] == 'napalm_GameFrame')
+    else
+        assert(sent[1] and sent[1][1] == 'lups_shockwave' and sent[1][2] == 10)
+    end
+end
+print('PASS Lups weapon zero: shockwave and napalm registration/events')
+
 -- Execute the real batch implementation against an in-memory VBO. Check GPU
 -- contents at draw time, including wraps, visibility changes and reallocation.
 local uploads,draws = 0,0

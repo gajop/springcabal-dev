@@ -89,13 +89,28 @@ on `2026.10.3103` and `2026.11.0103`. The test-only snapshot is excluded from no
 normal fmt, Clippy and module builds also passed. The fix is committed on
 [Hunted's public rust branch](https://github.com/SpringCabal/Hunted/commit/45fe6ebb143288a4021aa9ad04f3c14e72a8b9c5).
 
-The `2026.11.0104` NVIDIA queue reuses 43 existing checks from `verify all`,
-`verify visual`, Lua gameplay reviews and checked-jobs suites. It retains the
-CPU/GPU quiet guards and global verification lock. These rendered checks are
-pending: the worker is waiting for CPU/GPU availability, including two foreign
-engine menu processes. No no-render result is used as rendering or performance
-evidence. Existing benchmark results remain pinned to their original engine,
-`2026.10.3103`.
+The 20 November runs used the official Linux `2026.11.0104` headless binary
+and the existing candidate checkouts. They staged temporary files on the project
+drive because the pinned engine warns when looking up the host's RAM-backed
+`/tmp` as a block device.
+
+| Game | Result |
+| --- | --- |
+| Flove | Serial and four-worker checked-jobs suites passed. Each run passed 66 rules, 10 UI input and 13 scenario assertions. The checked-jobs run exercised mushroom targeting. |
+| Hunted | Serial and four-worker checked-jobs suites passed, each with 22 Lua regression checks and 40 Rust assertions. The checked-jobs run exercised rabbit lighting. |
+| My Cube | Rust passed all 32 integration assertions. The Lua archive reached the existing startup check's frame limit with zero engine warnings or errors. |
+| Area 17 | All 23 Rust and six Lua gameplay assertions ran successfully. The suite failed on five RmlUi texture warnings. All five files exist in the candidate archive. |
+| Gravitas | The Lua rules and B.O.B. suites passed. Rust's level spawned all 543 units and initialized the HUD. Its smoke test failed on the RmlUi warning for the existing `heart.png` asset. |
+
+The release's no-render RmlUi backend returns an empty texture handle for every
+request. The Area 17 and Gravitas failures remain recorded under the existing
+warning checks. Both still need their rendered suites.
+[Engine source](https://github.com/gajop/spring-rust/blob/96574c7e80eac7898f0738c2abebff0c1a38b2aa/rts/Rml/Backends/RmlUi_Renderer_Headless.h)
+
+The 43 existing checks in the `2026.11.0104` NVIDIA plan remain pending. Its
+dedicated worker ended while the machine stayed busy. Rendered checks still
+require the CPU/GPU quiet guards and global verification lock. The active Flove
+visual checks and Gravitas timings use the `2026.10.3103` benchmark engine.
 
 Detailed inputs, logs and receipts are retained locally under
 `codex-work/engine-2026.11.0103/` and `codex-work/engine-2026.11.0104/`.
