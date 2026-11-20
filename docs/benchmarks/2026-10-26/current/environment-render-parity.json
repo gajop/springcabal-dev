@@ -402,5 +402,58 @@
       "LuaRules/wasm/partsneeded-rules.wasm": "8ccbeaaac42b45f9dc4fd885b0e07b94f9aa059a39018e7beb96c46df1f1a7fb",
       "LuaUI/wasm/partsneeded-ui.wasm": "bdcc058ca5c339a3a74d0ac4185f95fe4cba974df4b541498b57d37a2d73abd8"
     }
+  },
+  "combined_private_build": {
+    "utc": "2026-11-20T04:21:29.415860+00:00",
+    "stage": "known_source_fixes_staged",
+    "candidate_games": {
+      "Hunted.sdd": "115787cd4e5abde8e028fa9aa2907bc574053e8c",
+      "Hunted-wasm.sdd": "6630375debcf0f7237d2f759b560d2ebfe33b945",
+      "ToTheLastDrop.sdd": "a89162672cbc409dbe011304493996f6fb35ab40",
+      "ToTheLastDrop-wasm.sdd": "f8f832aba915b52d81353ecd5e47f64e2246845f",
+      "Flove.sdd": "3e628dafbe7219c5057e05ac8f7df1341618dca1",
+      "Flove-wasm.sdd": "9ebff662e3af05900f6c07f2f71f0658ef93ce40",
+      "Area-17.sdd": "21566b5bcae810122391ce341151ea797f5f9018",
+      "Area17-wasm.sdd": "db5db780761b9aa3cb399ff0de22ee83ca63513d",
+      "MyCube.sdd": "1a21666512a804b1276b172fdf3c25c58d91ee1e",
+      "MyCube-wasm.sdd": "6d1c3860f2b299ea470df7c4ffb8f9164bd40ca6",
+      "PartsNeeded.sdd": "f61ebb6ac48a193aa55b7a1032e96e39d9317509",
+      "PartsNeeded-wasm.sdd": "03983eaed4e2b9f736d38ca186bc5bff94c165b4",
+      "Gravitas.sdd": "a63138f0d02194b0cc3157cd65e89781334423e2",
+      "Gravitas-wasm.sdd": "f48ef1e4404718376e4ececa0055d56f1fd7020e"
+    },
+    "shared_commit": "706a68063e8dfc21b043b179a879dfcde8599bbf",
+    "tooling_commit": "de9521f8a35a0d7b2316aab1f8ab7f5eac3509a4",
+    "normal_wasm_modules": 18,
+    "normal_builds_passed": 7,
+    "shared_host_tests_passed": 39,
+    "focused_lua_checks": {
+      "area17": {
+        "sha256": "53271fea2faf5395a44c6fec635b76a720c981db11be5d4085ef1bcab70af27e",
+        "log": "codex-work/night-2026-10-30/v4/final-code-20261120/area17-lua-checks.log"
+      },
+      "hunted": {
+        "sha256": "0f92367299ba976512773385389a9cd0fd496611efcb3c2a0fb8fbc0c39743c4",
+        "log": "codex-work/night-2026-10-30/v4/final-code-20261120/hunted-lua-checks.log"
+      },
+      "partsneeded": {
+        "sha256": "1b3cea35b18f4431db84acd1111a071e5a1ad9170053e635b5a73c0c8314c43f",
+        "log": "codex-work/night-2026-10-30/v4/final-code-20261120/partsneeded-lua-checks.log"
+      },
+      "ttld": {
+        "sha256": "29d2d15e0cc0522785c9d7930144ff1fb6222d2057f35e74cbb41a92223d585b",
+        "log": "codex-work/night-2026-10-30/v4/final-code-20261120/ttld-lua-checks.log"
+      }
+    },
+    "rendered_checks_and_timings_pending": true,
+    "normal_build_manifest": "codex-work/night-2026-10-30/v4/final-code-20261120/normal-build/result.json",
+    "benchmark_inputs": {
+      "games": "codex-work/night-2026-10-30/v4/final-code-20261120/spring-linux/games",
+      "ttld_fire_games": "codex-work/night-2026-10-30/v4/final-code-20261120/games/ToTheLastDropProduction",
+      "ttld_fire_fixture_sha256": "aa2adb59638fe4bff2ce3c9dc0f7a2eecc1d07b95cb8ea277864bb53e5a9c17c",
+      "gravitas_effects_probe_sha256": "21de1b6c7df75d151011ed0ac3d1107e89b4c5fae24a163845f9a05a02b2d79c"
+    },
+    "release_engine": "2026.11.0104",
+    "additional_unique_runtime_and_source_bytes": 11796480
   }
 }
