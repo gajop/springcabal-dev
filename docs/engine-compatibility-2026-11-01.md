@@ -113,10 +113,16 @@ request. The Area 17 and Gravitas failures remain recorded under the existing
 warning checks. Both still need their rendered suites.
 [Engine source](https://github.com/gajop/spring-rust/blob/96574c7e80eac7898f0738c2abebff0c1a38b2aa/rts/Rml/Backends/RmlUi_Renderer_Headless.h)
 
-The 43 existing checks in the `2026.11.0104` NVIDIA plan remain pending. Its
-dedicated worker ended while the machine stayed busy. Rendered checks still
-require the CPU/GPU quiet guards and global verification lock. The active Flove
-visual checks and Gravitas timings use the `2026.10.3103` benchmark engine.
+The installed-source check rebuilt all 18 staged Wasm modules across the seven
+games. Rust 1.97.1 and the original build paths reproduce the older Flove,
+Area 17, Parts Needed and Gravitas modules. Area 17 also requires Clang 18 to
+match its bundled C++ math code. The Hunted, My Cube and To the Last Drop
+modules were checked with their recorded Rust 1.100.0 toolchain.
+
+The 43-case `2026.11.0104` plan can reuse these seven installed-source checks.
+The rendered checks still require the CPU/GPU quiet guards and global
+verification lock. The active Flove visual checks and Gravitas timings use
+the `2026.10.3103` benchmark engine.
 
 ## Windows runtime under Wine
 
