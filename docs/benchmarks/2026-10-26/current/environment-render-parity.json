@@ -81,7 +81,7 @@
       "remaining": "Complete current NVIDIA visual/wisp/input/world/GL checks; verify and measure Lua buffer reuse, adopt reviewed sources, then collect six fresh normal/10\u00d7 and jobs comparisons with matching captures."
     },
     "ttld": {
-      "code": "Private full projectile/deferred/bloom restoration builds and matches fresh builds. Staff offset, exact cast parameters, mouse sampling and light order are aligned. Both sides now include weapon zero. The retained-buffer trial preserves 947 sampled lights and 385 recorded host draws; these are logic checks, not speed measurements.",
+      "code": "Public Rust skips lighting setup on true headless engines. All 58 gameplay assertions pass on 2026.10.3103 and 2026.11.0104, including on the private lighting candidate. Both builds match source. The private candidate aligns staff offset, cast parameters, mouse sampling, light order and weapon zero. The retained-buffer trial preserves 947 sampled lights and 385 host draws.",
       "remaining": "Complete the five existing NVIDIA suites, before/repeat/after output captures on both backends and measured buffer/cache trials. Review stress light counts, adopt sources and rerun all four timing/profile/world/video cases."
     },
     "area17": {
@@ -120,9 +120,9 @@
       "source_diffs_sha256": {
         "shared-source": "c19c0bf632cab512546322411398d6e6ab4fc384451ffb003605688debf5081a",
         "spring-linux/games/ToTheLastDrop.sdd": "567a20ccfc73cd46feabeea14fac7148580cdde7b05c119677bcddfc4f3b3b06",
-        "spring-linux/games/ToTheLastDrop-wasm.sdd": "792de863367874ed1729bf622d5db4b9f51489fb6de60d72f7a2234c12695bec"
+        "spring-linux/games/ToTheLastDrop-wasm.sdd": "059a94be0ebc107c468ade6217cf16b19895ab3956c3f9646d04b9918e37643e"
       },
-      "installed_check_sha256": "5efacb749191b0c8434ac5b49766bcf1fdff52feda2bbb388c7d4b06c3b577b2"
+      "installed_check_sha256": "6bf75f583c983a5bac2ba8fea6bb93760e73a4c012db6ac782e200069d04f240"
     }
   },
   "flove_correctness": {
@@ -301,6 +301,26 @@
           "sha256": "1a7c9dfc6f10440b134b6273fd936370ca3b9a4c95e82279adae96c768045fd7"
         }
       }
+    }
+  },
+  "ttld_headless_shadow_fix": {
+    "rust_commit": "d0e8693f72e1cae0371f1176d830a5ee6074e645",
+    "scope": "Skip UI lighting and shadow setup on true headless engines.",
+    "engines": {
+      "2026.10.3103": {
+        "headless_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+        "public_gameplay_assertions": 58,
+        "candidate_gameplay_assertions": 58
+      },
+      "2026.11.0104": {
+        "headless_sha256": "6059d1533779f49737b225d77d89a8da1eaa75de1a20248c52871bbfd5f76a19",
+        "public_gameplay_assertions": 58,
+        "candidate_gameplay_assertions": 58
+      }
+    },
+    "normal_module_counts": {
+      "public": 3,
+      "private": 3
     }
   }
 }

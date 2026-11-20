@@ -46,10 +46,16 @@ The official Linux `2026.11.0104` binary passes both focused parity runs:
 Lua/native comparisons with three cases, and the typed Core Wasm comparison.
 The native reference contains nonzero X/Z wind values; the Wasm comparison reports
 no missing results, mismatches or vacuous results. Parts Needed's existing
-no-render integration suite now passes. TTLD initializes its UI and passes all 58
-gameplay assertions; its no-render suite still exits unsuccessfully because the
-headless engine warns that shadows are unsupported. That raw failure remains
-recorded and does not count as a graphics pass.
+no-render integration suite now passes.
+
+To the Last Drop's Rust lighting widget now checks the engine's headless flag
+before setting up lighting and shadows. The existing Lua/Rust headless suite
+passes all 58 Rust gameplay assertions and its Lua checks on both
+`2026.10.3103` and `2026.11.0104`. The same suite passes on the private
+lighting candidate, and all three normal Wasm modules match fresh builds for
+each source. The earlier unsupported-shadow warning remains in the diagnostic
+archive. The rendered lighting suites are pending.
+[Public Rust fix](https://github.com/SpringCabal/LD43/commit/d0e8693f72e1cae0371f1176d830a5ee6074e645)
 
 ## Other changes reviewed
 
