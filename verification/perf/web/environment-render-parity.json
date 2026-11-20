@@ -69,8 +69,8 @@
   },
   "work_status": {
     "gravitas": {
-      "code": "The measured Lua particle change and weapon-zero fixes are public at a63138f. Existing Lua rules and BOB checks passed on the two tested engines. Three original Rust-only jobs cases still match the selected inputs.",
-      "remaining": "Repeat the three Lua/Rust emitter loads with matching profiles and videos. Finish jobs-clock diagnostics and source attribution."
+      "code": "The measured Lua particle change and weapon-zero fixes are public at a63138f. Existing Lua rules and BOB checks passed on the two tested engines. Three original Rust-only jobs cases still match the selected inputs. A private Lua range-submission trial preserves host-replayed draw calls and reduces sampled Lua instructions by 7.5% at 100 emitters.",
+      "remaining": "Repeat the three Lua/Rust emitter loads with matching profiles and videos. Finish jobs-clock diagnostics and source attribution. Run the private trial\u2019s fixed-frame image check and paired NVIDIA timings before adoption."
     },
     "hunted": {
       "code": "The combined private map-edge and rabbit-material candidate passes serial and checked-jobs assertions on engine 0104. In saved NVIDIA captures the restored terrain matches all 239 affected Lua pixels. The full proposed HUD crop passes the independent replay at 0.124% RMSE against the existing 2% limit.",

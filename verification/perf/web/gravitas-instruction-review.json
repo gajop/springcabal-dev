@@ -371,5 +371,56 @@
     "public_sources_untouched": true,
     "rust_unchanged": true,
     "output_contract": "Same records, lifecycle, masks, upload order, draw ranges and shaders; only Lua field reads/calls change."
+  },
+  "retained_ranges_candidate": {
+    "utc": "2026-11-20T03:28:13.493237+00:00",
+    "baseline_lua": "a63138f0d02194b0cc3157cd65e89781334423e2",
+    "candidate_lua": "1d9ad0feb3229244684c784f96a155be2fb66790",
+    "rust": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+    "game_source_file": "lups/headers/particle_batch.lua",
+    "candidate_sha256": "ad076d4593a5894394146f63b42c3e9fda80396f509512641f7936921844a3f7",
+    "host_probe_sha256": "2896eea04252e324cbb3563438e4ecc3bd43e9f036682547d923fbcbc365d064",
+    "mock_replay_sha256": "e437c3de958f313b848aa6eac1bb849592f620ebc868335bee9bea1d2994530f",
+    "trace_frames_with_edge_cases": 640,
+    "edge_trace_sha256": "9a243223a84f9ad3971610492e932d25a99c251be071c7a6e4422a5b965ce820",
+    "matched_instruction_diagnostic_counts": [
+      {
+        "emitters": 1,
+        "host_trace_frame_count": 900,
+        "trace_sha256": "75f6c5dedd91fd599e8dbed787936dce37a2ded8d7611af2afe429dfc3579466",
+        "upload_calls": 2014,
+        "numeric_fields_uploaded": 307660,
+        "draw_calls": 4059,
+        "instruction_hook_samples_public": 10446,
+        "instruction_hook_samples_candidate": 9712,
+        "reduction_percent": 7.026613057629715
+      },
+      {
+        "emitters": 10,
+        "host_trace_frame_count": 900,
+        "trace_sha256": "7894ff1f5ade3d08f686b5679836dafa2a87b440d1edef56470022953a580a76",
+        "upload_calls": 58304,
+        "numeric_fields_uploaded": 9049036,
+        "draw_calls": 3867,
+        "instruction_hook_samples_public": 99669,
+        "instruction_hook_samples_candidate": 92427,
+        "reduction_percent": 7.266050627577281
+      },
+      {
+        "emitters": 100,
+        "host_trace_frame_count": 210,
+        "trace_sha256": "5993f78536d9ca8e860b3e13bdf0cf90e401440da85eef891797bd4a69c09c29",
+        "upload_calls": 221669,
+        "numeric_fields_uploaded": 33966516,
+        "draw_calls": 4184,
+        "instruction_hook_samples_public": 979905,
+        "instruction_hook_samples_candidate": 906356,
+        "reduction_percent": 7.505727596042478
+      }
+    ],
+    "instructions": "Host Lua 5.1 count hook sampled every 997 VM instructions, frames 300\u2013900 inclusive. Graphics bindings are mocked.",
+    "existing_regression_fixture_passed": true,
+    "source_changes_only": true,
+    "render_and_whole_frame_measurements_pending": true
   }
 }
