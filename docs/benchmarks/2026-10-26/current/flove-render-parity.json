@@ -226,5 +226,300 @@
       "utc": "2026-10-31T22:27:56.919436+00:00"
     }
   },
-  "draw_boundary_repair": "Both editions invalidate the shared wisp cache at DrawGenesis; the pinned base gadget handler does not implement UnsyncedHeightMapUpdate."
+  "draw_boundary_repair": "Both editions invalidate the shared wisp cache at DrawGenesis; the pinned base gadget handler does not implement UnsyncedHeightMapUpdate.",
+  "archived_grass_workload": {
+    "scope": "Older NVIDIA CPU profile attribution and world counts. These profiles predate the active candidate. The stacks measure sampled main-thread CPU; laptop GPU time and current frame rates remain unmeasured.",
+    "profile_attribution": [
+      {
+        "load": 1,
+        "backend": "lua",
+        "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "archived_profile": "../profiles/flove-combat-1x--flove-00-lua.js",
+        "decoded_profile_sha256": "e05c1f1db79108a2f736e5e61face8fcd501c53b01b6b4b1a80d6a27870623eb",
+        "sample_window_simulation_frames": [
+          300,
+          900
+        ],
+        "sampled_main_cpu_ns": 3148296568,
+        "terrain_grass_inclusive_ns": 328657312,
+        "terrain_grass_near_inclusive_ns": 310621240,
+        "terrain_grass_main_cpu_percent": 10.439,
+        "grass_detail": 100
+      },
+      {
+        "load": 1,
+        "backend": "wasm",
+        "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "archived_profile": "../profiles/flove-combat-1x--flove-00-wasm.js",
+        "decoded_profile_sha256": "364502833fa70a0d46e6ea6f77e21c0d6a8b34a26422918423377d6191d6ae78",
+        "sample_window_simulation_frames": [
+          300,
+          900
+        ],
+        "sampled_main_cpu_ns": 2609218416,
+        "terrain_grass_inclusive_ns": 302605208,
+        "terrain_grass_near_inclusive_ns": 274549096,
+        "terrain_grass_main_cpu_percent": 11.598,
+        "grass_detail": 100
+      },
+      {
+        "load": 10,
+        "backend": "lua",
+        "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "archived_profile": "../profiles/flove-combat-10x--flove-00-lua.js",
+        "decoded_profile_sha256": "91c4e5a2e9b099fce8d90ee91e5c149002c9a41b9eb438a2f2c96ecfcf0f32de",
+        "sample_window_simulation_frames": [
+          300,
+          900
+        ],
+        "sampled_main_cpu_ns": 51799598784,
+        "terrain_grass_inclusive_ns": 362725448,
+        "terrain_grass_near_inclusive_ns": 324649296,
+        "terrain_grass_main_cpu_percent": 0.7,
+        "grass_detail": 100
+      },
+      {
+        "load": 10,
+        "backend": "wasm",
+        "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "archived_profile": "../profiles/flove-combat-10x--flove-00-wasm.js",
+        "decoded_profile_sha256": "ccf10fd7227d353b6335f0328ac27c642733143e673c68dc399335e1676bf9bd",
+        "sample_window_simulation_frames": [
+          300,
+          900
+        ],
+        "sampled_main_cpu_ns": 45745490616,
+        "terrain_grass_inclusive_ns": 386773544,
+        "terrain_grass_near_inclusive_ns": 344689376,
+        "terrain_grass_main_cpu_percent": 0.845,
+        "grass_detail": 100
+      }
+    ],
+    "world_counts_and_geometry": {
+      "scope": "Archived NVIDIA world counts at frames 300, 600 and 900 and a source geometry comparison. Instantiated faces include offscreen units and omit passes, so these are not GPU draw or timing counts.",
+      "captures": [
+        {
+          "load": 1,
+          "backend": "lua",
+          "world": "perf-runs/2026-10-31-current-columns-worlds/flove-1x-after-off-w1-0/flove-00-lua/world.jsonl.gz",
+          "world_gzip_sha256": "74bdc73ba3f52484aff22f511652cfaa20584ac81c55d7cced05d8b3617753cb",
+          "frames": {
+            "300": {
+              "grass_by_model": {
+                "grass1": 25,
+                "grass2": 16,
+                "grass3": 16,
+                "grass4": 16,
+                "grass5": 14
+              },
+              "all_grass": 87,
+              "all_units": 597,
+              "instantiated_grass_triangles": 16876
+            },
+            "600": {
+              "grass_by_model": {
+                "grass1": 25,
+                "grass2": 17,
+                "grass3": 16,
+                "grass4": 17,
+                "grass5": 15
+              },
+              "all_grass": 90,
+              "all_units": 601,
+              "instantiated_grass_triangles": 17642
+            },
+            "900": {
+              "grass_by_model": {
+                "grass1": 26,
+                "grass2": 17,
+                "grass3": 17,
+                "grass4": 22,
+                "grass5": 16
+              },
+              "all_grass": 98,
+              "all_units": 609,
+              "instantiated_grass_triangles": 19016
+            }
+          }
+        },
+        {
+          "load": 1,
+          "backend": "wasm",
+          "world": "perf-runs/2026-10-31-current-columns-worlds/flove-1x-after-off-w1-0/flove-00-wasm/world.jsonl.gz",
+          "world_gzip_sha256": "c101ca6e2d0fea040a5fa1f0ee6511afdd33cf9e65b8bf23e82778adc1283d94",
+          "frames": {
+            "300": {
+              "grass_by_model": {
+                "grass1": 25,
+                "grass2": 16,
+                "grass3": 16,
+                "grass4": 16,
+                "grass5": 14
+              },
+              "all_grass": 87,
+              "all_units": 597,
+              "instantiated_grass_triangles": 16876
+            },
+            "600": {
+              "grass_by_model": {
+                "grass1": 25,
+                "grass2": 17,
+                "grass3": 16,
+                "grass4": 17,
+                "grass5": 15
+              },
+              "all_grass": 90,
+              "all_units": 601,
+              "instantiated_grass_triangles": 17642
+            },
+            "900": {
+              "grass_by_model": {
+                "grass1": 26,
+                "grass2": 17,
+                "grass3": 17,
+                "grass4": 22,
+                "grass5": 16
+              },
+              "all_grass": 98,
+              "all_units": 609,
+              "instantiated_grass_triangles": 19016
+            }
+          }
+        },
+        {
+          "load": 10,
+          "backend": "lua",
+          "world": "perf-runs/2026-10-31-current-columns-worlds/flove-10x-after-off-w1-0/flove-00-lua/world.jsonl.gz",
+          "world_gzip_sha256": "95873667cfea26f461377f679bd90a9c1b4377db860e46d59cb3f74ee83149cc",
+          "frames": {
+            "300": {
+              "grass_by_model": {
+                "grass1": 231,
+                "grass2": 152,
+                "grass3": 142,
+                "grass4": 141,
+                "grass5": 132
+              },
+              "all_grass": 798,
+              "all_units": 5556,
+              "instantiated_grass_triangles": 155680
+            },
+            "600": {
+              "grass_by_model": {
+                "grass1": 233,
+                "grass2": 153,
+                "grass3": 145,
+                "grass4": 141,
+                "grass5": 134
+              },
+              "all_grass": 806,
+              "all_units": 5566,
+              "instantiated_grass_triangles": 157828
+            },
+            "900": {
+              "grass_by_model": {
+                "grass1": 237,
+                "grass2": 154,
+                "grass3": 147,
+                "grass4": 141,
+                "grass5": 134
+              },
+              "all_grass": 813,
+              "all_units": 5574,
+              "instantiated_grass_triangles": 158704
+            }
+          }
+        },
+        {
+          "load": 10,
+          "backend": "wasm",
+          "world": "perf-runs/2026-10-31-current-columns-worlds/flove-10x-after-off-w1-0/flove-00-wasm/world.jsonl.gz",
+          "world_gzip_sha256": "b75bcdc97fc9640114da22cf1f92523fef36833a1a39fc7c28e98a62918cdc9d",
+          "frames": {
+            "300": {
+              "grass_by_model": {
+                "grass1": 231,
+                "grass2": 152,
+                "grass3": 142,
+                "grass4": 141,
+                "grass5": 132
+              },
+              "all_grass": 798,
+              "all_units": 5556,
+              "instantiated_grass_triangles": 155680
+            },
+            "600": {
+              "grass_by_model": {
+                "grass1": 233,
+                "grass2": 153,
+                "grass3": 145,
+                "grass4": 141,
+                "grass5": 134
+              },
+              "all_grass": 806,
+              "all_units": 5566,
+              "instantiated_grass_triangles": 157828
+            },
+            "900": {
+              "grass_by_model": {
+                "grass1": 237,
+                "grass2": 154,
+                "grass3": 147,
+                "grass4": 141,
+                "grass5": 134
+              },
+              "all_grass": 813,
+              "all_units": 5574,
+              "instantiated_grass_triangles": 158704
+            }
+          }
+        }
+      ],
+      "public_models": {
+        "grass1": {
+          "triangulated_faces": 64,
+          "source_xml_byte_match": false,
+          "max_transform_component_delta": 4.345194759558524e-08,
+          "lua_sha256": "505c8634d180168f954c93ca2e72d99fb5d03b635de5642e4a4a4b73e6ef8ded",
+          "rust_sha256": "815d1efcca14fc5916040add70655a85e4dfce7cafa0ea54d2ebc9adfc7c348f"
+        },
+        "grass2": {
+          "triangulated_faces": 100,
+          "source_xml_byte_match": false,
+          "max_transform_component_delta": 4.345194759558524e-08,
+          "lua_sha256": "f502e0be8704513d27b3caef7810c1648a0ca70b0db5ef3466efdf7c6ead2f12",
+          "rust_sha256": "2ca512d3ebb552548407d6b02a476ae55fa0e3563b361a51f9084518c4975bc2"
+        },
+        "grass3": {
+          "triangulated_faces": 260,
+          "source_xml_byte_match": true,
+          "max_transform_component_delta": 0,
+          "lua_sha256": "6ec4d3d56ea65ceddeb5d8435e5a69e983a35c3089ffa50bf742433178088b34",
+          "rust_sha256": "6ec4d3d56ea65ceddeb5d8435e5a69e983a35c3089ffa50bf742433178088b34"
+        },
+        "grass4": {
+          "triangulated_faces": 96,
+          "source_xml_byte_match": true,
+          "max_transform_component_delta": 0,
+          "lua_sha256": "d4a825eff3dc0b85ed6d904fab7bec20ead640bbd9cd88a062b43132050966f3",
+          "rust_sha256": "d4a825eff3dc0b85ed6d904fab7bec20ead640bbd9cd88a062b43132050966f3"
+        },
+        "grass5": {
+          "triangulated_faces": 570,
+          "source_xml_byte_match": false,
+          "max_transform_component_delta": 4.985782198208e-08,
+          "lua_sha256": "2f96b5b276a32eec63dd82828679352934170c8d30d4b96531d223694d010f7d",
+          "rust_sha256": "9f0193279b77829e12736a8efcdce7e4ae9fb1ad53f1cb89064f1281205f4f29"
+        }
+      },
+      "identical_unit_definitions_texture_and_model_metadata": true
+    },
+    "near_grass_base_distance_map_units": {
+      "7": 314,
+      "100": 2546
+    },
+    "engine_implementation": "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/Rendering/Env/GrassDrawer.cpp",
+    "settings": "The shared launch configuration selects GrassDetail=100. The pinned engine default is 7. Near terrain turfs issue a transform and display-list draw per turf.",
+    "conclusion": "Both implementations have the same archived grass-unit workload. Terrain grass is a common CPU cost at normal load. The profiles cannot isolate terrain grass GPU time or establish the laptop slowdown."
+  }
 }
