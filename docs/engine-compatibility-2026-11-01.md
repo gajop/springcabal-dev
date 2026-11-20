@@ -58,7 +58,7 @@ recorded and does not count as a graphics pass.
 | GLTF piece axes, upstream #3321 | No `.glb` or `.gltf` assets occur in the 14 Lua/Wasm game trees. No asset conversion was changed. |
 | One-based weapon numbers, `32b6c0ffb4` | Already present in the previous engine pin, `782c0e8a`. Audited setters use one-based slots. Projectile `weapon_num: 0` is the documented sentinel for no firing weapon instance. |
 | Weapon-definition IDs | Remain zero-based. Keep the separate fixes for collectors that skipped definition zero. |
-| Write-directory fallback, `4a2e322a19` | Already present in `782c0e8a`; existing verification supplies an explicit isolated write directory. Windows fallback checks remain pending. |
+| Write-directory fallback, `4a2e322a19` | Already present in `782c0e8a`. On `2026.11.0104` under Wine, a write-denied `--write-dir` was skipped in favor of `SPRING_WRITEDIR`. |
 | Near plane, `19910b9dac` | Already present in `782c0e8a`. Rendered scenario checks remain pending. |
 | Headless draw throttle, `4e04bef331` | Already present in `782c0e8a`. Reran the existing no-render integration checks on the new official binary. |
 
@@ -111,6 +111,17 @@ The 43 existing checks in the `2026.11.0104` NVIDIA plan remain pending. Its
 dedicated worker ended while the machine stayed busy. Rendered checks still
 require the CPU/GPU quiet guards and global verification lock. The active Flove
 visual checks and Gravitas timings use the `2026.10.3103` benchmark engine.
+
+## Windows runtime under Wine
+
+The Windows `2026.11.0104` headless executable matched the binary in the
+published archive. The existing `get_wind_vector` parity test passed with both
+an explicit writable directory and a denied directory followed by
+`SPRING_WRITEDIR`. Lua and Core Wasm produced the same nonzero wind vector in
+both cases. The engine logged the denied directory as read-only and wrote its
+settings and infolog in the fallback directory. Both cases read `springcontent`
+and `maphelper` from a path containing `窓`. These checks exercised the
+headless Windows executable under Wine. Rendered Windows checks remain pending.
 
 Detailed inputs, logs and receipts are retained locally under
 `codex-work/engine-2026.11.0103/` and `codex-work/engine-2026.11.0104/`.
