@@ -141,7 +141,7 @@
 <tr><td>Shadows</td><td>29.656 / 29.923</td><td>20.765 / 21.116</td><td>8.163 / 8.120</td><td>8.323 / 8.056</td></tr>
 <tr><td>Fire</td><td>29.776 / 29.739</td><td>21.086 / 20.908</td><td>8.076 / 8.146</td><td>8.387 / 7.969</td></tr>
   </tbody></table></div>
-  <p class="caption">Pathfinding is the largest shared cost at this load. About 1.3–1.5 ms/frame is spent scanning exit-only squares inside the footprint collision query. The query does not read the result of that constructor scan; the pathfinder separately checks traversal restrictions. Skipping the redundant scan is a candidate for a separate engine test. <a href="https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/Sim/MoveTypes/MoveMath/MoveMath.cpp#L155">Pinned collision code</a>.</p>
+  <p class="caption">Pathfinding is the largest shared cost at this load. About 1.3–1.5 ms/frame is spent scanning exit-only squares for a flag the footprint collision query never reads. The pathfinder checks traversal restrictions separately. A private engine executable skips the redundant scan. Its rebuilt baseline matches all 31 allocated runtime sections apart from the build ID. Guarded world comparisons and NVIDIA timings are pending. <a href="ttld-current-costs.json">Build and profile evidence</a>.</p>
   <!-- ttld-current-costs-end -->
   <!-- gpu-jobs-negative-control -->
   <p class="caption">The Gravitas GPU particle path dispatches zero jobs. Its paired median change is −3.37%, with a 95% mean ratio interval of [0.942, 1.020] that includes no change. <a href="gravitas-gpu-jobs-control-review.json">Control evidence</a>.</p>

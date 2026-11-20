@@ -735,5 +735,30 @@
     "source": "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/Sim/Path/HAPFS/PathManager.cpp#L779",
     "footprint_source": "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/Sim/MoveTypes/MoveMath/MoveMath.cpp#L155",
     "opportunity": "The footprint function constructs a collision query with an exit-only scan, then checks objects through ObjectBlockType and IsNonBlocking, which do not read that flag. The pathfinder separately checks exit-only state when expanding a node. A narrower collision query could skip the constructor scan, while preserving the independent traversal checks. This has not been tested as an engine change."
+  },
+  "footprint_trial": {
+    "status": "Private executable linked and staged. Matched runtime output and paired NVIDIA timing are pending.",
+    "base_source": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+    "trial_source": "8b9a53b21f05e403b8a9cdf59c7edcb5868f60bf",
+    "file_sha256": "931f9e35849a72c02a75dc40c966956ce859c993ceb6a48dec870c2b70c6cfb4",
+    "patch_applies_to_engine_0104_source": true,
+    "optimized_object": {
+      "before_scans_exit_only": true,
+      "after_scans_exit_only": false,
+      "regular_constructor_retains_scan": true
+    },
+    "executable": {
+      "pinned_executable_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+      "baseline_executable_sha256": "c4f0f2c3829165b162e90beaddc973904cb65495bd3a90ab67ff85bd6a018f1c",
+      "baseline_allocated_sections_match_except_build_id": true,
+      "baseline_different_sections": [],
+      "scope": "Pinned executable relink and one-object variant. Debug sections omitted. Existing runtime checks and NVIDIA timing remain separate.",
+      "candidate_sha256": "7764836bacd7c74f34c262649195e6333d8e64780fa67b60eb0697426c9c9d08",
+      "candidate_size": 75693920,
+      "pinned_allocated_sections": 31,
+      "complete": true
+    },
+    "runtime_version": "spring version 2026.10.3102-11-g782c0e8 codex/current-geometry-2026.10.31",
+    "scope": "One local C++ translation unit and a relink from the pinned build artifacts. The final engine and timings remain on their own pins."
   }
 }
