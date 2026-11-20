@@ -170,5 +170,88 @@
       "iterations": 145
     },
     "changes": "Original rabbit shader/material, local cursor flashlight, original f32 distance cutoff with conservative cylinder broadphase, cached fade uniforms and matched cylinder topology/culling. Exact pinned UI dependencies restored in private inputs."
+  },
+  "light_distance_trial": {
+    "source": {
+      "Hunted.sdd": {
+        "base": "115787cd4e5abde8e028fa9aa2907bc574053e8c",
+        "candidate": "ec5ecafda90a48abc66f7ad4bfa0f6e02667fe4f",
+        "base_tree_sha256": "194c7f28055cf2ea3010557bbd4e9ed2c95e59e9340dd545ac5b4c6b8636be9a",
+        "candidate_tree_sha256": "c04f1707d0684cffd26a6ae5c35a9a463341df223fa41f1d4808d12bc3e87268",
+        "overlay": "LuaRules/Gadgets/rabbit_visibility.lua",
+        "base_file_sha256": "253d53f366b393df9438d30561583bfd0b17e262c151ec9c3bffda1502f51f29",
+        "candidate_file_sha256": "5af4a7abbc5dacf1357ef904fda4560bd79e93b210d16f862106167540920562"
+      },
+      "Hunted-wasm.sdd": {
+        "base": "62a5110fea48db32df0b8faf4059fd2ac4d0bfeb",
+        "candidate": "5ea689ec2e2b1afb4dc065422d323a6df40074f7",
+        "base_tree_sha256": "cb78c270d9ca01edbd17d02d083a90b27a71e8b5ebde92e33174747240747262",
+        "candidate_tree_sha256": "c5642eb898d314f3f10a872440151db2a456f63d7a9563a01a006c274e7872db",
+        "overlay": "LuaUI/wasm/hunted-ui.wasm",
+        "base_file_sha256": "fa334d6ffb97108a619dc347321ea610a65fa6dec503538358704830c973501b",
+        "candidate_file_sha256": "8a4a18ad9ea2f61974d66d3890e103685d75d007bb39762418a233688ee0715a"
+      }
+    },
+    "scope": "Private optional measurement on top of the combined renderer corrections. Separate from release parity.",
+    "host_replay": {
+      "scope": "Archived world positions and rule-light inputs, host Lua 5.1 with stub spatial queries and material bindings. Calls are counted. No renderer or elapsed timing.",
+      "runs": {
+        "1": {
+          "calls_reduced_percent": 19.545454545454543,
+          "world": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-01-lua/world.jsonl.gz",
+          "world_sha256": "2f2818cfde36aaede9de9a0965c72c5d860e7252c73177953870f5b3ccac6925",
+          "before": {
+            "output_sha256": "2aadcbc5f3f0797b50d37f99ece235a6d6b69f5a0d53d2d5bd0d48d4d78635c7",
+            "sqrt_calls": 1320,
+            "spatial_queries": 500,
+            "no_draw_calls": 231,
+            "uniform_uploads": 262,
+            "frames": 154
+          },
+          "after": {
+            "output_sha256": "2aadcbc5f3f0797b50d37f99ece235a6d6b69f5a0d53d2d5bd0d48d4d78635c7",
+            "sqrt_calls": 1062,
+            "spatial_queries": 500,
+            "no_draw_calls": 231,
+            "uniform_uploads": 262,
+            "frames": 154
+          }
+        },
+        "10": {
+          "calls_reduced_percent": 23.748300640901142,
+          "world": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-1/hunted-10x-lua-rust-w1/hunted-10x/hunted-00-lua/world.jsonl.gz",
+          "world_sha256": "c7cda9e0fde2748e2653341e65ce805e64353ae36666fca6633bedb169e43f39",
+          "before": {
+            "output_sha256": "b20dea6fdd91d05add0c3bde6e246c299489f6ec725cb05b84546e29a5a48b63",
+            "sqrt_calls": 514900,
+            "spatial_queries": 5000,
+            "no_draw_calls": 2567,
+            "uniform_uploads": 7857,
+            "frames": 154
+          },
+          "after": {
+            "output_sha256": "b20dea6fdd91d05add0c3bde6e246c299489f6ec725cb05b84546e29a5a48b63",
+            "sqrt_calls": 392620,
+            "spatial_queries": 5000,
+            "no_draw_calls": 2567,
+            "uniform_uploads": 7857,
+            "frames": 154
+          }
+        }
+      }
+    },
+    "rust_host_ui_tests": 2,
+    "rust_normal_wasm_build_and_clippy": "passed",
+    "official_0104_no_render": {
+      "serial": {
+        "lua_assertions": 22,
+        "rust_assertions": 40
+      },
+      "checked_jobs_pool4": {
+        "lua_assertions": 22,
+        "rust_assertions": 40
+      }
+    },
+    "nvidia_output_and_timing": "pending"
   }
 }

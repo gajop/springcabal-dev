@@ -1,0 +1,149 @@
+{
+  "utc": "2026-11-20T04:02:44.458184+00:00",
+  "scope": "Estimated engine launch time plus the existing ten-second quiet check per launch. Uses saved accepted NVIDIA run durations or same-scene timing proxies. Counts first-pass captures and excludes retries, parity checks, encoding, processing and release work.",
+  "machine_minutes": 191.0175890183977,
+  "activities": {
+    "timings": {
+      "remaining_runs": 190,
+      "estimated_minutes": 86.82188394534853
+    },
+    "profiles": {
+      "remaining_runs": 38,
+      "estimated_minutes": 17.252229294614917,
+      "older_captures_available": 11,
+      "timing_proxy_cases": 8
+    },
+    "worlds": {
+      "remaining_runs": 32,
+      "estimated_minutes": 21.094149543604395,
+      "older_captures_available": 8,
+      "timing_proxy_cases": 8
+    },
+    "clips": {
+      "remaining_runs": 30,
+      "estimated_minutes": 49.65614289953276
+    },
+    "callback_pairs": {
+      "remaining_runs": 30,
+      "estimated_minutes": 13.066069639489417
+    },
+    "job_clocks": {
+      "remaining_runs": 8,
+      "estimated_minutes": 3.1271136958076764
+    }
+  },
+  "timing_cases": {
+    "hunted-lua-rust-w1": {
+      "mean_previous_launch_seconds": 3.5518584916018883,
+      "previous_runs": 10
+    },
+    "hunted-10x-lua-rust-w1": {
+      "mean_previous_launch_seconds": 7.776637039403431,
+      "previous_runs": 10
+    },
+    "flove-combat-lua-rust-w1": {
+      "mean_previous_launch_seconds": 7.692643834499177,
+      "previous_runs": 10
+    },
+    "flove-combat-10x-lua-rust-w1": {
+      "mean_previous_launch_seconds": 47.42901849920163,
+      "previous_runs": 10
+    },
+    "ttld-shadows-1x-w1": {
+      "mean_previous_launch_seconds": 9.603512705711182,
+      "previous_runs": 10
+    },
+    "ttld-shadows-10x-w1": {
+      "mean_previous_launch_seconds": 52.35019331261283,
+      "previous_runs": 10
+    },
+    "ttld-burning-1x-w1": {
+      "mean_previous_launch_seconds": 9.59296560640214,
+      "previous_runs": 10
+    },
+    "ttld-burning-10x-w1": {
+      "mean_previous_launch_seconds": 53.27040353857446,
+      "previous_runs": 10
+    },
+    "area17-1x-w1": {
+      "mean_previous_launch_seconds": 7.580458148801699,
+      "previous_runs": 10
+    },
+    "area17-2x-w1": {
+      "mean_previous_launch_seconds": 12.213743991664765,
+      "previous_runs": 12
+    },
+    "fire-1-lua-rust-w4": {
+      "mean_previous_launch_seconds": 3.577015535009559,
+      "previous_runs": 10
+    },
+    "fire-10-lua-rust-w4": {
+      "mean_previous_launch_seconds": 4.069279951986391,
+      "previous_runs": 10
+    },
+    "fire-100-lua-rust-w4": {
+      "mean_previous_launch_seconds": 13.632904755708296,
+      "previous_runs": 10
+    },
+    "mycube-1x-w1": {
+      "mean_previous_launch_seconds": 5.582585509901401,
+      "previous_runs": 10
+    },
+    "partsneeded-1x-w1": {
+      "mean_previous_launch_seconds": 4.058868263603654,
+      "previous_runs": 10
+    },
+    "flove-combat-10x-jobs-w1": {
+      "mean_previous_launch_seconds": 44.49537725782526,
+      "previous_runs": 12
+    },
+    "flove-combat-10x-jobs-w4": {
+      "mean_previous_launch_seconds": 30.260643486701884,
+      "previous_runs": 10
+    },
+    "flove-combat-jobs-w1": {
+      "mean_previous_launch_seconds": 7.585024565493223,
+      "previous_runs": 10
+    },
+    "flove-combat-jobs-w4": {
+      "mean_previous_launch_seconds": 6.608169177388349,
+      "previous_runs": 11
+    }
+  },
+  "current": {
+    "lua_rust_comparisons": [
+      0,
+      15
+    ],
+    "jobs_controls": [
+      7,
+      11
+    ],
+    "profiles": [
+      14,
+      52
+    ],
+    "world_recordings": [
+      8,
+      40
+    ],
+    "clips": [
+      0,
+      30
+    ],
+    "callback_pairs": [
+      0,
+      15
+    ],
+    "job_clocks": [
+      2,
+      10
+    ]
+  },
+  "finish_order": [
+    "Review known renderer and workload corrections using the existing verification suites.",
+    "Finish the planned matrix and captures with matching game revisions and settings.",
+    "Pass the 0104 release checks and publish RC4 using the existing packaging workflow."
+  ],
+  "calendar_eta": "Waits depend on real CPU and NVIDIA availability and the outcome of the pending checks."
+}
