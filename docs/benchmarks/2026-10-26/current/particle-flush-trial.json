@@ -444,7 +444,7 @@
     }
   ],
   "decision": {
-    "gravitas": "Include the measured change in the Lua candidate; combined Lua rules and BOB checks pending.",
+    "gravitas": "Adopted on public master at a63138f0d02194b0cc3157cd65e89781334423e2. The benchmark table retains the pre-change baseline until the fresh paired runs finish.",
     "ttld": "Keep the existing path; both measured intervals include zero change."
   },
   "fixed_image_scope": {
@@ -659,5 +659,36 @@
         "032e11330aeeb1b52388e3f0c788b869cebf0fd78fbb9c73640d0148e7ef51fc"
       ]
     }
+  },
+  "gravitas_adoption": {
+    "commit": "a63138f0d02194b0cc3157cd65e89781334423e2",
+    "rule_checks": [
+      {
+        "suite": "gravitas lua-rules",
+        "engine": "2026.10.3103",
+        "headless_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+        "receipt_sha256": "f8e7e0cd56cc68693fdbaa8db5bbdb29a00657ad207e1724fd07bff2265f14dc"
+      },
+      {
+        "suite": "gravitas lua-bob",
+        "engine": "2026.10.3103",
+        "headless_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+        "receipt_sha256": "f8e7e0cd56cc68693fdbaa8db5bbdb29a00657ad207e1724fd07bff2265f14dc"
+      },
+      {
+        "suite": "gravitas lua-rules",
+        "engine": "2026.11.0104",
+        "headless_sha256": "6059d1533779f49737b225d77d89a8da1eaa75de1a20248c52871bbfd5f76a19",
+        "receipt_sha256": "c0ab5e747da794af569fd27857caa517f9c6e9ef50ba56f3fa91d572164c0bc4"
+      },
+      {
+        "suite": "gravitas lua-bob",
+        "engine": "2026.11.0104",
+        "headless_sha256": "6059d1533779f49737b225d77d89a8da1eaa75de1a20248c52871bbfd5f76a19",
+        "receipt_sha256": "7147bd9b25d58cadf7ce2010979e442d5b7543d77d7bcb4a82d11e9950325031"
+      }
+    ],
+    "runtime": "Engine headless executables. Fire proof and prior performance samples used NVIDIA.",
+    "refresh_provenance": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-11-20-gravitas-public/fire-100-lua-rust-w4/provenance.json"
   }
 }
