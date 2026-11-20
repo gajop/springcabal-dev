@@ -86,7 +86,7 @@
     },
     "area17": {
       "code": "Private beam/deferred-light/HDR/bloom corrections build and match fresh builds. Seventeen Lua regressions pass, including weapon-zero impulse/fall-immunity handling. Both-side light-buffer/cache candidates preserve 2,164 sampled lights in host checks; GPU/cost proof remains.",
-      "remaining": "Complete rendered suites and before/repeat/after output captures for both backends, measure buffer reuse, adopt sources and collect fresh normal/2\u00d7 comparisons and captures. The earlier no-render texture-warning attempt remains failed."
+      "remaining": "The saved GL trace covers idle only. The revised input reaches lifting at frame 360 in both languages and both loads in no-render checks. Capture idle and lifting on NVIDIA, measure buffer reuse, adopt verified sources, then repeat the affected comparisons and captures."
     },
     "partsneeded": {
       "code": "Private map-edge, fog and full lighting are implemented, including Lua weapon zero. Normal builds and installed-build comparison pass; current no-render integration, endings, restart and same-pass assertions pass. The actual Lua projectile collector also passes the weapon-zero host regression.",

@@ -1,0 +1,6 @@
+300: local screenshot png
+# A civilian between the normal and doubled-load UFO starting points.
+# Let the game's own abduction code drive the beam in each implementation.
+352: cheat 1
+354: give 1 civilian 0 @14414,0,1492
+360: local screenshot png

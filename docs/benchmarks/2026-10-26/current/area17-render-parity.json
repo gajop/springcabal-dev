@@ -145,5 +145,308 @@
       ],
       "utc": "2026-10-31T22:05:33.980450+00:00"
     }
+  },
+  "active_beam_verification": {
+    "scope": "The existing headless world observer verified the input action and beam state only. These runs used the real no-render binary and retained all original render-stub warnings. The historical independent NVIDIA GL trace contains only idle strips.",
+    "candidate_sources": {
+      "Area-17.sdd": {
+        "public_base": "2c8c725e80814a32259f0fc400487337c1aa5343",
+        "head": "f4517aa6b0e99b55032337c02a8762d4864fa296",
+        "diff_sha256": "925293b8095db1d2edebea8fd976915c3a2cfb3d81676f588d44f6fda3eddea6",
+        "normal_modules": {}
+      },
+      "Area17-wasm.sdd": {
+        "public_base": "4784fc666fc8783c6e1f5d08f659288fbacb4053",
+        "head": "1258f851d361593665099685d63b09dc8883421d",
+        "diff_sha256": "1d5ea2637da6ab71705010e9019b4737ec8011bd30813d0d9c31a988a7dd2661",
+        "normal_modules": {
+          "LuaRules/wasm/area17-rules.wasm": "9570f27f2743ddc6cb6f9a7db6d1a01980ca027efd5bb2d0266a032b09fb2af5",
+          "LuaUI/wasm/area17-ui.wasm": "a4192a4a1b99080575d264ad24bc7fab52e575af58d1a4261b286cff32d21587"
+        }
+      }
+    },
+    "original_source_commits": {
+      "Area-17.sdd": "2c8c725e80814a32259f0fc400487337c1aa5343",
+      "Area17-wasm.sdd": "4784fc666fc8783c6e1f5d08f659288fbacb4053"
+    },
+    "tape_sha256": "c5fee95b56a9985ac36cca1911abd9b4cef1ef8e0712bfdef70ad56a90536cf7",
+    "visual_tape_sha256": "180ee08f072c45345185814ba69300282d280068331b997ed759813db243a18f",
+    "verified_action_runs": [
+      {
+        "phase": "reference",
+        "load": 1,
+        "backend": "lua",
+        "samples": {
+          "300": {
+            "ufo_id": 16697,
+            "beam_enabled": 0.0,
+            "position": [
+              14403.068359375,
+              429.413391113,
+              1482.598876953
+            ],
+            "civilian_count": 325,
+            "units": 1329
+          },
+          "360": {
+            "ufo_id": 16697,
+            "beam_enabled": 1.0,
+            "position": [
+              14403.068359375,
+              432.832611084,
+              1482.598876953
+            ],
+            "civilian_count": 326,
+            "units": 1330
+          }
+        },
+        "output": "codex-work/night-2026-10-30/v4/area17-render-parity/active-beam-input-20261120/tape-original-1x/area17-00-lua",
+        "result_sha256": "cd80cccc1451a3d0ed970d1f400e16f8a83b1b5cfccef124189093476ee1b1ad",
+        "recording_sha256": "8c17768f76eac424a39fb3c07cb39a20fe67a8f1374c04a6936d817e58d81a1b",
+        "strict_runner_passed": false,
+        "strict_render_stub_messages": 7
+      },
+      {
+        "phase": "candidate",
+        "load": 1,
+        "backend": "lua",
+        "samples": {
+          "300": {
+            "ufo_id": 16697,
+            "beam_enabled": 0.0,
+            "position": [
+              14403.068359375,
+              429.413391113,
+              1482.598876953
+            ],
+            "civilian_count": 325,
+            "units": 1329
+          },
+          "360": {
+            "ufo_id": 16697,
+            "beam_enabled": 1.0,
+            "position": [
+              14403.068359375,
+              432.832611084,
+              1482.598876953
+            ],
+            "civilian_count": 326,
+            "units": 1330
+          }
+        },
+        "output": "codex-work/night-2026-10-30/v4/area17-render-parity/active-beam-input-20261120/tape-headless-1x/area17-00-lua",
+        "result_sha256": "1a29ae2de464adeaeeae66e7fe717cda1afa4bb260f1614045252ca984e2117e",
+        "recording_sha256": "90602686c407249e29282fea3dfabed8cd4c9b5e739157a532217050e5eb230f",
+        "strict_runner_passed": false,
+        "strict_render_stub_messages": 7
+      },
+      {
+        "phase": "candidate",
+        "load": 1,
+        "backend": "wasm",
+        "samples": {
+          "300": {
+            "ufo_id": 16697,
+            "beam_enabled": 0.0,
+            "position": [
+              14403.068359375,
+              429.413391113,
+              1482.598876953
+            ],
+            "civilian_count": 325,
+            "units": 1329
+          },
+          "360": {
+            "ufo_id": 16697,
+            "beam_enabled": 1.0,
+            "position": [
+              14403.068359375,
+              432.832611084,
+              1482.598876953
+            ],
+            "civilian_count": 326,
+            "units": 1330
+          }
+        },
+        "output": "codex-work/night-2026-10-30/v4/area17-render-parity/active-beam-input-20261120/tape-headless-1x/area17-00-wasm",
+        "result_sha256": "494a6dc42428c58e17298c13e37166b7b03268198193a05bb6d0a74b8cedbb86",
+        "recording_sha256": "f4ee3b9d1d3f86e45cdf07c49c3dc644576518af795735ca2926bff56935b237",
+        "strict_runner_passed": false,
+        "strict_render_stub_messages": 5
+      },
+      {
+        "phase": "reference",
+        "load": 2,
+        "backend": "lua",
+        "samples": {
+          "300": {
+            "ufo_id": 1708,
+            "beam_enabled": 0.0,
+            "position": [
+              14421.794921875,
+              434.207550049,
+              1501.325195313
+            ],
+            "civilian_count": 975,
+            "units": 3637
+          },
+          "360": {
+            "ufo_id": 1708,
+            "beam_enabled": 1.0,
+            "position": [
+              14421.794921875,
+              434.207550049,
+              1501.325195313
+            ],
+            "civilian_count": 976,
+            "units": 3638
+          }
+        },
+        "output": "codex-work/night-2026-10-30/v4/area17-render-parity/active-beam-input-20261120/tape-original-2x/area17-00-lua",
+        "result_sha256": "75eff577532fb07c5fc3c4aca3e27b973f269291725cdd6f775e715c7065fbd5",
+        "recording_sha256": "763c64de3ea900f27c94f0906f2a82e495671c0d317005e309045fa319e48616",
+        "strict_runner_passed": false,
+        "strict_render_stub_messages": 7
+      },
+      {
+        "phase": "candidate",
+        "load": 2,
+        "backend": "lua",
+        "samples": {
+          "300": {
+            "ufo_id": 1708,
+            "beam_enabled": 0.0,
+            "position": [
+              14421.794921875,
+              434.207550049,
+              1501.325195313
+            ],
+            "civilian_count": 975,
+            "units": 3637
+          },
+          "360": {
+            "ufo_id": 1708,
+            "beam_enabled": 1.0,
+            "position": [
+              14421.794921875,
+              434.207550049,
+              1501.325195313
+            ],
+            "civilian_count": 976,
+            "units": 3638
+          }
+        },
+        "output": "codex-work/night-2026-10-30/v4/area17-render-parity/active-beam-input-20261120/tape-headless-2x/area17-00-lua",
+        "result_sha256": "bc04fe6af8ddb82e44795a79cb1b03804bf34ba1527803e88130dfd659bc6f4d",
+        "recording_sha256": "7be3c4ab18dcfb3c257aef7330e6230bb7eed39feac8b5c5a6fe10bfb8127cb5",
+        "strict_runner_passed": false,
+        "strict_render_stub_messages": 7
+      },
+      {
+        "phase": "candidate",
+        "load": 2,
+        "backend": "wasm",
+        "samples": {
+          "300": {
+            "ufo_id": 1708,
+            "beam_enabled": 0.0,
+            "position": [
+              14421.794921875,
+              434.207550049,
+              1501.325195313
+            ],
+            "civilian_count": 975,
+            "units": 3637
+          },
+          "360": {
+            "ufo_id": 1708,
+            "beam_enabled": 1.0,
+            "position": [
+              14421.794921875,
+              434.207550049,
+              1501.325195313
+            ],
+            "civilian_count": 976,
+            "units": 3638
+          }
+        },
+        "output": "codex-work/night-2026-10-30/v4/area17-render-parity/active-beam-input-20261120/tape-headless-2x/area17-00-wasm",
+        "result_sha256": "d81e1be2beb14d035d86a5c04cfc246160acc6a9daad1d013842dae7a509de86",
+        "recording_sha256": "f72e2b05e14573e08dbc5998c4100d7cff5dd65f95bcd10ca72e93041058ff47",
+        "strict_runner_passed": false,
+        "strict_render_stub_messages": 5
+      }
+    ],
+    "legacy_nvidia_trace": {
+      "directory": "perf-runs/2026-11-01-area17-material-gl-tools-separated/1x-shadows0/original-lua/attempt-0/area17-00-lua",
+      "raw_sha256": "605abd053a72a8e6ae62ddf53129db7ead88ad887054e92d80d4895f9a6fda0a",
+      "dump_sha256": "ff8d163055d6e725ec56edc4437d01462c50bb176f86877687084fdc9065c0a0",
+      "valid_archive_stream": true,
+      "beam": {
+        "observed_strip_counts": {
+          "idle": 363
+        },
+        "vertices_per_strip": 52,
+        "samples": {
+          "300": {
+            "top_alpha": 0.6,
+            "bottom_alpha": 0.0,
+            "vertices": 52,
+            "top_ring_x_span": 19.959999999999127,
+            "base_ring_x_span": 146.03000000000065,
+            "height": 349.82192
+          },
+          "356": {
+            "top_alpha": 0.6,
+            "bottom_alpha": 0.0,
+            "vertices": 52,
+            "top_ring_x_span": 19.959999999999127,
+            "base_ring_x_span": 131.54000000000087,
+            "height": 346.57702
+          },
+          "357": {
+            "top_alpha": 0.6,
+            "bottom_alpha": 0.0,
+            "vertices": 52,
+            "top_ring_x_span": 19.959999999999127,
+            "base_ring_x_span": 131.6800000000003,
+            "height": 346.69131999999996
+          },
+          "358": {
+            "top_alpha": 0.6,
+            "bottom_alpha": 0.0,
+            "vertices": 52,
+            "top_ring_x_span": 19.959999999999127,
+            "base_ring_x_span": 132.07999999999993,
+            "height": 347.43562
+          },
+          "359": {
+            "top_alpha": 0.6,
+            "bottom_alpha": 0.0,
+            "vertices": 52,
+            "top_ring_x_span": 19.959999999999127,
+            "base_ring_x_span": 132.76000000000022,
+            "height": 348.80992
+          },
+          "360": {
+            "top_alpha": 0.6,
+            "bottom_alpha": 0.0,
+            "vertices": 52,
+            "top_ring_x_span": 19.959999999999127,
+            "base_ring_x_span": 133.4400000000005,
+            "height": 350.11552
+          },
+          "361": {
+            "top_alpha": 0.6,
+            "bottom_alpha": 0.0,
+            "vertices": 52,
+            "top_ring_x_span": 19.959999999999127,
+            "base_ring_x_span": 134.1299999999992,
+            "height": 351.35582
+          }
+        }
+      }
+    },
+    "pending": "Six guarded NVIDIA GL/image runs on original Lua and both complete lighting candidates at normal and doubled load."
   }
 }

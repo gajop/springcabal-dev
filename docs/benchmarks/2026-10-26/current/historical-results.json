@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20T01:56:00.820585+00:00",
+  "generated_at": "2026-11-20T02:13:43.284441+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1972,7 +1972,7 @@
       "game": "area17",
       "title": "Area 17",
       "code": "Private beam/deferred-light/HDR/bloom corrections build and match fresh builds. Seventeen Lua regressions pass, including weapon-zero impulse/fall-immunity handling. Both-side light-buffer/cache candidates preserve 2,164 sampled lights in host checks; GPU/cost proof remains.",
-      "remaining": "Complete rendered suites and before/repeat/after output captures for both backends, measure buffer reuse, adopt sources and collect fresh normal/2\u00d7 comparisons and captures. The earlier no-render texture-warning attempt remains failed.",
+      "remaining": "The saved GL trace covers idle only. The revised input reaches lifting at frame 360 in both languages and both loads in no-render checks. Capture idle and lifting on NVIDIA, measure buffer reuse, adopt verified sources, then repeat the affected comparisons and captures.",
       "expected": 2,
       "completed": 0,
       "raw_completed": 1,
