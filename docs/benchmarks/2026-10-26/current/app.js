@@ -2,6 +2,7 @@
 'use strict';
 const DATA=window.SC_DATA, $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg';
 const HISTORY=window.SC_HISTORY??{scenes:{},games:[],jobs:[]};
+const archivedProfiles=window.SC_TTLD_ARCHIVE??[];
 const state={scene:DATA.scenes[0],comparison:'language',pair:0,worlds:[],frame:300,playing:false,fit:true,profile:null,flame:null,history:[]};
 const assets=new Map(), requests=new Map();
 const assetCacheLimit=6;
@@ -180,7 +181,23 @@ function cpuComparison(){
   for(const p of[left,right]){const box=document.createElement('div'),button=document.createElement('button'),list=document.createElement('pre');button.textContent='Inspect '+profileName(p);button.onclick=()=>{$('profile').value=p.key;loadProfile();location.hash='profiles';};list.textContent=p.cpu_costs.leaves.map(r=>fmt(r.ms)+' ms  '+r.name).join('\n');box.append(button,list);leaves.append(box);}
 }
 function selectProfileForScene(){const preferred=matchingProfiles('wasm',isLanguage()?'off':'on')[0];if(preferred){$('profile').value=preferred.key;loadProfile();}else{++profileToken;state.profile=null;state.flame=null;state.history=[];$('profile').value='';$('thread').replaceChildren();for(const id of ['flame','flame-detail','profile-categories','profile-leaves'])$(id).replaceChildren();$('profile-meta').textContent='No sampled capture matching this comparison’s renderer, jobs, worker count, engine, game code and timers yet.';}}
-async function loadProfile(){const token=++profileToken,entry=DATA.profiles.find(p=>p.key===$('profile').value);if(!entry){$('profile-meta').textContent='No sampled capture for this selection.';return;}try{const p=await loadAsset(entry);if(token!==profileToken)return;state.profile=p;state.history=[];$('thread').replaceChildren();const threads=[...p.threads].sort((a,b)=>b.weight-a.weight);for(const t of threads)option($('thread'),t.name,t.name+' · '+fmt(t.weight/1e6,0)+' sampled CPU ms');const main=threads.find(t=>t.name.includes('recoil-main'));if(main)$('thread').value=main.name;$('profile-meta').textContent=`${profileName(entry)} · ${p.samples.toLocaleString()} stack samples · ${p.run.renderer} · pool ${p.run.worker_threads} · timers ${p.run.callback_timers??'on'} · engine ${(p.runtime?.engine_commit??'unknown').slice(0,12)}${p.run.contended?' · CPU pressure flagged; diagnostic only':''}`;selectThread();}catch(error){$('profile-meta').textContent=error.message;}}
+async function loadProfile(){
+  const token=++profileToken,key=$('profile').value;
+  const entry=DATA.profiles.find(p=>p.key===key)??archivedProfiles.find(p=>p.key===key);
+  if(!entry){$('profile-meta').textContent='No sampled capture for this selection.';return;}
+  try{
+    const p=await loadAsset(entry);
+    if(token!==profileToken)return;
+    state.profile=p;state.history=[];$('thread').replaceChildren();
+    const threads=[...p.threads].sort((a,b)=>b.weight-a.weight);
+    for(const t of threads)option($('thread'),t.name,t.name+' · '+fmt(t.weight/1e6,0)+' sampled CPU ms');
+    const main=threads.find(t=>t.name.includes('recoil-main'));
+    if(main)$('thread').value=main.name;
+    const archive=entry.archive_label?`Archived · ${entry.archive_label} · `:'';
+    $('profile-meta').textContent=`${archive}${profileName(entry)} · ${p.samples.toLocaleString()} stack samples · ${p.run.renderer} · pool ${p.run.worker_threads} · timers ${p.run.callback_timers??'on'} · engine ${(p.runtime?.engine_commit??'unknown').slice(0,12)}${p.run.contended?' · CPU pressure flagged; diagnostic only':''}`;
+    selectThread();
+  }catch(error){if(token===profileToken)$('profile-meta').textContent=error.message;}
+}
 function selectThread(){state.flame=state.profile?.threads.find(t=>t.name===$('thread').value);state.history=[];drawFlame();profileCategories();}
 function nodeName(n){return n.name==='[unknown]'?'[unresolved] '+n.dso:n.name;}
 function drawFlame(){
@@ -229,6 +246,11 @@ function workOverview(){
 }
 for(const s of DATA.scenes)option($('scene'),s.id,s.title+' · '+s.load);
 for(const p of DATA.profiles)option($('profile'),p.key,profileName(p));
+if(archivedProfiles.length){
+  const archive=document.createElement('optgroup');archive.label='Archived TTLD · earlier renderer';
+  for(const p of archivedProfiles)option(archive,p.key,profileName(p));
+  $('profile').append(archive);
+}
 $('scene').onchange=()=>selectScene($('scene').value);$('comparison').onchange=()=>{state.comparison=$('comparison').value;refreshScene();};$('overview-metric').onchange=overview;$('repeat').onchange=traces;$('trace-metric').onchange=drawTrace;
 $('show-history').onchange=()=>{overviewTable();$('scene-note').textContent=sceneNote(state.scene);};
 $('frame').oninput=()=>{state.frame=+$('frame').value;drawWorlds();};$('play').onclick=()=>{if(state.frame>=900)state.frame=0;state.playing=!state.playing;$('play').textContent=state.playing?'Pause':'Play';};$('fit').onclick=()=>{state.fit=!state.fit;drawWorlds();};

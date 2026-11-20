@@ -69,6 +69,7 @@
 <section id="profiles">
   <div class="toolbar"><h2>What the CPU was doing</h2><label>Capture <select id="profile"></select></label><label>Thread <select id="thread"></select></label></div>
   <p id="profile-meta" class="caption"></p>
+  <p class="caption">The capture menu includes four archived TTLD pairs for diagnosis. Their game revisions precede renderer parity. <a href="#ttld-path-costs">Pathfinding breakdown</a>.</p>
   <p>Width means sampled user-space CPU time in the selected thread, not elapsed frame time or GPU utilization. GPU-driver symbols are often private, but their library and visible caller remain identifiable. Missing unwind parents remain missing; no call chain is invented.</p>
   <div class="toolbar"><button id="flame-back">Back</button><button id="flame-reset">Reset zoom</button><label>Find symbol <input id="flame-search" placeholder="e.g. WaitBuffer, luaH_get, HAPFS"></label></div>
   <div id="flame" class="flame"></div><p id="flame-detail" class="mono caption" aria-live="polite"></p>
@@ -131,9 +132,16 @@
 <tr><td>ttld-shadows-1x-w1</td><td>5.473 / 5.267</td><td>3.854 / 3.808</td><td>0.721 / 0.261</td><td>4.733 / 5.017</td><td>1.617 / 2.001</td></tr>
 <tr><td>ttld-shadows-10x-w1</td><td>57.734 / 53.350</td><td>9.873 / 7.573</td><td>5.745 / 1.543</td><td>52.405 / 52.492</td><td>0.010 / 0.013</td></tr>
 <tr><td>ttld-burning-1x-w1</td><td>5.537 / 5.286</td><td>2.974 / 3.815</td><td>1.607 / 0.301</td><td>3.871 / 4.993</td><td>0.578 / 1.977</td></tr>
-<tr><td>ttld-burning-10x-w1</td><td>60.023 / 53.434</td><td>10.963 / 7.607</td><td>pending</td><td>pending</td><td>pending</td></tr>
+<tr><td>ttld-burning-10x-w1</td><td>60.023 / 53.434</td><td>10.963 / 7.607</td><td>7.495 / 1.623</td><td>52.759 / 52.164</td><td>0.013 / 0.007</td></tr>
   </tbody></table></div>
   <p class="caption">At 10× with shadows, Lua has 4.20 ms/frame more sampled runtime CPU on the recorded source pair. At normal fire Rust has 1.31 ms/frame less runtime CPU and 1.40 ms/frame more inclusive fence-wait CPU. The original rendering gap remains unexplained.</p>
+  <h3 id="ttld-path-costs">TTLD pathfinding at 10× units</h3>
+  <p class="caption">Sampled main-thread CPU ms per frame, Lua / Rust, from the archived pairs above. Grid and estimator are disjoint parts of the HAPFS total. Ground movement is measured outside HAPFS. Both runs used one native worker. <a href="ttld-current-costs.json">Profile identities, source and attribution</a>.</p>
+  <div class="table-scroll"><table><thead><tr><th>Scene</th><th>HAPFS update</th><th>Grid search</th><th>Estimator search</th><th>Ground movement</th></tr></thead><tbody>
+<tr><td>Shadows</td><td>29.656 / 29.923</td><td>20.765 / 21.116</td><td>8.163 / 8.120</td><td>8.323 / 8.056</td></tr>
+<tr><td>Fire</td><td>29.776 / 29.739</td><td>21.086 / 20.908</td><td>8.076 / 8.146</td><td>8.387 / 7.969</td></tr>
+  </tbody></table></div>
+  <p class="caption">Pathfinding is the largest shared cost at this load. About 1.3–1.5 ms/frame is spent scanning exit-only squares inside the footprint collision query. The query does not read the result of that constructor scan; the pathfinder separately checks traversal restrictions. Skipping the redundant scan is a candidate for a separate engine test. <a href="https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/Sim/MoveTypes/MoveMath/MoveMath.cpp#L155">Pinned collision code</a>.</p>
   <!-- ttld-current-costs-end -->
   <!-- gpu-jobs-negative-control -->
   <p class="caption">The Gravitas GPU particle path dispatches zero jobs. Its paired median change is −3.37%, with a 95% mean ratio interval of [0.942, 1.020] that includes no change. <a href="gravitas-gpu-jobs-control-review.json">Control evidence</a>.</p>
@@ -207,5 +215,5 @@ python3 verification/perf/dashboard.py \
 <footer>SpringCabal Lua / Rust benchmarks · data from the existing verification framework</footer>
 </main></div>
 <div id="tooltip" role="tooltip" hidden></div>
-<script src="data.js"></script><script src="historical-results.js"></script><script src="app.js"></script>
+<script src="data.js"></script><script src="historical-results.js"></script><script src="ttld-archived-profiles.js"></script><script src="app.js"></script>
 </body></html>

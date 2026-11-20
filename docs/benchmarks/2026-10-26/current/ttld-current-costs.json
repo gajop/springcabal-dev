@@ -1,5 +1,5 @@
 {
-  "utc": "2026-10-31T16:26:30.644445+00:00",
+  "utc": "2026-11-20T03:38:05.542839+00:00",
   "cases": [
     {
       "case": "ttld-shadows-1x-w1",
@@ -50,6 +50,26 @@
       "profiles": {
         "lua": {
           "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-lua/profile.json",
+          "profile_sha256": "ecf86d55bae11f59590054bfd2befc4efad3060cbb2f70e832935fcaff93b13e",
+          "result_sha256": "d676c0971652bf28130ead4d0c819c06d9c251a7e94b8ca9332f53104186cd1d",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-0--ttld-shadows-1x-w1--ttld-shadows-1x--ttld-00-lua.js",
+          "profile_asset_json_sha256": "019e0053e1cdc0ae109d56af75bcaecb252dc9f664a92edf87b530164e5bfd78",
+          "repeat": 0,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 1635,
+          "background_cpu_cores_peak": 0.23608631545862582,
           "main_cpu_ms": 5.454241773333333,
           "runtime_cpu_ms": 0.72144288,
           "other_cpu_ms": 4.732798893333333,
@@ -69,10 +89,46 @@
             "model_submission": 0.09018036,
             "rml_ui": 0.0,
             "unit_scripts": 0.06012024
+          },
+          "path_attribution_cpu_ms": {
+            "main": 5.454241773333333,
+            "remaining": 4.29859716,
+            "ground_move": 0.48096192,
+            "path": 0.6746826933333333,
+            "other_path": 0.013360053333333333,
+            "fine": 0.5511022,
+            "footprint_within_path": 0.18704074666666667,
+            "exit_only_within_footprint": 0.05678022666666667,
+            "exit_only_within_path": 0.09686038666666667,
+            "estimator": 0.11022044
           }
         },
         "wasm": {
           "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-wasm/profile.json",
+          "profile_sha256": "ee70cbd373117d7a452147976fec6d5bc2c3336313179de087e9b8055fca7a4d",
+          "result_sha256": "4df870267fa2dbb3392cbcb955ab3bd7159b360dbc27e9a224643efcd364cb37",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-0--ttld-shadows-1x-w1--ttld-shadows-1x--ttld-00-wasm.js",
+          "profile_asset_json_sha256": "c583a2783f7be7c83cd31ccd65b6ab0af9c35b954ad5f484975aea2187238aea",
+          "repeat": 0,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+            "modules": {
+              "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+              "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+              "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 1580,
+          "background_cpu_cores_peak": 0.20887269503745728,
           "main_cpu_ms": 5.277221066666667,
           "runtime_cpu_ms": 0.26052104,
           "other_cpu_ms": 5.016700026666667,
@@ -94,8 +150,24 @@
             "model_submission": 0.1002004,
             "rml_ui": 0.04008016,
             "unit_scripts": 0.04676018666666667
+          },
+          "path_attribution_cpu_ms": {
+            "main": 5.277221066666667,
+            "remaining": 4.074816266666667,
+            "ground_move": 0.51102204,
+            "path": 0.69138276,
+            "other_path": 0.026720106666666667,
+            "fine": 0.54108216,
+            "footprint_within_path": 0.21710086666666667,
+            "exit_only_within_footprint": 0.04008016,
+            "exit_only_within_path": 0.08684034666666667,
+            "estimator": 0.12358049333333333
           }
         }
+      },
+      "profile_input_sha256": {
+        "input.txt": "764ca3d4b5be72fd8e0370cb8476c1d5bf85be6efc85d51b4b2cf1d5c6b049bf",
+        "timed-input.txt": "62e4fbd3b98172d4c01a33922f66c668db1271b839165237011fcb64864aa0eb"
       }
     },
     {
@@ -147,6 +219,26 @@
       "profiles": {
         "lua": {
           "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-10x-w1/ttld-shadows-10x/ttld-00-lua/profile.json",
+          "profile_sha256": "7b589f2a10734e0139f80f68c55f745967477df005ddfd396684e5bcf564c307",
+          "result_sha256": "36443066d389f0fde60fb90c7859fb96ce74265dba1923ac5f696b62e8846063",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-0--ttld-shadows-10x-w1--ttld-shadows-10x--ttld-00-lua.js",
+          "profile_asset_json_sha256": "ece4f53ad1ae1708cc0890e3940158b33ae8e4d5444b790630a4c6a72fa0152f",
+          "repeat": 0,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 17427,
+          "background_cpu_cores_peak": 0.216246623782684,
           "main_cpu_ms": 58.149632133333334,
           "runtime_cpu_ms": 5.744822933333333,
           "other_cpu_ms": 52.4048092,
@@ -167,10 +259,46 @@
             "model_submission": 1.0688042666666666,
             "rml_ui": 0.0,
             "unit_scripts": 0.6279225066666667
+          },
+          "path_attribution_cpu_ms": {
+            "main": 58.149632133333334,
+            "remaining": 20.17034052,
+            "path": 29.655978386666668,
+            "other_path": 0.7281229066666667,
+            "fine": 20.764862893333333,
+            "footprint_within_path": 9.843019293333333,
+            "exit_only_within_footprint": 1.3593854266666667,
+            "exit_only_within_path": 2.548430173333333,
+            "estimator": 8.162992586666666,
+            "ground_move": 8.323313226666667
           }
         },
         "wasm": {
           "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-10x-w1/ttld-shadows-10x/ttld-00-wasm/profile.json",
+          "profile_sha256": "174ecf89ce3132ab89c632842abbad2217d5315cf06a978837fd67a946187fb2",
+          "result_sha256": "8e1e8e394b650d2d66841ad8bc0e10ec4f2a4ac95848a618a606768c364a0fdc",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-0--ttld-shadows-10x-w1--ttld-shadows-10x--ttld-00-wasm.js",
+          "profile_asset_json_sha256": "8bdb54f911c6b3570865c0665c95fedfd22bce2ae3bd1a61f555399eb4d3c83c",
+          "repeat": 0,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+            "modules": {
+              "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+              "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+              "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 16199,
+          "background_cpu_cores_peak": 0.19649944610936584,
           "main_cpu_ms": 54.034735706666666,
           "runtime_cpu_ms": 1.5430861599999999,
           "other_cpu_ms": 52.491649546666665,
@@ -192,8 +320,24 @@
             "model_submission": 1.0153640533333332,
             "rml_ui": 0.19038076,
             "unit_scripts": 0.6947227733333333
+          },
+          "path_attribution_cpu_ms": {
+            "main": 54.034735706666666,
+            "remaining": 16.055444093333332,
+            "path": 29.923179453333333,
+            "other_path": 0.6880427466666666,
+            "fine": 21.115564293333332,
+            "footprint_within_path": 9.542418093333334,
+            "exit_only_within_footprint": 1.3360053333333333,
+            "exit_only_within_path": 2.6285904933333333,
+            "estimator": 8.119572413333334,
+            "ground_move": 8.05611216
           }
         }
+      },
+      "profile_input_sha256": {
+        "input.txt": "764ca3d4b5be72fd8e0370cb8476c1d5bf85be6efc85d51b4b2cf1d5c6b049bf",
+        "timed-input.txt": "62e4fbd3b98172d4c01a33922f66c668db1271b839165237011fcb64864aa0eb"
       }
     },
     {
@@ -245,6 +389,26 @@
       "profiles": {
         "lua": {
           "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-1x-w1/ttld-burning-1x/ttld-00-lua/profile.json",
+          "profile_sha256": "6cf3f82f89e6009a170cf666bd5ae4b89e333bcff217f867439a4b4e2067bf77",
+          "result_sha256": "37e0aea75d881c682830aa6d66bc4ec103fb5be1ff5a54b04cbd6d409dc0e509",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-0--ttld-burning-1x-w1--ttld-burning-1x--ttld-00-lua.js",
+          "profile_asset_json_sha256": "39fff8a7384629837d68300addb6540e46ebde9ed142de990536da8ad9121af8",
+          "repeat": 0,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 1642,
+          "background_cpu_cores_peak": 0.2548654160621033,
           "main_cpu_ms": 5.4776218666666665,
           "runtime_cpu_ms": 1.6065464133333334,
           "other_cpu_ms": 3.871075453333333,
@@ -265,10 +429,46 @@
             "model_submission": 0.06346025333333333,
             "rml_ui": 0.0,
             "unit_scripts": 0.04008016
+          },
+          "path_attribution_cpu_ms": {
+            "main": 5.4776218666666665,
+            "remaining": 4.24849696,
+            "ground_move": 0.51102204,
+            "path": 0.7181028666666667,
+            "other_path": 0.026720106666666667,
+            "fine": 0.5678022666666667,
+            "footprint_within_path": 0.17702070666666667,
+            "exit_only_within_footprint": 0.06346025333333333,
+            "exit_only_within_path": 0.11022044,
+            "estimator": 0.12358049333333333
           }
         },
         "wasm": {
           "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-1x-w1/ttld-burning-1x/ttld-00-wasm/profile.json",
+          "profile_sha256": "0567553dff6d23650e94fa7e8f1bba0e870c4a503dbe9fe06c7320be6b216bf9",
+          "result_sha256": "7da57affe7b78ed40c2a3f16510893271b08b108391d625e80154632407db22b",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-0--ttld-burning-1x-w1--ttld-burning-1x--ttld-00-wasm.js",
+          "profile_asset_json_sha256": "8dd86d9e99d7e7f973ef5ebafe59cb1740bfe51ec7b60bf1c516e682f857bea8",
+          "repeat": 0,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+            "modules": {
+              "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+              "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+              "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 1586,
+          "background_cpu_cores_peak": 0.13735261675659519,
           "main_cpu_ms": 5.293921133333333,
           "runtime_cpu_ms": 0.3006012,
           "other_cpu_ms": 4.993319933333333,
@@ -290,8 +490,24 @@
             "model_submission": 0.08684034666666667,
             "rml_ui": 0.03006012,
             "unit_scripts": 0.05344021333333333
+          },
+          "path_attribution_cpu_ms": {
+            "main": 5.293921133333333,
+            "remaining": 4.06813624,
+            "ground_move": 0.5076820266666666,
+            "path": 0.7181028666666667,
+            "other_path": 0.04342017333333333,
+            "fine": 0.5744822933333333,
+            "footprint_within_path": 0.22712090666666668,
+            "exit_only_within_footprint": 0.04008016,
+            "exit_only_within_path": 0.09018036,
+            "estimator": 0.1002004
           }
         }
+      },
+      "profile_input_sha256": {
+        "input.txt": "764ca3d4b5be72fd8e0370cb8476c1d5bf85be6efc85d51b4b2cf1d5c6b049bf",
+        "timed-input.txt": "62e4fbd3b98172d4c01a33922f66c668db1271b839165237011fcb64864aa0eb"
       }
     },
     {
@@ -340,10 +556,133 @@
         "lua_units_p50": 5735.0,
         "wasm_units_p50": 5735.0
       },
-      "profiles": {}
+      "profiles": {
+        "lua": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-1/ttld-burning-10x-w1/ttld-burning-10x/ttld-05-lua/profile.json",
+          "profile_sha256": "c4fa32d1ccf3bf08eb9e6dc8636323243a6d7ab262567be8b8b6ba7cf3582630",
+          "result_sha256": "021f2c2f9165c3002d7a1eb5d3c890ec2553fc55babb64d5cff08e6bab42adcd",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-1--ttld-burning-10x-w1--ttld-burning-10x--ttld-05-lua.js",
+          "profile_asset_json_sha256": "38fa27c034f03b6fedf9c1c4b3d982710cb57ea0ea0c4c6c19f86c4dfa66b256",
+          "repeat": 5,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "15c0e01991d48720407c2db574c8195fb9ece14f",
+            "modules": {},
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 18067,
+          "background_cpu_cores_peak": 0.31353548827025596,
+          "main_cpu_ms": 60.25384053333333,
+          "runtime_cpu_ms": 7.49498992,
+          "other_cpu_ms": 52.75885061333333,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 3.6840347066666665,
+            "Checksums / measurement": 0.5177020666666666,
+            "Lua runtime / tables / GC": 7.49498992,
+            "Native movement / pathfinding": 33.83099505333333,
+            "Native rendering / models": 2.49498996,
+            "Native simulation / animation": 5.704742773333333,
+            "Other native code": 6.396125533333334,
+            "Unresolved": 0.12692050666666665,
+            "Worker queue / waiting": 0.0033400133333333333
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 0.013360053333333333,
+            "native_spatial_queries": 1.1255844933333334,
+            "model_submission": 1.0855043333333334,
+            "rml_ui": 0.0,
+            "unit_scripts": 0.64128256
+          },
+          "path_attribution_cpu_ms": {
+            "main": 60.25384053333333,
+            "remaining": 22.090848186666665,
+            "path": 29.776218866666667,
+            "other_path": 0.6145624533333334,
+            "fine": 21.085504173333334,
+            "footprint_within_path": 9.873079413333333,
+            "exit_only_within_footprint": 1.4595858266666666,
+            "exit_only_within_path": 2.78557112,
+            "estimator": 8.07615224,
+            "ground_move": 8.38677348
+          }
+        },
+        "wasm": {
+          "profile": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-1/ttld-burning-10x-w1/ttld-burning-10x/ttld-05-wasm/profile.json",
+          "profile_sha256": "f326667a1a02b2190d4ddb2cf271ff4f545a15be5afaebea79c373e495cf6c27",
+          "result_sha256": "46ca6b1f658617df655fd6815452a37bcd44656b988617c5e972603b4b4a1ef3",
+          "profile_asset": "profiles/night-v7-matched-ui-fire--attempt-1--ttld-burning-10x-w1--ttld-burning-10x--ttld-05-wasm.js",
+          "profile_asset_json_sha256": "94a1e44cea08d8f734bdcfe5a16e3f3d3eb6fa86884a1c1acdd85ce5026ca415",
+          "repeat": 5,
+          "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+          "source_identity": {
+            "source_commit": "5f59ab882bc3f41715d67f16f933c3f113558d8b",
+            "modules": {
+              "LuaUI/wasm/ttld-ui.wasm": "e3bb70f5f156d986feb204442ed19f177ae61e8c0d098432108eb414133aa655",
+              "LuaRules/wasm/ttld-rules-unsynced.wasm": "243f6d09538933862ef54fee1ebeba4d9a7f07ae3ea51a0d0f2cf9dd1d974e11",
+              "LuaRules/wasm/ttld-rules.wasm": "be62aae5fefd9800a27d7fce42b38b435a5a481d47c6bd85d34df1b4dcf13ed0"
+            },
+            "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+            "resource_guard_sha256": "9d5cdf2b901a64a44851cf701ab63e59fd4f16ae85d4ef44311077f1020c9a6c",
+            "cpu_activity_policy": {
+              "max_background_cpu_cores": 0.5,
+              "quiet_seconds": 10,
+              "excludes": "runner process tree including live and reaped children",
+              "window": "launch through first CPU sample after final frame marker"
+            }
+          },
+          "recorded_stack_samples": 16126,
+          "background_cpu_cores_peak": 0.33302344128711964,
+          "main_cpu_ms": 53.78757472,
+          "runtime_cpu_ms": 1.6232464800000002,
+          "other_cpu_ms": 52.16432824,
+          "exclusive_categories_ms": {
+            "CPU time in graphics driver": 3.62725448,
+            "Checksums / measurement": 0.49766198666666667,
+            "Lua runtime / tables / GC": 0.013360053333333333,
+            "Native movement / pathfinding": 33.80761496,
+            "Native rendering / models": 2.4615898266666667,
+            "Native simulation / animation": 5.60120236,
+            "Other native code": 6.04208412,
+            "Unresolved": 0.12358049333333333,
+            "Wasm guest": 1.2558450133333334,
+            "Wasmtime runtime": 0.35404141333333333,
+            "Worker queue / waiting": 0.0033400133333333333
+          },
+          "inclusive_ancestors_ms": {
+            "buffer_fence_wait": 0.006680026666666667,
+            "native_spatial_queries": 1.0855043333333334,
+            "model_submission": 0.9853039333333333,
+            "rml_ui": 0.14362057333333333,
+            "unit_scripts": 0.66132264
+          },
+          "path_attribution_cpu_ms": {
+            "main": 53.78757472,
+            "remaining": 16.078824186666665,
+            "path": 29.73947872,
+            "other_path": 0.6847027333333333,
+            "fine": 20.908483466666667,
+            "footprint_within_path": 9.602538333333333,
+            "exit_only_within_footprint": 1.4562458133333334,
+            "exit_only_within_path": 2.768871053333333,
+            "estimator": 8.14629252,
+            "ground_move": 7.969271813333333
+          }
+        }
+      },
+      "profile_input_sha256": {
+        "input.txt": "764ca3d4b5be72fd8e0370cb8476c1d5bf85be6efc85d51b4b2cf1d5c6b049bf",
+        "timed-input.txt": "62e4fbd3b98172d4c01a33922f66c668db1271b839165237011fcb64864aa0eb"
+      }
     }
   ],
-  "scope": "Earlier held TTLD comparisons, with five clean pairs per scene and separate sampled profiles where available. The Rust bloom footprint and projectile light workload differ from Lua in these recordings. Fence-wait samples are a subset of other CPU. Fresh matched-source measurements remain pending.",
+  "scope": "Archived TTLD source and CPU captures. Each profile comes from one clean pair using the same engine, game trees and input as five earlier clean timing pairs. Bloom and projectile lighting differ between these Lua and Rust revisions. CPU sample weights are separate from those timings. The archived profiles are excluded from the current capture counts.",
   "source": {
     "reviewed": true,
     "checks_passed": true,
@@ -389,6 +728,12 @@
     },
     "utc": "2026-10-31T09:51:47.784576+00:00"
   },
-  "interpretation": "On the recorded 10\u00d7 shadows source pair, Lua has 4.20 ms/frame more sampled language-runtime CPU and other main-thread CPU is similar. Buffer-fence wait samples are small there. At normal fire Rust has 1.31 ms/frame less sampled runtime CPU and 1.40 ms/frame more inclusive stream-buffer fence-wait CPU. These results describe the held source pair and leave the original rendering gap unexplained.",
-  "source_status": "baseline"
+  "interpretation": "Both 10\u00d7 scenes devote about 30 ms/frame to HAPFS and 8 ms/frame to ground movement on each backend. Grid searches account for about 21 ms and lower-resolution estimator searches for about 8 ms within HAPFS. Native path searches are the largest identified shared cost on this one-worker fixture. Normal fire had more CPU fence time in Rust in the saved pair. The original rendering gap remains open.",
+  "source_status": "baseline",
+  "path_method": {
+    "grouping": "Each main-thread self weight goes to HAPFS manager Update, GroundMoveSystem Update outside HAPFS, or remaining CPU. Within HAPFS it goes to grid search, estimator search, or remaining path updates, with grid taking precedence on nested stacks. Footprint and exit-only totals are nested subsets.",
+    "source": "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/Sim/Path/HAPFS/PathManager.cpp#L779",
+    "footprint_source": "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/Sim/MoveTypes/MoveMath/MoveMath.cpp#L155",
+    "opportunity": "The footprint function constructs a collision query with an exit-only scan, then checks objects through ObjectBlockType and IsNonBlocking, which do not read that flag. The pathfinder separately checks exit-only state when expanding a node. A narrower collision query could skip the constructor scan, while preserving the independent traversal checks. This has not been tested as an engine change."
+  }
 }
