@@ -1,0 +1,450 @@
+{
+  "completed_at": "2026-11-02T22:05:48.952664+00:00",
+  "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+  "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+  "renderer": "NVIDIA GeForce GTX 1660 Ti",
+  "clean_alternating_pairs_per_load": 5,
+  "fixed_images": [
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 4,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 4,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 4,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 4,
+      "rmse": 0.0
+    }
+  ],
+  "source_results": [
+    {
+      "id": "particle-flush-gravitas-100x",
+      "title": "gravitas Lua particle flush",
+      "load": "100\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f"
+      },
+      "candidate_commits": {
+        "lua": "f57e1756a29ffb4134f0bc91a2cd092579a20b63"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-1-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-2-block-63/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-2-block-63/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 19.392899999999997,
+      "wall_after_ms": 18.452245,
+      "wall_change_pct": -4.873243062104993,
+      "wall_mean_ratio_95ci": [
+        0.949881449558965,
+        0.952472164123941
+      ],
+      "sim_before_ms": 0.051028,
+      "sim_after_ms": 0.050838999999999995,
+      "sim_change_pct": 0.49848460679533524,
+      "sim_mean_ratio_95ci": [
+        0.9783201410466691,
+        1.0099632219804149
+      ],
+      "draw_before_ms": 18.121062000000002,
+      "draw_after_ms": 17.146386,
+      "draw_change_pct": -5.378691381332956,
+      "draw_mean_ratio_95ci": [
+        0.9448362149598531,
+        0.9503778562688502
+      ]
+    },
+    {
+      "id": "particle-flush-ttld-10x",
+      "title": "ttld Lua particle flush",
+      "load": "10\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "15c0e01991d48720407c2db574c8195fb9ece14f"
+      },
+      "candidate_commits": {
+        "lua": "375e8dfa79c24e47112c6aa6e00b2de7a8e1a086"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 17,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-0-block-0/before/ttld-03-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-0-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-1-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-1-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-2-block-0/before/ttld-01-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-2-block-0/after/ttld-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-3-block-1/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-3-block-1/after/ttld-02-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-4-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-4-block-0/after/ttld-00-lua"
+        }
+      ],
+      "wall_before_ms": 60.463521666666665,
+      "wall_after_ms": 60.293753333333335,
+      "wall_change_pct": -0.20174487834101473,
+      "wall_mean_ratio_95ci": [
+        0.9965089481509746,
+        1.0011832138446264
+      ],
+      "sim_before_ms": 36.791983,
+      "sim_after_ms": 36.760222,
+      "sim_change_pct": -0.288616058562452,
+      "sim_mean_ratio_95ci": [
+        0.9951701302976198,
+        1.0026146900054125
+      ],
+      "draw_before_ms": 11.074911,
+      "draw_after_ms": 10.958977,
+      "draw_change_pct": -0.8954626843789337,
+      "draw_mean_ratio_95ci": [
+        0.9848301641843263,
+        0.998493289354111
+      ]
+    },
+    {
+      "id": "particle-flush-gravitas-10x",
+      "title": "gravitas Lua particle flush",
+      "load": "10\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f"
+      },
+      "candidate_commits": {
+        "lua": "f57e1756a29ffb4134f0bc91a2cd092579a20b63"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 12,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-1-block-0/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-2-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-2-block-0/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 1.7640033333333334,
+      "wall_after_ms": 1.6851366666666667,
+      "wall_change_pct": -4.14152656552047,
+      "wall_mean_ratio_95ci": [
+        0.9503106483606959,
+        0.959497628304534
+      ],
+      "sim_before_ms": 0.018094000000000002,
+      "sim_after_ms": 0.01821,
+      "sim_change_pct": 0.25324818321954545,
+      "sim_mean_ratio_95ci": [
+        0.989437834402354,
+        1.0134108146503193
+      ],
+      "draw_before_ms": 1.445297,
+      "draw_after_ms": 1.36358,
+      "draw_change_pct": -4.993146606838328,
+      "draw_mean_ratio_95ci": [
+        0.9408573948897205,
+        0.9516806734436974
+      ]
+    },
+    {
+      "id": "particle-flush-gravitas-1x",
+      "title": "gravitas Lua particle flush",
+      "load": "1\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f"
+      },
+      "candidate_commits": {
+        "lua": "f57e1756a29ffb4134f0bc91a2cd092579a20b63"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-1-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-2-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-2-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 0.5660633333333331,
+      "wall_after_ms": 0.5529466666666665,
+      "wall_change_pct": -2.511791966741017,
+      "wall_mean_ratio_95ci": [
+        0.8866761891139893,
+        1.0328528362892366
+      ],
+      "sim_before_ms": 0.016962,
+      "sim_after_ms": 0.016703,
+      "sim_change_pct": -1.3363160063577961,
+      "sim_mean_ratio_95ci": [
+        0.9774008205188554,
+        1.008309848034223
+      ],
+      "draw_before_ms": 0.457236,
+      "draw_after_ms": 0.45207200000000003,
+      "draw_change_pct": -1.465545145176661,
+      "draw_mean_ratio_95ci": [
+        0.9792913338929566,
+        0.9986514254520027
+      ]
+    },
+    {
+      "id": "particle-flush-ttld-1x",
+      "title": "ttld Lua particle flush",
+      "load": "1\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "15c0e01991d48720407c2db574c8195fb9ece14f"
+      },
+      "candidate_commits": {
+        "lua": "375e8dfa79c24e47112c6aa6e00b2de7a8e1a086"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-0-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-0-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-1-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-1-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-2-block-0/before/ttld-01-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-2-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-3-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-3-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-4-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-4-block-0/after/ttld-00-lua"
+        }
+      ],
+      "wall_before_ms": 5.5347133333333325,
+      "wall_after_ms": 5.527574999999998,
+      "wall_change_pct": -0.09561506944055775,
+      "wall_mean_ratio_95ci": [
+        0.9972303069951415,
+        1.0020026828464639
+      ],
+      "sim_before_ms": 1.449575,
+      "sim_after_ms": 1.460127,
+      "sim_change_pct": 0.7279374989220821,
+      "sim_mean_ratio_95ci": [
+        0.9950986249219509,
+        1.02023662010076
+      ],
+      "draw_before_ms": 2.9395729999999998,
+      "draw_after_ms": 2.935508,
+      "draw_change_pct": -0.5208174344692784,
+      "draw_mean_ratio_95ci": [
+        0.9709028920496429,
+        1.0343100632065825
+      ]
+    }
+  ],
+  "decision": {
+    "gravitas": "Include the measured change in the Lua candidate; combined Lua rules and BOB checks pending.",
+    "ttld": "Keep the existing path; both measured intervals include zero change."
+  }
+}
