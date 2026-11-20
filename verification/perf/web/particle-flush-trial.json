@@ -1,0 +1,818 @@
+{
+  "completed_at": "2026-11-02T22:05:48.952664+00:00",
+  "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+  "engine_sha256": "65ec897047035e222ba4ea149c95e4c7e52fa3edb24697bb0e08ec4f4d63f2a2",
+  "renderer": "NVIDIA GeForce GTX 1660 Ti",
+  "clean_alternating_pairs_per_load": 5,
+  "fixed_images": [
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "repeat",
+      "shot": 4,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "gravitas",
+      "phase": "candidate",
+      "shot": 4,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "repeat",
+      "shot": 4,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 0,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 1,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 2,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 3,
+      "rmse": 0.0
+    },
+    {
+      "game": "ttld",
+      "phase": "candidate",
+      "shot": 4,
+      "rmse": 0.0
+    }
+  ],
+  "source_results": [
+    {
+      "id": "particle-flush-gravitas-100x",
+      "title": "gravitas Lua particle flush",
+      "load": "100\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f"
+      },
+      "candidate_commits": {
+        "lua": "f57e1756a29ffb4134f0bc91a2cd092579a20b63"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-1-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-2-block-63/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-2-block-63/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/100x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 19.392899999999997,
+      "wall_after_ms": 18.452245,
+      "wall_change_pct": -4.873243062104993,
+      "wall_mean_ratio_95ci": [
+        0.949881449558965,
+        0.952472164123941
+      ],
+      "sim_before_ms": 0.051028,
+      "sim_after_ms": 0.050838999999999995,
+      "sim_change_pct": 0.49848460679533524,
+      "sim_mean_ratio_95ci": [
+        0.9783201410466691,
+        1.0099632219804149
+      ],
+      "draw_before_ms": 18.121062000000002,
+      "draw_after_ms": 17.146386,
+      "draw_change_pct": -5.378691381332956,
+      "draw_mean_ratio_95ci": [
+        0.9448362149598531,
+        0.9503778562688502
+      ]
+    },
+    {
+      "id": "particle-flush-ttld-10x",
+      "title": "ttld Lua particle flush",
+      "load": "10\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "15c0e01991d48720407c2db574c8195fb9ece14f"
+      },
+      "candidate_commits": {
+        "lua": "375e8dfa79c24e47112c6aa6e00b2de7a8e1a086"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 17,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-0-block-0/before/ttld-03-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-0-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-1-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-1-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-2-block-0/before/ttld-01-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-2-block-0/after/ttld-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-3-block-1/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-3-block-1/after/ttld-02-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-4-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/10x-round-4-block-0/after/ttld-00-lua"
+        }
+      ],
+      "wall_before_ms": 60.463521666666665,
+      "wall_after_ms": 60.293753333333335,
+      "wall_change_pct": -0.20174487834101473,
+      "wall_mean_ratio_95ci": [
+        0.9965089481509746,
+        1.0011832138446264
+      ],
+      "sim_before_ms": 36.791983,
+      "sim_after_ms": 36.760222,
+      "sim_change_pct": -0.288616058562452,
+      "sim_mean_ratio_95ci": [
+        0.9951701302976198,
+        1.0026146900054125
+      ],
+      "draw_before_ms": 11.074911,
+      "draw_after_ms": 10.958977,
+      "draw_change_pct": -0.8954626843789337,
+      "draw_mean_ratio_95ci": [
+        0.9848301641843263,
+        0.998493289354111
+      ]
+    },
+    {
+      "id": "particle-flush-gravitas-10x",
+      "title": "gravitas Lua particle flush",
+      "load": "10\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f"
+      },
+      "candidate_commits": {
+        "lua": "f57e1756a29ffb4134f0bc91a2cd092579a20b63"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 12,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-1-block-0/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-2-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-2-block-0/after/gravitas-01-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/10x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 1.7640033333333334,
+      "wall_after_ms": 1.6851366666666667,
+      "wall_change_pct": -4.14152656552047,
+      "wall_mean_ratio_95ci": [
+        0.9503106483606959,
+        0.959497628304534
+      ],
+      "sim_before_ms": 0.018094000000000002,
+      "sim_after_ms": 0.01821,
+      "sim_change_pct": 0.25324818321954545,
+      "sim_mean_ratio_95ci": [
+        0.989437834402354,
+        1.0134108146503193
+      ],
+      "draw_before_ms": 1.445297,
+      "draw_after_ms": 1.36358,
+      "draw_change_pct": -4.993146606838328,
+      "draw_mean_ratio_95ci": [
+        0.9408573948897205,
+        0.9516806734436974
+      ]
+    },
+    {
+      "id": "particle-flush-gravitas-1x",
+      "title": "gravitas Lua particle flush",
+      "load": "1\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "4a6b05f073fc38528506fb7b1c86dac5aa9a607f"
+      },
+      "candidate_commits": {
+        "lua": "f57e1756a29ffb4134f0bc91a2cd092579a20b63"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 10,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-0-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-0-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-1-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-1-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-2-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-2-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-3-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-3-block-0/after/gravitas-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-4-block-0/before/gravitas-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/gravitas/1x-round-4-block-0/after/gravitas-00-lua"
+        }
+      ],
+      "wall_before_ms": 0.5660633333333331,
+      "wall_after_ms": 0.5529466666666665,
+      "wall_change_pct": -2.511791966741017,
+      "wall_mean_ratio_95ci": [
+        0.8866761891139893,
+        1.0328528362892366
+      ],
+      "sim_before_ms": 0.016962,
+      "sim_after_ms": 0.016703,
+      "sim_change_pct": -1.3363160063577961,
+      "sim_mean_ratio_95ci": [
+        0.9774008205188554,
+        1.008309848034223
+      ],
+      "draw_before_ms": 0.457236,
+      "draw_after_ms": 0.45207200000000003,
+      "draw_change_pct": -1.465545145176661,
+      "draw_mean_ratio_95ci": [
+        0.9792913338929566,
+        0.9986514254520027
+      ]
+    },
+    {
+      "id": "particle-flush-ttld-1x",
+      "title": "ttld Lua particle flush",
+      "load": "1\u00d7",
+      "backends": [
+        "lua"
+      ],
+      "base_commits": {
+        "lua": "15c0e01991d48720407c2db574c8195fb9ece14f"
+      },
+      "candidate_commits": {
+        "lua": "375e8dfa79c24e47112c6aa6e00b2de7a8e1a086"
+      },
+      "adopted": null,
+      "change": "Cache fields outside the retained-entry loop and call the unchanged visibility uploader only on changes; records/ranges/shaders preserved.",
+      "backend": "lua",
+      "measured_rounds": 5,
+      "planned_rounds": 5,
+      "attempted_phase_pairs": 11,
+      "evidence": [
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-0-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-0-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-1-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-1-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-2-block-0/before/ttld-01-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-2-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-3-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-3-block-0/after/ttld-00-lua"
+        },
+        {
+          "before": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-4-block-0/before/ttld-00-lua",
+          "after": "perf-runs/2026-11-01-particle-flush-source/ttld/1x-round-4-block-0/after/ttld-00-lua"
+        }
+      ],
+      "wall_before_ms": 5.5347133333333325,
+      "wall_after_ms": 5.527574999999998,
+      "wall_change_pct": -0.09561506944055775,
+      "wall_mean_ratio_95ci": [
+        0.9972303069951415,
+        1.0020026828464639
+      ],
+      "sim_before_ms": 1.449575,
+      "sim_after_ms": 1.460127,
+      "sim_change_pct": 0.7279374989220821,
+      "sim_mean_ratio_95ci": [
+        0.9950986249219509,
+        1.02023662010076
+      ],
+      "draw_before_ms": 2.9395729999999998,
+      "draw_after_ms": 2.935508,
+      "draw_change_pct": -0.5208174344692784,
+      "draw_mean_ratio_95ci": [
+        0.9709028920496429,
+        1.0343100632065825
+      ]
+    }
+  ],
+  "decision": {
+    "gravitas": "Adopted on public master at a63138f0d02194b0cc3157cd65e89781334423e2. The benchmark table retains the pre-change baseline until the fresh paired runs finish.",
+    "ttld": "Keep the existing path; both measured intervals include zero change."
+  },
+  "fixed_image_scope": {
+    "region_xywh": [
+      480,
+      80,
+      420,
+      300
+    ],
+    "full_size": [
+      1280,
+      720
+    ],
+    "summary": "Every effect crop is pixel-identical. Both Gravitas changes outside the crop occupy the same 24\u00d724 region in the same shot. The unchanged-source repeat also changes in that region."
+  },
+  "fixed_images_full_frame": [
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 2,
+      "changed_pixels": 237,
+      "bounding_box": [
+        200,
+        219,
+        224,
+        243
+      ]
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 2,
+      "changed_pixels": 260,
+      "bounding_box": [
+        200,
+        219,
+        224,
+        243
+      ]
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 2,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 2,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    }
+  ],
+  "fixed_images_sha256": {
+    "gravitas": {
+      "control": [
+        "8898a4b95236ddbf1aeab4219c4a64045ad792477a3e815cfe8836de2cf2f99b",
+        "411eed7dd240437182e4487aed2c34f206bee62628b1ee60e20e2b7093814931",
+        "343a2aa712445dc06fbdbc45ed5fd3129a0d38b92e7ef530579d39e845223cc4",
+        "65c752dcd9ca6579183d33c7b72473ac502e54818fd219f8ea6743e76eb0968a",
+        "4ab5ed5d7756cf97f8eee28aca53d6f1ed2922475ad01a0cc49a8d0df759ceed"
+      ],
+      "repeat": [
+        "8898a4b95236ddbf1aeab4219c4a64045ad792477a3e815cfe8836de2cf2f99b",
+        "411eed7dd240437182e4487aed2c34f206bee62628b1ee60e20e2b7093814931",
+        "2b91e29cf04c1a9d5332367af798cc8b12ccbfad856af8d1c8966ef7a9b19f41",
+        "65c752dcd9ca6579183d33c7b72473ac502e54818fd219f8ea6743e76eb0968a",
+        "4ab5ed5d7756cf97f8eee28aca53d6f1ed2922475ad01a0cc49a8d0df759ceed"
+      ],
+      "candidate": [
+        "8898a4b95236ddbf1aeab4219c4a64045ad792477a3e815cfe8836de2cf2f99b",
+        "411eed7dd240437182e4487aed2c34f206bee62628b1ee60e20e2b7093814931",
+        "bd5e6d708cbe3422bddf37a72f2aee3aab4188879729ade0e0a003e619d425e1",
+        "65c752dcd9ca6579183d33c7b72473ac502e54818fd219f8ea6743e76eb0968a",
+        "4ab5ed5d7756cf97f8eee28aca53d6f1ed2922475ad01a0cc49a8d0df759ceed"
+      ]
+    },
+    "ttld": {
+      "control": [
+        "697f7f9fed9308ea5431e7b2f46af1965b4bca126b129b94e2c01473cec919cc",
+        "94868be69f7a46890988cff1804f2b63c9eb0781eed5cdd4d000a99f8ac37fe2",
+        "975d7c7c39eb6a45c0b03c565b52bef2ba012387a3d50a1e6fc831df4e381081",
+        "9a9a539d3a152b8db82ba8337668ac71541b969139e1150edfed9474c50ea2b2",
+        "032e11330aeeb1b52388e3f0c788b869cebf0fd78fbb9c73640d0148e7ef51fc"
+      ],
+      "repeat": [
+        "697f7f9fed9308ea5431e7b2f46af1965b4bca126b129b94e2c01473cec919cc",
+        "94868be69f7a46890988cff1804f2b63c9eb0781eed5cdd4d000a99f8ac37fe2",
+        "975d7c7c39eb6a45c0b03c565b52bef2ba012387a3d50a1e6fc831df4e381081",
+        "9a9a539d3a152b8db82ba8337668ac71541b969139e1150edfed9474c50ea2b2",
+        "032e11330aeeb1b52388e3f0c788b869cebf0fd78fbb9c73640d0148e7ef51fc"
+      ],
+      "candidate": [
+        "697f7f9fed9308ea5431e7b2f46af1965b4bca126b129b94e2c01473cec919cc",
+        "94868be69f7a46890988cff1804f2b63c9eb0781eed5cdd4d000a99f8ac37fe2",
+        "975d7c7c39eb6a45c0b03c565b52bef2ba012387a3d50a1e6fc831df4e381081",
+        "9a9a539d3a152b8db82ba8337668ac71541b969139e1150edfed9474c50ea2b2",
+        "032e11330aeeb1b52388e3f0c788b869cebf0fd78fbb9c73640d0148e7ef51fc"
+      ]
+    }
+  },
+  "gravitas_adoption": {
+    "commit": "a63138f0d02194b0cc3157cd65e89781334423e2",
+    "rule_checks": [
+      {
+        "suite": "gravitas lua-rules",
+        "engine": "2026.10.3103",
+        "headless_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+        "receipt_sha256": "f8e7e0cd56cc68693fdbaa8db5bbdb29a00657ad207e1724fd07bff2265f14dc"
+      },
+      {
+        "suite": "gravitas lua-bob",
+        "engine": "2026.10.3103",
+        "headless_sha256": "8b416ba781fffa4e601e066cf0a1e079e5235f7d1f84c00400e0ebd27fd62f9f",
+        "receipt_sha256": "f8e7e0cd56cc68693fdbaa8db5bbdb29a00657ad207e1724fd07bff2265f14dc"
+      },
+      {
+        "suite": "gravitas lua-rules",
+        "engine": "2026.11.0104",
+        "headless_sha256": "6059d1533779f49737b225d77d89a8da1eaa75de1a20248c52871bbfd5f76a19",
+        "receipt_sha256": "c0ab5e747da794af569fd27857caa517f9c6e9ef50ba56f3fa91d572164c0bc4"
+      },
+      {
+        "suite": "gravitas lua-bob",
+        "engine": "2026.11.0104",
+        "headless_sha256": "6059d1533779f49737b225d77d89a8da1eaa75de1a20248c52871bbfd5f76a19",
+        "receipt_sha256": "7147bd9b25d58cadf7ce2010979e442d5b7543d77d7bcb4a82d11e9950325031"
+      }
+    ],
+    "runtime": "Engine headless executables. Fire proof and prior performance samples used NVIDIA.",
+    "refresh_provenance": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-11-20-gravitas-public/fire-100-lua-rust-w4/provenance.json"
+  },
+  "retained_rust_jobs_controls": {
+    "checked_utc": "2026-11-20T00:56:06.019658+00:00",
+    "rust_source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+    "wasm_content_sha256": "22a61b8330f713b1100b41cb0f001dd4559a485bb0bc337c04aff936341631b9",
+    "wasm_modules": {
+      "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+      "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+      "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+    },
+    "evidence": "Same staged Rust tree, map, probe, engine, fixtures and guard policy as the selected Rust source. The Lua optimization does not affect these jobs controls.",
+    "cases": [
+      {
+        "campaign": "perf-runs/2026-10-30-night-v7-fire/fire-10-cpu-jobs-w1",
+        "worker_threads": 1,
+        "particle_updates": "cpu",
+        "graphics_renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "clean_pairs": 5,
+        "matching_state_pairs": 5,
+        "matching_event_pairs": 5,
+        "jobs_on_active_runs": 5,
+        "matching_fields": [
+          "engine_sha256",
+          "engine_commit",
+          "runner_sha256",
+          "resource_guard_sha256",
+          "cpu_activity_policy",
+          "cpu_pressure_policy",
+          "effects_probe_sha256",
+          "fixtures",
+          "input_sha256",
+          "effective_input_sha256"
+        ],
+        "matching_runner_args": [
+          "mode",
+          "frames",
+          "warmup",
+          "speed",
+          "unit_multiplier",
+          "scale_frame",
+          "frame_step",
+          "cpu_affinity",
+          "cpu_pressure_scope",
+          "callback_timers",
+          "max_background_cpu_cores",
+          "wait_for_idle",
+          "wait_for_gpu_idle"
+        ]
+      },
+      {
+        "campaign": "perf-runs/2026-10-30-night-v7-fire/fire-10-cpu-jobs-w4",
+        "worker_threads": 4,
+        "particle_updates": "cpu",
+        "graphics_renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "clean_pairs": 5,
+        "matching_state_pairs": 5,
+        "matching_event_pairs": 5,
+        "jobs_on_active_runs": 5,
+        "matching_fields": [
+          "engine_sha256",
+          "engine_commit",
+          "runner_sha256",
+          "resource_guard_sha256",
+          "cpu_activity_policy",
+          "cpu_pressure_policy",
+          "effects_probe_sha256",
+          "fixtures",
+          "input_sha256",
+          "effective_input_sha256"
+        ],
+        "matching_runner_args": [
+          "mode",
+          "frames",
+          "warmup",
+          "speed",
+          "unit_multiplier",
+          "scale_frame",
+          "frame_step",
+          "cpu_affinity",
+          "cpu_pressure_scope",
+          "callback_timers",
+          "max_background_cpu_cores",
+          "wait_for_idle",
+          "wait_for_gpu_idle"
+        ]
+      },
+      {
+        "campaign": "perf-runs/2026-10-30-night-v7-fire/fire-10-gpu-jobs-w4",
+        "worker_threads": 4,
+        "particle_updates": "gpu",
+        "graphics_renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "clean_pairs": 5,
+        "matching_state_pairs": 5,
+        "matching_event_pairs": 5,
+        "jobs_on_active_runs": 0,
+        "matching_fields": [
+          "engine_sha256",
+          "engine_commit",
+          "runner_sha256",
+          "resource_guard_sha256",
+          "cpu_activity_policy",
+          "cpu_pressure_policy",
+          "effects_probe_sha256",
+          "fixtures",
+          "input_sha256",
+          "effective_input_sha256"
+        ],
+        "matching_runner_args": [
+          "mode",
+          "frames",
+          "warmup",
+          "speed",
+          "unit_multiplier",
+          "scale_frame",
+          "frame_step",
+          "cpu_affinity",
+          "cpu_pressure_scope",
+          "callback_timers",
+          "max_background_cpu_cores",
+          "wait_for_idle",
+          "wait_for_gpu_idle"
+        ]
+      }
+    ]
+  }
+}

@@ -205,9 +205,16 @@ function workOverview(){
   for(const game of HISTORY.games){const tr=document.createElement('tr');for(const value of[game.title,game.code,game.completed+' / '+game.expected,game.remaining]){const td=document.createElement('td');td.textContent=value;tr.append(td);}body.append(tr);}
   $('work-snapshot').textContent=`Code/queue snapshot ${displayTime(HISTORY.generated_at)}. “No identified code fix pending” still requires final measurements and profile review; a discrepancy found there can require more code work.`;
   const jobs=$('historical-jobs-rows');jobs.replaceChildren();
-  const current=DATA.scenes.flatMap(s=>Object.values(s.jobs??{}));
-  for(const old of HISTORY.jobs){const fresh=current.find(r=>r.campaign===old.summary.campaign&&r.measured_pairs>=5),r=fresh??old.summary,tr=document.createElement('tr');
-    for(const value of[old.game+' · '+old.load,old.worker_threads,fmt(r.wall_mean_off_ms),fmt(r.wall_mean_on_ms),pct(r.wall_mean_paired_jobs_change_pct),r.measured_pairs,fresh?'CURRENT':old.status.toUpperCase()+' · '+old.campaign_label]){const td=document.createElement('td');td.textContent=value;tr.append(td);}tr.title=old.note;jobs.append(tr);}
+  const current=DATA.scenes.flatMap(scene=>[...Object.values(scene.jobs??{}),scene.gpu_jobs4]
+    .filter(row=>row?.measured_pairs>=5&&!row.held_reason).map(row=>({scene,row})));
+  const currentCampaigns=new Set(current.map(({row})=>row.campaign));
+  const jobRows=current.map(({scene,row})=>({
+    name:scene.title+' · '+scene.load+(scene.game==='gravitas'?(row===scene.gpu_jobs4?' · GPU updates':' · CPU updates'):''),
+    width:row.worker_threads,row,status:'CURRENT',note:''}));
+  for(const old of HISTORY.jobs){if(!currentCampaigns.has(old.summary.campaign))jobRows.push({
+    name:old.game+' · '+old.load,width:old.worker_threads,row:old.summary,status:old.status.toUpperCase()+' · '+old.campaign_label,note:old.note});}
+  for(const {name,width,row,status,note} of jobRows){const tr=document.createElement('tr');
+    for(const value of[name,width,fmt(row.wall_mean_off_ms),fmt(row.wall_mean_on_ms),pct(row.wall_mean_paired_jobs_change_pct),row.measured_pairs,status]){const td=document.createElement('td');td.textContent=value;tr.append(td);}tr.title=note;jobs.append(tr);}
 }
 for(const s of DATA.scenes)option($('scene'),s.id,s.title+' · '+s.load);
 for(const p of DATA.profiles)option($('profile'),p.key,profileName(p));
@@ -222,5 +229,5 @@ let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=se
 const usableConfigurations=HISTORY.games.reduce((total,game)=>total+game.completed,0);
 const plannedConfigurations=HISTORY.games.reduce((total,game)=>total+game.expected,0);
 const collectedConfigurations=HISTORY.games.reduce((total,game)=>total+(game.raw_completed??game.completed),0);
-$('campaign-status').textContent=`Snapshot ${displayTime(DATA.audit.generated_at)} · ${usableConfigurations} / ${plannedConfigurations} comparison configurations have five usable pairs; ${collectedConfigurations-usableConfigurations} further collected configurations are held for source corrections. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
+$('campaign-status').textContent=`Snapshot ${displayTime(DATA.audit.generated_at)} · ${usableConfigurations} / ${plannedConfigurations} comparison configurations have five usable pairs. ${collectedConfigurations-usableConfigurations} earlier configurations are held for source corrections or reruns. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
 $('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();workOverview();overview();selectScene((DATA.scenes.find(s=>s.language.measured_pairs>=5)??DATA.scenes[0]).id);requestAnimationFrame(animate);

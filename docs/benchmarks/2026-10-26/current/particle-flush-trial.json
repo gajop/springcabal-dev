@@ -690,5 +690,129 @@
     ],
     "runtime": "Engine headless executables. Fire proof and prior performance samples used NVIDIA.",
     "refresh_provenance": "/home/gajop/projects/spring-projects/springcabal-games/perf-runs/2026-11-20-gravitas-public/fire-100-lua-rust-w4/provenance.json"
+  },
+  "retained_rust_jobs_controls": {
+    "checked_utc": "2026-11-20T00:56:06.019658+00:00",
+    "rust_source_commit": "4389119d5d16ba04a83583ebdb0855fe5c4207b1",
+    "wasm_content_sha256": "22a61b8330f713b1100b41cb0f001dd4559a485bb0bc337c04aff936341631b9",
+    "wasm_modules": {
+      "LuaUI/wasm/gravitas-jobs.wasm": "6f6474bf3da61100eb82d7051916f9e3ee01d953b1019a1fcbae130db3a7a04d",
+      "LuaUI/wasm/gravitas-ui.wasm": "e67f53462ec4eae41f7e7495a605a0f2422ecb37dc1e29ea6f6843790b1acd2b",
+      "LuaRules/wasm/gravitas-rules.wasm": "0ad5c5fa9aa40d1addbc209ed2da5341b39aa89447df747f3a343e4e06406ef2"
+    },
+    "evidence": "Same staged Rust tree, map, probe, engine, fixtures and guard policy as the selected Rust source. The Lua optimization does not affect these jobs controls.",
+    "cases": [
+      {
+        "campaign": "perf-runs/2026-10-30-night-v7-fire/fire-10-cpu-jobs-w1",
+        "worker_threads": 1,
+        "particle_updates": "cpu",
+        "graphics_renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "clean_pairs": 5,
+        "matching_state_pairs": 5,
+        "matching_event_pairs": 5,
+        "jobs_on_active_runs": 5,
+        "matching_fields": [
+          "engine_sha256",
+          "engine_commit",
+          "runner_sha256",
+          "resource_guard_sha256",
+          "cpu_activity_policy",
+          "cpu_pressure_policy",
+          "effects_probe_sha256",
+          "fixtures",
+          "input_sha256",
+          "effective_input_sha256"
+        ],
+        "matching_runner_args": [
+          "mode",
+          "frames",
+          "warmup",
+          "speed",
+          "unit_multiplier",
+          "scale_frame",
+          "frame_step",
+          "cpu_affinity",
+          "cpu_pressure_scope",
+          "callback_timers",
+          "max_background_cpu_cores",
+          "wait_for_idle",
+          "wait_for_gpu_idle"
+        ]
+      },
+      {
+        "campaign": "perf-runs/2026-10-30-night-v7-fire/fire-10-cpu-jobs-w4",
+        "worker_threads": 4,
+        "particle_updates": "cpu",
+        "graphics_renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "clean_pairs": 5,
+        "matching_state_pairs": 5,
+        "matching_event_pairs": 5,
+        "jobs_on_active_runs": 5,
+        "matching_fields": [
+          "engine_sha256",
+          "engine_commit",
+          "runner_sha256",
+          "resource_guard_sha256",
+          "cpu_activity_policy",
+          "cpu_pressure_policy",
+          "effects_probe_sha256",
+          "fixtures",
+          "input_sha256",
+          "effective_input_sha256"
+        ],
+        "matching_runner_args": [
+          "mode",
+          "frames",
+          "warmup",
+          "speed",
+          "unit_multiplier",
+          "scale_frame",
+          "frame_step",
+          "cpu_affinity",
+          "cpu_pressure_scope",
+          "callback_timers",
+          "max_background_cpu_cores",
+          "wait_for_idle",
+          "wait_for_gpu_idle"
+        ]
+      },
+      {
+        "campaign": "perf-runs/2026-10-30-night-v7-fire/fire-10-gpu-jobs-w4",
+        "worker_threads": 4,
+        "particle_updates": "gpu",
+        "graphics_renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+        "clean_pairs": 5,
+        "matching_state_pairs": 5,
+        "matching_event_pairs": 5,
+        "jobs_on_active_runs": 0,
+        "matching_fields": [
+          "engine_sha256",
+          "engine_commit",
+          "runner_sha256",
+          "resource_guard_sha256",
+          "cpu_activity_policy",
+          "cpu_pressure_policy",
+          "effects_probe_sha256",
+          "fixtures",
+          "input_sha256",
+          "effective_input_sha256"
+        ],
+        "matching_runner_args": [
+          "mode",
+          "frames",
+          "warmup",
+          "speed",
+          "unit_multiplier",
+          "scale_frame",
+          "frame_step",
+          "cpu_affinity",
+          "cpu_pressure_scope",
+          "callback_timers",
+          "max_background_cpu_cores",
+          "wait_for_idle",
+          "wait_for_gpu_idle"
+        ]
+      }
+    ]
   }
 }

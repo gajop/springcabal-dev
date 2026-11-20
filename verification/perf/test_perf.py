@@ -284,6 +284,15 @@ class EquivalenceTests(unittest.TestCase):
         self.assertIs(dashboard.scene_summary({'ttld-pending': completed},
                                             'ttld-pending', 'ttld', True), completed)
 
+    def test_campaign_hold_can_target_only_the_superseded_timing_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            holds = {'lua-rust': {'timing_root': 'baseline', 'reason': 'Earlier source'},
+                     'other': {'reason': 'Workload differs'}}
+            self.assertEqual(dashboard.campaign_hold(holds, root/'baseline/lua-rust', root), holds['lua-rust'])
+            self.assertIsNone(dashboard.campaign_hold(holds, root/'replacement/lua-rust', root))
+            self.assertEqual(dashboard.campaign_hold(holds, root/'replacement/other', root), holds['other'])
+
     def test_recordings_use_explicit_frozen_revision_instead_of_observer_tree_hash(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory); games = root/'games'; games.mkdir()

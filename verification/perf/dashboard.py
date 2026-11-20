@@ -46,6 +46,14 @@ def read(path):
     return json.loads(path.read_text())
 
 
+def campaign_hold(holds, campaign, project=PROJECT):
+    hold = holds.get(campaign.name)
+    if not hold or 'timing_root' not in hold:
+        return hold
+    if campaign.parent.resolve() == (project / hold['timing_root']).resolve():
+        return hold
+
+
 def capture_scene(name):
     name = name.removesuffix('-jobs')
     return next((sid for sid, *_, capture in SCENES if capture == name), None)
@@ -266,8 +274,9 @@ def main():
                     if effects_fixtures(stamp) != current_effects_fixtures():
                         continue
                 target[row['campaign']] = row
-                if row['campaign'] in holds:
-                    row['held_reason'] = holds[row['campaign']]['reason']
+                hold = campaign_hold(holds, timing_root/row['campaign'])
+                if hold:
+                    row['held_reason'] = hold['reason']
                 campaign_roots[row['campaign']] = timing_root
     selected_captures = defaultdict(list)
     for sid, game, title, load, control, job, capture in SCENES:
@@ -429,7 +438,8 @@ def main():
         'omitted_superseded_capture_campaigns': {kind: sorted(paths) for kind, paths in omitted_captures.items()},
         'generated_at': datetime.now(timezone.utc).isoformat(timespec='seconds'),
         'timing_roots': [str(root) for root in timing_roots],
-        'primary_scenes_at_five_pairs': sum(s['language']['measured_pairs'] >= 5 for s in data['scenes']),
+        'primary_scenes_at_five_pairs': sum(s['language']['measured_pairs'] >= 5 and not s['language'].get('held_reason')
+                                            for s in data['scenes']),
         'primary_scene_count': len(data['scenes']),
         'diagnostic_pair_policy': 'Only complete clean recorded variant sets with both artifacts are exported; raw orphaned captures remain on disk.',
         'callback_timers': sorted({r.get('callback_timers', 'on') for r in saved}),

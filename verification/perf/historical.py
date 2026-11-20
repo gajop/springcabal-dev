@@ -8,6 +8,7 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import report
+from dashboard import campaign_hold
 
 PROJECT = Path(__file__).resolve().parents[2]
 SOURCES = [
@@ -144,12 +145,14 @@ def export(project, archive):
     if hold_path.exists():
         holds = read(hold_path).get('campaigns', {})
         for game in games:
-            held = [name for name in holds if name in completed and name.startswith(game['game'])]
+            prefix = 'fire-' if game['game'] == 'gravitas' else game['game']
+            held = [name for name, path in completed.items()
+                    if name.startswith(prefix) and campaign_hold(holds, project / path, project)]
             if held:
                 game['raw_completed'] = game['completed']
                 game['completed'] -= len(held)
                 game['held_cases'] = held
-                game['remaining'] += f' {len(held)} retained configurations have known workload mismatches and remain held.'
+                game['remaining'] += f' {len(held)} retained configurations remain held.'
                 if game['game'] == 'hunted':
                     game['remaining'] = 'Six raw configurations retained; both language cases held. Correct material/fade and flashlight rendering, align visibility costs, then repeat the affected final comparisons/captures.'
     # Display reviewed source-work progress independently of timing eligibility.

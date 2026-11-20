@@ -69,8 +69,8 @@
   },
   "work_status": {
     "gravitas": {
-      "code": "Selected effects optimizations are public; six timing configurations are collected. A private Lua submission trial remains. Separate shockwave/napalm weapon-zero fixes pass the existing LUPS regressions.",
-      "remaining": "Run the existing Lua rules/BOB checks on the compatibility fix, adopt reviewed sources, finish the submission trial, jobs diagnostics and final profile/source audit."
+      "code": "The measured Lua particle change and weapon-zero fixes are public at a63138f. Existing Lua rules and BOB checks passed on the two tested engines. Three original Rust-only jobs cases still match the selected inputs.",
+      "remaining": "Repeat the three Lua/Rust emitter loads with matching profiles and videos. Finish jobs-clock diagnostics and source attribution."
     },
     "hunted": {
       "code": "Private material/fade, cursor flashlight and map-edge corrections are implemented. Full candidate serial integration passes; the visual check needs an original-Lua reference review.",

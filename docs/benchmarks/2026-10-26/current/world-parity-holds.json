@@ -350,6 +350,21 @@
     "ttld-burning-10x-w1": {
       "reason": "Rust bloom blur uses inverse half-buffer dimensions; original Lua uses inverse full-view dimensions with the same kernel. Correct and verify the blur footprint before a language-only comparison. The native projectile collector also differs in visibility/pieces, LOD/fade/beam handling and projection; full rendering restoration remains required.",
       "source_review": "environment-render-parity.json"
+    },
+    "fire-1-lua-rust-w4": {
+      "reason": "Recorded before the public Gravitas Lua particle flush optimization at a63138f. A fresh Lua/Rust pair and matching captures are pending.",
+      "source_review": "particle-flush-trial.json",
+      "timing_root": "perf-runs/2026-10-30-night-v7-fire"
+    },
+    "fire-10-lua-rust-w4": {
+      "reason": "Recorded before the public Gravitas Lua particle flush optimization at a63138f. A fresh Lua/Rust pair and matching captures are pending.",
+      "source_review": "particle-flush-trial.json",
+      "timing_root": "perf-runs/2026-10-30-night-v7-fire"
+    },
+    "fire-100-lua-rust-w4": {
+      "reason": "Recorded before the public Gravitas Lua particle flush optimization at a63138f. A fresh Lua/Rust pair and matching captures are pending.",
+      "source_review": "particle-flush-trial.json",
+      "timing_root": "perf-runs/2026-10-30-night-v7-fire"
     }
   },
   "resolved_utc": "2026-10-31T15:46:20.473782+00:00",
