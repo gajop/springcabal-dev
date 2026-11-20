@@ -1,7 +1,7 @@
 {
   "generated_utc": "2026-10-31T23:43:57.593754+00:00",
-  "primary_cases_with_matching_profile_pair": 3,
-  "scope": "Exclusive perf CPU sample weights per measured frame. Current engine and resource guard, sources and module identities exactly match each primary timing case. Profiles are separate instrumented captures; these are neither GPU execution times nor additional timing replicates. Language/runtime combines Lua interpreter/table/GC, Wasm guest and Wasmtime. Other CPU includes bindings, engine, graphics driver and unresolved symbols. Native call wrappers can therefore remain outside the language column. Sampling variation is not an exact causal decomposition of whole-frame timing.",
+  "primary_cases_with_matching_profile_pair": 0,
+  "scope": "Retained pre-optimization Gravitas Lua/Rust profiles. Exclusive perf CPU sample weights per measured frame. Language/runtime combines Lua interpreter/table/GC, Wasm guest and Wasmtime. Other CPU includes bindings, engine, graphics driver and unresolved symbols. These profiles describe their recorded sources and the current-source profiles remain pending.",
   "cases": [
     {
       "case": "fire-1-lua-rust-w4",
@@ -81,7 +81,9 @@
       },
       "main_thread_difference_lua_minus_rust_ms": 0.08684034666666662,
       "language_runtime_difference_lua_minus_rust_ms": 0.10688042666666665,
-      "other_cpu_difference_lua_minus_rust_ms": -0.020040080000000016
+      "other_cpu_difference_lua_minus_rust_ms": -0.020040080000000016,
+      "source_status": "baseline",
+      "hold_reason": "Recorded before the public Gravitas Lua particle flush optimization at a63138f. A fresh Lua/Rust pair and matching captures are pending."
     },
     {
       "case": "fire-10-lua-rust-w4",
@@ -159,7 +161,9 @@
       },
       "main_thread_difference_lua_minus_rust_ms": 1.2758850933333332,
       "language_runtime_difference_lua_minus_rust_ms": 1.12224448,
-      "other_cpu_difference_lua_minus_rust_ms": 0.1536406133333333
+      "other_cpu_difference_lua_minus_rust_ms": 0.1536406133333333,
+      "source_status": "baseline",
+      "hold_reason": "Recorded before the public Gravitas Lua particle flush optimization at a63138f. A fresh Lua/Rust pair and matching captures are pending."
     },
     {
       "case": "fire-100-lua-rust-w4",
@@ -240,7 +244,129 @@
       },
       "main_thread_difference_lua_minus_rust_ms": 16.629926386666668,
       "language_runtime_difference_lua_minus_rust_ms": 16.91048750666667,
-      "other_cpu_difference_lua_minus_rust_ms": -0.28056112000000155
+      "other_cpu_difference_lua_minus_rust_ms": -0.28056112000000155,
+      "source_status": "baseline",
+      "hold_reason": "Recorded before the public Gravitas Lua particle flush optimization at a63138f. A fresh Lua/Rust pair and matching captures are pending."
     }
-  ]
+  ],
+  "world_check_progress": {
+    "expected_pairs": 20,
+    "current_pairs": 4,
+    "retained_pairs": 12,
+    "cases": {
+      "hunted-10x-lua-rust-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-1/hunted-10x-lua-rust-w1/hunted-10x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-1/hunted-10x-lua-rust-w1/hunted-10x/hunted-00-lua": "c20f15bfe9bedcbb253de798e62611153c5587496e1df40efa3f3f29b62aff93",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-1/hunted-10x-lua-rust-w1/hunted-10x/hunted-00-wasm": "ac43d1dfb09e4262db131196104362abc67c77e586e55355c560de904841ae22"
+        }
+      },
+      "hunted-lua-rust-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-lua-rust-w1/hunted-1x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-01-lua": "c1daaba00cee2c83bdbdb3536f74dc78f829a4bbb1635d796cb49b75f84dba9d",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-lua-rust-w1/hunted-1x/hunted-01-wasm": "b749e816231841989d612d1c341cd8178e677830fec24ecba07c75c42738b521"
+        }
+      },
+      "hunted-jobs-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w1/hunted-1x-jobs",
+        "status": "current",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w1/hunted-1x-jobs/hunted-00-wasm-off": "168688eb6c72b1d9ffdbd7b26591c44a5c6549106d64e5431bbf7466cd7130a5",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w1/hunted-1x-jobs/hunted-00-wasm-on": "2d87d6b8ed57d2951ae3c6851fc65a71d299da7154b0212bd7e788af342c79e1"
+        }
+      },
+      "hunted-10x-jobs-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w1/hunted-10x-jobs",
+        "status": "current",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w1/hunted-10x-jobs/hunted-01-wasm-off": "da44a2f44b0730cb767727b00130279dec7aa461dcd4967c8f9bdcf2dac06d24",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w1/hunted-10x-jobs/hunted-01-wasm-on": "6435b1cc34ab06b5293287b1dd9da171c17bb3e0785029b98951153e83806d9d"
+        }
+      },
+      "hunted-jobs-w4": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w4/hunted-1x-jobs",
+        "status": "current",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w4/hunted-1x-jobs/hunted-00-wasm-off": "f37f173e0bafb0f991c629ac0873265735aeab46f26e8655503ed6f6f6c60cdd",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-jobs-w4/hunted-1x-jobs/hunted-00-wasm-on": "39afb39d91d418a329d4ee776871292ffecabfddd2329b0d76190e0f16083309"
+        }
+      },
+      "hunted-10x-jobs-w4": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w4/hunted-10x-jobs",
+        "status": "current",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w4/hunted-10x-jobs/hunted-00-wasm-off": "f90ef01305d537dbb30e31d649b2162016a5dec96f420067d8b9ec49225b6da6",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-hunted/attempt-0/hunted-10x-jobs-w4/hunted-10x-jobs/hunted-00-wasm-on": "2f0a6b3af3ea95d7e920a367e641193117f9c8655ddf99a9f29c1e763e82c8a6"
+        }
+      },
+      "mycube-1x-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/mycube-1x-w1/mycube-1x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-lua": "3f92ad5aa082a8152eebe14255ac9fd62d9dab36ba8e43847914aa453ad677c6",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/mycube-1x-w1/mycube-1x/mycube-00-wasm": "0a556e35ad8e1498d427436754b776f0342092955fd1dc986e42a2f766ae9b8d"
+        }
+      },
+      "partsneeded-1x-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-lua": "83e3944f9b5fb861ab1ef40fed075ecaf8311d576944dfbb2ab02a7e27b2a768",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v8-corrected-worlds-unaffected/attempt-0/partsneeded-1x-w1/partsneeded-1x/partsneeded-00-wasm": "da35c90444d42a4dd2b176152228023b4b6227690413c184cc546fd75d9cf8d8"
+        }
+      },
+      "ttld-shadows-1x-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-lua": "1630961a0d2623488c344e477448272f4b9daaad0b42602b6c3bd97f7f6393bb",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-shadows-1x-w1/ttld-shadows-1x/ttld-00-wasm": "da0a8ef479084d88af203723747453e37ed986a20dffc27da720d591d6e4ffe6"
+        }
+      },
+      "ttld-shadows-10x-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-2/ttld-shadows-10x-w1/ttld-shadows-10x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-2/ttld-shadows-10x-w1/ttld-shadows-10x/ttld-02-lua": "4b2c5f830ea7a69833cddc95082ba0210ce407fa3f39a40080c35db6d1ab0b63",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-2/ttld-shadows-10x-w1/ttld-shadows-10x/ttld-02-wasm": "d34d09ffeaf82f2e5aab79654f3ac8b38f9eb22c58082a9e61af4f5e5ab85633"
+        }
+      },
+      "ttld-burning-1x-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-1x-w1/ttld-burning-1x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-1x-w1/ttld-burning-1x/ttld-00-lua": "1696c2d1e67cd4276665c7f4f1fbc560eee2d89a8910aaa187ebe1953a71d948",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-1x-w1/ttld-burning-1x/ttld-00-wasm": "256bf1860b62f68bcf52984b1305ae4a28d49fedf70c90331c17663fbd35b46d"
+        }
+      },
+      "ttld-burning-10x-w1": {
+        "frames_compared": 151,
+        "capture": "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-10x-w1/ttld-burning-10x",
+        "status": "held",
+        "input_results_sha256": {
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-10x-w1/ttld-burning-10x/ttld-00-lua": "bfe45d5d22b4f34e7f71654e179b7a1f5f1f9a83faf46fbfbf69efb76b28c484",
+          "perf-runs/2026-10-31-worlds-matched-ui/night-v7-matched-ui-fire/attempt-0/ttld-burning-10x-w1/ttld-burning-10x/ttld-00-wasm": "f6095fcf4594119bd2966f02637a9d29ae7ea78900b2cb0c9e71eeec6578fcc2"
+        }
+      }
+    }
+  },
+  "callback_counter_progress": {
+    "expected_pairs": 15,
+    "current_pairs": 0,
+    "baseline_pairs": 12
+  }
 }

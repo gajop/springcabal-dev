@@ -104,5 +104,116 @@
     }
   },
   "generated_utc": "2026-10-31T22:43:50.750888+00:00",
-  "scope": "Separate diagnostic GPU runs with SPRING_WASM_JOB_TIMING=1. The existing engine clock reports its first 900-frame interval, including warmup; the extra tick guarantees the report is emitted. These are elapsed worker-thread clocks, including scheduling, not CPU sample time or additional benchmark pairs. Worker sums and main-thread batch waits overlap. Teardown/other is the remainder after the named internal clocks. All game modules, inputs, native worker widths and CPU/GPU guards match the selected case; 901 frames instead of the primary 900 is recorded explicitly."
+  "scope": "Separate diagnostic GPU runs with SPRING_WASM_JOB_TIMING=1. The existing engine clock reports its first 900-frame interval, including warmup; the extra tick guarantees the report is emitted. These are elapsed worker-thread clocks, including scheduling, not CPU sample time or additional benchmark pairs. Worker sums and main-thread batch waits overlap. Teardown/other is the remainder after the named internal clocks. All game modules, inputs, native worker widths and CPU/GPU guards match the selected case; 901 frames instead of the primary 900 is recorded explicitly.",
+  "gravitas_source_review": {
+    "checked_utc": "2026-11-20T01:11:37.220602+00:00",
+    "cases": [
+      {
+        "case": "fire-10-cpu-jobs-w1",
+        "particle_updates": "cpu",
+        "timing_source": "perf-runs/2026-10-30-night-v7-fire/fire-10-cpu-jobs-w1",
+        "pool_width": 1,
+        "jobs_active_on_runs": 5,
+        "clean_pairs": 5,
+        "frame_ms_off": 1.0701266666666664,
+        "frame_ms_on": 1.5507133333333334,
+        "paired_change_pct": 44.909325375812244,
+        "paired_mean_ratio_95ci": [
+          1.4074817342140988,
+          1.4840414102050425
+        ],
+        "profiles": {
+          "off": {
+            "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-cpu-jobs-w1/fire-10/gravitas-00-wasm-off/profile.json",
+            "profile_sha256": "7a435c87095c018949efc9ae0f5ff850e8858b4372a8e295ed99da4338772200",
+            "samples": 296,
+            "main_cpu_ms": 0.9886439466666667,
+            "other_threads_cpu_ms": 0.0
+          },
+          "on": {
+            "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-cpu-jobs-w1/fire-10/gravitas-00-wasm-on/profile.json",
+            "profile_sha256": "c13efd6dded4d9e81ee925ec521c5e16700364bdfa9ca6b969fc247cc375d33e",
+            "samples": 380,
+            "main_cpu_ms": 1.2692050666666668,
+            "other_threads_cpu_ms": 0.0
+          }
+        },
+        "clock_capture_source": "perf-runs/2026-10-31-current-job-costs/fire-10-cpu-jobs-w1/attempt-1/gravitas-00-wasm",
+        "batch_wait_ms": 0.493,
+        "outside_export_elapsed_share_pct": 47.73082942097027
+      },
+      {
+        "case": "fire-10-cpu-jobs-w4",
+        "particle_updates": "cpu",
+        "timing_source": "perf-runs/2026-10-30-night-v7-fire/fire-10-cpu-jobs-w4",
+        "pool_width": 4,
+        "jobs_active_on_runs": 5,
+        "clean_pairs": 5,
+        "frame_ms_off": 1.1122450000000002,
+        "frame_ms_on": 1.3118,
+        "paired_change_pct": 18.5149554879245,
+        "paired_mean_ratio_95ci": [
+          1.138183460948655,
+          1.2063401028867797
+        ],
+        "profiles": {
+          "off": {
+            "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-cpu-jobs-w4/fire-10/gravitas-00-wasm-off/profile.json",
+            "profile_sha256": "e58b085530cb920e7c704663bcb8312c7508e1329fa174eba60505ed961bc111",
+            "samples": 313,
+            "main_cpu_ms": 0.99198396,
+            "other_threads_cpu_ms": 0.05344021333333333
+          },
+          "on": {
+            "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-cpu-jobs-w4/fire-10/gravitas-00-wasm-on/profile.json",
+            "profile_sha256": "4095b6484d3c128455e60a7879f0122a99fe024c66cf2f514267a6b661cf0fe2",
+            "samples": 416,
+            "main_cpu_ms": 1.1022044,
+            "other_threads_cpu_ms": 0.28724114666666667
+          }
+        },
+        "clock_capture_source": "perf-runs/2026-10-31-current-job-costs/fire-10-cpu-jobs-w4/attempt-1/gravitas-00-wasm",
+        "batch_wait_ms": 0.252,
+        "outside_export_elapsed_share_pct": 60.40658276863504
+      },
+      {
+        "case": "fire-10-gpu-jobs-w4",
+        "particle_updates": "gpu",
+        "timing_source": "perf-runs/2026-10-30-night-v7-fire/fire-10-gpu-jobs-w4",
+        "pool_width": 4,
+        "jobs_active_on_runs": 0,
+        "clean_pairs": 5,
+        "frame_ms_off": 0.6041433333333331,
+        "frame_ms_on": 0.5861149999999999,
+        "paired_change_pct": -3.3736475339736116,
+        "paired_mean_ratio_95ci": [
+          0.941523441353464,
+          1.0203234704307291
+        ],
+        "profiles": {
+          "off": {
+            "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-gpu-jobs-w4/fire-10/gravitas-00-wasm-off/profile.json",
+            "profile_sha256": "4c91c44b6648d9596105ffd347daf7c9828ae4c61be695d8cb8d4e5879dcf9e9",
+            "samples": 128,
+            "main_cpu_ms": 0.39746158666666664,
+            "other_threads_cpu_ms": 0.03006012
+          },
+          "on": {
+            "source": "perf-runs/2026-10-31-profiles-matched-ui/night-v7-matched-ui-fire/attempt-0/fire-10-gpu-jobs-w4/fire-10/gravitas-00-wasm-on/profile.json",
+            "profile_sha256": "4840e5bbb7da38c5d154054e005445c60cdd3e3348b026715383db867ae05150",
+            "samples": 137,
+            "main_cpu_ms": 0.41750166666666666,
+            "other_threads_cpu_ms": 0.04008016
+          }
+        }
+      }
+    ],
+    "scope": "Existing guarded NVIDIA timing pairs, matching CPU profiles and two separate job-clock runs. Jobs-clock elapsed values cover frames 0\u2013900 and include warmup; CPU profiles and timings cover 300\u2013899.",
+    "source_paths": [
+      "https://github.com/SpringCabal/Gravitas/blob/4389119d5d16ba04a83583ebdb0855fe5c4207b1/wasm-src/ui/src/widgets/gfx_fire/fire/render.rs",
+      "https://github.com/SpringCabal/Gravitas/blob/4389119d5d16ba04a83583ebdb0855fe5c4207b1/wasm-src/ui/src/widgets/gfx_fire/fire/jobs.rs",
+      "https://github.com/gajop/spring-rust/blob/782c0e8a6837ec0b8ecf5f38a4d4815debc8119a/rts/WasmInterface/jobs/WasmJobProgram.cpp"
+    ],
+    "interpretation": "The CPU reference sends 80 bytes per drawable particle plus camera/palette metadata, then returns 52 bytes per visible billboard for main-thread vertex assembly. The engine prelinks the module but creates a new job store and copies inputs and outputs. Four workers reduce measured batch wait compared with one worker; jobs still increase elapsed frame time compared with serial at each width. The GPU update path returns before job dispatch."
+  }
 }

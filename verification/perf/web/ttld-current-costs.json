@@ -343,7 +343,7 @@
       "profiles": {}
     }
   ],
-  "scope": "Five accepted paired timing runs per scene. Timing cells are medians of run window means, or medians of run draw p50s. CPU costs are separate identity-matched sampled captures, not timing replicates or GPU durations. Inclusive fence waits are a subset of other CPU; do not add them again. Missing profile cells remain pending.",
+  "scope": "Earlier held TTLD comparisons, with five clean pairs per scene and separate sampled profiles where available. The Rust bloom footprint and projectile light workload differ from Lua in these recordings. Fence-wait samples are a subset of other CPU. Fresh matched-source measurements remain pending.",
   "source": {
     "reviewed": true,
     "checks_passed": true,
@@ -389,5 +389,6 @@
     },
     "utc": "2026-10-31T09:51:47.784576+00:00"
   },
-  "interpretation": "In the shadow 10x CPU captures the main-thread gap is almost entirely in Lua VM/table/GC versus Wasm guest/runtime costs; other main-thread CPU is close. Buffer-fence wait samples are negligible there. This describes the fresh captures and does not establish the cause of the superseded rendering gap. In the normal fire captures Rust has about 1.31 ms less runtime CPU and 1.40 ms more inclusive stream-buffer fence wait CPU, leaving their total CPU times close; these are CPU wait samples, not GPU durations."
+  "interpretation": "On the recorded 10\u00d7 shadows source pair, Lua has 4.20 ms/frame more sampled language-runtime CPU and other main-thread CPU is similar. Buffer-fence wait samples are small there. At normal fire Rust has 1.31 ms/frame less sampled runtime CPU and 1.40 ms/frame more inclusive stream-buffer fence-wait CPU. These results describe the held source pair and leave the original rendering gap unexplained.",
+  "source_status": "baseline"
 }
