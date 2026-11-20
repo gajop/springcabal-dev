@@ -446,5 +446,218 @@
   "decision": {
     "gravitas": "Include the measured change in the Lua candidate; combined Lua rules and BOB checks pending.",
     "ttld": "Keep the existing path; both measured intervals include zero change."
+  },
+  "fixed_image_scope": {
+    "region_xywh": [
+      480,
+      80,
+      420,
+      300
+    ],
+    "full_size": [
+      1280,
+      720
+    ],
+    "summary": "Every effect crop is pixel-identical. Both Gravitas changes outside the crop occupy the same 24\u00d724 region in the same shot. The unchanged-source repeat also changes in that region."
+  },
+  "fixed_images_full_frame": [
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 2,
+      "changed_pixels": 237,
+      "bounding_box": [
+        200,
+        219,
+        224,
+        243
+      ]
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "repeat",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 2,
+      "changed_pixels": 260,
+      "bounding_box": [
+        200,
+        219,
+        224,
+        243
+      ]
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "gravitas",
+      "comparison": "candidate",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 2,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "repeat",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 0,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 1,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 2,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 3,
+      "changed_pixels": 0,
+      "bounding_box": null
+    },
+    {
+      "game": "ttld",
+      "comparison": "candidate",
+      "shot": 4,
+      "changed_pixels": 0,
+      "bounding_box": null
+    }
+  ],
+  "fixed_images_sha256": {
+    "gravitas": {
+      "control": [
+        "8898a4b95236ddbf1aeab4219c4a64045ad792477a3e815cfe8836de2cf2f99b",
+        "411eed7dd240437182e4487aed2c34f206bee62628b1ee60e20e2b7093814931",
+        "343a2aa712445dc06fbdbc45ed5fd3129a0d38b92e7ef530579d39e845223cc4",
+        "65c752dcd9ca6579183d33c7b72473ac502e54818fd219f8ea6743e76eb0968a",
+        "4ab5ed5d7756cf97f8eee28aca53d6f1ed2922475ad01a0cc49a8d0df759ceed"
+      ],
+      "repeat": [
+        "8898a4b95236ddbf1aeab4219c4a64045ad792477a3e815cfe8836de2cf2f99b",
+        "411eed7dd240437182e4487aed2c34f206bee62628b1ee60e20e2b7093814931",
+        "2b91e29cf04c1a9d5332367af798cc8b12ccbfad856af8d1c8966ef7a9b19f41",
+        "65c752dcd9ca6579183d33c7b72473ac502e54818fd219f8ea6743e76eb0968a",
+        "4ab5ed5d7756cf97f8eee28aca53d6f1ed2922475ad01a0cc49a8d0df759ceed"
+      ],
+      "candidate": [
+        "8898a4b95236ddbf1aeab4219c4a64045ad792477a3e815cfe8836de2cf2f99b",
+        "411eed7dd240437182e4487aed2c34f206bee62628b1ee60e20e2b7093814931",
+        "bd5e6d708cbe3422bddf37a72f2aee3aab4188879729ade0e0a003e619d425e1",
+        "65c752dcd9ca6579183d33c7b72473ac502e54818fd219f8ea6743e76eb0968a",
+        "4ab5ed5d7756cf97f8eee28aca53d6f1ed2922475ad01a0cc49a8d0df759ceed"
+      ]
+    },
+    "ttld": {
+      "control": [
+        "697f7f9fed9308ea5431e7b2f46af1965b4bca126b129b94e2c01473cec919cc",
+        "94868be69f7a46890988cff1804f2b63c9eb0781eed5cdd4d000a99f8ac37fe2",
+        "975d7c7c39eb6a45c0b03c565b52bef2ba012387a3d50a1e6fc831df4e381081",
+        "9a9a539d3a152b8db82ba8337668ac71541b969139e1150edfed9474c50ea2b2",
+        "032e11330aeeb1b52388e3f0c788b869cebf0fd78fbb9c73640d0148e7ef51fc"
+      ],
+      "repeat": [
+        "697f7f9fed9308ea5431e7b2f46af1965b4bca126b129b94e2c01473cec919cc",
+        "94868be69f7a46890988cff1804f2b63c9eb0781eed5cdd4d000a99f8ac37fe2",
+        "975d7c7c39eb6a45c0b03c565b52bef2ba012387a3d50a1e6fc831df4e381081",
+        "9a9a539d3a152b8db82ba8337668ac71541b969139e1150edfed9474c50ea2b2",
+        "032e11330aeeb1b52388e3f0c788b869cebf0fd78fbb9c73640d0148e7ef51fc"
+      ],
+      "candidate": [
+        "697f7f9fed9308ea5431e7b2f46af1965b4bca126b129b94e2c01473cec919cc",
+        "94868be69f7a46890988cff1804f2b63c9eb0781eed5cdd4d000a99f8ac37fe2",
+        "975d7c7c39eb6a45c0b03c565b52bef2ba012387a3d50a1e6fc831df4e381081",
+        "9a9a539d3a152b8db82ba8337668ac71541b969139e1150edfed9474c50ea2b2",
+        "032e11330aeeb1b52388e3f0c788b869cebf0fd78fbb9c73640d0148e7ef51fc"
+      ]
+    }
   }
 }
