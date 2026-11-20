@@ -89,8 +89,8 @@
       "remaining": "The saved GL trace covers idle only. The revised input reaches lifting at frame 360 in both languages and both loads in no-render checks. Capture idle and lifting on NVIDIA, measure buffer reuse, adopt verified sources, then repeat the affected comparisons and captures."
     },
     "partsneeded": {
-      "code": "Private map-edge, fog and full lighting are implemented, including Lua weapon zero. Normal builds and installed-build comparison pass; current no-render integration, endings, restart and same-pass assertions pass. The actual Lua projectile collector also passes the weapon-zero host regression.",
-      "remaining": "Complete current GPU/output checks and investigate camera settling if it repeats; adopt corrected sources, then repeat the normal comparison and its captures."
+      "code": "Private map-edge, fog and deferred lighting are implemented. The repaired visual test reserves six additional frames per shot and rejects late frames. The shifted scenario passes 70 no-render assertions on both pinned engines. Both normal Wasm modules match fresh builds.",
+      "remaining": "Rerun the strict NVIDIA visual and input checks, verify matching fog and map-edge output, then adopt verified sources and repeat the normal comparison and captures."
     },
     "mycube": {
       "code": "Public story/RNG/pose corrections remain. Private map-edge restoration passes serial integration. The private Lua projectile definition loop includes weapon zero and passes the actual-collector host regression.",
@@ -102,11 +102,11 @@
       "source_diffs_sha256": {
         "shared-source": "fda80eaffa87b9024f7152fb75fc2b5e6cacd09da74ce2488f6b58e4c2dda7f2",
         "spring-linux/games/PartsNeeded.sdd": "082f30d5d10204e6f690e92e3a6b31712325a6f7576d80a408442fa295b30b5a",
-        "spring-linux/games/PartsNeeded-wasm.sdd": "13deaa10ad53a77499aeeb96470fb8db2b9e75f9d06eb5c37099f89b01562a05",
+        "spring-linux/games/PartsNeeded-wasm.sdd": "fa308b78dc3f4f335a0db01f390f8775b88d4253290cdb4736a35de62cf472bd",
         "spring-linux/games/Area-17.sdd": "a86cf9f85c839821f956f7f9c3b0b0d426c37becfbbd8a853185c5a17679ca0d",
         "spring-linux/games/Area17-wasm.sdd": "d6cdd0768ca0ab79d03b504aef1bb4223f4921a5e9e0d3cf26fe555a9fa37696"
       },
-      "installed_check_sha256": "6e0a315b0fb2cb132e7ae8bf16d406867ffa55059dfa62596c4edb425cae803c"
+      "installed_check_sha256": "58629921e950b39069094e3852f9bae2e6b5a114d4d094b3ff3e1711653a3f53"
     },
     "flove-lighting-parity": {
       "source_diffs_sha256": {
@@ -321,6 +321,86 @@
     "normal_module_counts": {
       "public": 3,
       "private": 3
+    }
+  },
+  "partsneeded_visual_fixture": {
+    "private_rust_commit": "779c81bc2545699ca34f5fcc9b2153a5a8d40b44",
+    "old_archived_visual_check": {
+      "nvidia_renderer": "GeForce GTX 1660 Ti",
+      "strict_exit": 1,
+      "new_timing_evidence": false,
+      "frame_and_steady_samples": {
+        "shot_3": [
+          124,
+          2
+        ],
+        "shot_4": [
+          139,
+          3
+        ]
+      },
+      "reference_rmse": {
+        "shot_1": {
+          "rmse_percent": 2.28205,
+          "screenshot_sha256": "3c85bd7400296abfa1678592d7d64122a225ab7e24706da1d17d9d9d7154a84b"
+        },
+        "shot_2": {
+          "rmse_percent": 5.6097,
+          "screenshot_sha256": "58d76f8f5cdda7e86ef805d2588595532a271ae0378dcfe8bab5c2b23359c34b"
+        },
+        "shot_3": {
+          "rmse_percent": 2.5662000000000003,
+          "screenshot_sha256": "01bf4ef13c57c34c5a52536890cc08817b4c34a9512c878e1c382381fded4c1c"
+        },
+        "shot_4": {
+          "rmse_percent": 0.9845160000000001,
+          "screenshot_sha256": "17f2dc0ac28e2371803c2b89a6ec009d7c278498a226268b3fda1d08c7a81a3d"
+        }
+      },
+      "existing_settled_shot_limit_percent": 3,
+      "infolog_path": "codex-work/night-2026-10-30/v4/lighting-render-parity/gpu-checks/0fb98b39bf69/partsneeded-visual/attempt-0/partsneeded-visual/last.infolog.txt",
+      "infolog_sha256": "e28f49ace884fa63e9512d8a8d7e211866d336316181adb74d1cd49ac7956a28"
+    },
+    "revised_visual_fixture": {
+      "settling_frames_per_pickup_stage": 6,
+      "body_shot_frames": [
+        112,
+        129
+      ],
+      "five_parts_shot_frames": [
+        136,
+        149
+      ],
+      "scripted_final_pickup": 150,
+      "drops_the_old_late_acceptance_path": true,
+      "visual_feature_build_log_sha256": "a6d59d0f35c83d658600cfb0befdb19d8877b20ac9485f5c77627310cbf211ba"
+    },
+    "no_render_shifted_scenario": {
+      "0104": {
+        "assertions": [
+          57,
+          4,
+          4,
+          5
+        ],
+        "log": "codex-work/night-2026-10-30/v4/lighting-render-parity/partsneeded-settled-shots-20261120/shifted-script-headless-0104.log",
+        "sha256": "7ef306afc81cb0a1b3153966470671fa956e192dfe2a33ef8524925f90bde929"
+      },
+      "3103": {
+        "assertions": [
+          57,
+          4,
+          4,
+          5
+        ],
+        "log": "codex-work/night-2026-10-30/v4/lighting-render-parity/partsneeded-settled-shots-20261120/shifted-script-headless-3103.log",
+        "sha256": "875ce0c9b171c54f2a5f5b813608d59f600cb6c49ae1bd000f7bef757523ea4c"
+      }
+    },
+    "new_guarded_visual_pass_pending": true,
+    "byte_identical_installed_module_digests": {
+      "LuaRules/wasm/partsneeded-rules.wasm": "8ccbeaaac42b45f9dc4fd885b0e07b94f9aa059a39018e7beb96c46df1f1a7fb",
+      "LuaUI/wasm/partsneeded-ui.wasm": "bdcc058ca5c339a3a74d0ac4185f95fe4cba974df4b541498b57d37a2d73abd8"
     }
   }
 }

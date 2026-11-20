@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20T02:24:51.410410+00:00",
+  "generated_at": "2026-11-20T03:15:46.506623+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -2045,8 +2045,8 @@
     {
       "game": "partsneeded",
       "title": "Parts Needed",
-      "code": "Private map-edge, fog and full lighting are implemented, including Lua weapon zero. Normal builds and installed-build comparison pass; current no-render integration, endings, restart and same-pass assertions pass. The actual Lua projectile collector also passes the weapon-zero host regression.",
-      "remaining": "Complete current GPU/output checks and investigate camera settling if it repeats; adopt corrected sources, then repeat the normal comparison and its captures.",
+      "code": "Private map-edge, fog and deferred lighting are implemented. The repaired visual test reserves six additional frames per shot and rejects late frames. The shifted scenario passes 70 no-render assertions on both pinned engines. Both normal Wasm modules match fresh builds.",
+      "remaining": "Rerun the strict NVIDIA visual and input checks, verify matching fog and map-edge output, then adopt verified sources and repeat the normal comparison and captures.",
       "expected": 1,
       "completed": 0,
       "raw_completed": 1,

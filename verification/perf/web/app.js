@@ -56,7 +56,7 @@ function sceneNote(s){
   const selected=summary();
   const previous=state.comparison==='language'&&$('show-history').checked&&!selected.measured_pairs?HISTORY.scenes[s.id]:null;
   const mode=state.comparison==='gpu_jobs4'?' GPU-update control: particle curves remain on the GPU, so there is no CPU curve job to dispatch. Both sides still draw through NVIDIA OpenGL.':s.game==='gravitas'&&!isLanguage()?' CPU-update reference: jobs parallelize particle curve calculations; both sides still draw through NVIDIA OpenGL.':'';
-  const hold=selected.held_reason?`Earlier comparison held for review. ${selected.held_reason} `:'';
+  const hold=selected.held_reason?`Earlier comparison held for review. Excluded from current results. ${selected.held_reason} `:'';
   const context=isLanguage()?notes[s.id]:'Rust jobs off/on using the same staged game and worker count.';
   const history=previous?` Earlier recorded frame time was ${fmt(previous.summary.wall_mean_lua_ms)} ms for Lua and ${fmt(previous.summary.wall_mean_rust_ms)} ms for Rust. ${previous.note} Current timing traces remain pending.`:'';
   return hold+context+mode+history;
@@ -130,7 +130,8 @@ function refreshScene(){
   $('scene-runtime').textContent=runtime?`Engine ${runtime.engine_commit??'unknown commit'} · SHA-256 ${runtime.engine_sha256} · CPU gate: ${runtime.cpu_activity_policy?'≤ '+runtime.cpu_activity_policy.max_background_cpu_cores+' background cores + pressure':'pressure'}`:'';
   const repos={hunted:'Hunted',flove:'Flove',ttld:'LD43',area17:'Area-17',gravitas:'Gravitas',mycube:'LD42',partsneeded:'LD35'},sources=$('scene-sources');sources.replaceChildren();
   for(const[backend,label]of[['lua','Lua source'],['wasm','Rust source']]){const commit=s.game_content?.[backend]?.source_commit;if(!commit)continue;if(sources.childNodes.length)sources.append(' · ');const link=document.createElement('a');link.href=`https://github.com/SpringCabal/${repos[state.scene.game]}/tree/${commit}`;link.textContent=`${label} ${commit.slice(0,8)}`;sources.append(link);}
-  $('scene-note').textContent=sceneNote(state.scene);$('scene-numbers').replaceChildren();for(const[label,value,sub]of[[n[0],fmt(a)+' ms','median of run window means'],[n[1],fmt(b)+' ms','median of run window means'],['Paired time change',pct(change),`${s.measured_pairs} accepted / ${s.attempted_pairs} pairs`]]){const d=document.createElement('div');const t=document.createElement('span');t.textContent=label;const v=document.createElement('strong');v.textContent=value;const sm=document.createElement('small');sm.textContent=sub;d.append(t,v,sm);$('scene-numbers').append(d);}
+  const pairStatus=s.held_reason?`${s.measured_pairs} archived pairs · excluded`:`${s.measured_pairs} accepted / ${s.attempted_pairs} pairs`;
+  $('scene-note').textContent=sceneNote(state.scene);$('scene-numbers').replaceChildren();for(const[label,value,sub]of[[n[0],fmt(a)+' ms','median of run window means'],[n[1],fmt(b)+' ms','median of run window means'],['Paired time change',pct(change),pairStatus]]){const d=document.createElement('div');const t=document.createElement('span');t.textContent=label;const v=document.createElement('strong');v.textContent=value;const sm=document.createElement('small');sm.textContent=sub;d.append(t,v,sm);$('scene-numbers').append(d);}
   videos();repeats();costs();cpuComparison();runTable();$('repeat').replaceChildren();for(const p of paired())option($('repeat'),p[0].repeat,'Pair '+(p[0].repeat+1)+(p.every(r=>r.pair_accepted)?'':' · excluded'));traces();loadWorlds();selectProfileForScene();
 }
 
@@ -191,13 +192,19 @@ function matchesGame(asset,backend){const expected=summary()?.game_content?.[bac
 function videos(){const clips=isLanguage()?(DATA.videos??[]).filter(v=>v.scene===state.scene.id&&matchesGame(v,v.backend)):[];$('video-grid').replaceChildren();for(const clip of clips){const f=document.createElement('figure'),caption=document.createElement('figcaption'),video=document.createElement('video');caption.textContent=clip.label;video.src=clip.url;video.controls=true;video.preload='metadata';video.playsInline=true;f.append(caption,video);$('video-grid').append(f);}if(!clips.length){const p=document.createElement('p');p.textContent=isLanguage()?'No rendered clips matching this engine and game revision yet.':'Rendered clips are provided for the Lua / serial Rust comparison; jobs captures are available in the world and CPU sections.';$('video-grid').append(p);}}
 function overviewTable(){
   const body=$('overview-rows');body.replaceChildren();
+  const showHistory=$('show-history').checked;
   for(const scene of DATA.scenes){
-    const previous=$('show-history').checked&&!scene.language.measured_pairs?HISTORY.scenes[scene.id]:null;
-    const r=previous?.summary??scene.language,tr=document.createElement('tr');tr.className='click-row'+(previous?' historical-row':'');
-    const status=r.held_reason?'HELD · '+r.held_reason:previous?`${previous.status.toUpperCase()} · ${previous.campaign_label}. ${previous.note}`:r.measured_pairs?`CURRENT · ≤ ${r.runtime?.cpu_activity_policy?.max_background_cpu_cores??'—'} background cores`:'Pending; no saved comparison';
+    const saved=scene.language;
+    const earlier=saved.measured_pairs?null:HISTORY.scenes[scene.id];
+    const previous=showHistory?earlier:null;
+    const r=previous?.summary??(saved.held_reason&&!showHistory?{}:saved);
+    const archived=Boolean(previous||saved.held_reason&&showHistory);
+    const tr=document.createElement('tr');tr.className='click-row'+(archived?' historical-row':'');
+    const status=saved.held_reason?'HELD · Excluded from current results. '+saved.held_reason:previous?`${previous.status.toUpperCase()} · ${previous.campaign_label}. ${previous.note}`:r.measured_pairs?`CURRENT · ≤ ${r.runtime?.cpu_activity_policy?.max_background_cpu_cores??'—'} background cores`:earlier?'Pending · archived result available':'Pending; no saved comparison';
+    const pairCount=archived?`${r.measured_pairs} archived`:`${r.measured_pairs??0} / 5`;
     const cells=[scene.title+' · '+scene.load,fmt(r.wall_mean_lua_ms),fmt(r.wall_mean_rust_ms),pct(r.wall_mean_paired_rust_change_pct),
       fmt(r.sim_p50_lua_ms)+' / '+fmt(r.sim_p50_rust_ms),fmt(r.draw_p50_lua_ms)+' / '+fmt(r.draw_p50_rust_ms),
-      fmt(r.lua_units_p50,0)+' / '+fmt(r.wasm_units_p50,0),r.measured_pairs+' / 5',
+      fmt(r.lua_units_p50,0)+' / '+fmt(r.wasm_units_p50,0),pairCount,
       status];
     for(const value of cells){const td=document.createElement('td');td.textContent=value;tr.append(td);}
     if(previous)tr.title=previous.source+' · engine '+(previous.engine_commit?.slice(0,8)??'archived snapshot');
@@ -233,5 +240,7 @@ let resizeTimer;new ResizeObserver(()=>{clearTimeout(resizeTimer);resizeTimer=se
 const usableConfigurations=HISTORY.games.reduce((total,game)=>total+game.completed,0);
 const plannedConfigurations=HISTORY.games.reduce((total,game)=>total+game.expected,0);
 const collectedConfigurations=HISTORY.games.reduce((total,game)=>total+(game.raw_completed??game.completed),0);
-$('campaign-status').textContent=`Snapshot ${displayTime(DATA.audit.generated_at)} · ${usableConfigurations} / ${plannedConfigurations} comparison configurations have five usable pairs. ${collectedConfigurations-usableConfigurations} earlier configurations are held for source corrections or reruns. Callback timers ${(DATA.audit.callback_timers??[]).join(', ')||'pending'}.`;
+const usableLanguage=DATA.scenes.filter(scene=>scene.language.measured_pairs>=5&&!scene.language.held_reason&&!scene.different_cap).length;
+const plannedLanguage=DATA.scenes.length;
+$('campaign-status').textContent=`Snapshot ${displayTime(DATA.audit.generated_at)} · ${usableLanguage} / ${plannedLanguage} Lua/Rust comparisons and ${usableConfigurations-usableLanguage} / ${plannedConfigurations-plannedLanguage} Rust jobs controls have five usable pairs. ${collectedConfigurations-usableConfigurations} older configurations are excluded. ${plannedConfigurations-collectedConfigurations} await a result from the current campaign.`;
 $('total-runs').textContent=DATA.audit.runs;$('accepted-pairs').textContent=DATA.audit.accepted_pairs+' / '+DATA.audit.attempted_pairs;videos();optimizationTable();overviewTable();workOverview();overview();selectScene((DATA.scenes.find(s=>s.language.measured_pairs>=5)??DATA.scenes[0]).id);requestAnimationFrame(animate);
