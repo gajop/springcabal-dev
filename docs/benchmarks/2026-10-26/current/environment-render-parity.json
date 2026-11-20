@@ -73,8 +73,8 @@
       "remaining": "Repeat the three Lua/Rust emitter loads with matching profiles and videos. Finish jobs-clock diagnostics and source attribution."
     },
     "hunted": {
-      "code": "Private material/fade, cursor flashlight and map-edge corrections are implemented. Full candidate serial integration passes; the visual check needs an original-Lua reference review.",
-      "remaining": "Resolve the terrain-versus-sky screenshot difference without relaxing its threshold; finish GPU/world/GL review, Lua source-cost trials, adoption and both fresh language comparisons. Four Rust jobs controls remain usable."
+      "code": "The combined private map-edge and rabbit-material candidate passes serial and checked-jobs assertions on engine 0104. In saved NVIDIA captures the restored terrain matches all 239 affected Lua pixels. The full proposed HUD crop passes the independent replay at 0.124% RMSE against the existing 2% limit.",
+      "remaining": "Rerun rendered suites on the combined candidate, finish output and source-cost checks, then adopt and repeat the affected comparisons. Four earlier Rust jobs controls remain usable."
     },
     "flove": {
       "code": "Private renderer/spire and deferred-light corrections are implemented; depth inputs and startup policy are aligned. Latest animation, integration and jobs assertions pass. A separate Lua retained-light-record candidate passes host command comparisons only.",
@@ -163,5 +163,144 @@
   "weapon_zero_compatibility": {
     "url": "weapon-zero-compatibility.json",
     "sha256": "a3dd6b2158c07619626272b9b11ddccb8fcc8629501d047403dfb785b1cc23ac"
+  },
+  "hunted_hud_reference": {
+    "scope": "Saved 1280\u00d7720 NVIDIA screenshots. Controls runs corroborate the terrain corner. The proposed golden is the complete existing 1280\u00d770 HUD crop from map-edge candidate shot 4.",
+    "engine_commit": "782c0e8a6837ec0b8ecf5f38a4d4815debc8119a",
+    "renderer": "NVIDIA GeForce GTX 1660 Ti/PCIe/SSE2",
+    "earlier_golden": {
+      "path": "verification/fixtures/hunted/goldens/hud_top.png",
+      "sha256": "4b69fca2474ef7b1d28cd2882ff536f7584c19d3400f4882b5b1af6aee282d64",
+      "candidate_rmse_percent": 3.507139204867378
+    },
+    "proposed_golden": {
+      "path": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/hud_top.png",
+      "sha256": "42cad09eaeb1595ecd1763f618e2e1bb4f5b57e58e34b4b76c506d7c3bb70971",
+      "public_adoption_pending": true
+    },
+    "threshold_percent": 2,
+    "edge_region": {
+      "x": [
+        1264,
+        1279
+      ],
+      "y": [
+        0,
+        69
+      ],
+      "changed_pixels": 239,
+      "fraction_of_old_crop_squared_error": 0.9982909799445273,
+      "repeat_candidate_equal_pixels": 239
+    },
+    "changed_pixels_full_crop": 263,
+    "controls": {
+      "lua": {
+        "image": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/controls-lua.png",
+        "sha256": "cfaae1127cd0cd178b5cc868ca66845b5c581b121d5f96129b741c9303434d17",
+        "log": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/controls-lua.log",
+        "log_sha256": "1a00f52f62eec42af23a92bc47388f35cb178c9ec76d3fcbebb826f330aa832c",
+        "same_as_old_pixels": 0,
+        "same_as_restored_pixels": 239
+      },
+      "wasm": {
+        "image": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/controls-wasm.png",
+        "sha256": "16d89aca47985f06e860847eb75de1424e1343fdd70ab3ae0e4b3b33532acef3",
+        "log": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/controls-wasm.log",
+        "log_sha256": "5cd586c14aa8e2289152a918372883b8476deb333ba82cf3a477a47c24e55170",
+        "same_as_old_pixels": 239,
+        "same_as_restored_pixels": 0
+      }
+    },
+    "candidate_visual_captures": [
+      {
+        "attempt": "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1",
+        "log": "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1/hunted-visual/last.infolog.txt",
+        "log_sha256": "8dc1327e541498e4c879fb6376634f59d089b9bafe071309bad2906b2cd50da2",
+        "guard": "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1/guard.json",
+        "guard_sha256": "5c0ea3a14fa86960e8fddfb40526cbefc1da0b815b0c5e540db7672af96cd8f3",
+        "shots": [
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1/hunted-visual/screenshots/screen_2026-11-01_00-00-21-806.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1/hunted-visual/screenshots/screen_2026-11-01_00-00-22-766.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1/hunted-visual/screenshots/screen_2026-11-01_00-00-24-009.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1/hunted-visual/screenshots/screen_2026-11-01_00-00-25-509.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/79d772ac7ab2/hunted-visual/attempt-1/hunted-visual/screenshots/screen_2026-11-01_00-00-27-179.png"
+        ],
+        "frame_130_sha256": "3f03b2c05bf8a52c105daeb9e303c7141ebfed45b59e7fd6a8ee21b54adc19dc"
+      },
+      {
+        "attempt": "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0",
+        "log": "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0/hunted-visual/last.infolog.txt",
+        "log_sha256": "3ac4bdc7163f1e1625cb009fc660226feb82ed17091f245ca2a2aa50637def3a",
+        "guard": "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0/guard.json",
+        "guard_sha256": "30479e443568ae6d396d3997172d3f3f3f2dc9aebacab07eb968ede7cb58242e",
+        "shots": [
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0/hunted-visual/screenshots/screen_2026-10-31_23-01-39-646.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0/hunted-visual/screenshots/screen_2026-10-31_23-01-40-618.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0/hunted-visual/screenshots/screen_2026-10-31_23-01-41-872.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0/hunted-visual/screenshots/screen_2026-10-31_23-01-43-388.png",
+          "codex-work/night-2026-10-30/v4/environment-render-parity/gpu-checks/e5b1e6b7a95e/hunted-visual/attempt-0/hunted-visual/screenshots/screen_2026-10-31_23-01-45-037.png"
+        ],
+        "frame_130_sha256": "78a91bbdf9f8700f35ce1abb38daaf9a45a62ec09ec8ae0f7971bf700a2ca845"
+      }
+    ],
+    "fresh_gpu_suite_pending": true,
+    "existing_golden_replay": {
+      "all_passed": true,
+      "checks_per_saved_capture": 8,
+      "limits_percent": {
+        "whole_frame": 10,
+        "crop": 2
+      },
+      "independent_confirmatory_hud_rmse_percent": 0.12356,
+      "transcript": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/replay.log",
+      "transcript_sha256": "853dfc09bdd404cf526c40c754d420c5ef191c43bf41e52a028fd95d510d6aa8"
+    },
+    "combined_candidate_0104": {
+      "mode": "headless",
+      "engine_sha256": "6059d1533779f49737b225d77d89a8da1eaa75de1a20248c52871bbfd5f76a19",
+      "source": {
+        "Hunted.sdd": "115787cd4e5abde8e028fa9aa2907bc574053e8c",
+        "Hunted-wasm.sdd": "62a5110fea48db32df0b8faf4059fd2ac4d0bfeb"
+      },
+      "shared_commit": "2ccb62b57396c760bc0380848d77bac188b30d52",
+      "checks": {
+        "serial": {
+          "assertions": 40,
+          "log": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/combined-0104/serial.log",
+          "log_sha256": "2363d4bf1edc69326b34b329ed03093a8144ca67b15cab5dd4c473e357f5af65",
+          "infolog_sha256": "679e4fc4635e72e880d7769d837501ee5681720b3a2b39dc4205e7571f6193b1"
+        },
+        "checked-w4": {
+          "assertions": 40,
+          "log": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/combined-0104/checked-w4.log",
+          "log_sha256": "8dd6220f7f86a2adfcd7f100992b9b187550bc98cc69dd99e2d85da9abc0fb30",
+          "infolog_sha256": "c102e70c40522ab76f504944d46edea5deb4e19bb31d5de936bc17f717c3631a"
+        },
+        "mycube-rust": {
+          "assertions": 32,
+          "log": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/combined-0104/mycube-rust.log",
+          "log_sha256": "75f5487e56f3373cc25a6f2ade91b46cdbb6dfcbdf9f5562904cde7f52a9cf43",
+          "infolog_sha256": "67601c3c1754643b338e8d156408035cd8f79eeadde474424242006796bdfad0"
+        }
+      },
+      "normal_modules": {
+        "LuaRules/wasm/hunted-rules.wasm": "5af4a82e49275e85fe44c51ecb9eb75aca5849ae3f83c88b65fe5ffa8d496607",
+        "LuaRules/wasm/hunted-jobs.wasm": "75ee9a920daa88b069a00d1b06fb2f0a4bd0abfbe0ed7801195e6d9e89866211",
+        "LuaUI/wasm/hunted-ui.wasm": "fa334d6ffb97108a619dc347321ea610a65fa6dec503538358704830c973501b"
+      },
+      "lua_fixture_rerun_after_dropping_candidate_mouse_hook": true,
+      "installed_module_checks": {
+        "hunted": {
+          "matching_modules": 3,
+          "log": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/combined-0104/hunted-installed.log",
+          "sha256": "e3b50704f66f74248655cfe391d2f636a51251c912acda9805059e2d693af6e8"
+        },
+        "mycube": {
+          "matching_modules": 2,
+          "log": "codex-work/night-2026-10-30/v4/environment-render-parity/hunted-hud-review/reference-20261120/combined-0104/mycube-installed.log",
+          "sha256": "1a7c9dfc6f10440b134b6273fd936370ca3b9a4c95e82279adae96c768045fd7"
+        }
+      }
+    }
   }
 }

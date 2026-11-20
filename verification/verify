@@ -57,6 +57,7 @@ Environment:
   SPRING_ENGINE_BIN     override the rendering engine binary
   SPRING_HEADLESS_BIN   CPU-only engine override (VF_RENDERER=headless)
   VF_RENDERER          gpu (default), software, screen, or headless (integration)
+  VF_FIXTURES_DIR      use a separate fixture tree for candidate verification
   GOLDEN_TOLERANCE      override the RMSE % limit against goldens (set per suite)
   KEEP_TEST_ARTIFACTS=1 keep temporary workspaces
   VF_LOCK_FILE          lock that serializes verify runs

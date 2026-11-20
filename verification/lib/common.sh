@@ -17,7 +17,7 @@ fi
 # VF_GAMES_DIR points suites at other game checkouts (worktrees on a branch).
 GAMES_DIR=${VF_GAMES_DIR:-$PROJECT_ROOT/spring-linux/games}
 MAPS_DIR="$PROJECT_ROOT/spring-linux/maps"
-FIXTURES_DIR="$VERIFICATION_ROOT/fixtures"
+FIXTURES_DIR=${VF_FIXTURES_DIR:-$VERIFICATION_ROOT/fixtures}
 SHARED_FONTCACHE="$VERIFICATION_ROOT/cache/fontcache"
 
 LAUNCH_DIR="$PROJECT_ROOT/launch"

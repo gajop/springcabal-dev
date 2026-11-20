@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20T00:56:15.461162+00:00",
+  "generated_at": "2026-11-20T01:56:00.820585+00:00",
   "timezone": "Europe/Budapest",
   "scope": "Display-only retained results. Never merged into current statistics, traces, identities or capture eligibility. Superseded rows had known implementation/workload differences; their percentages are recorded observations, not language speedups.",
   "scenes": {
@@ -1983,8 +1983,8 @@
     {
       "game": "hunted",
       "title": "Hunted",
-      "code": "Private material/fade, cursor flashlight and map-edge corrections are implemented. Full candidate serial integration passes; the visual check needs an original-Lua reference review.",
-      "remaining": "Resolve the terrain-versus-sky screenshot difference without relaxing its threshold; finish GPU/world/GL review, Lua source-cost trials, adoption and both fresh language comparisons. Four Rust jobs controls remain usable.",
+      "code": "The combined private map-edge and rabbit-material candidate passes serial and checked-jobs assertions on engine 0104. In saved NVIDIA captures the restored terrain matches all 239 affected Lua pixels. The full proposed HUD crop passes the independent replay at 0.124% RMSE against the existing 2% limit.",
+      "remaining": "Rerun rendered suites on the combined candidate, finish output and source-cost checks, then adopt and repeat the affected comparisons. Four earlier Rust jobs controls remain usable.",
       "expected": 6,
       "completed": 4,
       "raw_completed": 6,
